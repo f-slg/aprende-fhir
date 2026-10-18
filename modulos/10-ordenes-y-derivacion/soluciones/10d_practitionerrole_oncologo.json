@@ -1,0 +1,40 @@
+{
+  "resourceType": "PractitionerRole",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Dr. Esteban Patricio Ruiz Montalvo: oncólogo clínico en el Hospital General Docente Ejemplo.</p></div>"
+  },
+  "active": true,
+  "practitioner": {
+    "reference": "Practitioner/{{oncologistId}}",
+    "display": "Dr. Esteban Patricio Ruiz Montalvo"
+  },
+  "organization": {
+    "reference": "Organization/{{hospitalId}}",
+    "display": "Hospital General Docente Ejemplo"
+  },
+  "code": [
+    {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/practitioner-role",
+          "code": "doctor",
+          "display": "Doctor"
+        }
+      ],
+      "text": "Médico"
+    }
+  ],
+  "specialty": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "394593009",
+          "display": "Medical oncology"
+        }
+      ],
+      "text": "Oncología clínica"
+    }
+  ]
+}

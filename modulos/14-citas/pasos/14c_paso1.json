@@ -1,0 +1,10 @@
+{
+  "resourceType": "Slot",
+  "schedule": {
+    "reference": "Schedule/{{scheduleId}}",
+    "display": "Agenda de quimioterapia"
+  },
+  "status": "free",
+  "start": "2025-07-02T09:00:00-05:00",
+  "end": "2025-07-02T11:00:00-05:00"
+}

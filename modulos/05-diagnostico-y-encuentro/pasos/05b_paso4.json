@@ -1,0 +1,90 @@
+{
+  "resourceType": "Encounter",
+  "status": "finished",
+  "class": {
+    "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+    "code": "AMB",
+    "display": "ambulatory"
+  },
+  "serviceType": {
+    "coding": [
+      {
+        "system": "http://terminology.hl7.org/CodeSystem/service-type",
+        "code": "124",
+        "display": "General Practice"
+      }
+    ],
+    "text": "Medicina general"
+  },
+  "priority": {
+    "coding": [
+      {
+        "system": "http://terminology.hl7.org/CodeSystem/v3-ActPriority",
+        "code": "R",
+        "display": "routine"
+      }
+    ],
+    "text": "Rutina"
+  },
+  "subject": {
+    "reference": "Patient/{{patientId}}",
+    "display": "Luis Alberto Paredes Cevallos"
+  },
+  "participant": [
+    {
+      "type": [
+        {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/v3-ParticipationType",
+              "code": "ATND",
+              "display": "attender"
+            }
+          ]
+        }
+      ],
+      "individual": {
+        "reference": "Practitioner/{{practitionerId}}",
+        "display": "Dra. Andrea Lucía Salazar Moreno"
+      }
+    }
+  ],
+  "period": {
+    "start": "2025-03-20T07:15:00-05:00",
+    "end": "2025-03-20T08:15:00-05:00"
+  },
+  "reasonCode": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "21522001",
+          "display": "Abdominal pain"
+        }
+      ],
+      "text": "Dolor abdominal, náuseas y diarrea"
+    }
+  ],
+  "diagnosis": [
+    {
+      "condition": {
+        "reference": "Condition/{{conditionIntoxId}}",
+        "display": "Intoxicación alimentaria bacteriana"
+      },
+      "use": {
+        "coding": [
+          {
+            "system": "http://terminology.hl7.org/CodeSystem/diagnosis-role",
+            "code": "DD",
+            "display": "Discharge diagnosis"
+          }
+        ]
+      },
+      "rank": 1
+    }
+  ],
+  "serviceProvider": {
+    "reference": "Organization/{{hospitalId}}",
+    "display": "Hospital General Docente Ejemplo"
+  }
+}

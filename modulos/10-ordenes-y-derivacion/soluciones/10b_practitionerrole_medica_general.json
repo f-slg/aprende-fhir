@@ -1,0 +1,59 @@
+{
+  "resourceType": "PractitionerRole",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Dra. Andrea Lucía Salazar Moreno: médica general en el Hospital General Docente Ejemplo,</p><p>consultorio 3, de lunes a viernes de 07:00 a 13:00.</p></div>"
+  },
+  "active": true,
+  "practitioner": {
+    "reference": "Practitioner/{{practitionerId}}",
+    "display": "Dra. Andrea Lucía Salazar Moreno"
+  },
+  "organization": {
+    "reference": "Organization/{{hospitalId}}",
+    "display": "Hospital General Docente Ejemplo"
+  },
+  "code": [
+    {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/practitioner-role",
+          "code": "doctor",
+          "display": "Doctor"
+        }
+      ],
+      "text": "Médica"
+    }
+  ],
+  "specialty": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "394814009",
+          "display": "General practice (specialty)"
+        }
+      ],
+      "text": "Medicina general"
+    }
+  ],
+  "location": [
+    {
+      "reference": "Location/{{officeLocationId}}",
+      "display": "Consultorio 3 de Medicina General"
+    }
+  ],
+  "availableTime": [
+    {
+      "daysOfWeek": [
+        "mon",
+        "tue",
+        "wed",
+        "thu",
+        "fri"
+      ],
+      "availableStartTime": "07:00:00",
+      "availableEndTime": "13:00:00"
+    }
+  ]
+}

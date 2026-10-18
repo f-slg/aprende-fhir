@@ -1,0 +1,54 @@
+{
+  "resourceType": "StructureDefinition",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Perfil didáctico PacienteTaller: un Patient que debe tener al menos un identificador,</p><p>un nombre, el sexo y la fecha de nacimiento.</p></div>"
+  },
+  "url": "https://f-slg.github.io/aprende-fhir/StructureDefinition/paciente-taller",
+  "version": "1.0.0",
+  "name": "PacienteTaller",
+  "title": "Paciente del taller",
+  "status": "draft",
+  "date": "2026-10-18",
+  "publisher": "Aprende FHIR desde cero (ejemplo didáctico)",
+  "description": "Perfil didáctico de Patient: exige identificador, nombre, sexo y fecha de nacimiento.",
+  "fhirVersion": "4.0.1",
+  "kind": "resource",
+  "abstract": false,
+  "type": "Patient",
+  "baseDefinition": "http://hl7.org/fhir/StructureDefinition/Patient",
+  "derivation": "constraint",
+  "differential": {
+    "element": [
+      {
+        "id": "Patient",
+        "path": "Patient",
+        "short": "Paciente del taller"
+      },
+      {
+        "id": "Patient.identifier",
+        "path": "Patient.identifier",
+        "short": "Al menos un identificador (la cédula)",
+        "min": 1
+      },
+      {
+        "id": "Patient.name",
+        "path": "Patient.name",
+        "short": "Al menos un nombre",
+        "min": 1
+      },
+      {
+        "id": "Patient.gender",
+        "path": "Patient.gender",
+        "short": "Sexo administrativo obligatorio",
+        "min": 1
+      },
+      {
+        "id": "Patient.birthDate",
+        "path": "Patient.birthDate",
+        "short": "Fecha de nacimiento obligatoria",
+        "min": 1
+      }
+    ]
+  }
+}

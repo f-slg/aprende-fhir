@@ -1,0 +1,17 @@
+{
+  "resourceType": "Specimen",
+  "type": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "258435002",
+        "display": "Tumor tissue sample"
+      }
+    ],
+    "text": "Tejido tumoral"
+  },
+  "subject": {
+    "reference": "Patient/{{patientId}}",
+    "display": "Luis Alberto Paredes Cevallos"
+  }
+}

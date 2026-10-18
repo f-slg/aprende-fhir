@@ -1,0 +1,51 @@
+{
+  "resourceType": "Practitioner",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Dra. Andrea Lucía Salazar Moreno, médica general. Registro profesional ficticio RP-000457.</p></div>"
+  },
+  "identifier": [
+    {
+      "use": "official",
+      "system": "https://f-slg.github.io/aprende-fhir/sid/registro-profesional",
+      "value": "RP-000457"
+    }
+  ],
+  "active": true,
+  "name": [
+    {
+      "use": "official",
+      "text": "Dra. Andrea Lucía Salazar Moreno",
+      "prefix": [
+        "Dra."
+      ],
+      "family": "Salazar Moreno",
+      "given": [
+        "Andrea",
+        "Lucía"
+      ]
+    }
+  ],
+  "telecom": [
+    {
+      "system": "email",
+      "value": "andrea.salazar@hospital-ejemplo.invalid",
+      "use": "work"
+    }
+  ],
+  "gender": "female",
+  "qualification": [
+    {
+      "code": {
+        "coding": [
+          {
+            "system": "http://terminology.hl7.org/CodeSystem/v2-0360",
+            "code": "MD",
+            "display": "Doctor of Medicine"
+          }
+        ],
+        "text": "Médica"
+      }
+    }
+  ]
+}

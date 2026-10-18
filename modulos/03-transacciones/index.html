@@ -1,0 +1,1565 @@
+
+<!doctype html>
+<html lang="es" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Taller práctico de HL7 FHIR R4 en español, paso a paso, con un caso clínico ecuatoriano ficticio. Para Postman, R o curl.">
+      
+      
+        <meta name="author" content="Dr. Fabricio Salas Guerrero">
+      
+      
+        <link rel="canonical" href="https://f-slg.github.io/aprende-fhir/modulos/03-transacciones/">
+      
+      
+        <link rel="prev" href="../02-patient/">
+      
+      
+        <link rel="next" href="../04-profesionales-y-organizaciones/">
+      
+      
+      <link rel="icon" href="../../imagenes/logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.39">
+    
+    
+      
+        <title>03 · Transacciones: varios recursos a la vez - Aprende FHIR desde cero</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.8c3ca2c6.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../estilos/taller.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#módulo-03--transacciones-varios-recursos-a-la-vez" class="md-skip">
+          Saltar a contenido
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabecera">
+    <a href="../.." title="Aprende FHIR desde cero" class="md-header__button md-logo" aria-label="Aprende FHIR desde cero" data-md-component="logo">
+      
+  <img src="../../imagenes/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Aprende FHIR desde cero
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              03 · Transacciones: varios recursos a la vez
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Cambiar a modo oscuro"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo oscuro" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Cambiar a modo claro"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo claro" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Búsqueda" placeholder="Búsqueda" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Buscar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpiar" aria-label="Limpiar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando búsqueda
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/f-slg/aprende-fhir" title="Ir al repositorio" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    f-slg/aprende-fhir
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navegación" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Aprende FHIR desde cero" class="md-nav__button md-logo" aria-label="Aprende FHIR desde cero" data-md-component="logo">
+      
+  <img src="../../imagenes/logo.png" alt="logo">
+
+    </a>
+    Aprende FHIR desde cero
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/f-slg/aprende-fhir" title="Ir al repositorio" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    f-slg/aprende-fhir
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Inicio
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Nivel básico
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Nivel básico
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01-fundamentos/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    01 · Fundamentos
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02-patient/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    02 · Patient: el paciente
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    03 · Transacciones: varios recursos a la vez
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    03 · Transacciones: varios recursos a la vez
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#lo-que-vas-a-aprender" class="md-nav__link">
+    <span class="md-ellipsis">
+      Lo que vas a aprender
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#la-historia" class="md-nav__link">
+    <span class="md-ellipsis">
+      La historia
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ficha-del-recurso-bundle" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ficha del recurso: Bundle
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-a-paso-armar-la-transacción" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso a paso: armar la transacción
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Paso a paso: armar la transacción">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paso-1--el-contenedor" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 1 · El contenedor
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-2--una-entrada-por-cada-paciente" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 2 · Una entrada por cada paciente
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-3--evitar-duplicados" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 3 · Evitar duplicados
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ejercicios-en-el-servidor" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ejercicios en el servidor
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Ejercicios en el servidor">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#03a--registrar-a-la-familia" class="md-nav__link">
+    <span class="md-ellipsis">
+      03a · Registrar a la familia
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#03b--comprobar" class="md-nav__link">
+    <span class="md-ellipsis">
+      03b · Comprobar
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reto-1--la-creación-condicional" class="md-nav__link">
+    <span class="md-ellipsis">
+      Reto 1 · La creación condicional
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reto-2--todo-o-nada" class="md-nav__link">
+    <span class="md-ellipsis">
+      Reto 2 · Todo o nada
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#autoevaluación" class="md-nav__link">
+    <span class="md-ellipsis">
+      Autoevaluación
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#resumen" class="md-nav__link">
+    <span class="md-ellipsis">
+      Resumen
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ejecutar-este-módulo" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ejecutar este módulo
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04-profesionales-y-organizaciones/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    04 · Profesionales y organizaciones
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05-diagnostico-y-encuentro/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    05 · Diagnóstico y encuentro
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06-observaciones/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    06 · Observaciones: signos vitales y tipos de valor
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Nivel intermedio
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Nivel intermedio
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07-antecedentes/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    07 · Antecedentes: alergias, medicación habitual y familia
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08-vacunacion/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    08 · Vacunación
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../09-documentos-clinicos/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    09 · Documentos clínicos
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10-ordenes-y-derivacion/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    10 · Órdenes y derivación
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../11-anatomia-patologica/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    11 · Anatomía patológica
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../12-plan-y-consentimiento/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    12 · Plan y consentimiento
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../13-procedimientos/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    13 · Procedimientos
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../14-citas/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    14 · Citas
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../15-medicamentos/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    15 · Medicamentos
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../16-seguimiento/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    16 · Seguimiento: cuestionarios y resultados informados por el paciente
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Nivel avanzado
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Nivel avanzado
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../17-busquedas-y-versiones/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    17 · Búsquedas avanzadas y versiones
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../18-terminologias-y-perfiles/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    18 · Terminologías y perfiles
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../19-resumen-ips/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    19 · Resumen del paciente (IPS)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#lo-que-vas-a-aprender" class="md-nav__link">
+    <span class="md-ellipsis">
+      Lo que vas a aprender
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#la-historia" class="md-nav__link">
+    <span class="md-ellipsis">
+      La historia
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ficha-del-recurso-bundle" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ficha del recurso: Bundle
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-a-paso-armar-la-transacción" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso a paso: armar la transacción
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Paso a paso: armar la transacción">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paso-1--el-contenedor" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 1 · El contenedor
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-2--una-entrada-por-cada-paciente" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 2 · Una entrada por cada paciente
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-3--evitar-duplicados" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 3 · Evitar duplicados
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ejercicios-en-el-servidor" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ejercicios en el servidor
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Ejercicios en el servidor">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#03a--registrar-a-la-familia" class="md-nav__link">
+    <span class="md-ellipsis">
+      03a · Registrar a la familia
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#03b--comprobar" class="md-nav__link">
+    <span class="md-ellipsis">
+      03b · Comprobar
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reto-1--la-creación-condicional" class="md-nav__link">
+    <span class="md-ellipsis">
+      Reto 1 · La creación condicional
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reto-2--todo-o-nada" class="md-nav__link">
+    <span class="md-ellipsis">
+      Reto 2 · Todo o nada
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#autoevaluación" class="md-nav__link">
+    <span class="md-ellipsis">
+      Autoevaluación
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#resumen" class="md-nav__link">
+    <span class="md-ellipsis">
+      Resumen
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ejecutar-este-módulo" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ejecutar este módulo
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+    <a href="https://github.com/f-slg/aprende-fhir/edit/main/modulos/03-transacciones/README.md" title="Editar esta página" class="md-content__button md-icon">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
+    </a>
+  
+  
+
+
+<h1 id="módulo-03--transacciones-varios-recursos-a-la-vez">Módulo 03 · Transacciones: varios recursos a la vez<a class="headerlink" href="#módulo-03--transacciones-varios-recursos-a-la-vez" title="Permanent link">&para;</a></h1>
+<p><a href="../02-patient/">← Módulo 02</a> · <a href="../../">Inicio</a> · <a href="../04-profesionales-y-organizaciones/">Módulo 04 →</a></p>
+<blockquote>
+<p><strong>Nivel:</strong> básico · <strong>Duración:</strong> 40 minutos · <strong>Necesitas:</strong> módulo 02</p>
+</blockquote>
+<h2 id="lo-que-vas-a-aprender">Lo que vas a aprender<a class="headerlink" href="#lo-que-vas-a-aprender" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Qué es un <strong>Bundle</strong> y sus distintos tipos.</li>
+<li>A enviar varios recursos en una sola petición con una <strong>transacción</strong>.</li>
+<li>Por qué una transacción es <strong>todo o nada</strong>.</li>
+<li>A evitar duplicados con la <strong>creación condicional</strong>.</li>
+</ol>
+<h2 id="la-historia">La historia<a class="headerlink" href="#la-historia" title="Permanent link">&para;</a></h2>
+<p>Luis llega acompañado de su familia: su esposa <strong>Carmen Elena Andrade Vega</strong>,
+su hija <strong>María José Paredes Andrade</strong> (18 años) y su hijo <strong>Daniel Esteban
+Paredes Andrade</strong> (15 años). La admisionista quiere registrar a los tres de
+una vez, y sin crear duplicados si alguno ya estaba registrado.</p>
+<hr />
+<h2 id="ficha-del-recurso-bundle">Ficha del recurso: Bundle<a class="headerlink" href="#ficha-del-recurso-bundle" title="Permanent link">&para;</a></h2>
+<p><strong>¿Qué es?</strong> Un <strong>contenedor</strong> de recursos. No representa nada clínico por sí
+mismo: agrupa otros recursos para enviarlos, devolverlos o guardarlos juntos.</p>
+<p><strong>¿Para qué se usa?</strong> Depende de su <code>type</code>:</p>
+<table>
+<thead>
+<tr>
+<th><code>type</code></th>
+<th>Para qué</th>
+<th>Quién lo crea</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>searchset</code></td>
+<td>Resultados de una búsqueda</td>
+<td>El servidor</td>
+</tr>
+<tr>
+<td><code>history</code></td>
+<td>Las versiones de uno o varios recursos</td>
+<td>El servidor</td>
+</tr>
+<tr>
+<td><code>transaction</code></td>
+<td>Varias operaciones que se aplican <strong>juntas: todas o ninguna</strong></td>
+<td>Tú</td>
+</tr>
+<tr>
+<td><code>batch</code></td>
+<td>Varias operaciones <strong>independientes</strong>: cada una puede fallar por separado</td>
+<td>Tú</td>
+</tr>
+<tr>
+<td><code>transaction-response</code>, <code>batch-response</code></td>
+<td>La respuesta a una transacción o un lote</td>
+<td>El servidor</td>
+</tr>
+<tr>
+<td><code>document</code></td>
+<td>Un documento clínico firmado e inmutable (módulo 09)</td>
+<td>Tú</td>
+</tr>
+<tr>
+<td><code>collection</code></td>
+<td>Un conjunto cualquiera de recursos</td>
+<td>Tú</td>
+</tr>
+</tbody>
+</table>
+<p><strong>¿Cuándo usar otro recurso?</strong> Si solo quieres agrupar recursos por tema
+dentro del servidor (por ejemplo, "los pacientes de un programa"), usa
+<strong>Group</strong> o <strong>List</strong>. Un Bundle es para <strong>transportar</strong> recursos.</p>
+<p><strong>Elementos principales</strong> (<a href="https://hl7.org/fhir/R4/bundle.html">https://hl7.org/fhir/R4/bundle.html</a>):</p>
+<!-- ficha Bundle -->
+<table>
+<thead>
+<tr>
+<th>Elemento</th>
+<th>Card.</th>
+<th>Tipo</th>
+<th>Para qué sirve</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>type</code></td>
+<td><strong>1..1</strong></td>
+<td>code</td>
+<td>Qué clase de Bundle es (tabla de arriba).</td>
+</tr>
+<tr>
+<td><code>timestamp</code></td>
+<td>0..1</td>
+<td>instant</td>
+<td>Cuándo se armó el Bundle. Obligatorio en los documentos.</td>
+</tr>
+<tr>
+<td><code>total</code></td>
+<td>0..1</td>
+<td>unsignedInt</td>
+<td>En una búsqueda, cuántos resultados hay en total.</td>
+</tr>
+<tr>
+<td><code>link</code></td>
+<td>0..*</td>
+<td>BackboneElement</td>
+<td>Enlaces de paginación: <code>self</code>, <code>next</code>, <code>previous</code>.</td>
+</tr>
+<tr>
+<td><code>entry</code></td>
+<td>0..*</td>
+<td>BackboneElement</td>
+<td>Cada uno de los recursos que contiene.</td>
+</tr>
+<tr>
+<td><code>entry.fullUrl</code></td>
+<td>0..1</td>
+<td>uri</td>
+<td>La dirección del recurso, o un <code>urn:uuid:</code> temporal.</td>
+</tr>
+<tr>
+<td><code>entry.resource</code></td>
+<td>0..1</td>
+<td>Resource</td>
+<td>El recurso en sí.</td>
+</tr>
+<tr>
+<td><code>entry.request</code></td>
+<td>0..1</td>
+<td>BackboneElement</td>
+<td>En una transacción: qué operación hacer con este recurso.</td>
+</tr>
+<tr>
+<td><code>entry.request.method</code></td>
+<td><strong>1..1</strong></td>
+<td>code</td>
+<td><code>POST</code>, <code>PUT</code>, <code>DELETE</code>...</td>
+</tr>
+<tr>
+<td><code>entry.request.url</code></td>
+<td><strong>1..1</strong></td>
+<td>uri</td>
+<td>Dónde: <code>Patient</code>, <code>Patient/1000</code>...</td>
+</tr>
+<tr>
+<td><code>entry.request.ifNoneExist</code></td>
+<td>0..1</td>
+<td>string</td>
+<td>Creación condicional: no crear si ya existe un recurso que cumple esta búsqueda.</td>
+</tr>
+<tr>
+<td><code>entry.response</code></td>
+<td>0..1</td>
+<td>BackboneElement</td>
+<td>En la respuesta: el resultado de cada operación.</td>
+</tr>
+</tbody>
+</table>
+<!-- /ficha -->
+
+<hr />
+<h2 id="paso-a-paso-armar-la-transacción">Paso a paso: armar la transacción<a class="headerlink" href="#paso-a-paso-armar-la-transacción" title="Permanent link">&para;</a></h2>
+<h3 id="paso-1--el-contenedor">Paso 1 · El contenedor<a class="headerlink" href="#paso-1--el-contenedor" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"resourceType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Bundle"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"transaction"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"entry"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="paso-2--una-entrada-por-cada-paciente">Paso 2 · Una entrada por cada paciente<a class="headerlink" href="#paso-2--una-entrada-por-cada-paciente" title="Permanent link">&para;</a></h3>
+<p>Cada <code>entry</code> lleva tres cosas: el recurso, su <code>fullUrl</code> y la operación.</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"fullUrl"</span><span class="p">:</span><span class="w"> </span><span class="s2">"urn:uuid:…"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"resource"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"resourceType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Patient"</span><span class="p">,</span><span class="w"> </span><span class="nt">"identifier"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="err">…</span><span class="w"> </span><span class="p">],</span><span class="w"> </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="err">…</span><span class="w"> </span><span class="p">],</span><span class="w"> </span><span class="nt">"gender"</span><span class="p">:</span><span class="w"> </span><span class="s2">"female"</span><span class="p">,</span><span class="w"> </span><span class="nt">"birthDate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2006-07-21"</span><span class="w"> </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"request"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"method"</span><span class="p">:</span><span class="w"> </span><span class="s2">"POST"</span><span class="p">,</span><span class="w"> </span><span class="nt">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Patient"</span><span class="w"> </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>El <code>fullUrl</code> con <code>urn:uuid:</code> es un <strong>identificador temporal</strong>. Sirve para que
+un recurso de la transacción apunte a otro que todavía no existe en el
+servidor: el servidor reemplaza cada <code>urn:uuid:</code> por el <code>id</code> definitivo al
+guardar. Aquí los pacientes no se apuntan entre sí, pero en el módulo 09 lo
+aprovecharás.</p>
+<h3 id="paso-3--evitar-duplicados">Paso 3 · Evitar duplicados<a class="headerlink" href="#paso-3--evitar-duplicados" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nt">"request"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nt">"method"</span><span class="p">:</span><span class="w"> </span><span class="s2">"POST"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Patient"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"ifNoneExist"</span><span class="p">:</span><span class="w"> </span><span class="s2">"identifier=https://f-slg.github.io/aprende-fhir/sid/cedula|9900000025"</span>
+<span class="p">}</span>
+</code></pre></div>
+<p><code>ifNoneExist</code> convierte el <code>POST</code> en una <strong>creación condicional</strong>: el
+servidor busca primero un paciente con esa cédula y solo lo crea si no
+existe. Así puedes enviar la misma transacción dos veces sin duplicar a
+nadie.</p>
+<p>Solución completa: <a href="soluciones/03a_bundle_transaction_familia.json"><code>03a_bundle_transaction_familia.json</code></a>.</p>
+<hr />
+<h2 id="ejercicios-en-el-servidor">Ejercicios en el servidor<a class="headerlink" href="#ejercicios-en-el-servidor" title="Permanent link">&para;</a></h2>
+<h3 id="03a--registrar-a-la-familia">03a · Registrar a la familia<a class="headerlink" href="#03a--registrar-a-la-familia" title="Permanent link">&para;</a></h3>
+<p>Una transacción se envía a la <strong>raíz</strong> del servidor, sin tipo de recurso en
+la ruta:</p>
+<div class="highlight"><pre><span></span><code><span class="err">POST {{FHIRURL}}</span>
+<span class="err">Content-Type: application/fhir+json</span>
+</code></pre></div>
+<p>Respuesta: <strong><code>200 OK</code></strong> con un Bundle de tipo <code>transaction-response</code>. En cada
+<code>entry.response</code> verás:</p>
+<ul>
+<li><code>status</code>: <code>201 Created</code> si lo creó, o <code>200 OK</code> si ya existía;</li>
+<li><code>location</code>: la dirección del recurso, por ejemplo <code>Patient/1001/_history/1</code>.</li>
+</ul>
+<h3 id="03b--comprobar">03b · Comprobar<a class="headerlink" href="#03b--comprobar" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="err">GET {{FHIRURL}}/Patient?family=Paredes</span>
+</code></pre></div>
+<p>Aparecen Luis, María José y Daniel. ¿Por qué no aparece Carmen Elena?
+<em>(Pista: mira su apellido.)</em></p>
+<h3 id="reto-1--la-creación-condicional">Reto 1 · La creación condicional<a class="headerlink" href="#reto-1--la-creación-condicional" title="Permanent link">&para;</a></h3>
+<p>Envía <strong>otra vez</strong> la misma transacción. En <code>entry.response.status</code> ahora
+verás <code>200 OK</code> en lugar de <code>201 Created</code>: los pacientes ya existían y no se
+duplicaron.</p>
+<h3 id="reto-2--todo-o-nada">Reto 2 · Todo o nada<a class="headerlink" href="#reto-2--todo-o-nada" title="Permanent link">&para;</a></h3>
+<p>Copia la transacción y cambia las tres cédulas por otras nuevas (por ejemplo,
+que empiecen con <code>98</code>). En uno de los pacientes escribe
+<code>"gender": "masculino"</code>. El servidor responde <strong><code>400</code></strong>:</p>
+<div class="highlight"><pre><span></span><code>HAPI-1821: [element="gender"] Invalid attribute value "masculino": Unknown AdministrativeGender code 'masculino'
+</code></pre></div>
+<p>Busca ahora a los pacientes con las cédulas nuevas: <strong>no existe ninguno</strong>.
+Aunque solo una entrada estaba mal, la transacción se rechazó completa. Eso
+garantiza que nunca quede la familia registrada a medias.</p>
+<h2 id="autoevaluación">Autoevaluación<a class="headerlink" href="#autoevaluación" title="Permanent link">&para;</a></h2>
+<details>
+<summary>1. ¿A qué dirección se envía una transacción?</summary>
+<p>A la raíz del servidor: <code>POST {{FHIRURL}}</code>, no a <code>/Patient</code> ni a <code>/Bundle</code>.</p>
+</details>
+<details>
+<summary>2. ¿Cuándo usarías <code>batch</code> en lugar de <code>transaction</code>?</summary>
+<p>Cuando las operaciones son independientes y prefieres que se guarden las
+correctas aunque alguna falle. Por ejemplo, una carga masiva de vacunas de
+muchos centros de salud: no conviene rechazar todo por un registro con error.</p>
+</details>
+<details>
+<summary>3. ¿Para qué sirve <code>ifNoneExist</code>?</summary>
+<p>Para no crear un recurso si ya existe uno que cumple la búsqueda indicada
+(aquí, la misma cédula). Evita duplicados cuando se reenvía información.</p>
+</details>
+<h2 id="resumen">Resumen<a class="headerlink" href="#resumen" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Un <strong>Bundle</strong> agrupa recursos; su <code>type</code> dice para qué.</li>
+<li>Una <strong>transacción</strong> se envía a la raíz y es <strong>todo o nada</strong>.</li>
+<li><code>urn:uuid:</code> es un identificador temporal para enlazar recursos que aún no
+  existen.</li>
+<li><code>ifNoneExist</code> evita duplicados.</li>
+</ul>
+<h2 id="ejecutar-este-módulo">Ejecutar este módulo<a class="headerlink" href="#ejecutar-este-módulo" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Postman:</strong> carpeta <em>03 · Transacciones</em>.</li>
+<li><strong>curl:</strong> <code>curl/taller.sh 03</code></li>
+<li><strong>R:</strong></li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="n">r</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">fhir</span><span class="p">(</span><span class="s">"POST"</span><span class="p">,</span><span class="w"> </span><span class="s">""</span><span class="p">,</span><span class="w"> </span><span class="s">"modulos/03-transacciones/soluciones/03a_bundle_transaction_familia.json"</span><span class="p">)</span>
+<span class="nf">vapply</span><span class="p">(</span><span class="n">r</span><span class="o">$</span><span class="n">entry</span><span class="p">,</span><span class="w"> </span><span class="kr">function</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="n">e</span><span class="o">$</span><span class="n">response</span><span class="o">$</span><span class="n">status</span><span class="p">,</span><span class="w"> </span><span class="s">""</span><span class="p">)</span>
+</code></pre></div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Volver al principio
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Pie" >
+        
+          
+          <a href="../02-patient/" class="md-footer__link md-footer__link--prev" aria-label="Anterior: 02 · Patient: el paciente">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Anterior
+              </span>
+              <div class="md-ellipsis">
+                02 · Patient: el paciente
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../04-profesionales-y-organizaciones/" class="md-footer__link md-footer__link--next" aria-label="Siguiente: 04 · Profesionales y organizaciones">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Siguiente
+              </span>
+              <div class="md-ellipsis">
+                04 · Profesionales y organizaciones
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Contenido CC BY 4.0 · Código MIT · HL7® y FHIR® son marcas registradas de Health Level Seven International; este taller no implica afiliación ni aval de HL7.
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.sections", "navigation.expand", "navigation.footer", "navigation.top", "navigation.tracking", "toc.follow", "search.highlight", "search.suggest", "content.code.copy", "content.action.edit"], "search": "../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.525ec568.min.js"></script>
+      
+    
+  </body>
+</html>

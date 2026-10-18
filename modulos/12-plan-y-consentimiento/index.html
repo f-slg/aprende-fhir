@@ -1,0 +1,2720 @@
+
+<!doctype html>
+<html lang="es" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Taller práctico de HL7 FHIR R4 en español, paso a paso, con un caso clínico ecuatoriano ficticio. Para Postman, R o curl.">
+      
+      
+        <meta name="author" content="Dr. Fabricio Salas Guerrero">
+      
+      
+        <link rel="canonical" href="https://f-slg.github.io/aprende-fhir/modulos/12-plan-y-consentimiento/">
+      
+      
+        <link rel="prev" href="../11-anatomia-patologica/">
+      
+      
+        <link rel="next" href="../13-procedimientos/">
+      
+      
+      <link rel="icon" href="../../imagenes/logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.39">
+    
+    
+      
+        <title>12 · Plan y consentimiento - Aprende FHIR desde cero</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.8c3ca2c6.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../estilos/taller.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#módulo-12--plan-y-consentimiento" class="md-skip">
+          Saltar a contenido
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabecera">
+    <a href="../.." title="Aprende FHIR desde cero" class="md-header__button md-logo" aria-label="Aprende FHIR desde cero" data-md-component="logo">
+      
+  <img src="../../imagenes/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Aprende FHIR desde cero
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              12 · Plan y consentimiento
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Cambiar a modo oscuro"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo oscuro" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Cambiar a modo claro"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo claro" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Búsqueda" placeholder="Búsqueda" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Buscar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpiar" aria-label="Limpiar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando búsqueda
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/f-slg/aprende-fhir" title="Ir al repositorio" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    f-slg/aprende-fhir
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navegación" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Aprende FHIR desde cero" class="md-nav__button md-logo" aria-label="Aprende FHIR desde cero" data-md-component="logo">
+      
+  <img src="../../imagenes/logo.png" alt="logo">
+
+    </a>
+    Aprende FHIR desde cero
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/f-slg/aprende-fhir" title="Ir al repositorio" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    f-slg/aprende-fhir
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Inicio
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Nivel básico
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Nivel básico
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01-fundamentos/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    01 · Fundamentos
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02-patient/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    02 · Patient: el paciente
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03-transacciones/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    03 · Transacciones: varios recursos a la vez
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04-profesionales-y-organizaciones/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    04 · Profesionales y organizaciones
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05-diagnostico-y-encuentro/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    05 · Diagnóstico y encuentro
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06-observaciones/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    06 · Observaciones: signos vitales y tipos de valor
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Nivel intermedio
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Nivel intermedio
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07-antecedentes/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    07 · Antecedentes: alergias, medicación habitual y familia
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08-vacunacion/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    08 · Vacunación
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../09-documentos-clinicos/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    09 · Documentos clínicos
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10-ordenes-y-derivacion/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    10 · Órdenes y derivación
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../11-anatomia-patologica/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    11 · Anatomía patológica
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    12 · Plan y consentimiento
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    12 · Plan y consentimiento
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#lo-que-vas-a-aprender" class="md-nav__link">
+    <span class="md-ellipsis">
+      Lo que vas a aprender
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#la-historia" class="md-nav__link">
+    <span class="md-ellipsis">
+      La historia
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ficha-del-recurso-careteam" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ficha del recurso: CareTeam
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ficha-del-recurso-goal" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ficha del recurso: Goal
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ficha-del-recurso-careplan" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ficha del recurso: CarePlan
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ficha-del-recurso-consent" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ficha del recurso: Consent
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-a-paso-el-comité-de-tumores" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso a paso: el comité de tumores
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Paso a paso: el comité de tumores">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paso-1--el-mínimo-estado-nombre-y-paciente" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 1 · El mínimo: estado, nombre y paciente
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-2--quiénes-lo-integran-y-con-qué-rol" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 2 · Quiénes lo integran y con qué rol
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-3--desde-cuándo-de-qué-organización-y-por-qué" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 3 · Desde cuándo, de qué organización y por qué
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-a-paso-las-metas" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso a paso: las metas
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Paso a paso: las metas">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paso-1--el-mínimo-estado-descripción-y-paciente" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 1 · El mínimo: estado, descripción y paciente
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-2--avance-prioridad-y-plazo" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 2 · Avance, prioridad y plazo
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-3--a-qué-problema-responde-y-quién-la-propone" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 3 · A qué problema responde y quién la propone
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-a-paso-el-plan-de-tratamiento" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso a paso: el plan de tratamiento
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Paso a paso: el plan de tratamiento">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paso-1--el-mínimo-estado-intención-y-paciente" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 1 · El mínimo: estado, intención y paciente
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-2--qué-plan-es-de-cuándo-y-de-quién" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 2 · Qué plan es, de cuándo y de quién
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-3--el-equipo-el-problema-y-las-metas" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 3 · El equipo, el problema y las metas
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-4--las-actividades-cirugía-quimioterapia-y-hormonoterapia" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 4 · Las actividades: cirugía, quimioterapia y hormonoterapia
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-a-paso-el-consentimiento-informado" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso a paso: el consentimiento informado
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Paso a paso: el consentimiento informado">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paso-1--el-mínimo-estado-alcance-categoría-paciente-y-norma" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 1 · El mínimo: estado, alcance, categoría, paciente y norma
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-2--cuándo-quién-lo-otorga-y-ante-qué-organización" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 2 · Cuándo, quién lo otorga y ante qué organización
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-3--qué-se-autoriza-la-disposición" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 3 · Qué se autoriza: la disposición
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ejercicios-en-el-servidor" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ejercicios en el servidor
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Ejercicios en el servidor">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#12f--el-plan-con-sus-metas-y-su-equipo" class="md-nav__link">
+    <span class="md-ellipsis">
+      12f · El plan con sus metas y su equipo
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12g-y-12h--error-a-propósito-el-consentimiento-sin-categoría" class="md-nav__link">
+    <span class="md-ellipsis">
+      12g y 12h · Error a propósito: el consentimiento sin categoría
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#para-pensar" class="md-nav__link">
+    <span class="md-ellipsis">
+      Para pensar
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#autoevaluación" class="md-nav__link">
+    <span class="md-ellipsis">
+      Autoevaluación
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#resumen" class="md-nav__link">
+    <span class="md-ellipsis">
+      Resumen
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ejecutar-este-módulo" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ejecutar este módulo
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../13-procedimientos/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    13 · Procedimientos
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../14-citas/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    14 · Citas
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../15-medicamentos/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    15 · Medicamentos
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../16-seguimiento/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    16 · Seguimiento: cuestionarios y resultados informados por el paciente
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Nivel avanzado
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Nivel avanzado
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../17-busquedas-y-versiones/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    17 · Búsquedas avanzadas y versiones
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../18-terminologias-y-perfiles/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    18 · Terminologías y perfiles
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../19-resumen-ips/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    19 · Resumen del paciente (IPS)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#lo-que-vas-a-aprender" class="md-nav__link">
+    <span class="md-ellipsis">
+      Lo que vas a aprender
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#la-historia" class="md-nav__link">
+    <span class="md-ellipsis">
+      La historia
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ficha-del-recurso-careteam" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ficha del recurso: CareTeam
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ficha-del-recurso-goal" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ficha del recurso: Goal
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ficha-del-recurso-careplan" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ficha del recurso: CarePlan
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ficha-del-recurso-consent" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ficha del recurso: Consent
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-a-paso-el-comité-de-tumores" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso a paso: el comité de tumores
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Paso a paso: el comité de tumores">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paso-1--el-mínimo-estado-nombre-y-paciente" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 1 · El mínimo: estado, nombre y paciente
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-2--quiénes-lo-integran-y-con-qué-rol" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 2 · Quiénes lo integran y con qué rol
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-3--desde-cuándo-de-qué-organización-y-por-qué" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 3 · Desde cuándo, de qué organización y por qué
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-a-paso-las-metas" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso a paso: las metas
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Paso a paso: las metas">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paso-1--el-mínimo-estado-descripción-y-paciente" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 1 · El mínimo: estado, descripción y paciente
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-2--avance-prioridad-y-plazo" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 2 · Avance, prioridad y plazo
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-3--a-qué-problema-responde-y-quién-la-propone" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 3 · A qué problema responde y quién la propone
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-a-paso-el-plan-de-tratamiento" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso a paso: el plan de tratamiento
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Paso a paso: el plan de tratamiento">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paso-1--el-mínimo-estado-intención-y-paciente" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 1 · El mínimo: estado, intención y paciente
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-2--qué-plan-es-de-cuándo-y-de-quién" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 2 · Qué plan es, de cuándo y de quién
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-3--el-equipo-el-problema-y-las-metas" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 3 · El equipo, el problema y las metas
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-4--las-actividades-cirugía-quimioterapia-y-hormonoterapia" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 4 · Las actividades: cirugía, quimioterapia y hormonoterapia
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-a-paso-el-consentimiento-informado" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso a paso: el consentimiento informado
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Paso a paso: el consentimiento informado">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paso-1--el-mínimo-estado-alcance-categoría-paciente-y-norma" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 1 · El mínimo: estado, alcance, categoría, paciente y norma
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-2--cuándo-quién-lo-otorga-y-ante-qué-organización" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 2 · Cuándo, quién lo otorga y ante qué organización
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-3--qué-se-autoriza-la-disposición" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 3 · Qué se autoriza: la disposición
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ejercicios-en-el-servidor" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ejercicios en el servidor
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Ejercicios en el servidor">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#12f--el-plan-con-sus-metas-y-su-equipo" class="md-nav__link">
+    <span class="md-ellipsis">
+      12f · El plan con sus metas y su equipo
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12g-y-12h--error-a-propósito-el-consentimiento-sin-categoría" class="md-nav__link">
+    <span class="md-ellipsis">
+      12g y 12h · Error a propósito: el consentimiento sin categoría
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#para-pensar" class="md-nav__link">
+    <span class="md-ellipsis">
+      Para pensar
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#autoevaluación" class="md-nav__link">
+    <span class="md-ellipsis">
+      Autoevaluación
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#resumen" class="md-nav__link">
+    <span class="md-ellipsis">
+      Resumen
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ejecutar-este-módulo" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ejecutar este módulo
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+    <a href="https://github.com/f-slg/aprende-fhir/edit/main/modulos/12-plan-y-consentimiento/README.md" title="Editar esta página" class="md-content__button md-icon">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
+    </a>
+  
+  
+
+
+<h1 id="módulo-12--plan-y-consentimiento">Módulo 12 · Plan y consentimiento<a class="headerlink" href="#módulo-12--plan-y-consentimiento" title="Permanent link">&para;</a></h1>
+<p><a href="../11-anatomia-patologica/">← Módulo 11</a> · <a href="../../">Inicio</a> · <a href="../13-procedimientos/">Módulo 13 →</a></p>
+<blockquote>
+<p><strong>Nivel:</strong> intermedio · <strong>Duración:</strong> 75 minutos · <strong>Necesitas:</strong> módulos 10 y 11</p>
+</blockquote>
+<h2 id="lo-que-vas-a-aprender">Lo que vas a aprender<a class="headerlink" href="#lo-que-vas-a-aprender" title="Permanent link">&para;</a></h2>
+<ol>
+<li>A representar un <strong>equipo</strong> de atención con CareTeam.</li>
+<li>A definir <strong>metas</strong> de tratamiento con Goal.</li>
+<li>A registrar un <strong>plan de tratamiento</strong> con sus actividades (CarePlan).</li>
+<li>A registrar un <strong>consentimiento informado</strong> (Consent).</li>
+</ol>
+<h2 id="la-historia">La historia<a class="headerlink" href="#la-historia" title="Permanent link">&para;</a></h2>
+<p>Con el diagnóstico confirmado (módulo 11), el <strong>20 de mayo de 2025</strong> se reúne
+el <strong>comité de tumores de mama</strong> del hospital, coordinado por el Dr. Ruiz,
+con la Dra. Salazar como médica de cabecera. El comité acuerda:</p>
+<table>
+<thead>
+<tr>
+<th>Metas</th>
+<th>Plan</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sin evidencia de enfermedad al terminar el tratamiento</td>
+<td>1. Mastectomía parcial</td>
+</tr>
+<tr>
+<td>Mantener la funcionalidad (ECOG 0 a 1)</td>
+<td>2. Quimioterapia con doxorrubicina, 4 ciclos</td>
+</tr>
+<tr>
+<td></td>
+<td>3. Hormonoterapia con tamoxifeno, 5 años</td>
+</tr>
+</tbody>
+</table>
+<p>El <strong>27 de mayo</strong>, después de que el equipo le explicara la cirugía, sus
+riesgos y sus alternativas, Luis <strong>firma el consentimiento informado</strong> para
+la mastectomía parcial.</p>
+<hr />
+<h2 id="ficha-del-recurso-careteam">Ficha del recurso: CareTeam<a class="headerlink" href="#ficha-del-recurso-careteam" title="Permanent link">&para;</a></h2>
+<p><strong>¿Qué es?</strong> Un <strong>grupo de personas</strong> que participa en la atención de un
+paciente: un comité de tumores, el equipo de un programa de crónicos, el
+equipo de cuidados paliativos. Puede incluir al paciente y a su familia.</p>
+<p><strong>¿Para qué se usa?</strong> Para decir <strong>quiénes</strong> son responsables de un paciente
+o de un plan, y con qué rol cada uno.</p>
+<p><strong>¿Cuándo usar otro recurso?</strong> Un grupo de personas sin relación con un
+paciente concreto (por ejemplo, "el personal de oncología") es un <strong>Group</strong> o
+una <strong>Organization</strong>.</p>
+<!-- ficha CareTeam -->
+<table>
+<thead>
+<tr>
+<th>Elemento</th>
+<th>Card.</th>
+<th>Tipo</th>
+<th>Para qué sirve</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>identifier</code></td>
+<td>0..*</td>
+<td>Identifier</td>
+<td>Identificador del equipo.</td>
+</tr>
+<tr>
+<td><code>status</code> ⚑</td>
+<td>0..1</td>
+<td>code</td>
+<td><code>proposed</code>, <code>active</code>, <code>suspended</code>, <code>inactive</code> o <code>entered-in-error</code>.</td>
+</tr>
+<tr>
+<td><code>category</code></td>
+<td>0..*</td>
+<td>CodeableConcept</td>
+<td>Clase de equipo.</td>
+</tr>
+<tr>
+<td><code>name</code></td>
+<td>0..1</td>
+<td>string</td>
+<td>Nombre.</td>
+</tr>
+<tr>
+<td><code>subject</code></td>
+<td>0..1</td>
+<td>Reference(Patient | Group)</td>
+<td>El paciente que atiende.</td>
+</tr>
+<tr>
+<td><code>period</code></td>
+<td>0..1</td>
+<td>Period</td>
+<td>Desde y hasta cuándo funciona.</td>
+</tr>
+<tr>
+<td><code>participant</code></td>
+<td>0..*</td>
+<td>BackboneElement</td>
+<td>Sus integrantes.</td>
+</tr>
+<tr>
+<td><code>participant.role</code></td>
+<td>0..*</td>
+<td>CodeableConcept</td>
+<td>El rol de cada uno.</td>
+</tr>
+<tr>
+<td><code>participant.member</code></td>
+<td>0..1</td>
+<td>Reference(Practitioner | PractitionerRole | RelatedPerson | Patient | …)</td>
+<td>La persona o el rol profesional.</td>
+</tr>
+<tr>
+<td><code>reasonReference</code></td>
+<td>0..*</td>
+<td>Reference(Condition)</td>
+<td>El problema de salud por el que existe el equipo.</td>
+</tr>
+<tr>
+<td><code>managingOrganization</code></td>
+<td>0..*</td>
+<td>Reference(Organization)</td>
+<td>La organización responsable.</td>
+</tr>
+<tr>
+<td><code>note</code></td>
+<td>0..*</td>
+<td>Annotation</td>
+<td>Notas.</td>
+</tr>
+</tbody>
+</table>
+<!-- /ficha -->
+
+<h2 id="ficha-del-recurso-goal">Ficha del recurso: Goal<a class="headerlink" href="#ficha-del-recurso-goal" title="Permanent link">&para;</a></h2>
+<p><strong>¿Qué es?</strong> Un <strong>resultado deseado</strong> para el paciente: bajar la presión a
+menos de 140/90, perder 5 kg, dejar de fumar, sin evidencia de enfermedad.</p>
+<p><strong>¿Para qué se usa?</strong> Para que el plan tenga <strong>metas medibles</strong> y se pueda
+evaluar si se alcanzaron.</p>
+<!-- ficha Goal -->
+<table>
+<thead>
+<tr>
+<th>Elemento</th>
+<th>Card.</th>
+<th>Tipo</th>
+<th>Para qué sirve</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>identifier</code></td>
+<td>0..*</td>
+<td>Identifier</td>
+<td>Identificador de la meta.</td>
+</tr>
+<tr>
+<td><code>lifecycleStatus</code> ⚑</td>
+<td><strong>1..1</strong></td>
+<td>code</td>
+<td><code>proposed</code>, <code>planned</code>, <code>accepted</code>, <code>active</code>, <code>on-hold</code>, <code>completed</code>, <code>cancelled</code>...</td>
+</tr>
+<tr>
+<td><code>achievementStatus</code></td>
+<td>0..1</td>
+<td>CodeableConcept</td>
+<td>¿Se está logrando? <code>in-progress</code>, <code>improving</code>, <code>worsening</code>, <code>achieved</code>, <code>not-achieved</code>...</td>
+</tr>
+<tr>
+<td><code>category</code></td>
+<td>0..*</td>
+<td>CodeableConcept</td>
+<td>Clase de meta: tratamiento, dietética, conductual.</td>
+</tr>
+<tr>
+<td><code>priority</code></td>
+<td>0..1</td>
+<td>CodeableConcept</td>
+<td>Prioridad: alta, media o baja.</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td><strong>1..1</strong></td>
+<td>CodeableConcept</td>
+<td><strong>Qué</strong> se quiere lograr.</td>
+</tr>
+<tr>
+<td><code>subject</code></td>
+<td><strong>1..1</strong></td>
+<td>Reference(Patient | Group | Organization)</td>
+<td>Para quién.</td>
+</tr>
+<tr>
+<td><code>start[x]</code></td>
+<td>0..1</td>
+<td>date | CodeableConcept</td>
+<td>Cuándo empieza.</td>
+</tr>
+<tr>
+<td><code>target</code></td>
+<td>0..*</td>
+<td>BackboneElement</td>
+<td>El objetivo medible y su plazo.</td>
+</tr>
+<tr>
+<td><code>target.measure</code></td>
+<td>0..1</td>
+<td>CodeableConcept</td>
+<td>Qué se mide (por ejemplo, la presión sistólica).</td>
+</tr>
+<tr>
+<td><code>target.detail[x]</code></td>
+<td>0..1</td>
+<td>Quantity | Range | CodeableConcept | string | …</td>
+<td>El valor que se quiere alcanzar.</td>
+</tr>
+<tr>
+<td><code>target.due[x]</code></td>
+<td>0..1</td>
+<td>date | Duration</td>
+<td>Para cuándo.</td>
+</tr>
+<tr>
+<td><code>expressedBy</code></td>
+<td>0..1</td>
+<td>Reference(Patient | Practitioner | PractitionerRole | RelatedPerson)</td>
+<td>Quién propone la meta.</td>
+</tr>
+<tr>
+<td><code>addresses</code></td>
+<td>0..*</td>
+<td>Reference(Condition | Observation | MedicationStatement | NutritionOrder | …)</td>
+<td>El problema de salud al que responde.</td>
+</tr>
+<tr>
+<td><code>outcomeReference</code></td>
+<td>0..*</td>
+<td>Reference(Observation)</td>
+<td>Las observaciones que muestran el resultado.</td>
+</tr>
+</tbody>
+</table>
+<!-- /ficha -->
+
+<p><code>lifecycleStatus</code> (¿en qué etapa está la meta?) y <code>achievementStatus</code> (¿se
+está cumpliendo?) son dos preguntas distintas, igual que los dos estados de
+Condition (módulo 05).</p>
+<h2 id="ficha-del-recurso-careplan">Ficha del recurso: CarePlan<a class="headerlink" href="#ficha-del-recurso-careplan" title="Permanent link">&para;</a></h2>
+<p><strong>¿Qué es?</strong> El <strong>plan de atención</strong> de un paciente: qué se va a hacer, para
+qué problema, con qué metas y quiénes participan.</p>
+<p><strong>¿Para qué se usa?</strong> Para planes de tratamiento oncológico, planes de
+enfermería, planes de control de crónicos, planes de rehabilitación. Las
+órdenes y prescripciones que lo ejecutan pueden apuntar a él con <code>basedOn</code>.</p>
+<!-- ficha CarePlan -->
+<table>
+<thead>
+<tr>
+<th>Elemento</th>
+<th>Card.</th>
+<th>Tipo</th>
+<th>Para qué sirve</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>identifier</code></td>
+<td>0..*</td>
+<td>Identifier</td>
+<td>Identificador del plan.</td>
+</tr>
+<tr>
+<td><code>status</code> ⚑</td>
+<td><strong>1..1</strong></td>
+<td>code</td>
+<td><code>draft</code>, <code>active</code>, <code>on-hold</code>, <code>revoked</code>, <code>completed</code>, <code>entered-in-error</code>.</td>
+</tr>
+<tr>
+<td><code>intent</code> ⚑</td>
+<td><strong>1..1</strong></td>
+<td>code</td>
+<td><code>proposal</code>, <code>plan</code>, <code>order</code> u <code>option</code>.</td>
+</tr>
+<tr>
+<td><code>category</code></td>
+<td>0..*</td>
+<td>CodeableConcept</td>
+<td>Clase de plan.</td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td>0..1</td>
+<td>string</td>
+<td>Título.</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td>0..1</td>
+<td>string</td>
+<td>Descripción.</td>
+</tr>
+<tr>
+<td><code>subject</code></td>
+<td><strong>1..1</strong></td>
+<td>Reference(Patient | Group)</td>
+<td>Para quién.</td>
+</tr>
+<tr>
+<td><code>period</code></td>
+<td>0..1</td>
+<td>Period</td>
+<td>Periodo que cubre.</td>
+</tr>
+<tr>
+<td><code>created</code></td>
+<td>0..1</td>
+<td>dateTime</td>
+<td>Cuándo se creó.</td>
+</tr>
+<tr>
+<td><code>author</code></td>
+<td>0..1</td>
+<td>Reference(Patient | Practitioner | PractitionerRole | Device | …)</td>
+<td>Quién es responsable del plan.</td>
+</tr>
+<tr>
+<td><code>careTeam</code></td>
+<td>0..*</td>
+<td>Reference(CareTeam)</td>
+<td>El equipo que lo ejecuta.</td>
+</tr>
+<tr>
+<td><code>addresses</code></td>
+<td>0..*</td>
+<td>Reference(Condition)</td>
+<td>Los problemas de salud que atiende.</td>
+</tr>
+<tr>
+<td><code>goal</code></td>
+<td>0..*</td>
+<td>Reference(Goal)</td>
+<td>Las metas.</td>
+</tr>
+<tr>
+<td><code>activity</code></td>
+<td>0..*</td>
+<td>BackboneElement</td>
+<td>Las actividades.</td>
+</tr>
+<tr>
+<td><code>activity.reference</code></td>
+<td>0..1</td>
+<td>Reference(Appointment | CommunicationRequest | DeviceRequest | MedicationRequest | …)</td>
+<td>Una actividad como referencia a una orden ya creada.</td>
+</tr>
+<tr>
+<td><code>activity.detail</code></td>
+<td>0..1</td>
+<td>BackboneElement</td>
+<td>Una actividad descrita dentro del plan.</td>
+</tr>
+<tr>
+<td><code>activity.detail.kind</code></td>
+<td>0..1</td>
+<td>code</td>
+<td>Qué tipo de recurso sería: ServiceRequest, MedicationRequest...</td>
+</tr>
+<tr>
+<td><code>activity.detail.code</code></td>
+<td>0..1</td>
+<td>CodeableConcept</td>
+<td>Qué actividad es.</td>
+</tr>
+<tr>
+<td><code>activity.detail.status</code> ⚑</td>
+<td><strong>1..1</strong></td>
+<td>code</td>
+<td>Estado: <code>not-started</code>, <code>scheduled</code>, <code>in-progress</code>, <code>completed</code>...</td>
+</tr>
+<tr>
+<td><code>activity.detail.scheduled[x]</code></td>
+<td>0..1</td>
+<td>Timing | Period | string</td>
+<td>Cuándo.</td>
+</tr>
+<tr>
+<td><code>activity.detail.performer</code></td>
+<td>0..*</td>
+<td>Reference(Practitioner | PractitionerRole | Organization | RelatedPerson | …)</td>
+<td>Quién la hace.</td>
+</tr>
+<tr>
+<td><code>activity.detail.description</code></td>
+<td>0..1</td>
+<td>string</td>
+<td>Descripción.</td>
+</tr>
+<tr>
+<td><code>note</code></td>
+<td>0..*</td>
+<td>Annotation</td>
+<td>Notas.</td>
+</tr>
+</tbody>
+</table>
+<!-- /ficha -->
+
+<p>Cada actividad se puede expresar de dos maneras: <code>activity.reference</code>, si la
+orden ya existe, o <code>activity.detail</code>, describiéndola dentro del plan. Aquí
+usamos <code>detail</code>, porque al momento del comité todavía no se han emitido las
+órdenes.</p>
+<h2 id="ficha-del-recurso-consent">Ficha del recurso: Consent<a class="headerlink" href="#ficha-del-recurso-consent" title="Permanent link">&para;</a></h2>
+<p><strong>¿Qué es?</strong> El registro de una <strong>decisión del paciente</strong> (o de su
+representante) de permitir o negar algo: un tratamiento, el uso de sus datos,
+participar en una investigación, una directiva anticipada.</p>
+<p><strong>¿Para qué se usa?</strong> Aquí, para el <strong>consentimiento informado</strong> de la
+cirugía. También se usa para controlar quién puede ver qué información del
+paciente.</p>
+<!-- ficha Consent -->
+<table>
+<thead>
+<tr>
+<th>Elemento</th>
+<th>Card.</th>
+<th>Tipo</th>
+<th>Para qué sirve</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>identifier</code></td>
+<td>0..*</td>
+<td>Identifier</td>
+<td>Número del consentimiento.</td>
+</tr>
+<tr>
+<td><code>status</code> ⚑</td>
+<td><strong>1..1</strong></td>
+<td>code</td>
+<td><code>draft</code>, <code>proposed</code>, <code>active</code>, <code>rejected</code>, <code>inactive</code> o <code>entered-in-error</code>.</td>
+</tr>
+<tr>
+<td><code>scope</code> ⚑</td>
+<td><strong>1..1</strong></td>
+<td>CodeableConcept</td>
+<td>Alcance: <code>treatment</code>, <code>patient-privacy</code>, <code>research</code> o <code>adr</code> (directiva anticipada).</td>
+</tr>
+<tr>
+<td><code>category</code></td>
+<td><strong>1..</strong>*</td>
+<td>CodeableConcept</td>
+<td>Clase de documento de consentimiento.</td>
+</tr>
+<tr>
+<td><code>patient</code></td>
+<td>0..1</td>
+<td>Reference(Patient)</td>
+<td>El paciente.</td>
+</tr>
+<tr>
+<td><code>dateTime</code></td>
+<td>0..1</td>
+<td>dateTime</td>
+<td>Cuándo se otorgó.</td>
+</tr>
+<tr>
+<td><code>performer</code></td>
+<td>0..*</td>
+<td>Reference(Organization | Patient | Practitioner | RelatedPerson | …)</td>
+<td>Quién lo otorga: el paciente o su representante.</td>
+</tr>
+<tr>
+<td><code>organization</code></td>
+<td>0..*</td>
+<td>Reference(Organization)</td>
+<td>Ante qué organización.</td>
+</tr>
+<tr>
+<td><code>source[x]</code></td>
+<td>0..1</td>
+<td>Attachment | Reference(Consent | DocumentReference | Contract | QuestionnaireResponse)</td>
+<td>El documento firmado (un PDF escaneado, por ejemplo).</td>
+</tr>
+<tr>
+<td><code>policy</code></td>
+<td>0..*</td>
+<td>BackboneElement</td>
+<td>Las normas en que se basa.</td>
+</tr>
+<tr>
+<td><code>policyRule</code></td>
+<td>0..1</td>
+<td>CodeableConcept</td>
+<td>La norma, codificada.</td>
+</tr>
+<tr>
+<td><code>provision</code></td>
+<td>0..1</td>
+<td>BackboneElement</td>
+<td><strong>Qué</strong> se permite o se niega.</td>
+</tr>
+<tr>
+<td><code>provision.type</code></td>
+<td>0..1</td>
+<td>code</td>
+<td><code>permit</code> (se permite) o <code>deny</code> (se niega).</td>
+</tr>
+<tr>
+<td><code>provision.period</code></td>
+<td>0..1</td>
+<td>Period</td>
+<td>Durante qué periodo.</td>
+</tr>
+<tr>
+<td><code>provision.actor</code></td>
+<td>0..*</td>
+<td>BackboneElement</td>
+<td>A quién se le permite.</td>
+</tr>
+<tr>
+<td><code>provision.code</code></td>
+<td>0..*</td>
+<td>CodeableConcept</td>
+<td>Sobre qué procedimiento o dato.</td>
+</tr>
+</tbody>
+</table>
+<!-- /ficha -->
+
+<p>Una regla de Consent (<code>ppc-1</code>): debe tener <code>policy</code> o <code>policyRule</code>, es decir,
+decir <strong>según qué norma</strong> se otorga.</p>
+<hr />
+<h2 id="paso-a-paso-el-comité-de-tumores">Paso a paso: el comité de tumores<a class="headerlink" href="#paso-a-paso-el-comité-de-tumores" title="Permanent link">&para;</a></h2>
+<h3 id="paso-1--el-mínimo-estado-nombre-y-paciente">Paso 1 · El mínimo: estado, nombre y paciente<a class="headerlink" href="#paso-1--el-mínimo-estado-nombre-y-paciente" title="Permanent link">&para;</a></h3>
+<!-- paso 12a 1 -->
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"resourceType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CareTeam"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"active"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Comité de tumores de mama"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"subject"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Patient/{{patientId}}"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Luis Alberto Paredes Cevallos"</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<!-- /paso -->
+
+<h3 id="paso-2--quiénes-lo-integran-y-con-qué-rol">Paso 2 · Quiénes lo integran y con qué rol<a class="headerlink" href="#paso-2--quiénes-lo-integran-y-con-qué-rol" title="Permanent link">&para;</a></h3>
+<!-- paso 12a 2 -->
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"participant"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"role"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Oncólogo clínico, coordinador del comité"</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">      </span><span class="p">],</span>
+<span class="w">      </span><span class="nt">"member"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"PractitionerRole/{{oncologistRoleId}}"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Dr. Ruiz · Oncología clínica"</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"role"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Médica de cabecera"</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">      </span><span class="p">],</span>
+<span class="w">      </span><span class="nt">"member"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"PractitionerRole/{{salazarRoleId}}"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Dra. Salazar · Medicina general"</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div>
+<!-- /paso -->
+
+<p>Cada <code>member</code> apunta a un <strong>PractitionerRole</strong> (módulo 10): no solo quién,
+sino en qué puesto. El rol se escribe con <code>text</code> porque no hay un código
+estándar para "coordinador del comité".</p>
+<h3 id="paso-3--desde-cuándo-de-qué-organización-y-por-qué">Paso 3 · Desde cuándo, de qué organización y por qué<a class="headerlink" href="#paso-3--desde-cuándo-de-qué-organización-y-por-qué" title="Permanent link">&para;</a></h3>
+<!-- paso 12a 3 -->
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"period"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"start"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2025-05-20"</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"managingOrganization"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Organization/{{hospitalId}}"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Hospital General Docente Ejemplo"</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">],</span>
+<span class="w">  </span><span class="nt">"reasonReference"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Condition/{{conditionCancerId}}"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Carcinoma ductal infiltrante de mama izquierda"</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">],</span>
+<span class="w">  </span><span class="nt">"identifier"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"system"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://f-slg.github.io/aprende-fhir/sid/equipo"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CT-MAMA-0001"</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">],</span>
+<span class="w">  </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"generated"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"div"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;div xmlns=\"http://www.w3.org/1999/xhtml\"&gt;&lt;p&gt;Comité de tumores de mama del Hospital General Docente Ejemplo:&lt;/p&gt;&lt;p&gt;Dr. Ruiz (oncología clínica, coordinador) y Dra. Salazar (medicina general).&lt;/p&gt;&lt;/div&gt;"</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<!-- /paso -->
+
+<p>Solución: <a href="soluciones/12a_careteam_comite.json"><code>12a_careteam_comite.json</code></a>.</p>
+<h2 id="paso-a-paso-las-metas">Paso a paso: las metas<a class="headerlink" href="#paso-a-paso-las-metas" title="Permanent link">&para;</a></h2>
+<h3 id="paso-1--el-mínimo-estado-descripción-y-paciente">Paso 1 · El mínimo: estado, descripción y paciente<a class="headerlink" href="#paso-1--el-mínimo-estado-descripción-y-paciente" title="Permanent link">&para;</a></h3>
+<!-- paso 12b 1 -->
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"resourceType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Goal"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"lifecycleStatus"</span><span class="p">:</span><span class="w"> </span><span class="s2">"active"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"description"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Sin evidencia de enfermedad al terminar el tratamiento"</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"subject"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Patient/{{patientId}}"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Luis Alberto Paredes Cevallos"</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<!-- /paso -->
+
+<p><code>description</code> es un CodeableConcept. Cuando no hay un código adecuado, basta
+con <code>text</code>.</p>
+<h3 id="paso-2--avance-prioridad-y-plazo">Paso 2 · Avance, prioridad y plazo<a class="headerlink" href="#paso-2--avance-prioridad-y-plazo" title="Permanent link">&para;</a></h3>
+<!-- paso 12b 2 -->
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"achievementStatus"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"coding"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"system"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://terminology.hl7.org/CodeSystem/goal-achievement"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"in-progress"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"In Progress"</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"En curso"</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"priority"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"coding"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"system"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://terminology.hl7.org/CodeSystem/goal-priority"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"high-priority"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"High Priority"</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Alta"</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"startDate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2025-05-20"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"target"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"dueDate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2026-06-30"</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div>
+<!-- /paso -->
+
+<p><code>target.dueDate</code>: el plazo para evaluarla, junio de 2026.</p>
+<h3 id="paso-3--a-qué-problema-responde-y-quién-la-propone">Paso 3 · A qué problema responde y quién la propone<a class="headerlink" href="#paso-3--a-qué-problema-responde-y-quién-la-propone" title="Permanent link">&para;</a></h3>
+<!-- paso 12b 3 -->
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"addresses"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Condition/{{conditionCancerId}}"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Carcinoma ductal infiltrante de mama izquierda"</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">],</span>
+<span class="w">  </span><span class="nt">"expressedBy"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"PractitionerRole/{{oncologistRoleId}}"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Dr. Ruiz · Oncología clínica"</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"identifier"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"system"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://f-slg.github.io/aprende-fhir/sid/meta"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"META-0001"</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">],</span>
+<span class="w">  </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"generated"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"div"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;div xmlns=\"http://www.w3.org/1999/xhtml\"&gt;&lt;p&gt;Meta: sin evidencia de enfermedad al terminar el tratamiento.&lt;/p&gt;&lt;/div&gt;"</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<!-- /paso -->
+
+<p>Solución: <a href="soluciones/12b_goal_control_enfermedad.json"><code>12b_goal_control_enfermedad.json</code></a>.
+La segunda meta cambia la descripción y la prioridad:</p>
+<!-- diferencia 12c -->
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"identifier"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"system"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://f-slg.github.io/aprende-fhir/sid/meta"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"META-0002"</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">],</span>
+<span class="w">  </span><span class="nt">"priority"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"coding"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"system"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://terminology.hl7.org/CodeSystem/goal-priority"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"medium-priority"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Medium Priority"</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Media"</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"description"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Mantener la funcionalidad durante el tratamiento (ECOG 0 a 1)"</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<!-- /diferencia -->
+
+<h2 id="paso-a-paso-el-plan-de-tratamiento">Paso a paso: el plan de tratamiento<a class="headerlink" href="#paso-a-paso-el-plan-de-tratamiento" title="Permanent link">&para;</a></h2>
+<h3 id="paso-1--el-mínimo-estado-intención-y-paciente">Paso 1 · El mínimo: estado, intención y paciente<a class="headerlink" href="#paso-1--el-mínimo-estado-intención-y-paciente" title="Permanent link">&para;</a></h3>
+<!-- paso 12d 1 -->
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"resourceType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CarePlan"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"active"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"intent"</span><span class="p">:</span><span class="w"> </span><span class="s2">"plan"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"subject"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Patient/{{patientId}}"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Luis Alberto Paredes Cevallos"</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<!-- /paso -->
+
+<p><code>intent: plan</code>: es un plan acordado, no una orden. Las órdenes concretas
+(la cirugía, las recetas) vendrán después.</p>
+<h3 id="paso-2--qué-plan-es-de-cuándo-y-de-quién">Paso 2 · Qué plan es, de cuándo y de quién<a class="headerlink" href="#paso-2--qué-plan-es-de-cuándo-y-de-quién" title="Permanent link">&para;</a></h3>
+<!-- paso 12d 2 -->
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"category"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Plan de tratamiento oncológico"</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">],</span>
+<span class="w">  </span><span class="nt">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Plan de tratamiento del cáncer de mama"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Tratamiento acordado por el comité de tumores de mama."</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"period"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"start"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2025-05-20"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"end"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2030-10-31"</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"created"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2025-05-20"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"author"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"PractitionerRole/{{oncologistRoleId}}"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Dr. Ruiz · Oncología clínica"</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<!-- /paso -->
+
+<h3 id="paso-3--el-equipo-el-problema-y-las-metas">Paso 3 · El equipo, el problema y las metas<a class="headerlink" href="#paso-3--el-equipo-el-problema-y-las-metas" title="Permanent link">&para;</a></h3>
+<!-- paso 12d 3 -->
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"careTeam"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CareTeam/{{careTeamId}}"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Comité de tumores de mama"</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">],</span>
+<span class="w">  </span><span class="nt">"addresses"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Condition/{{conditionCancerId}}"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Carcinoma ductal infiltrante de mama izquierda"</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">],</span>
+<span class="w">  </span><span class="nt">"goal"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Goal/{{goalControlId}}"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Sin evidencia de enfermedad"</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Goal/{{goalQualityId}}"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Mantener la funcionalidad"</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div>
+<!-- /paso -->
+
+<h3 id="paso-4--las-actividades-cirugía-quimioterapia-y-hormonoterapia">Paso 4 · Las actividades: cirugía, quimioterapia y hormonoterapia<a class="headerlink" href="#paso-4--las-actividades-cirugía-quimioterapia-y-hormonoterapia" title="Permanent link">&para;</a></h3>
+<!-- paso 12d 4 -->
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"activity"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"detail"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"kind"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ServiceRequest"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">"coding"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">            </span><span class="p">{</span>
+<span class="w">              </span><span class="nt">"system"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://snomed.info/sct"</span><span class="p">,</span>
+<span class="w">              </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"64368001"</span><span class="p">,</span>
+<span class="w">              </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Partial mastectomy"</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">          </span><span class="p">],</span>
+<span class="w">          </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Mastectomía parcial"</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"scheduled"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"scheduledPeriod"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">"start"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2025-06-10"</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"end"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2025-06-10"</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="nt">"performer"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">          </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">"reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"PractitionerRole/{{oncologistRoleId}}"</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Dr. Ruiz · Oncología clínica"</span>
+<span class="w">          </span><span class="p">}</span>
+<span class="w">        </span><span class="p">],</span>
+<span class="w">        </span><span class="nt">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Mastectomía parcial de la mama izquierda"</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"detail"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"kind"</span><span class="p">:</span><span class="w"> </span><span class="s2">"MedicationRequest"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">"coding"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">            </span><span class="p">{</span>
+<span class="w">              </span><span class="nt">"system"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://snomed.info/sct"</span><span class="p">,</span>
+<span class="w">              </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"367336001"</span><span class="p">,</span>
+<span class="w">              </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Chemotherapy"</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">          </span><span class="p">],</span>
+<span class="w">          </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Quimioterapia"</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"not-started"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"scheduledPeriod"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">"start"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2025-07-01"</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"end"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2025-09-30"</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="nt">"performer"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">          </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">"reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"PractitionerRole/{{oncologistRoleId}}"</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Dr. Ruiz · Oncología clínica"</span>
+<span class="w">          </span><span class="p">}</span>
+<span class="w">        </span><span class="p">],</span>
+<span class="w">        </span><span class="nt">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Doxorrubicina 60 mg/m² cada 21 días, 4 ciclos"</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"detail"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"kind"</span><span class="p">:</span><span class="w"> </span><span class="s2">"MedicationRequest"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">"coding"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">            </span><span class="p">{</span>
+<span class="w">              </span><span class="nt">"system"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://snomed.info/sct"</span><span class="p">,</span>
+<span class="w">              </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"169413002"</span><span class="p">,</span>
+<span class="w">              </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Hormone therapy"</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">          </span><span class="p">],</span>
+<span class="w">          </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Hormonoterapia"</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"not-started"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"scheduledPeriod"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">"start"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2025-10-15"</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"end"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2030-10-15"</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="nt">"performer"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">          </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">"reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"PractitionerRole/{{oncologistRoleId}}"</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Dr. Ruiz · Oncología clínica"</span>
+<span class="w">          </span><span class="p">}</span>
+<span class="w">        </span><span class="p">],</span>
+<span class="w">        </span><span class="nt">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Tamoxifeno 20 mg diarios por 5 años"</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">],</span>
+<span class="w">  </span><span class="nt">"identifier"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"system"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://f-slg.github.io/aprende-fhir/sid/plan"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"PLAN-2025-0001"</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">],</span>
+<span class="w">  </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"generated"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"div"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;div xmlns=\"http://www.w3.org/1999/xhtml\"&gt;&lt;p&gt;Plan de tratamiento del comité de tumores (20 de mayo de 2025):&lt;/p&gt;&lt;p&gt;1) mastectomía parcial; 2) quimioterapia con doxorrubicina, 4 ciclos; 3) hormonoterapia con tamoxifeno por 5 años.&lt;/p&gt;&lt;/div&gt;"</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<!-- /paso -->
+
+<p>Cada actividad tiene su <code>kind</code> (qué recurso la ejecutará), su código SNOMED
+CT, su estado y su periodo. La cirugía está <code>scheduled</code> (programada); las
+otras dos, <code>not-started</code>. Solución:
+<a href="soluciones/12d_careplan_oncologico.json"><code>12d_careplan_oncologico.json</code></a>.</p>
+<p>En el módulo 13, la cirugía tendrá <code>basedOn</code> apuntando a este plan.</p>
+<h2 id="paso-a-paso-el-consentimiento-informado">Paso a paso: el consentimiento informado<a class="headerlink" href="#paso-a-paso-el-consentimiento-informado" title="Permanent link">&para;</a></h2>
+<h3 id="paso-1--el-mínimo-estado-alcance-categoría-paciente-y-norma">Paso 1 · El mínimo: estado, alcance, categoría, paciente y norma<a class="headerlink" href="#paso-1--el-mínimo-estado-alcance-categoría-paciente-y-norma" title="Permanent link">&para;</a></h3>
+<!-- paso 12e 1 -->
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"resourceType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Consent"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"active"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"scope"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"coding"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"system"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://terminology.hl7.org/CodeSystem/consentscope"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"treatment"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Treatment"</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Tratamiento"</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"category"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"coding"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">"system"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://loinc.org"</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"59284-0"</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Patient Consent"</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">      </span><span class="p">],</span>
+<span class="w">      </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Consentimiento del paciente"</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">],</span>
+<span class="w">  </span><span class="nt">"patient"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Patient/{{patientId}}"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Luis Alberto Paredes Cevallos"</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"policyRule"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Consentimiento informado para procedimientos quirúrgicos (normativa nacional)"</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<!-- /paso -->
+
+<p>Seis elementos desde el inicio: <code>status</code>, <code>scope</code> y <code>category</code> son
+obligatorios, y la regla <code>ppc-1</code> exige <code>policy</code> o <code>policyRule</code>. El alcance es
+<code>treatment</code> y la categoría, LOINC <code>59284-0</code> <em>Patient Consent</em>.</p>
+<blockquote>
+<p><strong>Sobre un aviso del validador.</strong> <code>policyRule</code> solo tiene <code>text</code> y el
+validador avisa: <em>"No code provided, and a code should be provided from the
+value set 'Consent PolicyRule Codes'"</em>. Esa lista (<em>extensible</em>, como en el
+módulo 02) tiene normas de otros países; la ecuatoriana no está. Un texto
+claro es mejor que un código equivocado.</p>
+</blockquote>
+<h3 id="paso-2--cuándo-quién-lo-otorga-y-ante-qué-organización">Paso 2 · Cuándo, quién lo otorga y ante qué organización<a class="headerlink" href="#paso-2--cuándo-quién-lo-otorga-y-ante-qué-organización" title="Permanent link">&para;</a></h3>
+<!-- paso 12e 2 -->
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"dateTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2025-05-27T10:00:00-05:00"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"performer"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Patient/{{patientId}}"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Luis Alberto Paredes Cevallos"</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">],</span>
+<span class="w">  </span><span class="nt">"organization"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Organization/{{hospitalId}}"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Hospital General Docente Ejemplo"</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div>
+<!-- /paso -->
+
+<p><code>performer</code> es el propio Luis: quien otorga el consentimiento.</p>
+<h3 id="paso-3--qué-se-autoriza-la-disposición">Paso 3 · Qué se autoriza: la disposición<a class="headerlink" href="#paso-3--qué-se-autoriza-la-disposición" title="Permanent link">&para;</a></h3>
+<!-- paso 12e 3 -->
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"provision"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"permit"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"period"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"start"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2025-05-27"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"end"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2025-07-31"</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="nt">"actor"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"role"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Equipo quirúrgico tratante"</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="nt">"reference"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">"reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"PractitionerRole/{{oncologistRoleId}}"</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Dr. Ruiz · Oncología clínica"</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"coding"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">          </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">"system"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://snomed.info/sct"</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"64368001"</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Partial mastectomy"</span>
+<span class="w">          </span><span class="p">}</span>
+<span class="w">        </span><span class="p">],</span>
+<span class="w">        </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Mastectomía parcial"</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"identifier"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"system"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://f-slg.github.io/aprende-fhir/sid/consentimiento"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CI-2025-0007"</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">],</span>
+<span class="w">  </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"generated"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"div"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;div xmlns=\"http://www.w3.org/1999/xhtml\"&gt;&lt;p&gt;Consentimiento informado para la mastectomía parcial de la mama izquierda,&lt;/p&gt;&lt;p&gt;firmado por el paciente el 27 de mayo de 2025.&lt;/p&gt;&lt;/div&gt;"</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<!-- /paso -->
+
+<p><code>provision.type: permit</code> (se autoriza), <code>code</code>: la mastectomía parcial,
+<code>actor</code>: el equipo tratante, y <code>period</code>: hasta el 31 de julio. Solución:
+<a href="soluciones/12e_consent_cirugia.json"><code>12e_consent_cirugia.json</code></a>.</p>
+<hr />
+<h2 id="ejercicios-en-el-servidor">Ejercicios en el servidor<a class="headerlink" href="#ejercicios-en-el-servidor" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Paso</th>
+<th>Petición</th>
+<th>Guarda</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>12a</td>
+<td><code>POST /CareTeam</code></td>
+<td><code>careTeamId</code></td>
+</tr>
+<tr>
+<td>12b</td>
+<td><code>POST /Goal</code> (sin evidencia de enfermedad)</td>
+<td><code>goalControlId</code></td>
+</tr>
+<tr>
+<td>12c</td>
+<td><code>POST /Goal</code> (funcionalidad)</td>
+<td><code>goalQualityId</code></td>
+</tr>
+<tr>
+<td>12d</td>
+<td><code>POST /CarePlan</code></td>
+<td><code>carePlanId</code></td>
+</tr>
+<tr>
+<td>12e</td>
+<td><code>POST /Consent</code></td>
+<td><code>consentId</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="12f--el-plan-con-sus-metas-y-su-equipo">12f · El plan con sus metas y su equipo<a class="headerlink" href="#12f--el-plan-con-sus-metas-y-su-equipo" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="err">GET {{FHIRURL}}/CarePlan?subject=Patient/{{patientId}}&amp;_include=CarePlan:goal&amp;_include=CarePlan:care-team</span>
+</code></pre></div>
+<p>Se pueden combinar <strong>varios <code>_include</code></strong>. Verás el plan (<code>match</code>), el equipo
+y las dos metas (<code>include</code>): todo el acuerdo del comité en una petición.</p>
+<h3 id="12g-y-12h--error-a-propósito-el-consentimiento-sin-categoría">12g y 12h · Error a propósito: el consentimiento sin categoría<a class="headerlink" href="#12g-y-12h--error-a-propósito-el-consentimiento-sin-categoría" title="Permanent link">&para;</a></h3>
+<p>Envía (<a href="errores/12e1_consentimiento_sin_categoria.json"><code>12e1_consentimiento_sin_categoria.json</code></a>)
+un consentimiento sin <code>category</code>. <strong>El servidor responde <code>201 Created</code>.</strong> El
+validador lo detecta:</p>
+<div class="highlight"><pre><span></span><code>Consent.category: minimum required = 1, but only found 0
+</code></pre></div>
+<p>Bórralo con <code>DELETE {{FHIRURL}}/Consent/{{errorConsentId}}</code>.</p>
+<h2 id="para-pensar">Para pensar<a class="headerlink" href="#para-pensar" title="Permanent link">&para;</a></h2>
+<p>El consentimiento firmado en papel sigue siendo el documento legal. ¿Cómo lo
+vincularías a este recurso? <em>(Pista: <code>sourceAttachment</code>, con el PDF
+escaneado, o <code>sourceReference</code> a un DocumentReference.)</em></p>
+<h2 id="autoevaluación">Autoevaluación<a class="headerlink" href="#autoevaluación" title="Permanent link">&para;</a></h2>
+<details>
+<summary>1. ¿Qué diferencia hay entre un CarePlan con <code>intent: plan</code> y una ServiceRequest con <code>intent: order</code>?</summary>
+<p>El plan describe lo que se acordó hacer; la orden es el pedido concreto que
+alguien debe cumplir. Del plan salen las órdenes, que pueden apuntar a él con
+<code>basedOn</code>.</p>
+</details>
+<details>
+<summary>2. ¿Por qué Goal tiene dos estados?</summary>
+<p><code>lifecycleStatus</code> dice en qué etapa está la meta (propuesta, activa,
+completada); <code>achievementStatus</code>, si se está logrando (en curso, mejorando,
+lograda, no lograda).</p>
+</details>
+<details>
+<summary>3. Luis decide no aceptar la quimioterapia. ¿Cómo se registra?</summary>
+<p>Con un Consent cuya <code>provision.type</code> sea <code>deny</code> para la quimioterapia, y
+actualizando la actividad del plan a <code>cancelled</code>.</p>
+</details>
+<h2 id="resumen">Resumen<a class="headerlink" href="#resumen" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>CareTeam</strong> dice quiénes atienden al paciente y con qué rol.</li>
+<li><strong>Goal</strong> define metas medibles con su plazo.</li>
+<li><strong>CarePlan</strong> reúne el problema, las metas, el equipo y las actividades.</li>
+<li><strong>Consent</strong> registra lo que el paciente permite o niega, según qué norma.</li>
+</ul>
+<h2 id="ejecutar-este-módulo">Ejecutar este módulo<a class="headerlink" href="#ejecutar-este-módulo" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Postman:</strong> carpeta <em>12 · Plan y consentimiento</em>.</li>
+<li><strong>curl:</strong> <code>curl/taller.sh 12</code></li>
+<li><strong>R:</strong></li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="n">plan</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">fhir_buscar</span><span class="p">(</span><span class="s">"CarePlan?subject=Patient/{{patientId}}&amp;_include=CarePlan:goal&amp;_include=CarePlan:care-team"</span><span class="p">)</span>
+<span class="nf">vapply</span><span class="p">(</span><span class="n">plan</span><span class="o">$</span><span class="n">entry</span><span class="p">,</span><span class="w"> </span><span class="kr">function</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="nf">paste</span><span class="p">(</span><span class="n">e</span><span class="o">$</span><span class="n">resource</span><span class="o">$</span><span class="n">resourceType</span><span class="p">,</span><span class="w"> </span><span class="n">e</span><span class="o">$</span><span class="n">search</span><span class="o">$</span><span class="n">mode</span><span class="p">),</span><span class="w"> </span><span class="s">""</span><span class="p">)</span>
+<span class="nf">vapply</span><span class="p">(</span><span class="n">plan</span><span class="o">$</span><span class="n">entry</span><span class="p">[[</span><span class="m">1</span><span class="p">]]</span><span class="o">$</span><span class="n">resource</span><span class="o">$</span><span class="n">activity</span><span class="p">,</span><span class="w"> </span><span class="kr">function</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="w"> </span><span class="n">a</span><span class="o">$</span><span class="n">detail</span><span class="o">$</span><span class="n">description</span><span class="p">,</span><span class="w"> </span><span class="s">""</span><span class="p">)</span>
+</code></pre></div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Volver al principio
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Pie" >
+        
+          
+          <a href="../11-anatomia-patologica/" class="md-footer__link md-footer__link--prev" aria-label="Anterior: 11 · Anatomía patológica">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Anterior
+              </span>
+              <div class="md-ellipsis">
+                11 · Anatomía patológica
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../13-procedimientos/" class="md-footer__link md-footer__link--next" aria-label="Siguiente: 13 · Procedimientos">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Siguiente
+              </span>
+              <div class="md-ellipsis">
+                13 · Procedimientos
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Contenido CC BY 4.0 · Código MIT · HL7® y FHIR® son marcas registradas de Health Level Seven International; este taller no implica afiliación ni aval de HL7.
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.sections", "navigation.expand", "navigation.footer", "navigation.top", "navigation.tracking", "toc.follow", "search.highlight", "search.suggest", "content.code.copy", "content.action.edit"], "search": "../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.525ec568.min.js"></script>
+      
+    
+  </body>
+</html>

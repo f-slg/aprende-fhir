@@ -1,0 +1,30 @@
+{
+  "resourceType": "MedicationStatement",
+  "status": "active",
+  "medicationCodeableConcept": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "373567002",
+        "display": "Losartan"
+      }
+    ],
+    "text": "Losartán"
+  },
+  "subject": {
+    "reference": "Patient/{{patientId}}",
+    "display": "Luis Alberto Paredes Cevallos"
+  },
+  "context": {
+    "reference": "Encounter/{{encounterId}}",
+    "display": "Consulta por dolor abdominal"
+  },
+  "effectivePeriod": {
+    "start": "2021-06"
+  },
+  "dateAsserted": "2025-03-20",
+  "informationSource": {
+    "reference": "Patient/{{patientId}}",
+    "display": "Luis Alberto Paredes Cevallos"
+  }
+}

@@ -1,0 +1,2815 @@
+
+<!doctype html>
+<html lang="es" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Taller práctico de HL7 FHIR R4 en español, paso a paso, con un caso clínico ecuatoriano ficticio. Para Postman, R o curl.">
+      
+      
+        <meta name="author" content="Dr. Fabricio Salas Guerrero">
+      
+      
+        <link rel="canonical" href="https://f-slg.github.io/aprende-fhir/modulos/10-ordenes-y-derivacion/">
+      
+      
+        <link rel="prev" href="../09-documentos-clinicos/">
+      
+      
+        <link rel="next" href="../11-anatomia-patologica/">
+      
+      
+      <link rel="icon" href="../../imagenes/logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.39">
+    
+    
+      
+        <title>10 · Órdenes y derivación - Aprende FHIR desde cero</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.8c3ca2c6.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../estilos/taller.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#módulo-10--órdenes-y-derivación" class="md-skip">
+          Saltar a contenido
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabecera">
+    <a href="../.." title="Aprende FHIR desde cero" class="md-header__button md-logo" aria-label="Aprende FHIR desde cero" data-md-component="logo">
+      
+  <img src="../../imagenes/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Aprende FHIR desde cero
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              10 · Órdenes y derivación
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Cambiar a modo oscuro"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo oscuro" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Cambiar a modo claro"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo claro" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Búsqueda" placeholder="Búsqueda" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Buscar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpiar" aria-label="Limpiar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando búsqueda
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/f-slg/aprende-fhir" title="Ir al repositorio" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    f-slg/aprende-fhir
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navegación" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Aprende FHIR desde cero" class="md-nav__button md-logo" aria-label="Aprende FHIR desde cero" data-md-component="logo">
+      
+  <img src="../../imagenes/logo.png" alt="logo">
+
+    </a>
+    Aprende FHIR desde cero
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/f-slg/aprende-fhir" title="Ir al repositorio" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    f-slg/aprende-fhir
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Inicio
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Nivel básico
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Nivel básico
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01-fundamentos/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    01 · Fundamentos
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02-patient/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    02 · Patient: el paciente
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03-transacciones/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    03 · Transacciones: varios recursos a la vez
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04-profesionales-y-organizaciones/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    04 · Profesionales y organizaciones
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05-diagnostico-y-encuentro/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    05 · Diagnóstico y encuentro
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06-observaciones/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    06 · Observaciones: signos vitales y tipos de valor
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Nivel intermedio
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Nivel intermedio
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07-antecedentes/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    07 · Antecedentes: alergias, medicación habitual y familia
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08-vacunacion/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    08 · Vacunación
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../09-documentos-clinicos/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    09 · Documentos clínicos
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    10 · Órdenes y derivación
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    10 · Órdenes y derivación
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#lo-que-vas-a-aprender" class="md-nav__link">
+    <span class="md-ellipsis">
+      Lo que vas a aprender
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#la-historia" class="md-nav__link">
+    <span class="md-ellipsis">
+      La historia
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ficha-del-recurso-location" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ficha del recurso: Location
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ficha-del-recurso-practitionerrole" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ficha del recurso: PractitionerRole
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ficha-del-recurso-servicerequest" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ficha del recurso: ServiceRequest
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-a-paso-el-consultorio" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso a paso: el consultorio
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Paso a paso: el consultorio">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paso-1--el-mínimo-nombre-y-estado" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 1 · El mínimo: nombre y estado
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-2--qué-clase-de-lugar-es" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 2 · Qué clase de lugar es
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-3--dónde-está-y-quién-lo-administra" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 3 · Dónde está y quién lo administra
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-a-paso-el-rol-de-la-dra-salazar" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso a paso: el rol de la Dra. Salazar
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Paso a paso: el rol de la Dra. Salazar">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paso-1--el-mínimo-quién-y-dónde-trabaja" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 1 · El mínimo: quién y dónde trabaja
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-2--qué-rol-y-qué-especialidad" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 2 · Qué rol y qué especialidad
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-3--en-qué-consultorio-y-en-qué-horario" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 3 · En qué consultorio y en qué horario
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#la-consulta-por-el-nódulo" class="md-nav__link">
+    <span class="md-ellipsis">
+      La consulta por el nódulo
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-a-paso-la-orden-de-ecografía" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso a paso: la orden de ecografía
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Paso a paso: la orden de ecografía">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paso-1--el-mínimo-estado-intención-y-paciente" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 1 · El mínimo: estado, intención y paciente
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-2--qué-se-pide-con-qué-prioridad-y-de-qué-parte-del-cuerpo" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 2 · Qué se pide, con qué prioridad y de qué parte del cuerpo
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-3--quién-lo-pide-cuándo-en-qué-consulta-y-por-qué" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 3 · Quién lo pide, cuándo, en qué consulta y por qué
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-4--identificador-y-narrativa" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 4 · Identificador y narrativa
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-a-paso-el-informe-de-la-ecografía" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso a paso: el informe de la ecografía
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Paso a paso: el informe de la ecografía">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paso-1--el-mínimo-estado-y-código" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 1 · El mínimo: estado y código
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-2--de-quién-cuándo-y-quién-informa" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 2 · De quién, cuándo y quién informa
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-3--a-qué-orden-responde" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 3 · A qué orden responde
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-4--la-conclusión-bi-rads-4" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 4 · La conclusión: BI-RADS 4
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#la-orden-de-biopsia-y-la-derivación" class="md-nav__link">
+    <span class="md-ellipsis">
+      La orden de biopsia y la derivación
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ejercicios-en-el-servidor" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ejercicios en el servidor
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Ejercicios en el servidor">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#10j--las-órdenes-del-paciente" class="md-nav__link">
+    <span class="md-ellipsis">
+      10j · Las órdenes del paciente
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10k--qué-se-hizo-con-cada-orden-_revinclude" class="md-nav__link">
+    <span class="md-ellipsis">
+      10k · ¿Qué se hizo con cada orden? _revinclude
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10l--los-oncólogos-del-hospital" class="md-nav__link">
+    <span class="md-ellipsis">
+      10l · Los oncólogos del hospital
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10m--error-a-propósito-la-prioridad-en-español" class="md-nav__link">
+    <span class="md-ellipsis">
+      10m · Error a propósito: la prioridad en español
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#para-pensar" class="md-nav__link">
+    <span class="md-ellipsis">
+      Para pensar
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#autoevaluación" class="md-nav__link">
+    <span class="md-ellipsis">
+      Autoevaluación
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#resumen" class="md-nav__link">
+    <span class="md-ellipsis">
+      Resumen
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ejecutar-este-módulo" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ejecutar este módulo
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../11-anatomia-patologica/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    11 · Anatomía patológica
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../12-plan-y-consentimiento/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    12 · Plan y consentimiento
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../13-procedimientos/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    13 · Procedimientos
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../14-citas/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    14 · Citas
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../15-medicamentos/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    15 · Medicamentos
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../16-seguimiento/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    16 · Seguimiento: cuestionarios y resultados informados por el paciente
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Nivel avanzado
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Nivel avanzado
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../17-busquedas-y-versiones/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    17 · Búsquedas avanzadas y versiones
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../18-terminologias-y-perfiles/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    18 · Terminologías y perfiles
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../19-resumen-ips/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    19 · Resumen del paciente (IPS)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#lo-que-vas-a-aprender" class="md-nav__link">
+    <span class="md-ellipsis">
+      Lo que vas a aprender
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#la-historia" class="md-nav__link">
+    <span class="md-ellipsis">
+      La historia
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ficha-del-recurso-location" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ficha del recurso: Location
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ficha-del-recurso-practitionerrole" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ficha del recurso: PractitionerRole
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ficha-del-recurso-servicerequest" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ficha del recurso: ServiceRequest
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-a-paso-el-consultorio" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso a paso: el consultorio
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Paso a paso: el consultorio">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paso-1--el-mínimo-nombre-y-estado" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 1 · El mínimo: nombre y estado
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-2--qué-clase-de-lugar-es" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 2 · Qué clase de lugar es
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-3--dónde-está-y-quién-lo-administra" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 3 · Dónde está y quién lo administra
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-a-paso-el-rol-de-la-dra-salazar" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso a paso: el rol de la Dra. Salazar
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Paso a paso: el rol de la Dra. Salazar">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paso-1--el-mínimo-quién-y-dónde-trabaja" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 1 · El mínimo: quién y dónde trabaja
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-2--qué-rol-y-qué-especialidad" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 2 · Qué rol y qué especialidad
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-3--en-qué-consultorio-y-en-qué-horario" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 3 · En qué consultorio y en qué horario
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#la-consulta-por-el-nódulo" class="md-nav__link">
+    <span class="md-ellipsis">
+      La consulta por el nódulo
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-a-paso-la-orden-de-ecografía" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso a paso: la orden de ecografía
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Paso a paso: la orden de ecografía">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paso-1--el-mínimo-estado-intención-y-paciente" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 1 · El mínimo: estado, intención y paciente
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-2--qué-se-pide-con-qué-prioridad-y-de-qué-parte-del-cuerpo" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 2 · Qué se pide, con qué prioridad y de qué parte del cuerpo
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-3--quién-lo-pide-cuándo-en-qué-consulta-y-por-qué" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 3 · Quién lo pide, cuándo, en qué consulta y por qué
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-4--identificador-y-narrativa" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 4 · Identificador y narrativa
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-a-paso-el-informe-de-la-ecografía" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso a paso: el informe de la ecografía
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Paso a paso: el informe de la ecografía">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paso-1--el-mínimo-estado-y-código" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 1 · El mínimo: estado y código
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-2--de-quién-cuándo-y-quién-informa" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 2 · De quién, cuándo y quién informa
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-3--a-qué-orden-responde" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 3 · A qué orden responde
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-4--la-conclusión-bi-rads-4" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 4 · La conclusión: BI-RADS 4
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#la-orden-de-biopsia-y-la-derivación" class="md-nav__link">
+    <span class="md-ellipsis">
+      La orden de biopsia y la derivación
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ejercicios-en-el-servidor" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ejercicios en el servidor
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Ejercicios en el servidor">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#10j--las-órdenes-del-paciente" class="md-nav__link">
+    <span class="md-ellipsis">
+      10j · Las órdenes del paciente
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10k--qué-se-hizo-con-cada-orden-_revinclude" class="md-nav__link">
+    <span class="md-ellipsis">
+      10k · ¿Qué se hizo con cada orden? _revinclude
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10l--los-oncólogos-del-hospital" class="md-nav__link">
+    <span class="md-ellipsis">
+      10l · Los oncólogos del hospital
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10m--error-a-propósito-la-prioridad-en-español" class="md-nav__link">
+    <span class="md-ellipsis">
+      10m · Error a propósito: la prioridad en español
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#para-pensar" class="md-nav__link">
+    <span class="md-ellipsis">
+      Para pensar
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#autoevaluación" class="md-nav__link">
+    <span class="md-ellipsis">
+      Autoevaluación
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#resumen" class="md-nav__link">
+    <span class="md-ellipsis">
+      Resumen
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ejecutar-este-módulo" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ejecutar este módulo
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+    <a href="https://github.com/f-slg/aprende-fhir/edit/main/modulos/10-ordenes-y-derivacion/README.md" title="Editar esta página" class="md-content__button md-icon">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
+    </a>
+  
+  
+
+
+<h1 id="módulo-10--órdenes-y-derivación">Módulo 10 · Órdenes y derivación<a class="headerlink" href="#módulo-10--órdenes-y-derivación" title="Permanent link">&para;</a></h1>
+<p><a href="../09-documentos-clinicos/">← Módulo 09</a> · <a href="../../">Inicio</a> · <a href="../11-anatomia-patologica/">Módulo 11 →</a></p>
+<blockquote>
+<p><strong>Nivel:</strong> intermedio · <strong>Duración:</strong> 90 minutos · <strong>Necesitas:</strong> módulos 04, 05 y 07</p>
+</blockquote>
+<h2 id="lo-que-vas-a-aprender">Lo que vas a aprender<a class="headerlink" href="#lo-que-vas-a-aprender" title="Permanent link">&para;</a></h2>
+<ol>
+<li>A modelar <strong>dónde</strong> se atiende (Location) y <strong>en qué rol</strong> trabaja un
+   profesional (PractitionerRole).</li>
+<li>A <strong>pedir</strong> un estudio o un procedimiento con ServiceRequest.</li>
+<li>A <strong>derivar</strong> a un paciente a otro servicio.</li>
+<li>A cerrar el ciclo <strong>orden → resultado</strong> con <code>basedOn</code>.</li>
+<li>A buscar "hacia atrás" con <code>_revinclude</code>.</li>
+</ol>
+<h2 id="la-historia">La historia<a class="headerlink" href="#la-historia" title="Permanent link">&para;</a></h2>
+<p>El <strong>22 de abril de 2025</strong>, Luis vuelve al consultorio 3 de medicina general:
+se palpó un <strong>nódulo en la mama izquierda</strong>. La Dra. Salazar encuentra un
+nódulo de unos 2 cm en el cuadrante superior externo y pide una
+<strong>ecografía</strong> urgente.</p>
+<p>El 25 de abril la ecografía muestra un nódulo sólido e irregular de 2,4 cm:
+<strong>BI-RADS 4</strong>, sospechoso. El 28 de abril la médica pide una <strong>biopsia</strong> y
+<strong>deriva a Luis a Oncología Clínica</strong>, con el <strong>Dr. Esteban Patricio Ruiz
+Montalvo</strong>. En la derivación menciona el antecedente que registró en el
+módulo 07: la madre de Luis tuvo cáncer de mama.</p>
+<hr />
+<h2 id="ficha-del-recurso-location">Ficha del recurso: Location<a class="headerlink" href="#ficha-del-recurso-location" title="Permanent link">&para;</a></h2>
+<p><strong>¿Qué es?</strong> Un <strong>lugar físico</strong> donde se prestan servicios: un consultorio,
+una sala, una cama, un quirófano, un vacunatorio, una ambulancia.</p>
+<p><strong>¿Para qué se usa?</strong> Para decir <strong>dónde</strong> ocurrió una atención
+(<code>Encounter.location</code>), dónde trabaja un profesional
+(<code>PractitionerRole.location</code>) o dónde se agenda una cita (<code>Schedule.actor</code>).</p>
+<p><strong>¿Cuándo usar otro recurso?</strong> La <strong>institución</strong> es una <strong>Organization</strong>
+(módulo 04). Location es el sitio; Organization, quien lo administra.</p>
+<!-- ficha Location -->
+<table>
+<thead>
+<tr>
+<th>Elemento</th>
+<th>Card.</th>
+<th>Tipo</th>
+<th>Para qué sirve</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>identifier</code></td>
+<td>0..*</td>
+<td>Identifier</td>
+<td>Código del lugar.</td>
+</tr>
+<tr>
+<td><code>status</code> ⚑</td>
+<td>0..1</td>
+<td>code</td>
+<td><code>active</code>, <code>suspended</code> o <code>inactive</code>.</td>
+</tr>
+<tr>
+<td><code>name</code></td>
+<td>0..1</td>
+<td>string</td>
+<td>Nombre.</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td>0..1</td>
+<td>string</td>
+<td>Descripción.</td>
+</tr>
+<tr>
+<td><code>mode</code></td>
+<td>0..1</td>
+<td>code</td>
+<td><code>instance</code> (un lugar concreto) o <code>kind</code> (una clase de lugar, como "ambulancia").</td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td>0..*</td>
+<td>CodeableConcept</td>
+<td>Qué servicio se presta: consulta, emergencia, oncología.</td>
+</tr>
+<tr>
+<td><code>telecom</code></td>
+<td>0..*</td>
+<td>ContactPoint</td>
+<td>Teléfono o extensión.</td>
+</tr>
+<tr>
+<td><code>address</code></td>
+<td>0..1</td>
+<td>Address</td>
+<td>Dirección.</td>
+</tr>
+<tr>
+<td><code>physicalType</code></td>
+<td>0..1</td>
+<td>CodeableConcept</td>
+<td>Qué es físicamente: edificio, piso, sala, cama.</td>
+</tr>
+<tr>
+<td><code>position</code></td>
+<td>0..1</td>
+<td>BackboneElement</td>
+<td>Coordenadas geográficas.</td>
+</tr>
+<tr>
+<td><code>managingOrganization</code></td>
+<td>0..1</td>
+<td>Reference(Organization)</td>
+<td>La organización responsable.</td>
+</tr>
+<tr>
+<td><code>partOf</code></td>
+<td>0..1</td>
+<td>Reference(Location)</td>
+<td>El lugar más grande del que forma parte (la sala dentro del piso).</td>
+</tr>
+<tr>
+<td><code>hoursOfOperation</code></td>
+<td>0..*</td>
+<td>BackboneElement</td>
+<td>Horario de atención.</td>
+</tr>
+</tbody>
+</table>
+<!-- /ficha -->
+
+<h2 id="ficha-del-recurso-practitionerrole">Ficha del recurso: PractitionerRole<a class="headerlink" href="#ficha-del-recurso-practitionerrole" title="Permanent link">&para;</a></h2>
+<p><strong>¿Qué es?</strong> El <strong>rol</strong> que cumple un profesional en una organización: qué
+hace, con qué especialidad, dónde y en qué horario.</p>
+<p><strong>¿Para qué se usa?</strong> Practitioner es la persona (módulo 04);
+PractitionerRole, <strong>la persona en un puesto</strong>. La Dra. Salazar puede ser
+médica general en este hospital y docente en una universidad: un
+Practitioner y dos PractitionerRole. Muchos recursos aceptan una referencia
+a PractitionerRole en lugar de Practitioner, y es mejor usarla: dice no solo
+quién, sino <strong>con qué rol y para qué organización</strong>.</p>
+<!-- ficha PractitionerRole -->
+<table>
+<thead>
+<tr>
+<th>Elemento</th>
+<th>Card.</th>
+<th>Tipo</th>
+<th>Para qué sirve</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>active</code></td>
+<td>0..1</td>
+<td>boolean</td>
+<td>Si el rol está vigente.</td>
+</tr>
+<tr>
+<td><code>period</code></td>
+<td>0..1</td>
+<td>Period</td>
+<td>Desde y hasta cuándo.</td>
+</tr>
+<tr>
+<td><code>practitioner</code></td>
+<td>0..1</td>
+<td>Reference(Practitioner)</td>
+<td>La persona.</td>
+</tr>
+<tr>
+<td><code>organization</code></td>
+<td>0..1</td>
+<td>Reference(Organization)</td>
+<td>La organización.</td>
+</tr>
+<tr>
+<td><code>code</code></td>
+<td>0..*</td>
+<td>CodeableConcept</td>
+<td>El rol: médico, enfermera, investigador.</td>
+</tr>
+<tr>
+<td><code>specialty</code></td>
+<td>0..*</td>
+<td>CodeableConcept</td>
+<td>La especialidad.</td>
+</tr>
+<tr>
+<td><code>location</code></td>
+<td>0..*</td>
+<td>Reference(Location)</td>
+<td>Dónde atiende.</td>
+</tr>
+<tr>
+<td><code>healthcareService</code></td>
+<td>0..*</td>
+<td>Reference(HealthcareService)</td>
+<td>Los servicios que presta.</td>
+</tr>
+<tr>
+<td><code>telecom</code></td>
+<td>0..*</td>
+<td>ContactPoint</td>
+<td>Contacto en ese puesto.</td>
+</tr>
+<tr>
+<td><code>availableTime</code></td>
+<td>0..*</td>
+<td>BackboneElement</td>
+<td>Horario disponible.</td>
+</tr>
+<tr>
+<td><code>notAvailable</code></td>
+<td>0..*</td>
+<td>BackboneElement</td>
+<td>Periodos en que no está disponible (vacaciones).</td>
+</tr>
+</tbody>
+</table>
+<!-- /ficha -->
+
+<h2 id="ficha-del-recurso-servicerequest">Ficha del recurso: ServiceRequest<a class="headerlink" href="#ficha-del-recurso-servicerequest" title="Permanent link">&para;</a></h2>
+<p><strong>¿Qué es?</strong> Una <strong>orden o solicitud</strong> de que se haga algo: un examen de
+laboratorio, un estudio de imagen, un procedimiento, una interconsulta, una
+derivación, una terapia.</p>
+<p><strong>¿Para qué se usa?</strong> Para el circuito de pedidos: quién pide qué, para
+quién, con qué prioridad y por qué. Cuando el servicio se cumple, el
+resultado (DiagnosticReport, Procedure, Specimen) apunta a la orden con
+<code>basedOn</code> o <code>request</code>, y así se sabe <strong>qué orden se cumplió</strong>.</p>
+<p><strong>¿Cuándo usar otro recurso?</strong></p>
+<table>
+<thead>
+<tr>
+<th>Si se pide...</th>
+<th>Usa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Un medicamento</td>
+<td><strong>MedicationRequest</strong> (módulo 15)</td>
+</tr>
+<tr>
+<td>Una dieta</td>
+<td><strong>NutritionOrder</strong></td>
+</tr>
+<tr>
+<td>Un dispositivo (silla de ruedas, glucómetro)</td>
+<td><strong>DeviceRequest</strong></td>
+</tr>
+<tr>
+<td>Cualquier otro servicio</td>
+<td><strong>ServiceRequest</strong></td>
+</tr>
+</tbody>
+</table>
+<!-- ficha ServiceRequest -->
+<table>
+<thead>
+<tr>
+<th>Elemento</th>
+<th>Card.</th>
+<th>Tipo</th>
+<th>Para qué sirve</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>identifier</code></td>
+<td>0..*</td>
+<td>Identifier</td>
+<td>Número de la orden.</td>
+</tr>
+<tr>
+<td><code>basedOn</code></td>
+<td>0..*</td>
+<td>Reference(CarePlan | ServiceRequest | MedicationRequest)</td>
+<td>El plan u otra orden de la que deriva.</td>
+</tr>
+<tr>
+<td><code>replaces</code></td>
+<td>0..*</td>
+<td>Reference(ServiceRequest)</td>
+<td>La orden a la que reemplaza.</td>
+</tr>
+<tr>
+<td><code>requisition</code></td>
+<td>0..1</td>
+<td>Identifier</td>
+<td>Identificador común de varias órdenes pedidas juntas.</td>
+</tr>
+<tr>
+<td><code>status</code> ⚑</td>
+<td><strong>1..1</strong></td>
+<td>code</td>
+<td><code>draft</code>, <code>active</code>, <code>on-hold</code>, <code>revoked</code>, <code>completed</code>, <code>entered-in-error</code>.</td>
+</tr>
+<tr>
+<td><code>intent</code> ⚑</td>
+<td><strong>1..1</strong></td>
+<td>code</td>
+<td><code>proposal</code>, <code>plan</code>, <code>order</code>, <code>original-order</code>...</td>
+</tr>
+<tr>
+<td><code>category</code></td>
+<td>0..*</td>
+<td>CodeableConcept</td>
+<td>Clase: laboratorio, imagen, derivación, consejería.</td>
+</tr>
+<tr>
+<td><code>priority</code></td>
+<td>0..1</td>
+<td>code</td>
+<td><code>routine</code>, <code>urgent</code>, <code>asap</code> o <code>stat</code>.</td>
+</tr>
+<tr>
+<td><code>doNotPerform</code> ⚑</td>
+<td>0..1</td>
+<td>boolean</td>
+<td><code>true</code> si es una orden de <strong>no</strong> hacer algo.</td>
+</tr>
+<tr>
+<td><code>code</code></td>
+<td>0..1</td>
+<td>CodeableConcept</td>
+<td><strong>Qué</strong> se pide.</td>
+</tr>
+<tr>
+<td><code>subject</code></td>
+<td><strong>1..1</strong></td>
+<td>Reference(Patient | Group | Location | Device)</td>
+<td>Para quién.</td>
+</tr>
+<tr>
+<td><code>encounter</code></td>
+<td>0..1</td>
+<td>Reference(Encounter)</td>
+<td>En qué atención se pidió.</td>
+</tr>
+<tr>
+<td><code>occurrence[x]</code></td>
+<td>0..1</td>
+<td>dateTime | Period | Timing</td>
+<td>Cuándo debe hacerse.</td>
+</tr>
+<tr>
+<td><code>authoredOn</code></td>
+<td>0..1</td>
+<td>dateTime</td>
+<td>Cuándo se pidió.</td>
+</tr>
+<tr>
+<td><code>requester</code></td>
+<td>0..1</td>
+<td>Reference(Practitioner | PractitionerRole | Organization | Patient | …)</td>
+<td>Quién lo pide.</td>
+</tr>
+<tr>
+<td><code>performerType</code></td>
+<td>0..1</td>
+<td>CodeableConcept</td>
+<td>Qué tipo de profesional o servicio debe hacerlo.</td>
+</tr>
+<tr>
+<td><code>performer</code></td>
+<td>0..*</td>
+<td>Reference(Practitioner | PractitionerRole | Organization | CareTeam | …)</td>
+<td>Quién concretamente debe hacerlo.</td>
+</tr>
+<tr>
+<td><code>reasonCode</code></td>
+<td>0..*</td>
+<td>CodeableConcept</td>
+<td>Por qué, codificado.</td>
+</tr>
+<tr>
+<td><code>reasonReference</code></td>
+<td>0..*</td>
+<td>Reference(Condition | Observation | DiagnosticReport | DocumentReference)</td>
+<td>Por qué, como referencia a una Condition, Observation o informe.</td>
+</tr>
+<tr>
+<td><code>supportingInfo</code></td>
+<td>0..*</td>
+<td>Reference(Resource)</td>
+<td>Información adicional para quien lo hará.</td>
+</tr>
+<tr>
+<td><code>specimen</code></td>
+<td>0..*</td>
+<td>Reference(Specimen)</td>
+<td>Las muestras, si ya se tomaron.</td>
+</tr>
+<tr>
+<td><code>bodySite</code></td>
+<td>0..*</td>
+<td>CodeableConcept</td>
+<td>En qué parte del cuerpo.</td>
+</tr>
+<tr>
+<td><code>note</code></td>
+<td>0..*</td>
+<td>Annotation</td>
+<td>Notas para quien lo hará.</td>
+</tr>
+</tbody>
+</table>
+<!-- /ficha -->
+
+<p><code>doNotPerform</code> y <code>status</code> son <strong>modificadores</strong> (⚑): una orden con
+<code>doNotPerform: true</code> dice exactamente lo contrario que la misma orden sin él.</p>
+<p><strong>El ciclo de una orden:</strong></p>
+<div class="highlight"><pre><span></span><code>ServiceRequest (ecografía, active) ──▶ se hace el estudio ──▶ DiagnosticReport.basedOn ──▶ orden
+                                                            └──▶ la orden pasa a completed
+</code></pre></div>
+<hr />
+<h2 id="paso-a-paso-el-consultorio">Paso a paso: el consultorio<a class="headerlink" href="#paso-a-paso-el-consultorio" title="Permanent link">&para;</a></h2>
+<h3 id="paso-1--el-mínimo-nombre-y-estado">Paso 1 · El mínimo: nombre y estado<a class="headerlink" href="#paso-1--el-mínimo-nombre-y-estado" title="Permanent link">&para;</a></h3>
+<!-- paso 10a 1 -->
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"resourceType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Location"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Consultorio 3 de Medicina General"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"active"</span>
+<span class="p">}</span>
+</code></pre></div>
+<!-- /paso -->
+
+<h3 id="paso-2--qué-clase-de-lugar-es">Paso 2 · Qué clase de lugar es<a class="headerlink" href="#paso-2--qué-clase-de-lugar-es" title="Permanent link">&para;</a></h3>
+<!-- paso 10a 2 -->
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"mode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"instance"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"coding"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">"system"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://terminology.hl7.org/CodeSystem/v3-RoleCode"</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"FMC"</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Family Medicine clinic"</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">      </span><span class="p">],</span>
+<span class="w">      </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Consulta de medicina general"</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">],</span>
+<span class="w">  </span><span class="nt">"physicalType"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"coding"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"system"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://terminology.hl7.org/CodeSystem/location-physical-type"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ro"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Room"</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Sala"</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<!-- /paso -->
+
+<p><code>mode: instance</code>: es <strong>este</strong> consultorio, no "los consultorios" en general.
+<code>type</code> usa la tabla <code>v3-RoleCode</code> (<code>FMC</code>, consulta de medicina familiar y
+general) y <code>physicalType</code>, la tabla <code>location-physical-type</code> (<code>ro</code>, una
+sala).</p>
+<h3 id="paso-3--dónde-está-y-quién-lo-administra">Paso 3 · Dónde está y quién lo administra<a class="headerlink" href="#paso-3--dónde-está-y-quién-lo-administra" title="Permanent link">&para;</a></h3>
+<!-- paso 10a 3 -->
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"address"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"line"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="s2">"Av. Principal Ejemplo S00-00"</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nt">"city"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Quito"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Pichincha"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"country"</span><span class="p">:</span><span class="w"> </span><span class="s2">"EC"</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"managingOrganization"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Organization/{{hospitalId}}"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Hospital General Docente Ejemplo"</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"identifier"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"system"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://f-slg.github.io/aprende-fhir/sid/ubicacion"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"HGDE-CONS-03"</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">],</span>
+<span class="w">  </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"generated"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"div"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;div xmlns=\"http://www.w3.org/1999/xhtml\"&gt;&lt;p&gt;Consultorio 3 de Medicina General, planta baja del Hospital General Docente Ejemplo.&lt;/p&gt;&lt;/div&gt;"</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<!-- /paso -->
+
+<p>Solución: <a href="soluciones/10a_location_consultorio.json"><code>10a_location_consultorio.json</code></a>.</p>
+<h2 id="paso-a-paso-el-rol-de-la-dra-salazar">Paso a paso: el rol de la Dra. Salazar<a class="headerlink" href="#paso-a-paso-el-rol-de-la-dra-salazar" title="Permanent link">&para;</a></h2>
+<h3 id="paso-1--el-mínimo-quién-y-dónde-trabaja">Paso 1 · El mínimo: quién y dónde trabaja<a class="headerlink" href="#paso-1--el-mínimo-quién-y-dónde-trabaja" title="Permanent link">&para;</a></h3>
+<!-- paso 10b 1 -->
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"resourceType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"PractitionerRole"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"practitioner"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Practitioner/{{practitionerId}}"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Dra. Andrea Lucía Salazar Moreno"</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"organization"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Organization/{{hospitalId}}"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Hospital General Docente Ejemplo"</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<!-- /paso -->
+
+<h3 id="paso-2--qué-rol-y-qué-especialidad">Paso 2 · Qué rol y qué especialidad<a class="headerlink" href="#paso-2--qué-rol-y-qué-especialidad" title="Permanent link">&para;</a></h3>
+<!-- paso 10b 2 -->
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"coding"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">"system"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://terminology.hl7.org/CodeSystem/practitioner-role"</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"doctor"</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Doctor"</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">      </span><span class="p">],</span>
+<span class="w">      </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Médica"</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">],</span>
+<span class="w">  </span><span class="nt">"specialty"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"coding"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">"system"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://snomed.info/sct"</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"394814009"</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"General practice (specialty)"</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">      </span><span class="p">],</span>
+<span class="w">      </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Medicina general"</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div>
+<!-- /paso -->
+
+<p><code>code</code> dice el rol (<code>doctor</code>) y <code>specialty</code>, la especialidad con SNOMED CT
+(<code>394814009</code>, <em>General practice</em>).</p>
+<h3 id="paso-3--en-qué-consultorio-y-en-qué-horario">Paso 3 · En qué consultorio y en qué horario<a class="headerlink" href="#paso-3--en-qué-consultorio-y-en-qué-horario" title="Permanent link">&para;</a></h3>
+<!-- paso 10b 3 -->
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"active"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"location"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Location/{{officeLocationId}}"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Consultorio 3 de Medicina General"</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">],</span>
+<span class="w">  </span><span class="nt">"availableTime"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"daysOfWeek"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="s2">"mon"</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">"tue"</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">"wed"</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">"thu"</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">"fri"</span>
+<span class="w">      </span><span class="p">],</span>
+<span class="w">      </span><span class="nt">"availableStartTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"07:00:00"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"availableEndTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"13:00:00"</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">],</span>
+<span class="w">  </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"generated"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"div"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;div xmlns=\"http://www.w3.org/1999/xhtml\"&gt;&lt;p&gt;Dra. Andrea Lucía Salazar Moreno: médica general en el Hospital General Docente Ejemplo,&lt;/p&gt;&lt;p&gt;consultorio 3, de lunes a viernes de 07:00 a 13:00.&lt;/p&gt;&lt;/div&gt;"</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<!-- /paso -->
+
+<p><code>availableTime</code>: de lunes a viernes (<code>daysOfWeek</code>) de 07:00 a 13:00. Solución:
+<a href="soluciones/10b_practitionerrole_medica_general.json"><code>10b_practitionerrole_medica_general.json</code></a>.</p>
+<p><strong>El oncólogo.</strong> Se crea su Practitioner
+(<a href="soluciones/10c_practitioner_oncologo.json"><code>10c</code></a>), igual que el de la
+médica en el módulo 04, y su rol. Lo que cambia respecto del rol de la Dra.
+Salazar:</p>
+<!-- diferencia 10d -->
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"practitioner"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Practitioner/{{oncologistId}}"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Dr. Esteban Patricio Ruiz Montalvo"</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"coding"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">"system"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://terminology.hl7.org/CodeSystem/practitioner-role"</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"doctor"</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Doctor"</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">      </span><span class="p">],</span>
+<span class="w">      </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Médico"</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">],</span>
+<span class="w">  </span><span class="nt">"specialty"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"coding"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">"system"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://snomed.info/sct"</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"394593009"</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Medical oncology"</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">      </span><span class="p">],</span>
+<span class="w">      </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Oncología clínica"</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div>
+<!-- /diferencia -->
+
+<h2 id="la-consulta-por-el-nódulo">La consulta por el nódulo<a class="headerlink" href="#la-consulta-por-el-nódulo" title="Permanent link">&para;</a></h2>
+<p>Es un Encounter como el del módulo 05. Lo que cambia:</p>
+<!-- diferencia 10e -->
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"identifier"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"system"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://f-slg.github.io/aprende-fhir/sid/encuentro"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ENC-2025-0003"</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">],</span>
+<span class="w">  </span><span class="nt">"participant"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">"coding"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">            </span><span class="p">{</span>
+<span class="w">              </span><span class="nt">"system"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://terminology.hl7.org/CodeSystem/v3-ParticipationType"</span><span class="p">,</span>
+<span class="w">              </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ATND"</span><span class="p">,</span>
+<span class="w">              </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"attender"</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">          </span><span class="p">]</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">      </span><span class="p">],</span>
+<span class="w">      </span><span class="nt">"individual"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"PractitionerRole/{{salazarRoleId}}"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Dra. Salazar · Medicina general"</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">],</span>
+<span class="w">  </span><span class="nt">"period"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"start"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2025-04-22T08:00:00-05:00"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"end"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2025-04-22T08:30:00-05:00"</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"reasonCode"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"coding"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">"system"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://snomed.info/sct"</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"89164003"</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Breast lump"</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">      </span><span class="p">],</span>
+<span class="w">      </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Nódulo en la mama izquierda"</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">],</span>
+<span class="w">  </span><span class="nt">"location"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"location"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Location/{{officeLocationId}}"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Consultorio 3 de Medicina General"</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div>
+<!-- /diferencia -->
+
+<p>Dos novedades: <code>participant.individual</code> apunta al <strong>rol</strong> de la médica, no a
+la persona, y <code>location</code> dice en qué consultorio fue. Solución:
+<a href="soluciones/10e_encounter_consulta_nodulo.json"><code>10e_encounter_consulta_nodulo.json</code></a>.</p>
+<h2 id="paso-a-paso-la-orden-de-ecografía">Paso a paso: la orden de ecografía<a class="headerlink" href="#paso-a-paso-la-orden-de-ecografía" title="Permanent link">&para;</a></h2>
+<h3 id="paso-1--el-mínimo-estado-intención-y-paciente">Paso 1 · El mínimo: estado, intención y paciente<a class="headerlink" href="#paso-1--el-mínimo-estado-intención-y-paciente" title="Permanent link">&para;</a></h3>
+<!-- paso 10f 1 -->
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"resourceType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ServiceRequest"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"completed"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"intent"</span><span class="p">:</span><span class="w"> </span><span class="s2">"order"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"subject"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Patient/{{patientId}}"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Luis Alberto Paredes Cevallos"</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<!-- /paso -->
+
+<p><code>status</code>, <code>intent</code> y <code>subject</code> son obligatorios. <code>intent: order</code> dice que es
+una orden firme. La creamos directamente como <code>completed</code> porque en el taller
+el estudio ya se hizo; en un sistema real nacería <code>active</code> y pasaría a
+<code>completed</code> al cumplirse.</p>
+<h3 id="paso-2--qué-se-pide-con-qué-prioridad-y-de-qué-parte-del-cuerpo">Paso 2 · Qué se pide, con qué prioridad y de qué parte del cuerpo<a class="headerlink" href="#paso-2--qué-se-pide-con-qué-prioridad-y-de-qué-parte-del-cuerpo" title="Permanent link">&para;</a></h3>
+<!-- paso 10f 2 -->
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"category"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"coding"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">"system"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://snomed.info/sct"</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"363679005"</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Imaging"</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">      </span><span class="p">],</span>
+<span class="w">      </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Imagenología"</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">],</span>
+<span class="w">  </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"coding"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"system"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://snomed.info/sct"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"47079000"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Ultrasonography of breast"</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Ecografía de mama"</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"priority"</span><span class="p">:</span><span class="w"> </span><span class="s2">"urgent"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"bodySite"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"coding"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">"system"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://snomed.info/sct"</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"80248007"</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Left breast structure"</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">      </span><span class="p">],</span>
+<span class="w">      </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Mama izquierda"</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div>
+<!-- /paso -->
+
+<p><code>code</code> con SNOMED CT (<code>47079000</code>, <em>Ultrasonography of breast</em>) y <code>priority</code>
+es un <strong>code</strong> con cuatro valores posibles: <code>routine</code>, <code>urgent</code>, <code>asap</code> y
+<code>stat</code>.</p>
+<h3 id="paso-3--quién-lo-pide-cuándo-en-qué-consulta-y-por-qué">Paso 3 · Quién lo pide, cuándo, en qué consulta y por qué<a class="headerlink" href="#paso-3--quién-lo-pide-cuándo-en-qué-consulta-y-por-qué" title="Permanent link">&para;</a></h3>
+<!-- paso 10f 3 -->
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"encounter"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Encounter/{{noduleEncounterId}}"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Consulta por nódulo mamario, 22 de abril de 2025"</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"authoredOn"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2025-04-22T08:20:00-05:00"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"requester"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"PractitionerRole/{{salazarRoleId}}"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Dra. Salazar · Medicina general"</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"reasonCode"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"coding"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">"system"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://snomed.info/sct"</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"89164003"</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Breast lump"</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">      </span><span class="p">],</span>
+<span class="w">      </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Nódulo palpable en la mama izquierda"</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div>
+<!-- /paso -->
+
+<h3 id="paso-4--identificador-y-narrativa">Paso 4 · Identificador y narrativa<a class="headerlink" href="#paso-4--identificador-y-narrativa" title="Permanent link">&para;</a></h3>
+<!-- paso 10f 4 -->
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"identifier"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"system"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://f-slg.github.io/aprende-fhir/sid/orden"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ORD-2025-0101"</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">],</span>
+<span class="w">  </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"generated"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"div"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;div xmlns=\"http://www.w3.org/1999/xhtml\"&gt;&lt;p&gt;Orden: ecografía de mama izquierda, prioridad urgente.&lt;/p&gt;&lt;p&gt;Motivo: nódulo palpable de 2 cm en el cuadrante superior externo.&lt;/p&gt;&lt;/div&gt;"</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<!-- /paso -->
+
+<p>Solución: <a href="soluciones/10f_servicerequest_ecografia.json"><code>10f_servicerequest_ecografia.json</code></a>.</p>
+<h2 id="paso-a-paso-el-informe-de-la-ecografía">Paso a paso: el informe de la ecografía<a class="headerlink" href="#paso-a-paso-el-informe-de-la-ecografía" title="Permanent link">&para;</a></h2>
+<p>Es un DiagnosticReport, como el de patología del módulo 11 (su ficha está
+allí). Lo nuevo es <code>basedOn</code>: <strong>cierra el ciclo</strong> con la orden.</p>
+<h3 id="paso-1--el-mínimo-estado-y-código">Paso 1 · El mínimo: estado y código<a class="headerlink" href="#paso-1--el-mínimo-estado-y-código" title="Permanent link">&para;</a></h3>
+<!-- paso 10g 1 -->
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"resourceType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"DiagnosticReport"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"final"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"coding"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"system"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://loinc.org"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"24601-7"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"US Breast"</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Ecografía de mama"</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<!-- /paso -->
+
+<p>LOINC <code>24601-7</code>, <em>US Breast</em>.</p>
+<h3 id="paso-2--de-quién-cuándo-y-quién-informa">Paso 2 · De quién, cuándo y quién informa<a class="headerlink" href="#paso-2--de-quién-cuándo-y-quién-informa" title="Permanent link">&para;</a></h3>
+<!-- paso 10g 2 -->
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"category"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"coding"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">"system"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://terminology.hl7.org/CodeSystem/v2-0074"</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"RAD"</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Radiology"</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">      </span><span class="p">],</span>
+<span class="w">      </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Imagenología"</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">],</span>
+<span class="w">  </span><span class="nt">"subject"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Patient/{{patientId}}"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Luis Alberto Paredes Cevallos"</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"effectiveDateTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2025-04-25T10:00:00-05:00"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"issued"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2025-04-25T12:00:00-05:00"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"performer"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Organization/{{hospitalId}}"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Hospital General Docente Ejemplo"</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div>
+<!-- /paso -->
+
+<p><code>category</code> con <code>RAD</code> (<em>Radiology</em>) de la tabla <code>v2-0074</code>.</p>
+<h3 id="paso-3--a-qué-orden-responde">Paso 3 · A qué orden responde<a class="headerlink" href="#paso-3--a-qué-orden-responde" title="Permanent link">&para;</a></h3>
+<!-- paso 10g 3 -->
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"basedOn"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ServiceRequest/{{ultrasoundRequestId}}"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Orden de ecografía de mama"</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div>
+<!-- /paso -->
+
+<h3 id="paso-4--la-conclusión-bi-rads-4">Paso 4 · La conclusión: BI-RADS 4<a class="headerlink" href="#paso-4--la-conclusión-bi-rads-4" title="Permanent link">&para;</a></h3>
+<!-- paso 10g 4 -->
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"conclusion"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Nódulo sólido de bordes irregulares de 2,4 cm en el cuadrante superior externo de la mama izquierda. BI-RADS 4: sospechoso. Se recomienda biopsia."</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"conclusionCode"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"coding"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">"system"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://snomed.info/sct"</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"89164003"</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Breast lump"</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">      </span><span class="p">],</span>
+<span class="w">      </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Nódulo mamario sospechoso"</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">],</span>
+<span class="w">  </span><span class="nt">"identifier"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"system"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://f-slg.github.io/aprende-fhir/sid/informe"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"INF-IMG-2025-0212"</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">],</span>
+<span class="w">  </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"generated"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"div"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;div xmlns=\"http://www.w3.org/1999/xhtml\"&gt;&lt;p&gt;Ecografía de mama izquierda (25 de abril de 2025): nódulo sólido, irregular, de 2,4 cm, BI-RADS 4.&lt;/p&gt;&lt;p&gt;Se recomienda biopsia.&lt;/p&gt;&lt;/div&gt;"</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<!-- /paso -->
+
+<p><strong>BI-RADS</strong> es la clasificación de los estudios de mama: 4 significa
+"sospechoso", con indicación de biopsia. Solución:
+<a href="soluciones/10g_diagnosticreport_ecografia.json"><code>10g_diagnosticreport_ecografia.json</code></a>.</p>
+<h2 id="la-orden-de-biopsia-y-la-derivación">La orden de biopsia y la derivación<a class="headerlink" href="#la-orden-de-biopsia-y-la-derivación" title="Permanent link">&para;</a></h2>
+<p>Las dos se construyen como la orden de ecografía. Lo que cambia en la
+<strong>biopsia</strong> (<a href="soluciones/10h_servicerequest_biopsia.json"><code>10h</code></a>):</p>
+<!-- diferencia 10h -->
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"identifier"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"system"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://f-slg.github.io/aprende-fhir/sid/orden"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ORD-2025-0102"</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">],</span>
+<span class="w">  </span><span class="nt">"category"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"coding"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">"system"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://snomed.info/sct"</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"108252007"</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Laboratory procedure"</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">      </span><span class="p">],</span>
+<span class="w">      </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Procedimiento de laboratorio"</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">],</span>
+<span class="w">  </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"coding"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"system"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://snomed.info/sct"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"122548005"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Biopsy of breast"</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Biopsia de mama"</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"authoredOn"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2025-04-28T09:00:00-05:00"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"reasonReference"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"DiagnosticReport/{{ultrasoundReportId}}"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Ecografía BI-RADS 4"</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div>
+<!-- /diferencia -->
+
+<p>Su motivo (<code>reasonReference</code>) es el informe de la ecografía: el BI-RADS 4
+justifica la biopsia. En el módulo 11, la muestra (<code>Specimen.request</code>) y el
+informe de patología (<code>DiagnosticReport.basedOn</code>) apuntarán a esta orden.</p>
+<p>Lo que cambia en la <strong>derivación</strong> (<a href="soluciones/10i_servicerequest_derivacion.json"><code>10i</code></a>):</p>
+<!-- diferencia 10i -->
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"identifier"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"system"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://f-slg.github.io/aprende-fhir/sid/orden"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ORD-2025-0103"</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">],</span>
+<span class="w">  </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"active"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"category"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"coding"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">"system"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://snomed.info/sct"</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3457005"</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Patient referral"</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">      </span><span class="p">],</span>
+<span class="w">      </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Derivación"</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">],</span>
+<span class="w">  </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"coding"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"system"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://snomed.info/sct"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3457005"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Patient referral"</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Derivación a Oncología Clínica"</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"authoredOn"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2025-04-28T09:05:00-05:00"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"performerType"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"coding"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"system"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://snomed.info/sct"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"394593009"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Medical oncology"</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Oncología clínica"</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"performer"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"PractitionerRole/{{oncologistRoleId}}"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Dr. Ruiz · Oncología clínica"</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">],</span>
+<span class="w">  </span><span class="nt">"reasonReference"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"DiagnosticReport/{{ultrasoundReportId}}"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Ecografía BI-RADS 4"</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">],</span>
+<span class="w">  </span><span class="nt">"supportingInfo"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"FamilyMemberHistory/{{motherHistoryId}}"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Madre con cáncer de mama a los 52 años"</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">],</span>
+<span class="w">  </span><span class="nt">"note"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Paciente varón de 46 años con nódulo sospechoso y madre con cáncer de mama. Se solicita valoración prioritaria."</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div>
+<!-- /diferencia -->
+
+<ul>
+<li><code>category</code> y <code>code</code> SNOMED <code>3457005</code>, <em>Patient referral</em>.</li>
+<li><code>performerType</code> dice <strong>a qué servicio</strong> se deriva (oncología clínica) y
+  <code>performer</code>, <strong>a quién</strong> concretamente: al rol del Dr. Ruiz.</li>
+<li><code>supportingInfo</code> apunta al antecedente familiar del módulo 07: el oncólogo
+  lo verá sin buscarlo.</li>
+<li><code>status: active</code>: la derivación sigue abierta hasta que el oncólogo
+  atienda a Luis.</li>
+</ul>
+<hr />
+<h2 id="ejercicios-en-el-servidor">Ejercicios en el servidor<a class="headerlink" href="#ejercicios-en-el-servidor" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Paso</th>
+<th>Petición</th>
+<th>Guarda</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>10a</td>
+<td><code>POST /Location</code></td>
+<td><code>officeLocationId</code></td>
+</tr>
+<tr>
+<td>10b</td>
+<td><code>POST /PractitionerRole</code> (médica general)</td>
+<td><code>salazarRoleId</code></td>
+</tr>
+<tr>
+<td>10c</td>
+<td><code>POST /Practitioner</code> (oncólogo)</td>
+<td><code>oncologistId</code></td>
+</tr>
+<tr>
+<td>10d</td>
+<td><code>POST /PractitionerRole</code> (oncólogo)</td>
+<td><code>oncologistRoleId</code></td>
+</tr>
+<tr>
+<td>10e</td>
+<td><code>POST /Encounter</code></td>
+<td><code>noduleEncounterId</code></td>
+</tr>
+<tr>
+<td>10f</td>
+<td><code>POST /ServiceRequest</code> (ecografía)</td>
+<td><code>ultrasoundRequestId</code></td>
+</tr>
+<tr>
+<td>10g</td>
+<td><code>POST /DiagnosticReport</code> (ecografía)</td>
+<td><code>ultrasoundReportId</code></td>
+</tr>
+<tr>
+<td>10h</td>
+<td><code>POST /ServiceRequest</code> (biopsia)</td>
+<td><code>biopsyRequestId</code></td>
+</tr>
+<tr>
+<td>10i</td>
+<td><code>POST /ServiceRequest</code> (derivación)</td>
+<td><code>referralId</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="10j--las-órdenes-del-paciente">10j · Las órdenes del paciente<a class="headerlink" href="#10j--las-órdenes-del-paciente" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="err">GET {{FHIRURL}}/ServiceRequest?subject=Patient/{{patientId}}&amp;_sort=authored</span>
+</code></pre></div>
+<p>Devuelve las tres órdenes en orden cronológico: ecografía, biopsia y
+derivación.</p>
+<h3 id="10k--qué-se-hizo-con-cada-orden-_revinclude">10k · ¿Qué se hizo con cada orden? <code>_revinclude</code><a class="headerlink" href="#10k--qué-se-hizo-con-cada-orden-_revinclude" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="err">GET {{FHIRURL}}/ServiceRequest?subject=Patient/{{patientId}}&amp;_revinclude=DiagnosticReport:based-on</span>
+</code></pre></div>
+<p><code>_include</code> (módulo 05) trae los recursos <strong>a los que apuntan</strong> los
+resultados. <code>_revinclude</code> hace lo contrario: trae los recursos <strong>que apuntan
+a</strong> los resultados. Aquí, los informes cuyo <code>basedOn</code> es alguna de las
+órdenes. Verás las tres órdenes (<code>search.mode: match</code>) y dos informes
+(<code>include</code>): el de la ecografía y, cuando hagas el módulo 11, el de
+patología. La derivación no tiene informe: todavía está abierta.</p>
+<h3 id="10l--los-oncólogos-del-hospital">10l · Los oncólogos del hospital<a class="headerlink" href="#10l--los-oncólogos-del-hospital" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="err">GET {{FHIRURL}}/PractitionerRole?specialty=http://snomed.info/sct|394593009&amp;_include=PractitionerRole:practitioner</span>
+</code></pre></div>
+<p>Busca roles por especialidad e incluye a la persona de cada rol. Es la
+búsqueda que haría un sistema para elegir a quién derivar.</p>
+<h3 id="10m--error-a-propósito-la-prioridad-en-español">10m · Error a propósito: la prioridad en español<a class="headerlink" href="#10m--error-a-propósito-la-prioridad-en-español" title="Permanent link">&para;</a></h3>
+<p>Envía (<a href="errores/10e1_prioridad_en_espanol.json"><code>10e1_prioridad_en_espanol.json</code></a>)
+una orden con <code>"priority": "urgente"</code>. El servidor responde <strong><code>400</code></strong>:</p>
+<div class="highlight"><pre><span></span><code>HAPI-1821: [element="priority"] Invalid attribute value "urgente": Unknown ServiceRequestPriority code 'urgente'
+</code></pre></div>
+<h2 id="para-pensar">Para pensar<a class="headerlink" href="#para-pensar" title="Permanent link">&para;</a></h2>
+<p>Una derivación en papel suele perderse: no se sabe si el paciente llegó, ni
+qué dijo el especialista. Con FHIR, la derivación es un recurso con estado.
+¿Qué búsqueda usarías para listar las derivaciones a oncología que llevan más
+de 15 días en estado <code>active</code>? <em>(Pista: combina <code>status</code>, <code>performer</code> o
+<code>category</code>, y <code>authored</code> con el prefijo <code>lt</code>, "menor que".)</em></p>
+<h2 id="autoevaluación">Autoevaluación<a class="headerlink" href="#autoevaluación" title="Permanent link">&para;</a></h2>
+<details>
+<summary>1. ¿Practitioner o PractitionerRole en <code>ServiceRequest.requester</code>?</summary>
+<p>Mejor <strong>PractitionerRole</strong>: dice quién pide la orden, con qué rol y en qué
+organización. Los dos están permitidos.</p>
+</details>
+<details>
+<summary>2. ¿Cómo sabe el sistema que el informe de la ecografía cumple esa orden?</summary>
+<p>Porque el DiagnosticReport tiene <code>basedOn</code> apuntando a la ServiceRequest. Con
+<code>_revinclude=DiagnosticReport:based-on</code> se recupera desde la orden.</p>
+</details>
+<details>
+<summary>3. ¿Qué diferencia hay entre <code>performerType</code> y <code>performer</code>?</summary>
+<p><code>performerType</code> dice qué <strong>tipo</strong> de profesional o servicio debe atender
+(oncología clínica); <code>performer</code>, <strong>quién</strong> concretamente (el rol del Dr.
+Ruiz). Se puede indicar solo el tipo y dejar que el servicio asigne a la
+persona.</p>
+</details>
+<h2 id="resumen">Resumen<a class="headerlink" href="#resumen" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Location</strong> es el lugar; <strong>PractitionerRole</strong>, el profesional en un puesto.</li>
+<li><strong>ServiceRequest</strong> pide un servicio: estudio, procedimiento o derivación.</li>
+<li>Los resultados apuntan a la orden con <code>basedOn</code> (o <code>request</code> en Specimen).</li>
+<li><code>_revinclude</code> trae los recursos que apuntan a los resultados de la búsqueda.</li>
+</ul>
+<h2 id="ejecutar-este-módulo">Ejecutar este módulo<a class="headerlink" href="#ejecutar-este-módulo" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Postman:</strong> carpeta <em>10 · Órdenes y derivación</em>.</li>
+<li><strong>curl:</strong> <code>curl/taller.sh 10</code></li>
+<li><strong>R:</strong></li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="n">ordenes</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">fhir_buscar</span><span class="p">(</span><span class="s">"ServiceRequest?subject=Patient/{{patientId}}&amp;_revinclude=DiagnosticReport:based-on"</span><span class="p">)</span>
+<span class="nf">fhir_tabla</span><span class="p">(</span><span class="n">ordenes</span><span class="p">,</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<span class="w">  </span><span class="n">tipo</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="kr">function</span><span class="p">(</span><span class="n">r</span><span class="p">)</span><span class="w"> </span><span class="n">r</span><span class="o">$</span><span class="n">resourceType</span><span class="p">,</span>
+<span class="w">  </span><span class="n">que</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="kr">function</span><span class="p">(</span><span class="n">r</span><span class="p">)</span><span class="w"> </span><span class="n">r</span><span class="o">$</span><span class="n">code</span><span class="o">$</span><span class="n">text</span><span class="p">,</span>
+<span class="w">  </span><span class="n">estado</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kr">function</span><span class="p">(</span><span class="n">r</span><span class="p">)</span><span class="w"> </span><span class="n">r</span><span class="o">$</span><span class="n">status</span>
+<span class="p">))</span>
+</code></pre></div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Volver al principio
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Pie" >
+        
+          
+          <a href="../09-documentos-clinicos/" class="md-footer__link md-footer__link--prev" aria-label="Anterior: 09 · Documentos clínicos">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Anterior
+              </span>
+              <div class="md-ellipsis">
+                09 · Documentos clínicos
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../11-anatomia-patologica/" class="md-footer__link md-footer__link--next" aria-label="Siguiente: 11 · Anatomía patológica">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Siguiente
+              </span>
+              <div class="md-ellipsis">
+                11 · Anatomía patológica
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Contenido CC BY 4.0 · Código MIT · HL7® y FHIR® son marcas registradas de Health Level Seven International; este taller no implica afiliación ni aval de HL7.
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.sections", "navigation.expand", "navigation.footer", "navigation.top", "navigation.tracking", "toc.follow", "search.highlight", "search.suggest", "content.code.copy", "content.action.edit"], "search": "../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.525ec568.min.js"></script>
+      
+    
+  </body>
+</html>

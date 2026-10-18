@@ -1,0 +1,15 @@
+{
+  "resourceType": "Patient",
+  "identifier": [
+    {
+      "system": "https://f-slg.github.io/aprende-fhir/sid/cedula",
+      "value": "9800000012"
+    }
+  ],
+  "name": [
+    {
+      "text": "Paciente de prueba sin fecha de nacimiento"
+    }
+  ],
+  "gender": "male"
+}

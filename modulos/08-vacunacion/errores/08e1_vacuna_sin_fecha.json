@@ -1,0 +1,16 @@
+{
+  "resourceType": "Immunization",
+  "status": "completed",
+  "vaccineCode": {
+    "coding": [
+      {
+        "system": "http://hl7.org/fhir/sid/cvx",
+        "code": "141",
+        "display": "Influenza, split virus, trivalent, preservative"
+      }
+    ]
+  },
+  "patient": {
+    "reference": "Patient/{{patientId}}"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "resourceType": "FamilyMemberHistory",
+  "status": "completed",
+  "patient": {
+    "reference": "Patient/{{patientId}}",
+    "display": "Luis Alberto Paredes Cevallos"
+  },
+  "relationship": {
+    "coding": [
+      {
+        "system": "http://terminology.hl7.org/CodeSystem/v3-RoleCode",
+        "code": "MTH",
+        "display": "mother"
+      }
+    ],
+    "text": "Madre"
+  }
+}

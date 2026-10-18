@@ -1,0 +1,9 @@
+{
+  "resourceType": "Patient",
+  "nombre": [
+    {
+      "text": "Luis Alberto Paredes Cevallos"
+    }
+  ],
+  "gender": "male"
+}

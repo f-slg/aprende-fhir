@@ -1,0 +1,20 @@
+/* Colores de la familia geoecu · pobecu · Agenda FHIR · Aprende FHIR */
+:root {
+  --md-primary-fg-color: #0F2233;
+  --md-primary-fg-color--light: #1B3A52;
+  --md-primary-fg-color--dark: #0A1824;
+  --md-accent-fg-color: #C99700;
+  --md-typeset-a-color: #8A6500;
+}
+[data-md-color-scheme="slate"] {
+  --md-primary-fg-color: #0F2233;
+  --md-accent-fg-color: #F2B705;
+  --md-typeset-a-color: #F2B705;
+  --md-default-bg-color: #101820;
+}
+.md-header__button.md-logo img { height: 2rem; }
+/* Los desplegables de autoevaluación */
+.md-typeset details { border-left: 3px solid var(--md-accent-fg-color); padding: .2rem .8rem; margin: .6rem 0; }
+.md-typeset details summary { cursor: pointer; font-weight: 600; }
+/* Tablas anchas con desplazamiento horizontal en pantallas pequeñas */
+.md-typeset__table { display: block; overflow-x: auto; }

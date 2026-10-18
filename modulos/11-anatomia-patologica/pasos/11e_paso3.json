@@ -1,0 +1,66 @@
+{
+  "resourceType": "Observation",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Tamaño del tumor: 2,5 cm. Estado: final.</p></div>"
+  },
+  "status": "final",
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+          "code": "laboratory",
+          "display": "Laboratory"
+        }
+      ]
+    }
+  ],
+  "code": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "263605001",
+        "display": "Length dimension of neoplasm"
+      }
+    ],
+    "text": "Tamaño del tumor"
+  },
+  "subject": {
+    "reference": "Patient/{{patientId}}",
+    "display": "Luis Alberto Paredes Cevallos"
+  },
+  "focus": [
+    {
+      "reference": "BodyStructure/{{bodyStructureId}}",
+      "display": "Tumor de mama izquierda"
+    }
+  ],
+  "effectiveDateTime": "2025-05-08",
+  "performer": [
+    {
+      "reference": "Practitioner/{{practitionerId}}",
+      "display": "Dra. Andrea Lucía Salazar Moreno"
+    }
+  ],
+  "valueQuantity": {
+    "value": 2.5,
+    "unit": "cm",
+    "system": "http://unitsofmeasure.org",
+    "code": "cm"
+  },
+  "bodySite": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "80248007",
+        "display": "Left breast structure"
+      }
+    ],
+    "text": "Mama izquierda"
+  },
+  "specimen": {
+    "reference": "Specimen/{{specimenId}}",
+    "display": "Biopsia AP-2025-0457"
+  }
+}

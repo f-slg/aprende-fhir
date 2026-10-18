@@ -1,0 +1,36 @@
+{
+  "resourceType": "FamilyMemberHistory",
+  "status": "completed",
+  "patient": {
+    "reference": "Patient/{{patientId}}",
+    "display": "Luis Alberto Paredes Cevallos"
+  },
+  "date": "2025-03-20",
+  "name": "Rosa Cevallos (madre)",
+  "relationship": {
+    "coding": [
+      {
+        "system": "http://terminology.hl7.org/CodeSystem/v3-RoleCode",
+        "code": "MTH",
+        "display": "mother"
+      }
+    ],
+    "text": "Madre"
+  },
+  "sex": {
+    "coding": [
+      {
+        "system": "http://hl7.org/fhir/administrative-gender",
+        "code": "female",
+        "display": "Female"
+      }
+    ],
+    "text": "Femenino"
+  },
+  "deceasedAge": {
+    "value": 60,
+    "unit": "años",
+    "system": "http://unitsofmeasure.org",
+    "code": "a"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "resourceType": "Observation",
+  "status": "final",
+  "subject": {
+    "reference": "Patient/{{patientId}}"
+  },
+  "valueQuantity": {
+    "value": 38.4,
+    "unit": "°C",
+    "system": "http://unitsofmeasure.org",
+    "code": "Cel"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "resourceType": "Appointment",
+  "status": "booked",
+  "start": "2025-07-02T09:00:00-05:00",
+  "end": "2025-07-02T11:00:00-05:00",
+  "participant": [
+    {
+      "actor": {
+        "reference": "Patient/{{patientId}}",
+        "display": "Luis Alberto Paredes Cevallos"
+      },
+      "required": "required",
+      "status": "accepted"
+    },
+    {
+      "actor": {
+        "reference": "PractitionerRole/{{oncologistRoleId}}",
+        "display": "Dr. Ruiz · Oncología clínica"
+      },
+      "required": "required",
+      "status": "accepted"
+    },
+    {
+      "actor": {
+        "reference": "Location/{{dayHospitalLocationId}}",
+        "display": "Hospital de Día de Oncología"
+      },
+      "required": "required",
+      "status": "accepted"
+    }
+  ]
+}

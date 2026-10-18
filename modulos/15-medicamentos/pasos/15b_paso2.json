@@ -1,0 +1,41 @@
+{
+  "resourceType": "MedicationRequest",
+  "status": "active",
+  "intent": "order",
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/medicationrequest-category",
+          "code": "outpatient",
+          "display": "Outpatient"
+        }
+      ]
+    }
+  ],
+  "medicationCodeableConcept": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "372817009",
+        "display": "Doxorubicin"
+      }
+    ],
+    "text": "Doxorrubicina"
+  },
+  "subject": {
+    "reference": "Patient/{{patientId}}",
+    "display": "Luis Alberto Paredes Cevallos"
+  },
+  "authoredOn": "2025-07-01",
+  "requester": {
+    "reference": "Practitioner/{{practitionerId}}",
+    "display": "Dra. Andrea Lucía Salazar Moreno"
+  },
+  "reasonReference": [
+    {
+      "reference": "Condition/{{conditionCancerId}}",
+      "display": "Carcinoma ductal infiltrante de mama izquierda"
+    }
+  ]
+}

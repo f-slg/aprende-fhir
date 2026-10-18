@@ -1,0 +1,27 @@
+{
+  "resourceType": "Immunization",
+  "status": "completed",
+  "vaccineCode": {
+    "coding": [
+      {
+        "system": "http://hl7.org/fhir/sid/cvx",
+        "code": "141",
+        "display": "Influenza, split virus, trivalent, preservative"
+      }
+    ],
+    "text": "Influenza estacional"
+  },
+  "patient": {
+    "reference": "Patient/{{patientId}}",
+    "display": "Luis Alberto Paredes Cevallos"
+  },
+  "encounter": {
+    "reference": "Encounter/{{vaccinationEncounterId}}",
+    "display": "Vacunatorio, 3 de abril de 2025"
+  },
+  "occurrenceDateTime": "2025-04-03T10:10:00-05:00",
+  "recorded": "2025-04-03",
+  "primarySource": true,
+  "lotNumber": "FLU-25-0417",
+  "expirationDate": "2025-12-31"
+}

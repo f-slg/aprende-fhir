@@ -1,0 +1,47 @@
+{
+  "resourceType": "Organization",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Hospital General Docente Ejemplo, parte de la Red de Servicios de Salud Ejemplo (ficticia).</p></div>"
+  },
+  "identifier": [
+    {
+      "system": "https://f-slg.github.io/aprende-fhir/sid/establecimiento",
+      "value": "HGDE-0001"
+    }
+  ],
+  "active": true,
+  "type": [
+    {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/organization-type",
+          "code": "prov",
+          "display": "Healthcare Provider"
+        }
+      ]
+    }
+  ],
+  "name": "Hospital General Docente Ejemplo",
+  "telecom": [
+    {
+      "system": "phone",
+      "value": "+593 2 000 0000",
+      "use": "work"
+    }
+  ],
+  "address": [
+    {
+      "line": [
+        "Av. Principal Ejemplo S00-00"
+      ],
+      "city": "Quito",
+      "state": "Pichincha",
+      "country": "EC"
+    }
+  ],
+  "partOf": {
+    "reference": "Organization/{{organizationId}}",
+    "display": "Red de Servicios de Salud Ejemplo"
+  }
+}

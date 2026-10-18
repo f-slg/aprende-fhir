@@ -1,0 +1,1536 @@
+{
+ "02a": {
+  "archivo": "modulos/02-patient/soluciones/02a_patient_crear.json",
+  "pasos": [
+   {
+    "titulo": "El mínimo: un paciente vacío",
+    "campos": [
+     "resourceType"
+    ]
+   },
+   {
+    "titulo": "Los identificadores: cédula e historia clínica",
+    "campos": [
+     "identifier"
+    ]
+   },
+   {
+    "titulo": "El nombre, primero simple",
+    "parcial": {
+     "name": [
+      {
+       "use": "official",
+       "text": "Luis Alberto Paredes Cevallos",
+       "family": "Paredes Cevallos",
+       "given": [
+        "Luis",
+        "Alberto"
+       ]
+      }
+     ]
+    }
+   },
+   {
+    "titulo": "Los dos apellidos y el nombre de uso habitual",
+    "campos": [
+     "name"
+    ]
+   },
+   {
+    "titulo": "Datos demográficos",
+    "campos": [
+     "active",
+     "gender",
+     "birthDate"
+    ]
+   },
+   {
+    "titulo": "Dirección, idioma y lugar de nacimiento",
+    "campos": [
+     "address",
+     "communication",
+     "extension"
+    ]
+   },
+   {
+    "titulo": "La narrativa",
+    "campos": [
+     "text"
+    ]
+   }
+  ]
+ },
+ "02e": {
+  "diferencia": "02a",
+  "archivo": "modulos/02-patient/soluciones/02e_patient_actualizar.json"
+ },
+ "04a": {
+  "archivo": "modulos/04-profesionales-y-organizaciones/soluciones/04a_practitioner_crear.json",
+  "pasos": [
+   {
+    "titulo": "Quién es: identificador y nombre",
+    "campos": [
+     "resourceType",
+     "identifier",
+     "name"
+    ]
+   },
+   {
+    "titulo": "Contacto y sexo",
+    "campos": [
+     "active",
+     "telecom",
+     "gender"
+    ]
+   },
+   {
+    "titulo": "Su título profesional",
+    "campos": [
+     "qualification",
+     "text"
+    ]
+   }
+  ]
+ },
+ "04b": {
+  "archivo": "modulos/04-profesionales-y-organizaciones/soluciones/04b_organization_red.json",
+  "pasos": [
+   {
+    "titulo": "Nombre e identificador",
+    "campos": [
+     "resourceType",
+     "identifier",
+     "name"
+    ]
+   },
+   {
+    "titulo": "Tipo de organización y ubicación",
+    "campos": [
+     "active",
+     "type",
+     "address",
+     "text"
+    ]
+   }
+  ]
+ },
+ "04c": {
+  "diferencia": "04b",
+  "archivo": "modulos/04-profesionales-y-organizaciones/soluciones/04c_organization_hospital.json"
+ },
+ "05a": {
+  "archivo": "modulos/05-diagnostico-y-encuentro/soluciones/05a_condition_intoxicacion.json",
+  "pasos": [
+   {
+    "titulo": "El mínimo: de quién es la condición",
+    "campos": [
+     "resourceType",
+     "subject"
+    ]
+   },
+   {
+    "titulo": "Qué condición es: el código CIE-10",
+    "campos": [
+     "code"
+    ]
+   },
+   {
+    "titulo": "Los dos estados: clínico y de verificación",
+    "campos": [
+     "clinicalStatus",
+     "verificationStatus",
+     "category"
+    ]
+   },
+   {
+    "titulo": "Severidad y fechas",
+    "campos": [
+     "severity",
+     "onsetDateTime",
+     "abatementDateTime",
+     "recordedDate"
+    ]
+   },
+   {
+    "titulo": "Quién lo registró y la evidencia",
+    "campos": [
+     "identifier",
+     "recorder",
+     "asserter",
+     "evidence",
+     "text"
+    ]
+   }
+  ]
+ },
+ "05b": {
+  "archivo": "modulos/05-diagnostico-y-encuentro/soluciones/05b_encounter_crear.json",
+  "pasos": [
+   {
+    "titulo": "El mínimo: estado y clase",
+    "campos": [
+     "resourceType",
+     "status",
+     "class"
+    ]
+   },
+   {
+    "titulo": "Quién y cuándo",
+    "campos": [
+     "subject",
+     "participant",
+     "period"
+    ]
+   },
+   {
+    "titulo": "Qué tipo de atención fue",
+    "campos": [
+     "serviceType",
+     "priority",
+     "reasonCode"
+    ]
+   },
+   {
+    "titulo": "Dónde y con qué diagnóstico",
+    "campos": [
+     "serviceProvider",
+     "diagnosis"
+    ]
+   },
+   {
+    "titulo": "Identificador y narrativa",
+    "campos": [
+     "identifier",
+     "text"
+    ]
+   }
+  ]
+ },
+ "06a": {
+  "archivo": "modulos/06-observaciones/soluciones/06a_observation_presion_arterial.json",
+  "pasos": [
+   {
+    "titulo": "Lo que exige el perfil de signos vitales",
+    "campos": [
+     "resourceType",
+     "status",
+     "category",
+     "code",
+     "subject",
+     "effectiveDateTime",
+     "component"
+    ]
+   },
+   {
+    "titulo": "En qué consulta, quién midió y la narrativa",
+    "campos": [
+     "encounter",
+     "performer",
+     "text"
+    ]
+   }
+  ]
+ },
+ "06b": {
+  "diferencia": "06a",
+  "archivo": "modulos/06-observaciones/soluciones/06b_observation_temperatura.json"
+ },
+ "07a": {
+  "archivo": "modulos/07-antecedentes/soluciones/07a_allergyintolerance_penicilina.json",
+  "pasos": [
+   {
+    "titulo": "El mínimo válido: paciente, sustancia y estados",
+    "campos": [
+     "resourceType",
+     "patient",
+     "code",
+     "clinicalStatus",
+     "verificationStatus"
+    ]
+   },
+   {
+    "titulo": "Tipo, categoría y criticidad",
+    "campos": [
+     "type",
+     "category",
+     "criticality"
+    ]
+   },
+   {
+    "titulo": "La reacción",
+    "campos": [
+     "reaction"
+    ]
+   },
+   {
+    "titulo": "Cuándo empezó, quién lo registró y quién lo informó",
+    "campos": [
+     "identifier",
+     "encounter",
+     "onsetString",
+     "recordedDate",
+     "recorder",
+     "asserter",
+     "text"
+    ]
+   }
+  ]
+ },
+ "07b": {
+  "archivo": "modulos/07-antecedentes/soluciones/07b_medicationstatement_losartan.json",
+  "pasos": [
+   {
+    "titulo": "El mínimo: estado, medicamento y paciente",
+    "campos": [
+     "resourceType",
+     "status",
+     "medicationCodeableConcept",
+     "subject"
+    ]
+   },
+   {
+    "titulo": "Desde cuándo y quién lo informa",
+    "campos": [
+     "effectivePeriod",
+     "dateAsserted",
+     "informationSource",
+     "context"
+    ]
+   },
+   {
+    "titulo": "Por qué lo toma y cómo",
+    "campos": [
+     "reasonCode",
+     "dosage",
+     "text"
+    ]
+   }
+  ]
+ },
+ "07c": {
+  "archivo": "modulos/07-antecedentes/soluciones/07c_familymemberhistory_madre.json",
+  "pasos": [
+   {
+    "titulo": "El mínimo: estado, paciente y parentesco",
+    "campos": [
+     "resourceType",
+     "status",
+     "patient",
+     "relationship"
+    ]
+   },
+   {
+    "titulo": "Quién es el familiar",
+    "campos": [
+     "name",
+     "sex",
+     "date",
+     "deceasedAge"
+    ]
+   },
+   {
+    "titulo": "Su enfermedad",
+    "campos": [
+     "condition",
+     "text"
+    ]
+   }
+  ]
+ },
+ "07d": {
+  "diferencia": "07c",
+  "archivo": "modulos/07-antecedentes/soluciones/07d_familymemberhistory_padre.json"
+ },
+ "08a": {
+  "archivo": "modulos/08-vacunacion/soluciones/08a_immunization_diferida.json",
+  "pasos": [
+   {
+    "titulo": "El mínimo: estado, vacuna, paciente y fecha",
+    "campos": [
+     "resourceType",
+     "status",
+     "vaccineCode",
+     "patient",
+     "occurrenceDateTime"
+    ]
+   },
+   {
+    "titulo": "Por qué no se aplicó",
+    "campos": [
+     "statusReason",
+     "note"
+    ]
+   },
+   {
+    "titulo": "En qué consulta y quién lo informa",
+    "campos": [
+     "encounter",
+     "recorded",
+     "primarySource",
+     "text"
+    ]
+   }
+  ]
+ },
+ "08d": {
+  "archivo": "modulos/08-vacunacion/soluciones/08d_immunization_influenza.json",
+  "pasos": [
+   {
+    "titulo": "El mínimo: estado, vacuna, paciente y fecha",
+    "campos": [
+     "resourceType",
+     "status",
+     "vaccineCode",
+     "patient",
+     "occurrenceDateTime"
+    ]
+   },
+   {
+    "titulo": "Dónde y quién la registra",
+    "campos": [
+     "encounter",
+     "recorded",
+     "primarySource"
+    ]
+   },
+   {
+    "titulo": "El producto: lote y vencimiento",
+    "campos": [
+     "lotNumber",
+     "expirationDate"
+    ]
+   },
+   {
+    "titulo": "Cómo se aplicó: sitio, vía y dosis",
+    "campos": [
+     "site",
+     "route",
+     "doseQuantity"
+    ]
+   },
+   {
+    "titulo": "Quién vacunó y qué dosis del esquema es",
+    "campos": [
+     "performer",
+     "protocolApplied",
+     "text"
+    ]
+   }
+  ]
+ },
+ "08e": {
+  "diferencia": "08d",
+  "archivo": "modulos/08-vacunacion/soluciones/08e_immunization_td.json"
+ },
+ "09a": {
+  "archivo": "modulos/09-documentos-clinicos/soluciones/09a_composition_signos_vitales.json",
+  "pasos": [
+   {
+    "titulo": "El mínimo: estado, tipo, fecha, autor y título",
+    "campos": [
+     "resourceType",
+     "status",
+     "type",
+     "date",
+     "author",
+     "title"
+    ]
+   },
+   {
+    "titulo": "De quién y de qué consulta",
+    "campos": [
+     "subject",
+     "encounter",
+     "custodian"
+    ]
+   },
+   {
+    "titulo": "La sección con los signos vitales",
+    "campos": [
+     "section"
+    ]
+   },
+   {
+    "titulo": "Identificador y narrativa",
+    "campos": [
+     "identifier",
+     "text"
+    ]
+   }
+  ]
+ },
+ "11a": {
+  "archivo": "modulos/11-anatomia-patologica/soluciones/11a_bodystructure_tumor.json",
+  "pasos": [
+   {
+    "titulo": "El mínimo: de quién es",
+    "campos": [
+     "resourceType",
+     "patient"
+    ]
+   },
+   {
+    "titulo": "Qué es y dónde está",
+    "campos": [
+     "morphology",
+     "location",
+     "description"
+    ]
+   },
+   {
+    "titulo": "Identificador, estado y narrativa",
+    "campos": [
+     "identifier",
+     "active",
+     "text"
+    ]
+   }
+  ]
+ },
+ "11b": {
+  "diferencia": "11a",
+  "archivo": "modulos/11-anatomia-patologica/soluciones/11b_bodystructure_actualizar.json"
+ },
+ "11c": {
+  "archivo": "modulos/11-anatomia-patologica/soluciones/11c_specimen_crear.json",
+  "pasos": [
+   {
+    "titulo": "Qué muestra es y de quién",
+    "campos": [
+     "resourceType",
+     "type",
+     "subject"
+    ]
+   },
+   {
+    "titulo": "Cómo, cuándo y dónde se tomó",
+    "campos": [
+     "collection"
+    ]
+   },
+   {
+    "titulo": "Identificador, estado y recepción",
+    "campos": [
+     "identifier",
+     "status",
+     "receivedTime",
+     "text",
+     "request"
+    ]
+   }
+  ]
+ },
+ "11d": {
+  "diferencia": "11c",
+  "archivo": "modulos/11-anatomia-patologica/soluciones/11d_specimen_actualizar.json"
+ },
+ "11e": {
+  "archivo": "modulos/11-anatomia-patologica/soluciones/11e_observation_tamano_tumor.json",
+  "pasos": [
+   {
+    "titulo": "El mínimo: estado y código",
+    "campos": [
+     "resourceType",
+     "status",
+     "code"
+    ]
+   },
+   {
+    "titulo": "El resultado: 2,5 cm",
+    "campos": [
+     "category",
+     "subject",
+     "effectiveDateTime",
+     "performer",
+     "valueQuantity"
+    ]
+   },
+   {
+    "titulo": "A qué se refiere: el tumor, la mama y la muestra",
+    "campos": [
+     "focus",
+     "bodySite",
+     "specimen",
+     "text"
+    ]
+   }
+  ]
+ },
+ "11f": {
+  "diferencia": "11e",
+  "archivo": "modulos/11-anatomia-patologica/soluciones/11f_observation_tamano_tumor_actualizar.json"
+ },
+ "11h": {
+  "diferencia": "11g",
+  "archivo": "modulos/11-anatomia-patologica/soluciones/11h_observation_receptor_estrogeno_actualizar.json"
+ },
+ "11i": {
+  "archivo": "modulos/11-anatomia-patologica/soluciones/11i_diagnosticreport_patologia.json",
+  "pasos": [
+   {
+    "titulo": "El mínimo: estado y código",
+    "campos": [
+     "resourceType",
+     "status",
+     "code"
+    ]
+   },
+   {
+    "titulo": "De quién, cuándo y quién informa",
+    "campos": [
+     "category",
+     "subject",
+     "effectiveDateTime",
+     "issued",
+     "performer",
+     "resultsInterpreter"
+    ]
+   },
+   {
+    "titulo": "La muestra y los resultados",
+    "campos": [
+     "specimen",
+     "result",
+     "basedOn"
+    ]
+   },
+   {
+    "titulo": "La conclusión",
+    "campos": [
+     "conclusion",
+     "conclusionCode",
+     "identifier",
+     "text"
+    ]
+   }
+  ]
+ },
+ "11j": {
+  "archivo": "modulos/11-anatomia-patologica/soluciones/11j_condition_cancer_mama.json",
+  "pasos": [
+   {
+    "titulo": "El diagnóstico con dos códigos",
+    "campos": [
+     "resourceType",
+     "subject",
+     "code"
+    ]
+   },
+   {
+    "titulo": "Estados, categoría y sitio",
+    "campos": [
+     "clinicalStatus",
+     "verificationStatus",
+     "category",
+     "bodySite"
+    ]
+   },
+   {
+    "titulo": "Fechas, autor y la evidencia: el informe",
+    "campos": [
+     "onsetDateTime",
+     "recordedDate",
+     "recorder",
+     "evidence",
+     "identifier",
+     "text"
+    ]
+   }
+  ]
+ },
+ "13a": {
+  "archivo": "modulos/13-procedimientos/soluciones/13a_procedure_mastectomia.json",
+  "pasos": [
+   {
+    "titulo": "El mínimo: estado y paciente",
+    "campos": [
+     "resourceType",
+     "status",
+     "subject"
+    ]
+   },
+   {
+    "titulo": "Qué se hizo y en qué parte del cuerpo",
+    "campos": [
+     "category",
+     "code",
+     "bodySite"
+    ]
+   },
+   {
+    "titulo": "Cuándo, quién y por qué",
+    "campos": [
+     "performedDateTime",
+     "recorder",
+     "performer",
+     "reasonReference",
+     "basedOn"
+    ]
+   },
+   {
+    "titulo": "Identificador y narrativa",
+    "campos": [
+     "identifier",
+     "text"
+    ]
+   }
+  ]
+ },
+ "13b": {
+  "diferencia": "13a",
+  "archivo": "modulos/13-procedimientos/soluciones/13b_procedure_actualizar.json"
+ },
+ "15b": {
+  "archivo": "modulos/15-medicamentos/soluciones/15b_medicationrequest_doxorrubicina.json",
+  "pasos": [
+   {
+    "titulo": "El mínimo: estado, intención, medicamento y paciente",
+    "campos": [
+     "resourceType",
+     "status",
+     "intent",
+     "medicationCodeableConcept",
+     "subject"
+    ]
+   },
+   {
+    "titulo": "Quién, cuándo y por qué",
+    "campos": [
+     "category",
+     "authoredOn",
+     "requester",
+     "reasonReference"
+    ]
+   },
+   {
+    "titulo": "La dosis: texto y datos estructurados",
+    "campos": [
+     "dosageInstruction"
+    ]
+   },
+   {
+    "titulo": "La justificación: superficie corporal",
+    "campos": [
+     "supportingInformation",
+     "identifier",
+     "text"
+    ]
+   }
+  ]
+ },
+ "15c": {
+  "archivo": "modulos/15-medicamentos/soluciones/15c_medicationadministration_doxorrubicina.json",
+  "pasos": [
+   {
+    "titulo": "El mínimo: estado, medicamento, paciente y momento",
+    "campos": [
+     "resourceType",
+     "status",
+     "medicationCodeableConcept",
+     "subject",
+     "effectivePeriod"
+    ]
+   },
+   {
+    "titulo": "Quién la administró y por qué orden",
+    "campos": [
+     "category",
+     "performer",
+     "request",
+     "reasonReference",
+     "supportingInformation"
+    ]
+   },
+   {
+    "titulo": "Cuánto y cómo se administró",
+    "campos": [
+     "dosage",
+     "text"
+    ]
+   }
+  ]
+ },
+ "15d": {
+  "diferencia": "15c",
+  "archivo": "modulos/15-medicamentos/soluciones/15d_medicationadministration_actualizar.json"
+ },
+ "15e": {
+  "diferencia": "15b",
+  "archivo": "modulos/15-medicamentos/soluciones/15e_medicationrequest_tamoxifeno.json"
+ },
+ "15g": {
+  "diferencia": "15e",
+  "archivo": "modulos/15-medicamentos/soluciones/15g_medicationrequest_suspender.json"
+ },
+ "10a": {
+  "archivo": "modulos/10-ordenes-y-derivacion/soluciones/10a_location_consultorio.json",
+  "pasos": [
+   {
+    "titulo": "El mínimo: nombre y estado",
+    "campos": [
+     "resourceType",
+     "name",
+     "status"
+    ]
+   },
+   {
+    "titulo": "Qué clase de lugar es",
+    "campos": [
+     "mode",
+     "type",
+     "physicalType"
+    ]
+   },
+   {
+    "titulo": "Dónde está y quién lo administra",
+    "campos": [
+     "address",
+     "managingOrganization",
+     "identifier",
+     "text"
+    ]
+   }
+  ]
+ },
+ "10b": {
+  "archivo": "modulos/10-ordenes-y-derivacion/soluciones/10b_practitionerrole_medica_general.json",
+  "pasos": [
+   {
+    "titulo": "El mínimo: quién y dónde trabaja",
+    "campos": [
+     "resourceType",
+     "practitioner",
+     "organization"
+    ]
+   },
+   {
+    "titulo": "Qué rol y qué especialidad",
+    "campos": [
+     "code",
+     "specialty"
+    ]
+   },
+   {
+    "titulo": "En qué consultorio y en qué horario",
+    "campos": [
+     "active",
+     "location",
+     "availableTime",
+     "text"
+    ]
+   }
+  ]
+ },
+ "10d": {
+  "diferencia": "10b",
+  "archivo": "modulos/10-ordenes-y-derivacion/soluciones/10d_practitionerrole_oncologo.json"
+ },
+ "10e": {
+  "diferencia": "05b",
+  "archivo": "modulos/10-ordenes-y-derivacion/soluciones/10e_encounter_consulta_nodulo.json"
+ },
+ "10f": {
+  "archivo": "modulos/10-ordenes-y-derivacion/soluciones/10f_servicerequest_ecografia.json",
+  "pasos": [
+   {
+    "titulo": "El mínimo: estado, intención y paciente",
+    "campos": [
+     "resourceType",
+     "status",
+     "intent",
+     "subject"
+    ]
+   },
+   {
+    "titulo": "Qué se pide, con qué prioridad y de qué parte del cuerpo",
+    "campos": [
+     "category",
+     "code",
+     "priority",
+     "bodySite"
+    ]
+   },
+   {
+    "titulo": "Quién lo pide, cuándo, en qué consulta y por qué",
+    "campos": [
+     "encounter",
+     "authoredOn",
+     "requester",
+     "reasonCode"
+    ]
+   },
+   {
+    "titulo": "Identificador y narrativa",
+    "campos": [
+     "identifier",
+     "text"
+    ]
+   }
+  ]
+ },
+ "10g": {
+  "archivo": "modulos/10-ordenes-y-derivacion/soluciones/10g_diagnosticreport_ecografia.json",
+  "pasos": [
+   {
+    "titulo": "El mínimo: estado y código",
+    "campos": [
+     "resourceType",
+     "status",
+     "code"
+    ]
+   },
+   {
+    "titulo": "De quién, cuándo y quién informa",
+    "campos": [
+     "category",
+     "subject",
+     "effectiveDateTime",
+     "issued",
+     "performer"
+    ]
+   },
+   {
+    "titulo": "A qué orden responde",
+    "campos": [
+     "basedOn"
+    ]
+   },
+   {
+    "titulo": "La conclusión: BI-RADS 4",
+    "campos": [
+     "conclusion",
+     "conclusionCode",
+     "identifier",
+     "text"
+    ]
+   }
+  ]
+ },
+ "10h": {
+  "diferencia": "10f",
+  "archivo": "modulos/10-ordenes-y-derivacion/soluciones/10h_servicerequest_biopsia.json"
+ },
+ "10i": {
+  "diferencia": "10f",
+  "archivo": "modulos/10-ordenes-y-derivacion/soluciones/10i_servicerequest_derivacion.json"
+ },
+ "12a": {
+  "archivo": "modulos/12-plan-y-consentimiento/soluciones/12a_careteam_comite.json",
+  "pasos": [
+   {
+    "titulo": "El mínimo: estado, nombre y paciente",
+    "campos": [
+     "resourceType",
+     "status",
+     "name",
+     "subject"
+    ]
+   },
+   {
+    "titulo": "Quiénes lo integran y con qué rol",
+    "campos": [
+     "participant"
+    ]
+   },
+   {
+    "titulo": "Desde cuándo, de qué organización y por qué",
+    "campos": [
+     "period",
+     "managingOrganization",
+     "reasonReference",
+     "identifier",
+     "text"
+    ]
+   }
+  ]
+ },
+ "12b": {
+  "archivo": "modulos/12-plan-y-consentimiento/soluciones/12b_goal_control_enfermedad.json",
+  "pasos": [
+   {
+    "titulo": "El mínimo: estado, descripción y paciente",
+    "campos": [
+     "resourceType",
+     "lifecycleStatus",
+     "description",
+     "subject"
+    ]
+   },
+   {
+    "titulo": "Avance, prioridad y plazo",
+    "campos": [
+     "achievementStatus",
+     "priority",
+     "startDate",
+     "target"
+    ]
+   },
+   {
+    "titulo": "A qué problema responde y quién la propone",
+    "campos": [
+     "addresses",
+     "expressedBy",
+     "identifier",
+     "text"
+    ]
+   }
+  ]
+ },
+ "12c": {
+  "diferencia": "12b",
+  "archivo": "modulos/12-plan-y-consentimiento/soluciones/12c_goal_calidad_vida.json"
+ },
+ "12d": {
+  "archivo": "modulos/12-plan-y-consentimiento/soluciones/12d_careplan_oncologico.json",
+  "pasos": [
+   {
+    "titulo": "El mínimo: estado, intención y paciente",
+    "campos": [
+     "resourceType",
+     "status",
+     "intent",
+     "subject"
+    ]
+   },
+   {
+    "titulo": "Qué plan es, de cuándo y de quién",
+    "campos": [
+     "category",
+     "title",
+     "description",
+     "period",
+     "created",
+     "author"
+    ]
+   },
+   {
+    "titulo": "El equipo, el problema y las metas",
+    "campos": [
+     "careTeam",
+     "addresses",
+     "goal"
+    ]
+   },
+   {
+    "titulo": "Las actividades: cirugía, quimioterapia y hormonoterapia",
+    "campos": [
+     "activity",
+     "identifier",
+     "text"
+    ]
+   }
+  ]
+ },
+ "12e": {
+  "archivo": "modulos/12-plan-y-consentimiento/soluciones/12e_consent_cirugia.json",
+  "pasos": [
+   {
+    "titulo": "El mínimo: estado, alcance, categoría, paciente y norma",
+    "campos": [
+     "resourceType",
+     "status",
+     "scope",
+     "category",
+     "patient",
+     "policyRule"
+    ]
+   },
+   {
+    "titulo": "Cuándo, quién lo otorga y ante qué organización",
+    "campos": [
+     "dateTime",
+     "performer",
+     "organization"
+    ]
+   },
+   {
+    "titulo": "Qué se autoriza: la disposición",
+    "campos": [
+     "provision",
+     "identifier",
+     "text"
+    ]
+   }
+  ]
+ },
+ "14a": {
+  "diferencia": "10a",
+  "archivo": "modulos/14-citas/soluciones/14a_location_hospital_dia.json"
+ },
+ "14b": {
+  "archivo": "modulos/14-citas/soluciones/14b_schedule_quimioterapia.json",
+  "pasos": [
+   {
+    "titulo": "El mínimo: de quién es la agenda",
+    "campos": [
+     "resourceType",
+     "actor"
+    ]
+   },
+   {
+    "titulo": "Qué servicio ofrece y en qué periodo",
+    "campos": [
+     "active",
+     "serviceType",
+     "specialty",
+     "planningHorizon"
+    ]
+   },
+   {
+    "titulo": "Comentario, identificador y narrativa",
+    "campos": [
+     "comment",
+     "identifier",
+     "text"
+    ]
+   }
+  ]
+ },
+ "14c": {
+  "archivo": "modulos/14-citas/soluciones/14c_slot_ciclo1.json",
+  "pasos": [
+   {
+    "titulo": "El mínimo: agenda, estado, inicio y fin",
+    "campos": [
+     "resourceType",
+     "schedule",
+     "status",
+     "start",
+     "end"
+    ]
+   },
+   {
+    "titulo": "Qué servicio y la narrativa",
+    "campos": [
+     "serviceType",
+     "text"
+    ]
+   }
+  ]
+ },
+ "14d": {
+  "diferencia": "14c",
+  "archivo": "modulos/14-citas/soluciones/14d_slot_ciclo1_ocupado.json"
+ },
+ "14e": {
+  "archivo": "modulos/14-citas/soluciones/14e_appointment_ciclo1.json",
+  "pasos": [
+   {
+    "titulo": "El mínimo: estado, participantes, inicio y fin",
+    "campos": [
+     "resourceType",
+     "status",
+     "participant",
+     "start",
+     "end"
+    ]
+   },
+   {
+    "titulo": "Qué cupo ocupa y cuándo se agendó",
+    "campos": [
+     "slot",
+     "created"
+    ]
+   },
+   {
+    "titulo": "Qué atención es y por qué",
+    "campos": [
+     "serviceType",
+     "appointmentType",
+     "reasonReference",
+     "description",
+     "identifier",
+     "text"
+    ]
+   }
+  ]
+ },
+ "14f": {
+  "archivo": "modulos/14-citas/soluciones/14f_appointmentresponse_paciente.json",
+  "pasos": [
+   {
+    "titulo": "El mínimo: la cita, quién responde y su respuesta",
+    "campos": [
+     "resourceType",
+     "appointment",
+     "actor",
+     "participantStatus"
+    ]
+   },
+   {
+    "titulo": "Un comentario y la narrativa",
+    "campos": [
+     "comment",
+     "text"
+    ]
+   }
+  ]
+ },
+ "14g": {
+  "diferencia": "14e",
+  "archivo": "modulos/14-citas/soluciones/14g_appointment_ciclo1_cumplida.json"
+ },
+ "14i": {
+  "diferencia": "14e",
+  "archivo": "modulos/14-citas/soluciones/14i_appointment_ciclo2.json"
+ },
+ "14j": {
+  "diferencia": "14i",
+  "archivo": "modulos/14-citas/soluciones/14j_appointment_ciclo2_cancelada.json"
+ },
+ "16a": {
+  "archivo": "modulos/16-seguimiento/soluciones/16a_questionnaire_seguimiento.json",
+  "pasos": [
+   {
+    "titulo": "El mínimo: el estado",
+    "campos": [
+     "resourceType",
+     "status"
+    ]
+   },
+   {
+    "titulo": "Cómo se identifica: url, versión, nombre y título",
+    "campos": [
+     "url",
+     "version",
+     "name",
+     "title",
+     "date",
+     "publisher",
+     "description",
+     "subjectType"
+    ]
+   },
+   {
+    "titulo": "La primera pregunta: el dolor",
+    "parcial": {
+     "item": [
+      {
+       "linkId": "dolor",
+       "text": "En una escala de 0 (sin dolor) a 10 (el peor dolor imaginable), ¿cuánto dolor tuvo en la última semana?",
+       "type": "integer",
+       "required": true,
+       "code": [
+        {
+         "system": "http://loinc.org",
+         "code": "72514-3",
+         "display": "Pain severity - 0-10 verbal numeric rating [Score] - Reported"
+        }
+       ]
+      }
+     ]
+    }
+   },
+   {
+    "titulo": "Las demás preguntas",
+    "campos": [
+     "item",
+     "text"
+    ]
+   }
+  ]
+ },
+ "16b": {
+  "archivo": "modulos/16-seguimiento/soluciones/16b_questionnaireresponse_octubre.json",
+  "pasos": [
+   {
+    "titulo": "El mínimo: qué cuestionario, todavía en curso",
+    "campos": [
+     "resourceType",
+     "questionnaire"
+    ],
+    "parcial": {
+     "status": "in-progress"
+    }
+   },
+   {
+    "titulo": "De quién, cuándo y quién respondió",
+    "campos": [
+     "subject",
+     "authored",
+     "author",
+     "source"
+    ]
+   },
+   {
+    "titulo": "Las respuestas: ya se puede marcar como completo",
+    "campos": [
+     "item",
+     "status",
+     "text"
+    ]
+   }
+  ]
+ },
+ "16c": {
+  "diferencia": "16b",
+  "archivo": "modulos/16-seguimiento/soluciones/16c_questionnaireresponse_enero.json"
+ },
+ "16d": {
+  "archivo": "modulos/16-seguimiento/soluciones/16d_observation_dolor.json",
+  "pasos": [
+   {
+    "titulo": "El mínimo: estado y código",
+    "campos": [
+     "resourceType",
+     "status",
+     "code"
+    ]
+   },
+   {
+    "titulo": "El resultado: 6 de 10",
+    "campos": [
+     "category",
+     "subject",
+     "effectiveDateTime",
+     "performer",
+     "valueInteger"
+    ]
+   },
+   {
+    "titulo": "De dónde sale: el cuestionario",
+    "campos": [
+     "derivedFrom",
+     "text"
+    ]
+   }
+  ]
+ },
+ "17a": {
+  "diferencia": "02e",
+  "archivo": "modulos/17-busquedas-y-versiones/soluciones/17a_patient_agregar_correo.json"
+ },
+ "18a": {
+  "archivo": "modulos/18-terminologias-y-perfiles/soluciones/18a_structuredefinition_paciente_taller.json",
+  "pasos": [
+   {
+    "titulo": "El mínimo: qué es, sobre qué recurso y de qué deriva",
+    "campos": [
+     "resourceType",
+     "url",
+     "name",
+     "status",
+     "fhirVersion",
+     "kind",
+     "abstract",
+     "type",
+     "baseDefinition",
+     "derivation"
+    ],
+    "parcial": {
+     "differential": {
+      "element": [
+       {
+        "id": "Patient",
+        "path": "Patient",
+        "short": "Paciente del taller"
+       }
+      ]
+     }
+    }
+   },
+   {
+    "titulo": "La primera restricción: al menos un identificador",
+    "parcial": {
+     "differential": {
+      "element": [
+       {
+        "id": "Patient",
+        "path": "Patient",
+        "short": "Paciente del taller"
+       },
+       {
+        "id": "Patient.identifier",
+        "path": "Patient.identifier",
+        "short": "Al menos un identificador (la cédula)",
+        "min": 1
+       }
+      ]
+     }
+    }
+   },
+   {
+    "titulo": "Las demás restricciones y los metadatos",
+    "campos": [
+     "differential",
+     "version",
+     "title",
+     "date",
+     "publisher",
+     "description",
+     "text"
+    ]
+   }
+  ]
+ },
+ "18b": {
+  "archivo": "modulos/18-terminologias-y-perfiles/soluciones/18b_codesystem_ecog.json",
+  "pasos": [
+   {
+    "titulo": "El mínimo: url, nombre, estado y contenido",
+    "campos": [
+     "resourceType",
+     "url",
+     "name",
+     "status",
+     "content"
+    ]
+   },
+   {
+    "titulo": "Los metadatos",
+    "campos": [
+     "version",
+     "title",
+     "date",
+     "publisher",
+     "description",
+     "caseSensitive"
+    ]
+   },
+   {
+    "titulo": "Los códigos",
+    "campos": [
+     "count",
+     "concept",
+     "text"
+    ]
+   }
+  ]
+ },
+ "18c": {
+  "archivo": "modulos/18-terminologias-y-perfiles/soluciones/18c_valueset_ecog.json",
+  "pasos": [
+   {
+    "titulo": "El mínimo: url, nombre y estado",
+    "campos": [
+     "resourceType",
+     "url",
+     "name",
+     "status"
+    ]
+   },
+   {
+    "titulo": "Qué códigos incluye",
+    "campos": [
+     "compose"
+    ]
+   },
+   {
+    "titulo": "Los metadatos",
+    "campos": [
+     "version",
+     "title",
+     "date",
+     "publisher",
+     "description",
+     "text"
+    ]
+   }
+  ]
+ },
+ "19a": {
+  "archivo": "modulos/19-resumen-ips/soluciones/19a_composition_ips.json",
+  "pasos": [
+   {
+    "titulo": "El mínimo: estado, tipo, paciente, fecha, autor y título",
+    "campos": [
+     "resourceType",
+     "status",
+     "type",
+     "subject",
+     "date",
+     "author",
+     "title"
+    ]
+   },
+   {
+    "titulo": "Identificador, confidencialidad y custodio",
+    "campos": [
+     "identifier",
+     "confidentiality",
+     "custodian"
+    ]
+   },
+   {
+    "titulo": "Las tres secciones obligatorias: problemas, alergias y medicación",
+    "parcial": {
+     "section": [
+      {
+       "title": "Problemas activos",
+       "code": {
+        "coding": [
+         {
+          "system": "http://loinc.org",
+          "code": "11450-4",
+          "display": "Problem list - Reported"
+         }
+        ]
+       },
+       "text": {
+        "status": "generated",
+        "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Carcinoma ductal infiltrante de mama izquierda (activo, desde mayo de 2025).</p></div>"
+       },
+       "entry": [
+        {
+         "reference": "Condition/{{conditionCancerId}}",
+         "display": "Carcinoma ductal infiltrante de mama izquierda"
+        }
+       ]
+      },
+      {
+       "title": "Alergias e intolerancias",
+       "code": {
+        "coding": [
+         {
+          "system": "http://loinc.org",
+          "code": "48765-2",
+          "display": "Allergies and adverse reactions Document"
+         }
+        ]
+       },
+       "text": {
+        "status": "generated",
+        "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Alergia a la penicilina, criticidad alta: urticaria generalizada.</p></div>"
+       },
+       "entry": [
+        {
+         "reference": "AllergyIntolerance/{{allergyId}}",
+         "display": "Alergia a la penicilina"
+        }
+       ]
+      },
+      {
+       "title": "Medicación",
+       "code": {
+        "coding": [
+         {
+          "system": "http://loinc.org",
+          "code": "10160-0",
+          "display": "History of Medication use Narrative"
+         }
+        ]
+       },
+       "text": {
+        "status": "generated",
+        "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Losartán 50 mg por vía oral una vez al día (hipertensión arterial).</p></div>"
+       },
+       "entry": [
+        {
+         "reference": "MedicationStatement/{{medStatementId}}",
+         "display": "Losartán 50 mg diarios"
+        }
+       ]
+      }
+     ]
+    }
+   },
+   {
+    "titulo": "Las secciones recomendadas y la narrativa",
+    "campos": [
+     "section",
+     "text"
+    ]
+   }
+  ]
+ }
+}

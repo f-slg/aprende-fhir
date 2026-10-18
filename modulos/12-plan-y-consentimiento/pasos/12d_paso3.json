@@ -1,0 +1,47 @@
+{
+  "resourceType": "CarePlan",
+  "status": "active",
+  "intent": "plan",
+  "category": [
+    {
+      "text": "Plan de tratamiento oncológico"
+    }
+  ],
+  "title": "Plan de tratamiento del cáncer de mama",
+  "description": "Tratamiento acordado por el comité de tumores de mama.",
+  "subject": {
+    "reference": "Patient/{{patientId}}",
+    "display": "Luis Alberto Paredes Cevallos"
+  },
+  "period": {
+    "start": "2025-05-20",
+    "end": "2030-10-31"
+  },
+  "created": "2025-05-20",
+  "author": {
+    "reference": "PractitionerRole/{{oncologistRoleId}}",
+    "display": "Dr. Ruiz · Oncología clínica"
+  },
+  "careTeam": [
+    {
+      "reference": "CareTeam/{{careTeamId}}",
+      "display": "Comité de tumores de mama"
+    }
+  ],
+  "addresses": [
+    {
+      "reference": "Condition/{{conditionCancerId}}",
+      "display": "Carcinoma ductal infiltrante de mama izquierda"
+    }
+  ],
+  "goal": [
+    {
+      "reference": "Goal/{{goalControlId}}",
+      "display": "Sin evidencia de enfermedad"
+    },
+    {
+      "reference": "Goal/{{goalQualityId}}",
+      "display": "Mantener la funcionalidad"
+    }
+  ]
+}

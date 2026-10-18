@@ -1,0 +1,13 @@
+{
+  "resourceType": "Schedule",
+  "actor": [
+    {
+      "reference": "Location/{{dayHospitalLocationId}}",
+      "display": "Hospital de Día de Oncología"
+    },
+    {
+      "reference": "PractitionerRole/{{oncologistRoleId}}",
+      "display": "Dr. Ruiz · Oncología clínica"
+    }
+  ]
+}

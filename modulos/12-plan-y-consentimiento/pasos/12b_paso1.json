@@ -1,0 +1,11 @@
+{
+  "resourceType": "Goal",
+  "lifecycleStatus": "active",
+  "description": {
+    "text": "Sin evidencia de enfermedad al terminar el tratamiento"
+  },
+  "subject": {
+    "reference": "Patient/{{patientId}}",
+    "display": "Luis Alberto Paredes Cevallos"
+  }
+}

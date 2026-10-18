@@ -1,0 +1,527 @@
+{
+  "resourceType": "Bundle",
+  "identifier": {
+    "system": "https://f-slg.github.io/aprende-fhir/sid/documento",
+    "value": "DOC-2025-0002"
+  },
+  "type": "document",
+  "timestamp": "2025-03-20T08:05:00-05:00",
+  "entry": [
+    {
+      "fullUrl": "urn:uuid:f2d231e7-98de-552d-a4b7-3746c969fc7d",
+      "resource": {
+        "resourceType": "Composition",
+        "text": {
+          "status": "generated",
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Nota de signos vitales del 20 de marzo de 2025.</p><p>Presión arterial 128/84 mmHg; Temperatura 38,4 °C; Frecuencia respiratoria 20/min; Frecuencia cardíaca 102/min.</p></div>"
+        },
+        "identifier": {
+          "system": "https://f-slg.github.io/aprende-fhir/sid/documento",
+          "value": "DOC-2025-0002"
+        },
+        "status": "final",
+        "type": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "8716-3",
+              "display": "Vital signs note"
+            }
+          ],
+          "text": "Nota de signos vitales"
+        },
+        "subject": {
+          "reference": "urn:uuid:23ec1dbb-82a6-5861-a7e6-e740e360bbd1",
+          "display": "Luis Alberto Paredes Cevallos"
+        },
+        "date": "2025-03-20T08:00:00-05:00",
+        "author": [
+          {
+            "reference": "urn:uuid:bcc451cc-0c62-55f2-b2ac-7bb05c17b7d3",
+            "display": "Dra. Andrea Lucía Salazar Moreno"
+          }
+        ],
+        "title": "Signos vitales - consulta del 20 de marzo de 2025",
+        "custodian": {
+          "reference": "urn:uuid:da2c5e11-c915-559b-8a94-5300b874e626",
+          "display": "Hospital General Docente Ejemplo"
+        },
+        "section": [
+          {
+            "title": "Signos vitales",
+            "code": {
+              "coding": [
+                {
+                  "system": "http://loinc.org",
+                  "code": "8716-3",
+                  "display": "Vital signs note"
+                }
+              ],
+              "text": "Nota de signos vitales"
+            },
+            "text": {
+              "status": "generated",
+              "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Presión arterial 128/84 mmHg; Temperatura 38,4 °C; Frecuencia respiratoria 20/min; Frecuencia cardíaca 102/min.</p></div>"
+            },
+            "entry": [
+              {
+                "reference": "urn:uuid:453da060-c4e9-52ef-b373-aedfa9e26711",
+                "display": "Presión arterial 128/84 mmHg"
+              },
+              {
+                "reference": "urn:uuid:8d27fb7c-9930-53dd-a567-2f2e4ed7a846",
+                "display": "Temperatura 38,4 °C"
+              },
+              {
+                "reference": "urn:uuid:d2df19f2-5d73-5898-bfd0-e5cbb017981f",
+                "display": "Frecuencia respiratoria 20/min"
+              },
+              {
+                "reference": "urn:uuid:80d55c13-a24b-53e1-86ff-30e1ba30e878",
+                "display": "Frecuencia cardíaca 102/min"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:23ec1dbb-82a6-5861-a7e6-e740e360bbd1",
+      "resource": {
+        "resourceType": "Patient",
+        "text": {
+          "status": "generated",
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Luis Alberto Paredes Cevallos, hombre, nacido el 12 de marzo de 1979 en Riobamba.</p><p>Cédula ficticia 9900000017 · Historia clínica HC-000123.</p></div>"
+        },
+        "identifier": [
+          {
+            "use": "official",
+            "type": {
+              "coding": [
+                {
+                  "system": "http://terminology.hl7.org/CodeSystem/v2-0203",
+                  "code": "NI",
+                  "display": "National unique individual identifier"
+                }
+              ],
+              "text": "Cédula de identidad"
+            },
+            "system": "https://f-slg.github.io/aprende-fhir/sid/cedula",
+            "value": "9900000017"
+          },
+          {
+            "use": "usual",
+            "type": {
+              "coding": [
+                {
+                  "system": "http://terminology.hl7.org/CodeSystem/v2-0203",
+                  "code": "MR",
+                  "display": "Medical record number"
+                }
+              ],
+              "text": "Historia clínica"
+            },
+            "system": "https://f-slg.github.io/aprende-fhir/sid/historia-clinica/hospital-general-docente-ejemplo",
+            "value": "HC-000123"
+          }
+        ],
+        "active": true,
+        "name": [
+          {
+            "use": "official",
+            "text": "Luis Alberto Paredes Cevallos",
+            "family": "Paredes Cevallos",
+            "_family": {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/humanname-fathers-family",
+                  "valueString": "Paredes"
+                },
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/humanname-mothers-family",
+                  "valueString": "Cevallos"
+                }
+              ]
+            },
+            "given": [
+              "Luis",
+              "Alberto"
+            ]
+          },
+          {
+            "use": "usual",
+            "text": "Luis Paredes"
+          }
+        ],
+        "gender": "male",
+        "birthDate": "1979-03-12",
+        "address": [
+          {
+            "use": "home",
+            "type": "physical",
+            "line": [
+              "Av. de los Ejemplos N00-00 y calle Ficticia"
+            ],
+            "city": "Quito",
+            "district": "Quito",
+            "state": "Pichincha",
+            "country": "EC"
+          }
+        ],
+        "communication": [
+          {
+            "language": {
+              "coding": [
+                {
+                  "system": "urn:ietf:bcp:47",
+                  "code": "es",
+                  "display": "Spanish"
+                }
+              ],
+              "text": "Español"
+            },
+            "preferred": true
+          }
+        ],
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/patient-birthPlace",
+            "valueAddress": {
+              "city": "Riobamba",
+              "state": "Chimborazo",
+              "country": "EC"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:bcc451cc-0c62-55f2-b2ac-7bb05c17b7d3",
+      "resource": {
+        "resourceType": "Practitioner",
+        "text": {
+          "status": "generated",
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Dra. Andrea Lucía Salazar Moreno, médica general. Registro profesional ficticio RP-000457.</p></div>"
+        },
+        "identifier": [
+          {
+            "use": "official",
+            "system": "https://f-slg.github.io/aprende-fhir/sid/registro-profesional",
+            "value": "RP-000457"
+          }
+        ],
+        "active": true,
+        "name": [
+          {
+            "use": "official",
+            "text": "Dra. Andrea Lucía Salazar Moreno",
+            "prefix": [
+              "Dra."
+            ],
+            "family": "Salazar Moreno",
+            "given": [
+              "Andrea",
+              "Lucía"
+            ]
+          }
+        ],
+        "telecom": [
+          {
+            "system": "email",
+            "value": "andrea.salazar@hospital-ejemplo.invalid",
+            "use": "work"
+          }
+        ],
+        "gender": "female",
+        "qualification": [
+          {
+            "code": {
+              "coding": [
+                {
+                  "system": "http://terminology.hl7.org/CodeSystem/v2-0360",
+                  "code": "MD",
+                  "display": "Doctor of Medicine"
+                }
+              ],
+              "text": "Médica"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:da2c5e11-c915-559b-8a94-5300b874e626",
+      "resource": {
+        "resourceType": "Organization",
+        "text": {
+          "status": "generated",
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Hospital General Docente Ejemplo, parte de la Red de Servicios de Salud Ejemplo (ficticia).</p></div>"
+        },
+        "identifier": [
+          {
+            "system": "https://f-slg.github.io/aprende-fhir/sid/establecimiento",
+            "value": "HGDE-0001"
+          }
+        ],
+        "active": true,
+        "type": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/organization-type",
+                "code": "prov",
+                "display": "Healthcare Provider"
+              }
+            ]
+          }
+        ],
+        "name": "Hospital General Docente Ejemplo",
+        "telecom": [
+          {
+            "system": "phone",
+            "value": "+593 2 000 0000",
+            "use": "work"
+          }
+        ],
+        "address": [
+          {
+            "line": [
+              "Av. Principal Ejemplo S00-00"
+            ],
+            "city": "Quito",
+            "state": "Pichincha",
+            "country": "EC"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:453da060-c4e9-52ef-b373-aedfa9e26711",
+      "resource": {
+        "resourceType": "Observation",
+        "text": {
+          "status": "generated",
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Presión arterial: 128/84 mmHg.</p></div>"
+        },
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "vital-signs",
+                "display": "Vital Signs"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "85354-9",
+              "display": "Blood pressure panel with all children optional"
+            }
+          ],
+          "text": "Presión arterial"
+        },
+        "subject": {
+          "reference": "urn:uuid:23ec1dbb-82a6-5861-a7e6-e740e360bbd1",
+          "display": "Luis Alberto Paredes Cevallos"
+        },
+        "effectiveDateTime": "2025-03-20T07:30:00-05:00",
+        "performer": [
+          {
+            "reference": "urn:uuid:bcc451cc-0c62-55f2-b2ac-7bb05c17b7d3",
+            "display": "Dra. Andrea Lucía Salazar Moreno"
+          }
+        ],
+        "component": [
+          {
+            "code": {
+              "coding": [
+                {
+                  "system": "http://loinc.org",
+                  "code": "8480-6",
+                  "display": "Systolic blood pressure"
+                }
+              ],
+              "text": "Presión sistólica"
+            },
+            "valueQuantity": {
+              "value": 128,
+              "unit": "mmHg",
+              "system": "http://unitsofmeasure.org",
+              "code": "mm[Hg]"
+            }
+          },
+          {
+            "code": {
+              "coding": [
+                {
+                  "system": "http://loinc.org",
+                  "code": "8462-4",
+                  "display": "Diastolic blood pressure"
+                }
+              ],
+              "text": "Presión diastólica"
+            },
+            "valueQuantity": {
+              "value": 84,
+              "unit": "mmHg",
+              "system": "http://unitsofmeasure.org",
+              "code": "mm[Hg]"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:8d27fb7c-9930-53dd-a567-2f2e4ed7a846",
+      "resource": {
+        "resourceType": "Observation",
+        "text": {
+          "status": "generated",
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Temperatura corporal: 38,4 °C.</p></div>"
+        },
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "vital-signs",
+                "display": "Vital Signs"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "8310-5",
+              "display": "Body temperature"
+            }
+          ],
+          "text": "Temperatura corporal"
+        },
+        "subject": {
+          "reference": "urn:uuid:23ec1dbb-82a6-5861-a7e6-e740e360bbd1",
+          "display": "Luis Alberto Paredes Cevallos"
+        },
+        "effectiveDateTime": "2025-03-20T07:30:00-05:00",
+        "performer": [
+          {
+            "reference": "urn:uuid:bcc451cc-0c62-55f2-b2ac-7bb05c17b7d3",
+            "display": "Dra. Andrea Lucía Salazar Moreno"
+          }
+        ],
+        "valueQuantity": {
+          "value": 38.4,
+          "unit": "°C",
+          "system": "http://unitsofmeasure.org",
+          "code": "Cel"
+        }
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:d2df19f2-5d73-5898-bfd0-e5cbb017981f",
+      "resource": {
+        "resourceType": "Observation",
+        "text": {
+          "status": "generated",
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Frecuencia respiratoria: 20 respiraciones por minuto.</p></div>"
+        },
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "vital-signs",
+                "display": "Vital Signs"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "9279-1",
+              "display": "Respiratory rate"
+            }
+          ],
+          "text": "Frecuencia respiratoria"
+        },
+        "subject": {
+          "reference": "urn:uuid:23ec1dbb-82a6-5861-a7e6-e740e360bbd1",
+          "display": "Luis Alberto Paredes Cevallos"
+        },
+        "effectiveDateTime": "2025-03-20T07:30:00-05:00",
+        "performer": [
+          {
+            "reference": "urn:uuid:bcc451cc-0c62-55f2-b2ac-7bb05c17b7d3",
+            "display": "Dra. Andrea Lucía Salazar Moreno"
+          }
+        ],
+        "valueQuantity": {
+          "value": 20,
+          "unit": "respiraciones/min",
+          "system": "http://unitsofmeasure.org",
+          "code": "/min"
+        }
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:80d55c13-a24b-53e1-86ff-30e1ba30e878",
+      "resource": {
+        "resourceType": "Observation",
+        "text": {
+          "status": "generated",
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Frecuencia cardíaca: 102 latidos por minuto.</p></div>"
+        },
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "vital-signs",
+                "display": "Vital Signs"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "8867-4",
+              "display": "Heart rate"
+            }
+          ],
+          "text": "Frecuencia cardíaca"
+        },
+        "subject": {
+          "reference": "urn:uuid:23ec1dbb-82a6-5861-a7e6-e740e360bbd1",
+          "display": "Luis Alberto Paredes Cevallos"
+        },
+        "effectiveDateTime": "2025-03-20T07:30:00-05:00",
+        "performer": [
+          {
+            "reference": "urn:uuid:bcc451cc-0c62-55f2-b2ac-7bb05c17b7d3",
+            "display": "Dra. Andrea Lucía Salazar Moreno"
+          }
+        ],
+        "valueQuantity": {
+          "value": 102,
+          "unit": "latidos/min",
+          "system": "http://unitsofmeasure.org",
+          "code": "/min"
+        }
+      }
+    }
+  ]
+}

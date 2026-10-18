@@ -1,0 +1,22 @@
+{
+  "resourceType": "ValueSet",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Valores de la escala ECOG: todos los códigos del CodeSystem EscalaECOG.</p></div>"
+  },
+  "url": "https://f-slg.github.io/aprende-fhir/ValueSet/ecog",
+  "version": "1.0.0",
+  "name": "ValoresECOG",
+  "title": "Valores de la escala ECOG",
+  "status": "active",
+  "date": "2026-10-18",
+  "publisher": "Aprende FHIR desde cero (ejemplo didáctico)",
+  "description": "Conjunto de valores con todos los códigos de la escala ECOG del taller.",
+  "compose": {
+    "include": [
+      {
+        "system": "https://f-slg.github.io/aprende-fhir/CodeSystem/ecog"
+      }
+    ]
+  }
+}

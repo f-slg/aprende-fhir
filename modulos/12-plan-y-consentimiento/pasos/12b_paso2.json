@@ -1,0 +1,37 @@
+{
+  "resourceType": "Goal",
+  "lifecycleStatus": "active",
+  "achievementStatus": {
+    "coding": [
+      {
+        "system": "http://terminology.hl7.org/CodeSystem/goal-achievement",
+        "code": "in-progress",
+        "display": "In Progress"
+      }
+    ],
+    "text": "En curso"
+  },
+  "priority": {
+    "coding": [
+      {
+        "system": "http://terminology.hl7.org/CodeSystem/goal-priority",
+        "code": "high-priority",
+        "display": "High Priority"
+      }
+    ],
+    "text": "Alta"
+  },
+  "description": {
+    "text": "Sin evidencia de enfermedad al terminar el tratamiento"
+  },
+  "subject": {
+    "reference": "Patient/{{patientId}}",
+    "display": "Luis Alberto Paredes Cevallos"
+  },
+  "startDate": "2025-05-20",
+  "target": [
+    {
+      "dueDate": "2026-06-30"
+    }
+  ]
+}

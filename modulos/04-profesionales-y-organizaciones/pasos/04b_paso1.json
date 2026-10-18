@@ -1,0 +1,10 @@
+{
+  "resourceType": "Organization",
+  "identifier": [
+    {
+      "system": "https://f-slg.github.io/aprende-fhir/sid/establecimiento",
+      "value": "RED-0001"
+    }
+  ],
+  "name": "Red de Servicios de Salud Ejemplo"
+}

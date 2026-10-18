@@ -1,0 +1,1865 @@
+
+<!doctype html>
+<html lang="es" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Taller práctico de HL7 FHIR R4 en español, paso a paso, con un caso clínico ecuatoriano ficticio. Para Postman, R o curl.">
+      
+      
+        <meta name="author" content="Dr. Fabricio Salas Guerrero">
+      
+      
+        <link rel="canonical" href="https://f-slg.github.io/aprende-fhir/modulos/17-busquedas-y-versiones/">
+      
+      
+        <link rel="prev" href="../16-seguimiento/">
+      
+      
+        <link rel="next" href="../18-terminologias-y-perfiles/">
+      
+      
+      <link rel="icon" href="../../imagenes/logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.39">
+    
+    
+      
+        <title>17 · Búsquedas avanzadas y versiones - Aprende FHIR desde cero</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.8c3ca2c6.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../estilos/taller.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#módulo-17--búsquedas-avanzadas-y-versiones" class="md-skip">
+          Saltar a contenido
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabecera">
+    <a href="../.." title="Aprende FHIR desde cero" class="md-header__button md-logo" aria-label="Aprende FHIR desde cero" data-md-component="logo">
+      
+  <img src="../../imagenes/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Aprende FHIR desde cero
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              17 · Búsquedas avanzadas y versiones
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Cambiar a modo oscuro"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo oscuro" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Cambiar a modo claro"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo claro" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Búsqueda" placeholder="Búsqueda" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Buscar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpiar" aria-label="Limpiar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando búsqueda
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/f-slg/aprende-fhir" title="Ir al repositorio" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    f-slg/aprende-fhir
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navegación" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Aprende FHIR desde cero" class="md-nav__button md-logo" aria-label="Aprende FHIR desde cero" data-md-component="logo">
+      
+  <img src="../../imagenes/logo.png" alt="logo">
+
+    </a>
+    Aprende FHIR desde cero
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/f-slg/aprende-fhir" title="Ir al repositorio" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    f-slg/aprende-fhir
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Inicio
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Nivel básico
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Nivel básico
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01-fundamentos/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    01 · Fundamentos
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02-patient/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    02 · Patient: el paciente
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03-transacciones/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    03 · Transacciones: varios recursos a la vez
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04-profesionales-y-organizaciones/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    04 · Profesionales y organizaciones
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05-diagnostico-y-encuentro/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    05 · Diagnóstico y encuentro
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06-observaciones/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    06 · Observaciones: signos vitales y tipos de valor
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Nivel intermedio
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Nivel intermedio
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07-antecedentes/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    07 · Antecedentes: alergias, medicación habitual y familia
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08-vacunacion/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    08 · Vacunación
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../09-documentos-clinicos/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    09 · Documentos clínicos
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10-ordenes-y-derivacion/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    10 · Órdenes y derivación
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../11-anatomia-patologica/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    11 · Anatomía patológica
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../12-plan-y-consentimiento/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    12 · Plan y consentimiento
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../13-procedimientos/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    13 · Procedimientos
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../14-citas/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    14 · Citas
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../15-medicamentos/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    15 · Medicamentos
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../16-seguimiento/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    16 · Seguimiento: cuestionarios y resultados informados por el paciente
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Nivel avanzado
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Nivel avanzado
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    17 · Búsquedas avanzadas y versiones
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    17 · Búsquedas avanzadas y versiones
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#lo-que-vas-a-aprender" class="md-nav__link">
+    <span class="md-ellipsis">
+      Lo que vas a aprender
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#la-historia" class="md-nav__link">
+    <span class="md-ellipsis">
+      La historia
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ficha-los-tipos-de-parámetros-de-búsqueda" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ficha: los tipos de parámetros de búsqueda
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ficha-prefijos" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ficha: prefijos
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ficha-modificadores" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ficha: modificadores
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ejercicios-en-el-servidor" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ejercicios en el servidor
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Ejercicios en el servidor">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#17a--encadenada-por-la-cédula-sin-conocer-el-id" class="md-nav__link">
+    <span class="md-ellipsis">
+      17a · Encadenada: por la cédula, sin conocer el id
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#17b--encadenada-con-tipo" class="md-nav__link">
+    <span class="md-ellipsis">
+      17b · Encadenada con tipo
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#17c--inversa-_has" class="md-nav__link">
+    <span class="md-ellipsis">
+      17c · Inversa: _has
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#17d--prefijo-gt" class="md-nav__link">
+    <span class="md-ellipsis">
+      17d · Prefijo gt
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#17e--un-rango-de-fechas" class="md-nav__link">
+    <span class="md-ellipsis">
+      17e · Un rango de fechas
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#17f-17g-y-17h--modificadores" class="md-nav__link">
+    <span class="md-ellipsis">
+      17f, 17g y 17h · Modificadores
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#17i-17j-y-17k--controlar-la-respuesta" class="md-nav__link">
+    <span class="md-ellipsis">
+      17i, 17j y 17k · Controlar la respuesta
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#17l--paginación" class="md-nav__link">
+    <span class="md-ellipsis">
+      17l · Paginación
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#las-versiones" class="md-nav__link">
+    <span class="md-ellipsis">
+      Las versiones
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Las versiones">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#17m-y-17n--leer-y-comparar-versiones" class="md-nav__link">
+    <span class="md-ellipsis">
+      17m y 17n · Leer y comparar versiones
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#17o--actualizar-con-if-match" class="md-nav__link">
+    <span class="md-ellipsis">
+      17o · Actualizar con If-Match
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#17p--error-a-propósito-actualizar-con-una-versión-vieja" class="md-nav__link">
+    <span class="md-ellipsis">
+      17p · Error a propósito: actualizar con una versión vieja
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#para-pensar" class="md-nav__link">
+    <span class="md-ellipsis">
+      Para pensar
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#autoevaluación" class="md-nav__link">
+    <span class="md-ellipsis">
+      Autoevaluación
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#resumen" class="md-nav__link">
+    <span class="md-ellipsis">
+      Resumen
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ejecutar-este-módulo" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ejecutar este módulo
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../18-terminologias-y-perfiles/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    18 · Terminologías y perfiles
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../19-resumen-ips/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    19 · Resumen del paciente (IPS)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#lo-que-vas-a-aprender" class="md-nav__link">
+    <span class="md-ellipsis">
+      Lo que vas a aprender
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#la-historia" class="md-nav__link">
+    <span class="md-ellipsis">
+      La historia
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ficha-los-tipos-de-parámetros-de-búsqueda" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ficha: los tipos de parámetros de búsqueda
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ficha-prefijos" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ficha: prefijos
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ficha-modificadores" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ficha: modificadores
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ejercicios-en-el-servidor" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ejercicios en el servidor
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Ejercicios en el servidor">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#17a--encadenada-por-la-cédula-sin-conocer-el-id" class="md-nav__link">
+    <span class="md-ellipsis">
+      17a · Encadenada: por la cédula, sin conocer el id
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#17b--encadenada-con-tipo" class="md-nav__link">
+    <span class="md-ellipsis">
+      17b · Encadenada con tipo
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#17c--inversa-_has" class="md-nav__link">
+    <span class="md-ellipsis">
+      17c · Inversa: _has
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#17d--prefijo-gt" class="md-nav__link">
+    <span class="md-ellipsis">
+      17d · Prefijo gt
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#17e--un-rango-de-fechas" class="md-nav__link">
+    <span class="md-ellipsis">
+      17e · Un rango de fechas
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#17f-17g-y-17h--modificadores" class="md-nav__link">
+    <span class="md-ellipsis">
+      17f, 17g y 17h · Modificadores
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#17i-17j-y-17k--controlar-la-respuesta" class="md-nav__link">
+    <span class="md-ellipsis">
+      17i, 17j y 17k · Controlar la respuesta
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#17l--paginación" class="md-nav__link">
+    <span class="md-ellipsis">
+      17l · Paginación
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#las-versiones" class="md-nav__link">
+    <span class="md-ellipsis">
+      Las versiones
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Las versiones">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#17m-y-17n--leer-y-comparar-versiones" class="md-nav__link">
+    <span class="md-ellipsis">
+      17m y 17n · Leer y comparar versiones
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#17o--actualizar-con-if-match" class="md-nav__link">
+    <span class="md-ellipsis">
+      17o · Actualizar con If-Match
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#17p--error-a-propósito-actualizar-con-una-versión-vieja" class="md-nav__link">
+    <span class="md-ellipsis">
+      17p · Error a propósito: actualizar con una versión vieja
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#para-pensar" class="md-nav__link">
+    <span class="md-ellipsis">
+      Para pensar
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#autoevaluación" class="md-nav__link">
+    <span class="md-ellipsis">
+      Autoevaluación
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#resumen" class="md-nav__link">
+    <span class="md-ellipsis">
+      Resumen
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ejecutar-este-módulo" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ejecutar este módulo
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+    <a href="https://github.com/f-slg/aprende-fhir/edit/main/modulos/17-busquedas-y-versiones/README.md" title="Editar esta página" class="md-content__button md-icon">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
+    </a>
+  
+  
+
+
+<h1 id="módulo-17--búsquedas-avanzadas-y-versiones">Módulo 17 · Búsquedas avanzadas y versiones<a class="headerlink" href="#módulo-17--búsquedas-avanzadas-y-versiones" title="Permanent link">&para;</a></h1>
+<p><a href="../16-seguimiento/">← Módulo 16</a> · <a href="../../">Inicio</a> · <a href="../18-terminologias-y-perfiles/">Módulo 18 →</a></p>
+<blockquote>
+<p><strong>Nivel:</strong> avanzado · <strong>Duración:</strong> 90 minutos · <strong>Necesitas:</strong> módulos 01 a 16
+(este módulo busca sobre el expediente completo de Luis)</p>
+</blockquote>
+<h2 id="lo-que-vas-a-aprender">Lo que vas a aprender<a class="headerlink" href="#lo-que-vas-a-aprender" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Los <strong>tipos de parámetros</strong> de búsqueda y cómo se escribe cada uno.</li>
+<li><strong>Prefijos</strong> para comparar números y fechas (<code>gt</code>, <code>ge</code>, <code>lt</code>...).</li>
+<li><strong>Modificadores</strong> (<code>:exact</code>, <code>:not</code>, <code>:missing</code>...).</li>
+<li><strong>Búsquedas encadenadas</strong> (<code>subject.identifier</code>) e <strong>inversas</strong> (<code>_has</code>).</li>
+<li>A controlar <strong>qué</strong> devuelve el servidor y <strong>cuánto</strong> (<code>_summary</code>,
+   <code>_elements</code>, <code>_sort</code>, <code>_count</code>, paginación).</li>
+<li>A trabajar con <strong>versiones</strong>: leer una versión anterior, comparar versiones
+   y evitar que dos personas se sobrescriban (<code>If-Match</code>).</li>
+</ol>
+<h2 id="la-historia">La historia<a class="headerlink" href="#la-historia" title="Permanent link">&para;</a></h2>
+<p>Han pasado diez meses desde la primera consulta. El expediente de Luis tiene
+más de 60 recursos. Ahora no se trata de registrar, sino de <strong>encontrar</strong>: la
+última frecuencia cardíaca, las consultas de abril, los problemas activos,
+los pacientes con cáncer de mama. Y la admisionista necesita agregar el
+correo electrónico de Luis sin pisar los cambios que otra persona pueda estar
+haciendo al mismo tiempo.</p>
+<blockquote>
+<p>Todas las búsquedas de este módulo se envían con <code>Cache-Control: no-cache</code>,
+para que el servidor no reutilice resultados anteriores (módulo 14).</p>
+</blockquote>
+<hr />
+<h2 id="ficha-los-tipos-de-parámetros-de-búsqueda">Ficha: los tipos de parámetros de búsqueda<a class="headerlink" href="#ficha-los-tipos-de-parámetros-de-búsqueda" title="Permanent link">&para;</a></h2>
+<p>Cada recurso tiene sus <strong>parámetros de búsqueda</strong>, que están al final de su
+página en la especificación (por ejemplo,
+<a href="https://hl7.org/fhir/R4/observation.html#search">https://hl7.org/fhir/R4/observation.html#search</a>). Cada parámetro es de un
+<strong>tipo</strong>, y el tipo dice cómo se escribe el valor:</p>
+<table>
+<thead>
+<tr>
+<th>Tipo</th>
+<th>Busca en...</th>
+<th>Cómo se escribe</th>
+<th>Ejemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>string</code></td>
+<td>Textos: nombres, direcciones</td>
+<td>El comienzo del texto, sin importar mayúsculas ni tildes</td>
+<td><code>Patient?family=pare</code></td>
+</tr>
+<tr>
+<td><code>token</code></td>
+<td>Códigos e identificadores</td>
+<td><code>system\|code</code>, o solo <code>code</code></td>
+<td><code>Observation?code=http://loinc.org\|8310-5</code></td>
+</tr>
+<tr>
+<td><code>reference</code></td>
+<td>Referencias a otros recursos</td>
+<td><code>Tipo/id</code></td>
+<td><code>Observation?subject=Patient/1001</code></td>
+</tr>
+<tr>
+<td><code>date</code></td>
+<td>Fechas y periodos</td>
+<td><code>AAAA-MM-DD</code>, con prefijo opcional</td>
+<td><code>Encounter?date=ge2025-04-01</code></td>
+</tr>
+<tr>
+<td><code>quantity</code></td>
+<td>Cantidades</td>
+<td><code>[prefijo]valor\|sistema\|unidad</code></td>
+<td><code>Observation?value-quantity=ge38\|http://unitsofmeasure.org\|Cel</code></td>
+</tr>
+<tr>
+<td><code>number</code></td>
+<td>Números sin unidad</td>
+<td><code>[prefijo]valor</code></td>
+<td><code>RiskAssessment?probability=gt0.8</code></td>
+</tr>
+<tr>
+<td><code>uri</code></td>
+<td>Direcciones canónicas</td>
+<td>La URL completa</td>
+<td><code>Questionnaire?url=https://…</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Parámetros generales</strong>, que sirven en cualquier recurso:</p>
+<table>
+<thead>
+<tr>
+<th>Parámetro</th>
+<th>Para qué</th>
+<th>Ejemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>_id</code></td>
+<td>Por id</td>
+<td><code>Patient?_id=1001</code></td>
+</tr>
+<tr>
+<td><code>_lastUpdated</code></td>
+<td>Por fecha de última modificación</td>
+<td><code>Patient?_lastUpdated=gt2026-01-01</code></td>
+</tr>
+<tr>
+<td><code>_count</code></td>
+<td>Resultados por página</td>
+<td><code>_count=5</code></td>
+</tr>
+<tr>
+<td><code>_sort</code></td>
+<td>Orden (con <code>-</code>, descendente)</td>
+<td><code>_sort=-date</code></td>
+</tr>
+<tr>
+<td><code>_summary</code></td>
+<td>Una versión resumida, o solo el total con <code>count</code></td>
+<td><code>_summary=count</code></td>
+</tr>
+<tr>
+<td><code>_elements</code></td>
+<td>Solo ciertos elementos</td>
+<td><code>_elements=code,value</code></td>
+</tr>
+<tr>
+<td><code>_include</code>, <code>_revinclude</code></td>
+<td>Agregar recursos relacionados (módulos 05 y 10)</td>
+<td><code>_include=Encounter:diagnosis</code></td>
+</tr>
+<tr>
+<td><code>_has</code></td>
+<td>Búsqueda inversa</td>
+<td><code>Patient?_has:Condition:subject:code=…</code></td>
+</tr>
+</tbody>
+</table>
+<p>Los valores con caracteres especiales se <strong>codifican</strong> en la URL: un espacio
+es <code>%20</code>, una barra vertical <code>|</code> puede ir como <code>%7C</code>. Postman lo hace por ti;
+en curl y en el navegador, escríbelo tú.</p>
+<h2 id="ficha-prefijos">Ficha: prefijos<a class="headerlink" href="#ficha-prefijos" title="Permanent link">&para;</a></h2>
+<p>Para <code>date</code>, <code>number</code> y <code>quantity</code>, el valor puede llevar un prefijo:</p>
+<table>
+<thead>
+<tr>
+<th>Prefijo</th>
+<th>Significa</th>
+<th>Ejemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>eq</code></td>
+<td>igual (es el predeterminado)</td>
+<td><code>date=eq2025-04-22</code></td>
+</tr>
+<tr>
+<td><code>ne</code></td>
+<td>distinto</td>
+<td><code>value-quantity=ne0</code></td>
+</tr>
+<tr>
+<td><code>gt</code> / <code>lt</code></td>
+<td>mayor / menor que</td>
+<td><code>value-quantity=gt100</code></td>
+</tr>
+<tr>
+<td><code>ge</code> / <code>le</code></td>
+<td>mayor o igual / menor o igual</td>
+<td><code>date=ge2025-04-01</code></td>
+</tr>
+<tr>
+<td><code>sa</code> / <code>eb</code></td>
+<td>empieza después de / termina antes de</td>
+<td><code>date=sa2025-06-01</code></td>
+</tr>
+</tbody>
+</table>
+<p>Para un <strong>rango</strong>, se repite el parámetro: <code>date=ge2025-04-01&amp;date=lt2025-05-01</code>
+es "en abril de 2025".</p>
+<h2 id="ficha-modificadores">Ficha: modificadores<a class="headerlink" href="#ficha-modificadores" title="Permanent link">&para;</a></h2>
+<p>Se escriben después del nombre del parámetro, con dos puntos:</p>
+<table>
+<thead>
+<tr>
+<th>Modificador</th>
+<th>Para</th>
+<th>Significa</th>
+<th>Ejemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>:exact</code></td>
+<td>string</td>
+<td>Exactamente ese texto (con mayúsculas y tildes)</td>
+<td><code>family:exact=Paredes Cevallos</code></td>
+</tr>
+<tr>
+<td><code>:contains</code></td>
+<td>string</td>
+<td>Contiene el texto en cualquier parte</td>
+<td><code>family:contains=redes</code></td>
+</tr>
+<tr>
+<td><code>:text</code></td>
+<td>token</td>
+<td>Busca en el texto del código, no en el código</td>
+<td><code>code:text=presión</code></td>
+</tr>
+<tr>
+<td><code>:not</code></td>
+<td>token</td>
+<td>Distinto de ese código</td>
+<td><code>clinical-status:not=resolved</code></td>
+</tr>
+<tr>
+<td><code>:missing</code></td>
+<td>todos</td>
+<td>El elemento falta (<code>true</code>) o está (<code>false</code>)</td>
+<td><code>encounter:missing=true</code></td>
+</tr>
+<tr>
+<td><code>:[Tipo]</code></td>
+<td>reference</td>
+<td>Limita el tipo de recurso referenciado</td>
+<td><code>subject:Patient.family=Paredes</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="ejercicios-en-el-servidor">Ejercicios en el servidor<a class="headerlink" href="#ejercicios-en-el-servidor" title="Permanent link">&para;</a></h2>
+<h3 id="17a--encadenada-por-la-cédula-sin-conocer-el-id">17a · Encadenada: por la cédula, sin conocer el id<a class="headerlink" href="#17a--encadenada-por-la-cédula-sin-conocer-el-id" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="err">GET {{FHIRURL}}/Observation?subject.identifier=https://f-slg.github.io/aprende-fhir/sid/cedula|9900000017&amp;category=vital-signs</span>
+</code></pre></div>
+<p>El punto <strong>encadena</strong>: "las observaciones cuyo <code>subject</code> es un paciente con
+esta cédula". No necesitas saber el <code>id</code> de Luis en el servidor, solo su
+cédula: es la forma de buscar cuando los datos vienen de otro sistema.
+Devuelve 5 signos vitales (los 4 de la consulta y la superficie corporal).</p>
+<h3 id="17b--encadenada-con-tipo">17b · Encadenada con tipo<a class="headerlink" href="#17b--encadenada-con-tipo" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="err">GET {{FHIRURL}}/Encounter?subject:Patient.family=Paredes&amp;subject:Patient.given=Luis</span>
+</code></pre></div>
+<p><code>:Patient</code> aclara de qué tipo es la referencia encadenada. Devuelve las 3
+atenciones de Luis: la consulta de marzo, el vacunatorio y la consulta por el
+nódulo.</p>
+<h3 id="17c--inversa-_has">17c · Inversa: <code>_has</code><a class="headerlink" href="#17c--inversa-_has" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="err">GET {{FHIRURL}}/Patient?_has:Condition:subject:code=http://snomed.info/sct|254837009</span>
+</code></pre></div>
+<p>Se lee: "pacientes <strong>que tienen</strong> una Condition, cuyo <code>subject</code> es el
+paciente, con el código de cáncer de mama". Es la búsqueda de un registro de
+tumores o de un programa: encontrar personas a partir de sus diagnósticos.</p>
+<h3 id="17d--prefijo-gt">17d · Prefijo <code>gt</code><a class="headerlink" href="#17d--prefijo-gt" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="err">GET {{FHIRURL}}/Observation?subject=Patient/{{patientId}}&amp;code=http://loinc.org|8867-4&amp;value-quantity=gt100</span>
+</code></pre></div>
+<p>Frecuencias cardíacas mayores que 100: encuentra los 102 latidos por minuto
+de la consulta de marzo.</p>
+<h3 id="17e--un-rango-de-fechas">17e · Un rango de fechas<a class="headerlink" href="#17e--un-rango-de-fechas" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="err">GET {{FHIRURL}}/Encounter?subject=Patient/{{patientId}}&amp;date=ge2025-04-01&amp;date=lt2025-05-01</span>
+</code></pre></div>
+<p>Las atenciones de abril: el vacunatorio (3 de abril) y la consulta por el
+nódulo (22 de abril).</p>
+<h3 id="17f-17g-y-17h--modificadores">17f, 17g y 17h · Modificadores<a class="headerlink" href="#17f-17g-y-17h--modificadores" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="err">GET {{FHIRURL}}/Patient?family:exact=Paredes%20Cevallos</span>
+<span class="err">GET {{FHIRURL}}/Condition?subject=Patient/{{patientId}}&amp;clinical-status:not=resolved</span>
+<span class="err">GET {{FHIRURL}}/Observation?subject=Patient/{{patientId}}&amp;encounter:missing=true</span>
+</code></pre></div>
+<ul>
+<li><code>:exact</code> encuentra solo a Luis, no a sus hijos Paredes Andrade. Fíjate en
+  el <code>%20</code>: el espacio va codificado.</li>
+<li><code>:not=resolved</code> deja solo el cáncer de mama: la intoxicación se resolvió.</li>
+<li><code>:missing=true</code> devuelve las 4 observaciones registradas fuera de una
+  consulta: el tamaño del tumor, el receptor de estrógeno, la superficie
+  corporal y el dolor del cuestionario. Útil para controlar la calidad del
+  registro.</li>
+</ul>
+<h3 id="17i-17j-y-17k--controlar-la-respuesta">17i, 17j y 17k · Controlar la respuesta<a class="headerlink" href="#17i-17j-y-17k--controlar-la-respuesta" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="err">GET {{FHIRURL}}/Observation?subject=Patient/{{patientId}}&amp;_summary=count</span>
+<span class="err">GET {{FHIRURL}}/Observation?subject=Patient/{{patientId}}&amp;category=vital-signs&amp;_elements=code,value</span>
+<span class="err">GET {{FHIRURL}}/Observation?subject=Patient/{{patientId}}&amp;code=http://loinc.org|8867-4&amp;_sort=-date&amp;_count=1</span>
+</code></pre></div>
+<ul>
+<li><code>_summary=count</code> devuelve <strong>solo el total</strong> (12 observaciones), sin los
+  recursos: ideal para indicadores.</li>
+<li><code>_elements=code,value</code> devuelve cada observación solo con su código y su
+  valor. Para un elemento de elección se usa su nombre base: <code>value</code>, no
+  <code>valueQuantity</code>.</li>
+<li><code>_sort=-date&amp;_count=1</code> es "la más reciente": orden descendente por fecha y
+  un solo resultado.</li>
+</ul>
+<h3 id="17l--paginación">17l · Paginación<a class="headerlink" href="#17l--paginación" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="err">GET {{FHIRURL}}/Observation?subject=Patient/{{patientId}}&amp;_count=5</span>
+</code></pre></div>
+<p>El servidor devuelve 5 resultados y, en <code>link</code>, la relación <code>next</code> con la
+dirección de la página siguiente. Para recorrer todos los resultados se
+sigue <code>next</code> hasta que no aparezca. <strong>No construyas tú la dirección de la
+página siguiente</strong>: usa la que da el servidor.</p>
+<h2 id="las-versiones">Las versiones<a class="headerlink" href="#las-versiones" title="Permanent link">&para;</a></h2>
+<p>Cada <code>PUT</code> crea una <strong>versión</strong> nueva (módulo 02). El servidor lo indica en
+<code>meta.versionId</code> y en el encabezado HTTP <code>ETag</code>, por ejemplo <code>W/"2"</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Operación</th>
+<th>Petición</th>
+<th>Para qué</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Leer la versión actual</td>
+<td><code>GET /Patient/{id}</code></td>
+<td>Lo de siempre</td>
+</tr>
+<tr>
+<td>Historial</td>
+<td><code>GET /Patient/{id}/_history</code></td>
+<td>Todas las versiones (módulo 02)</td>
+</tr>
+<tr>
+<td>Leer una versión (<em>vread</em>)</td>
+<td><code>GET /Patient/{id}/_history/1</code></td>
+<td>Cómo estaba en un momento</td>
+</tr>
+<tr>
+<td>Comparar versiones</td>
+<td><code>GET /Patient/{id}/$diff</code></td>
+<td>Qué cambió (operación de HAPI)</td>
+</tr>
+<tr>
+<td>Actualizar sin pisar a otro</td>
+<td><code>PUT</code> con <code>If-Match: W/"2"</code></td>
+<td>Control de concurrencia</td>
+</tr>
+</tbody>
+</table>
+<h3 id="17m-y-17n--leer-y-comparar-versiones">17m y 17n · Leer y comparar versiones<a class="headerlink" href="#17m-y-17n--leer-y-comparar-versiones" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="err">GET {{FHIRURL}}/Patient/{{patientId}}/_history/1</span>
+<span class="err">GET {{FHIRURL}}/Patient/{{patientId}}/$diff</span>
+</code></pre></div>
+<p>La versión 1 es el paciente del módulo 02, sin teléfono ni estado civil.
+<code>$diff</code> compara la versión actual con la anterior y devuelve un <code>Parameters</code>
+con cada cambio: su tipo (<code>insert</code>, <code>replace</code>, <code>delete</code>) y su ruta
+(<code>Patient.telecom</code>, <code>Patient.maritalStatus</code>...). <code>$diff</code> es una operación de
+HAPI: no todos los servidores la tienen.</p>
+<h3 id="17o--actualizar-con-if-match">17o · Actualizar con <code>If-Match</code><a class="headerlink" href="#17o--actualizar-con-if-match" title="Permanent link">&para;</a></h3>
+<p>Imagina que la admisionista abre el registro de Luis (versión 2) para
+agregar su correo. Mientras escribe, otra persona actualiza el teléfono. Si la
+admisionista guarda sin más, <strong>borra</strong> el cambio de la otra persona, porque
+<code>PUT</code> reemplaza todo el recurso.</p>
+<p><code>If-Match</code> lo evita: dice "actualiza solo si el recurso <strong>sigue</strong> en la
+versión que yo leí".</p>
+<div class="highlight"><pre><span></span><code><span class="err">PUT {{FHIRURL}}/Patient/{{patientId}}</span>
+<span class="err">If-Match: W/"2"</span>
+</code></pre></div>
+<p>Esto es lo que agrega la actualización
+(<a href="soluciones/17a_patient_agregar_correo.json"><code>17a_patient_agregar_correo.json</code></a>):</p>
+<!-- diferencia 17a -->
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"telecom"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"system"</span><span class="p">:</span><span class="w"> </span><span class="s2">"phone"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"+593 99 000 0000"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"use"</span><span class="p">:</span><span class="w"> </span><span class="s2">"mobile"</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"system"</span><span class="p">:</span><span class="w"> </span><span class="s2">"email"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"luis.paredes@correo.invalid"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"use"</span><span class="p">:</span><span class="w"> </span><span class="s2">"home"</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div>
+<!-- /diferencia -->
+
+<p>El servidor responde <code>200 OK</code> y el paciente pasa a la versión 3.</p>
+<h3 id="17p--error-a-propósito-actualizar-con-una-versión-vieja">17p · Error a propósito: actualizar con una versión vieja<a class="headerlink" href="#17p--error-a-propósito-actualizar-con-una-versión-vieja" title="Permanent link">&para;</a></h3>
+<p>Repite <strong>exactamente</strong> la misma petición, con <code>If-Match: W/"2"</code>. Ahora el
+recurso ya está en la versión 3, y el servidor la rechaza:</p>
+<div class="highlight"><pre><span></span><code>409 · HAPI-0989: Trying to update Patient/1001/_history/2 but this is not the current version
+</code></pre></div>
+<p>La especificación de FHIR indica responder <code>412 Precondition Failed</code>; HAPI
+responde <code>409 Conflict</code>. Los dos dicen lo mismo: <strong>alguien cambió el recurso
+después de que lo leíste</strong>. Lo correcto es volver a leerlo, aplicar tu cambio
+sobre la versión nueva y enviarlo con el <code>If-Match</code> actualizado.</p>
+<h2 id="para-pensar">Para pensar<a class="headerlink" href="#para-pensar" title="Permanent link">&para;</a></h2>
+<p>Para un <strong>tablero de vigilancia</strong> de hipertensión necesitas, cada semana, el
+número de pacientes con hipertensión que tienen al menos una presión
+sistólica mayor o igual a 140 en el último mes. ¿Qué combinación de <code>_has</code>,
+<code>_summary=count</code> y prefijos de fecha usarías? ¿Qué problema tendría contar
+directamente las observaciones en lugar de los pacientes?</p>
+<h2 id="autoevaluación">Autoevaluación<a class="headerlink" href="#autoevaluación" title="Permanent link">&para;</a></h2>
+<details>
+<summary>1. ¿Cómo buscas las vacunas de un paciente si solo conoces su cédula?</summary>
+<p>Con una búsqueda encadenada: <code>Immunization?patient.identifier=&lt;system&gt;|&lt;cédula&gt;</code>.</p>
+</details>
+<details>
+<summary>2. ¿Qué diferencia hay entre <code>_include</code> y <code>_has</code>?</summary>
+<p><code>_include</code> <strong>agrega</strong> al resultado los recursos relacionados. <code>_has</code>
+<strong>filtra</strong>: devuelve los recursos que tienen otros recursos que cumplen una
+condición, sin agregarlos.</p>
+</details>
+<details>
+<summary>3. El servidor responde 409 a tu <code>PUT</code> con <code>If-Match</code>. ¿Qué haces?</summary>
+<p>Vuelves a leer el recurso (que tiene cambios de otra persona), aplicas tu
+cambio sobre esa versión y lo envías con el <code>If-Match</code> de la versión nueva.</p>
+</details>
+<h2 id="resumen">Resumen<a class="headerlink" href="#resumen" title="Permanent link">&para;</a></h2>
+<ul>
+<li>El <strong>tipo</strong> del parámetro dice cómo se escribe el valor: <code>string</code>, <code>token</code>,
+  <code>reference</code>, <code>date</code>, <code>quantity</code>...</li>
+<li>Los <strong>prefijos</strong> comparan (<code>gt</code>, <code>ge</code>, <code>lt</code>, <code>le</code>) y los <strong>modificadores</strong>
+  cambian el sentido (<code>:exact</code>, <code>:not</code>, <code>:missing</code>).</li>
+<li>Las búsquedas <strong>encadenadas</strong> cruzan referencias; <code>_has</code> busca al revés.</li>
+<li><code>_summary=count</code>, <code>_elements</code>, <code>_sort</code> y <code>_count</code> controlan la respuesta;
+  para paginar se sigue <code>next</code>.</li>
+<li><code>If-Match</code> evita que dos actualizaciones se pisen.</li>
+</ul>
+<h2 id="ejecutar-este-módulo">Ejecutar este módulo<a class="headerlink" href="#ejecutar-este-módulo" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Postman:</strong> carpeta <em>17 · Búsquedas avanzadas y versiones</em>.</li>
+<li><strong>curl:</strong> <code>curl/taller.sh 17</code> (necesita los módulos anteriores: ejecuta todo)</li>
+<li><strong>R:</strong></li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="c1"># La frecuencia cardíaca más reciente, sin conocer el id del paciente</span>
+<span class="n">fc</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">fhir</span><span class="p">(</span><span class="s">"GET"</span><span class="p">,</span><span class="w"> </span><span class="nf">paste0</span><span class="p">(</span><span class="s">"Observation?subject.identifier=https://f-slg.github.io/aprende-fhir/sid/cedula|9900000017"</span><span class="p">,</span>
+<span class="w">                         </span><span class="s">"&amp;code=http://loinc.org|8867-4&amp;_sort=-date&amp;_count=1"</span><span class="p">),</span>
+<span class="w">           </span><span class="n">encabezados</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span><span class="n">`Cache-Control`</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"no-cache"</span><span class="p">))</span>
+<span class="n">fc</span><span class="o">$</span><span class="n">entry</span><span class="p">[[</span><span class="m">1</span><span class="p">]]</span><span class="o">$</span><span class="n">resource</span><span class="o">$</span><span class="n">valueQuantity</span><span class="o">$</span><span class="n">value</span>
+</code></pre></div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Volver al principio
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Pie" >
+        
+          
+          <a href="../16-seguimiento/" class="md-footer__link md-footer__link--prev" aria-label="Anterior: 16 · Seguimiento: cuestionarios y resultados informados por el paciente">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Anterior
+              </span>
+              <div class="md-ellipsis">
+                16 · Seguimiento: cuestionarios y resultados informados por el paciente
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../18-terminologias-y-perfiles/" class="md-footer__link md-footer__link--next" aria-label="Siguiente: 18 · Terminologías y perfiles">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Siguiente
+              </span>
+              <div class="md-ellipsis">
+                18 · Terminologías y perfiles
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Contenido CC BY 4.0 · Código MIT · HL7® y FHIR® son marcas registradas de Health Level Seven International; este taller no implica afiliación ni aval de HL7.
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.sections", "navigation.expand", "navigation.footer", "navigation.top", "navigation.tracking", "toc.follow", "search.highlight", "search.suggest", "content.code.copy", "content.action.edit"], "search": "../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.525ec568.min.js"></script>
+      
+    
+  </body>
+</html>

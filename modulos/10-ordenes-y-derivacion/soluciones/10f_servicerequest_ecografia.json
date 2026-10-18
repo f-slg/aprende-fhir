@@ -1,0 +1,75 @@
+{
+  "resourceType": "ServiceRequest",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Orden: ecografía de mama izquierda, prioridad urgente.</p><p>Motivo: nódulo palpable de 2 cm en el cuadrante superior externo.</p></div>"
+  },
+  "identifier": [
+    {
+      "system": "https://f-slg.github.io/aprende-fhir/sid/orden",
+      "value": "ORD-2025-0101"
+    }
+  ],
+  "status": "completed",
+  "intent": "order",
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "363679005",
+          "display": "Imaging"
+        }
+      ],
+      "text": "Imagenología"
+    }
+  ],
+  "priority": "urgent",
+  "code": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "47079000",
+        "display": "Ultrasonography of breast"
+      }
+    ],
+    "text": "Ecografía de mama"
+  },
+  "subject": {
+    "reference": "Patient/{{patientId}}",
+    "display": "Luis Alberto Paredes Cevallos"
+  },
+  "encounter": {
+    "reference": "Encounter/{{noduleEncounterId}}",
+    "display": "Consulta por nódulo mamario, 22 de abril de 2025"
+  },
+  "authoredOn": "2025-04-22T08:20:00-05:00",
+  "requester": {
+    "reference": "PractitionerRole/{{salazarRoleId}}",
+    "display": "Dra. Salazar · Medicina general"
+  },
+  "bodySite": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "80248007",
+          "display": "Left breast structure"
+        }
+      ],
+      "text": "Mama izquierda"
+    }
+  ],
+  "reasonCode": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "89164003",
+          "display": "Breast lump"
+        }
+      ],
+      "text": "Nódulo palpable en la mama izquierda"
+    }
+  ]
+}

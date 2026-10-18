@@ -1,0 +1,14 @@
+{
+  "resourceType": "Observation",
+  "status": "final",
+  "code": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "263605001",
+        "display": "Length dimension of neoplasm"
+      }
+    ],
+    "text": "Tamaño del tumor"
+  }
+}

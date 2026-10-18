@@ -1,0 +1,33 @@
+{
+  "resourceType": "CareTeam",
+  "status": "active",
+  "name": "Comité de tumores de mama",
+  "subject": {
+    "reference": "Patient/{{patientId}}",
+    "display": "Luis Alberto Paredes Cevallos"
+  },
+  "participant": [
+    {
+      "role": [
+        {
+          "text": "Oncólogo clínico, coordinador del comité"
+        }
+      ],
+      "member": {
+        "reference": "PractitionerRole/{{oncologistRoleId}}",
+        "display": "Dr. Ruiz · Oncología clínica"
+      }
+    },
+    {
+      "role": [
+        {
+          "text": "Médica de cabecera"
+        }
+      ],
+      "member": {
+        "reference": "PractitionerRole/{{salazarRoleId}}",
+        "display": "Dra. Salazar · Medicina general"
+      }
+    }
+  ]
+}

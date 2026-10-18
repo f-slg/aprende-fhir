@@ -1,0 +1,62 @@
+{
+  "resourceType": "Encounter",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Atención en el vacunatorio, 3 de abril de 2025, 10:00 a 10:20.</p></div>"
+  },
+  "identifier": [
+    {
+      "system": "https://f-slg.github.io/aprende-fhir/sid/encuentro",
+      "value": "ENC-2025-0002"
+    }
+  ],
+  "status": "finished",
+  "class": {
+    "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+    "code": "AMB",
+    "display": "ambulatory"
+  },
+  "type": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "33879002",
+          "display": "Administration of vaccine to produce active immunity"
+        }
+      ],
+      "text": "Vacunación"
+    }
+  ],
+  "subject": {
+    "reference": "Patient/{{patientId}}",
+    "display": "Luis Alberto Paredes Cevallos"
+  },
+  "participant": [
+    {
+      "type": [
+        {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/v3-ParticipationType",
+              "code": "PPRF",
+              "display": "primary performer"
+            }
+          ]
+        }
+      ],
+      "individual": {
+        "reference": "Practitioner/{{nursePractitionerId}}",
+        "display": "Lcda. Rosa Elena Quishpe Tenesaca"
+      }
+    }
+  ],
+  "period": {
+    "start": "2025-04-03T10:00:00-05:00",
+    "end": "2025-04-03T10:20:00-05:00"
+  },
+  "serviceProvider": {
+    "reference": "Organization/{{hospitalId}}",
+    "display": "Hospital General Docente Ejemplo"
+  }
+}

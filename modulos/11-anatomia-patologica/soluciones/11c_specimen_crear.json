@@ -1,0 +1,62 @@
+{
+  "resourceType": "Specimen",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Biopsia de tejido tumoral de mama izquierda (AP-2025-0457). Estado: available.</p></div>"
+  },
+  "identifier": [
+    {
+      "system": "https://f-slg.github.io/aprende-fhir/sid/muestra",
+      "value": "AP-2025-0457"
+    }
+  ],
+  "status": "available",
+  "type": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "258435002",
+        "display": "Tumor tissue sample"
+      }
+    ],
+    "text": "Tejido tumoral"
+  },
+  "subject": {
+    "reference": "Patient/{{patientId}}",
+    "display": "Luis Alberto Paredes Cevallos"
+  },
+  "request": [
+    {
+      "reference": "ServiceRequest/{{biopsyRequestId}}",
+      "display": "Orden de biopsia de mama"
+    }
+  ],
+  "receivedTime": "2025-05-06T10:30:00-05:00",
+  "collection": {
+    "collector": {
+      "reference": "Practitioner/{{practitionerId}}",
+      "display": "Dra. Andrea Lucía Salazar Moreno"
+    },
+    "collectedDateTime": "2025-05-06T09:00:00-05:00",
+    "method": {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "129314006",
+          "display": "Biopsy - action"
+        }
+      ],
+      "text": "Biopsia"
+    },
+    "bodySite": {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "80248007",
+          "display": "Left breast structure"
+        }
+      ],
+      "text": "Mama izquierda"
+    }
+  }
+}

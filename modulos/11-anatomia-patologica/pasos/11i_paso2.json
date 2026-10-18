@@ -1,0 +1,44 @@
+{
+  "resourceType": "DiagnosticReport",
+  "status": "final",
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/v2-0074",
+          "code": "SP",
+          "display": "Surgical Pathology"
+        }
+      ],
+      "text": "Anatomía patológica"
+    }
+  ],
+  "code": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "11526-1",
+        "display": "Pathology study"
+      }
+    ],
+    "text": "Estudio de patología"
+  },
+  "subject": {
+    "reference": "Patient/{{patientId}}",
+    "display": "Luis Alberto Paredes Cevallos"
+  },
+  "effectiveDateTime": "2025-05-12",
+  "issued": "2025-05-13T12:00:00-05:00",
+  "performer": [
+    {
+      "reference": "Organization/{{hospitalId}}",
+      "display": "Hospital General Docente Ejemplo"
+    }
+  ],
+  "resultsInterpreter": [
+    {
+      "reference": "Practitioner/{{practitionerId}}",
+      "display": "Dra. Andrea Lucía Salazar Moreno"
+    }
+  ]
+}

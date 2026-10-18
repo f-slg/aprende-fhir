@@ -1,0 +1,7 @@
+{
+  "resourceType": "CodeSystem",
+  "url": "https://f-slg.github.io/aprende-fhir/CodeSystem/ecog",
+  "name": "EscalaECOG",
+  "status": "active",
+  "content": "complete"
+}

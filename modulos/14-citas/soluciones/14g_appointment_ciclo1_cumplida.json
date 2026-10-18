@@ -1,0 +1,72 @@
+{
+  "resourceType": "Appointment",
+  "id": "{{appointment1Id}}",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Cita cumplida: quimioterapia ciclo 1 de 4, 2 de julio de 2025.</p></div>"
+  },
+  "identifier": [
+    {
+      "system": "https://f-slg.github.io/aprende-fhir/sid/cita",
+      "value": "CITA-2025-QT1"
+    }
+  ],
+  "status": "fulfilled",
+  "serviceType": [
+    {
+      "text": "Quimioterapia ambulatoria"
+    }
+  ],
+  "appointmentType": {
+    "coding": [
+      {
+        "system": "http://terminology.hl7.org/CodeSystem/v2-0276",
+        "code": "FOLLOWUP",
+        "display": "A follow up visit from a previous appointment"
+      }
+    ],
+    "text": "Ciclo de tratamiento"
+  },
+  "reasonReference": [
+    {
+      "reference": "Condition/{{conditionCancerId}}",
+      "display": "Carcinoma ductal infiltrante de mama izquierda"
+    }
+  ],
+  "description": "Quimioterapia con doxorrubicina, ciclo 1 de 4",
+  "slot": [
+    {
+      "reference": "Slot/{{slot1Id}}",
+      "display": "Cupo del ciclo 1"
+    }
+  ],
+  "start": "2025-07-02T09:00:00-05:00",
+  "end": "2025-07-02T11:00:00-05:00",
+  "created": "2025-06-20T10:00:00-05:00",
+  "participant": [
+    {
+      "actor": {
+        "reference": "Patient/{{patientId}}",
+        "display": "Luis Alberto Paredes Cevallos"
+      },
+      "required": "required",
+      "status": "accepted"
+    },
+    {
+      "actor": {
+        "reference": "PractitionerRole/{{oncologistRoleId}}",
+        "display": "Dr. Ruiz · Oncología clínica"
+      },
+      "required": "required",
+      "status": "accepted"
+    },
+    {
+      "actor": {
+        "reference": "Location/{{dayHospitalLocationId}}",
+        "display": "Hospital de Día de Oncología"
+      },
+      "required": "required",
+      "status": "accepted"
+    }
+  ]
+}

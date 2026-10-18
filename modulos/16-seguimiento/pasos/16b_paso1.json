@@ -1,0 +1,5 @@
+{
+  "resourceType": "QuestionnaireResponse",
+  "questionnaire": "https://f-slg.github.io/aprende-fhir/Questionnaire/seguimiento-oncologico",
+  "status": "in-progress"
+}

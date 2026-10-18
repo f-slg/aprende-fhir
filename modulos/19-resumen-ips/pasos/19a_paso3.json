@@ -1,0 +1,103 @@
+{
+  "resourceType": "Composition",
+  "identifier": {
+    "system": "https://f-slg.github.io/aprende-fhir/sid/documento",
+    "value": "IPS-2026-0001"
+  },
+  "status": "final",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "60591-5",
+        "display": "Patient summary Document"
+      }
+    ],
+    "text": "Resumen del paciente"
+  },
+  "subject": {
+    "reference": "Patient/{{patientId}}",
+    "display": "Luis Alberto Paredes Cevallos"
+  },
+  "date": "2026-02-15T10:00:00-05:00",
+  "author": [
+    {
+      "reference": "PractitionerRole/{{oncologistRoleId}}",
+      "display": "Dr. Ruiz · Oncología clínica"
+    }
+  ],
+  "title": "Resumen internacional del paciente",
+  "confidentiality": "N",
+  "custodian": {
+    "reference": "Organization/{{hospitalId}}",
+    "display": "Hospital General Docente Ejemplo"
+  },
+  "section": [
+    {
+      "title": "Problemas activos",
+      "code": {
+        "coding": [
+          {
+            "system": "http://loinc.org",
+            "code": "11450-4",
+            "display": "Problem list - Reported"
+          }
+        ]
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Carcinoma ductal infiltrante de mama izquierda (activo, desde mayo de 2025).</p></div>"
+      },
+      "entry": [
+        {
+          "reference": "Condition/{{conditionCancerId}}",
+          "display": "Carcinoma ductal infiltrante de mama izquierda"
+        }
+      ]
+    },
+    {
+      "title": "Alergias e intolerancias",
+      "code": {
+        "coding": [
+          {
+            "system": "http://loinc.org",
+            "code": "48765-2",
+            "display": "Allergies and adverse reactions Document"
+          }
+        ]
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Alergia a la penicilina, criticidad alta: urticaria generalizada.</p></div>"
+      },
+      "entry": [
+        {
+          "reference": "AllergyIntolerance/{{allergyId}}",
+          "display": "Alergia a la penicilina"
+        }
+      ]
+    },
+    {
+      "title": "Medicación",
+      "code": {
+        "coding": [
+          {
+            "system": "http://loinc.org",
+            "code": "10160-0",
+            "display": "History of Medication use Narrative"
+          }
+        ]
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Losartán 50 mg por vía oral una vez al día (hipertensión arterial).</p></div>"
+      },
+      "entry": [
+        {
+          "reference": "MedicationStatement/{{medStatementId}}",
+          "display": "Losartán 50 mg diarios"
+        }
+      ]
+    }
+  ]
+}

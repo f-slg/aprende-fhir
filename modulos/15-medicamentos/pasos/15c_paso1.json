@@ -1,0 +1,22 @@
+{
+  "resourceType": "MedicationAdministration",
+  "status": "completed",
+  "medicationCodeableConcept": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "372817009",
+        "display": "Doxorubicin"
+      }
+    ],
+    "text": "Doxorrubicina"
+  },
+  "subject": {
+    "reference": "Patient/{{patientId}}",
+    "display": "Luis Alberto Paredes Cevallos"
+  },
+  "effectivePeriod": {
+    "start": "2025-07-02T09:00:00-05:00",
+    "end": "2025-07-02T09:30:00-05:00"
+  }
+}

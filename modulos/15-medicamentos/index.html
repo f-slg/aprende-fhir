@@ -1,0 +1,2168 @@
+
+<!doctype html>
+<html lang="es" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Taller práctico de HL7 FHIR R4 en español, paso a paso, con un caso clínico ecuatoriano ficticio. Para Postman, R o curl.">
+      
+      
+        <meta name="author" content="Dr. Fabricio Salas Guerrero">
+      
+      
+        <link rel="canonical" href="https://f-slg.github.io/aprende-fhir/modulos/15-medicamentos/">
+      
+      
+        <link rel="prev" href="../14-citas/">
+      
+      
+        <link rel="next" href="../16-seguimiento/">
+      
+      
+      <link rel="icon" href="../../imagenes/logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.39">
+    
+    
+      
+        <title>15 · Medicamentos - Aprende FHIR desde cero</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.8c3ca2c6.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../estilos/taller.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#módulo-15--medicamentos" class="md-skip">
+          Saltar a contenido
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabecera">
+    <a href="../.." title="Aprende FHIR desde cero" class="md-header__button md-logo" aria-label="Aprende FHIR desde cero" data-md-component="logo">
+      
+  <img src="../../imagenes/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Aprende FHIR desde cero
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              15 · Medicamentos
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Cambiar a modo oscuro"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo oscuro" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Cambiar a modo claro"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo claro" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Búsqueda" placeholder="Búsqueda" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Buscar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpiar" aria-label="Limpiar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando búsqueda
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/f-slg/aprende-fhir" title="Ir al repositorio" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    f-slg/aprende-fhir
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navegación" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Aprende FHIR desde cero" class="md-nav__button md-logo" aria-label="Aprende FHIR desde cero" data-md-component="logo">
+      
+  <img src="../../imagenes/logo.png" alt="logo">
+
+    </a>
+    Aprende FHIR desde cero
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/f-slg/aprende-fhir" title="Ir al repositorio" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    f-slg/aprende-fhir
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Inicio
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Nivel básico
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Nivel básico
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01-fundamentos/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    01 · Fundamentos
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02-patient/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    02 · Patient: el paciente
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03-transacciones/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    03 · Transacciones: varios recursos a la vez
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04-profesionales-y-organizaciones/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    04 · Profesionales y organizaciones
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05-diagnostico-y-encuentro/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    05 · Diagnóstico y encuentro
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06-observaciones/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    06 · Observaciones: signos vitales y tipos de valor
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Nivel intermedio
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Nivel intermedio
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07-antecedentes/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    07 · Antecedentes: alergias, medicación habitual y familia
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08-vacunacion/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    08 · Vacunación
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../09-documentos-clinicos/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    09 · Documentos clínicos
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10-ordenes-y-derivacion/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    10 · Órdenes y derivación
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../11-anatomia-patologica/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    11 · Anatomía patológica
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../12-plan-y-consentimiento/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    12 · Plan y consentimiento
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../13-procedimientos/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    13 · Procedimientos
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../14-citas/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    14 · Citas
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    15 · Medicamentos
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    15 · Medicamentos
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#lo-que-vas-a-aprender" class="md-nav__link">
+    <span class="md-ellipsis">
+      Lo que vas a aprender
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#la-historia" class="md-nav__link">
+    <span class="md-ellipsis">
+      La historia
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ficha-del-recurso-medicationrequest" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ficha del recurso: MedicationRequest
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ficha-del-recurso-medicationadministration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ficha del recurso: MedicationAdministration
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-a-paso-la-superficie-corporal" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso a paso: la superficie corporal
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-a-paso-la-prescripción-de-doxorrubicina" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso a paso: la prescripción de doxorrubicina
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Paso a paso: la prescripción de doxorrubicina">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paso-1--el-mínimo-estado-intención-medicamento-y-paciente" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 1 · El mínimo: estado, intención, medicamento y paciente
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-2--quién-cuándo-y-por-qué" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 2 · Quién, cuándo y por qué
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-3--la-dosis-texto-y-datos-estructurados" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 3 · La dosis: texto y datos estructurados
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-4--la-justificación-superficie-corporal" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 4 · La justificación: superficie corporal
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-a-paso-la-administración-del-primer-ciclo" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso a paso: la administración del primer ciclo
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Paso a paso: la administración del primer ciclo">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paso-1--el-mínimo-estado-medicamento-paciente-y-momento" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 1 · El mínimo: estado, medicamento, paciente y momento
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-2--quién-la-administró-y-por-qué-orden" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 2 · Quién la administró y por qué orden
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-3--cuánto-y-cómo-se-administró" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 3 · Cuánto y cómo se administró
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#el-tamoxifeno-otra-receta-otro-ciclo-de-vida" class="md-nav__link">
+    <span class="md-ellipsis">
+      El tamoxifeno: otra receta, otro ciclo de vida
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ejercicios-en-el-servidor" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ejercicios en el servidor
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Ejercicios en el servidor">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#15h-y-15i--error-a-propósito-la-receta-sin-intención" class="md-nav__link">
+    <span class="md-ellipsis">
+      15h y 15i · Error a propósito: la receta sin intención
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#autoevaluación" class="md-nav__link">
+    <span class="md-ellipsis">
+      Autoevaluación
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#resumen" class="md-nav__link">
+    <span class="md-ellipsis">
+      Resumen
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ejecutar-este-módulo" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ejecutar este módulo
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../16-seguimiento/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    16 · Seguimiento: cuestionarios y resultados informados por el paciente
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Nivel avanzado
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Nivel avanzado
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../17-busquedas-y-versiones/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    17 · Búsquedas avanzadas y versiones
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../18-terminologias-y-perfiles/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    18 · Terminologías y perfiles
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../19-resumen-ips/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    19 · Resumen del paciente (IPS)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#lo-que-vas-a-aprender" class="md-nav__link">
+    <span class="md-ellipsis">
+      Lo que vas a aprender
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#la-historia" class="md-nav__link">
+    <span class="md-ellipsis">
+      La historia
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ficha-del-recurso-medicationrequest" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ficha del recurso: MedicationRequest
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ficha-del-recurso-medicationadministration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ficha del recurso: MedicationAdministration
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-a-paso-la-superficie-corporal" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso a paso: la superficie corporal
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-a-paso-la-prescripción-de-doxorrubicina" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso a paso: la prescripción de doxorrubicina
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Paso a paso: la prescripción de doxorrubicina">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paso-1--el-mínimo-estado-intención-medicamento-y-paciente" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 1 · El mínimo: estado, intención, medicamento y paciente
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-2--quién-cuándo-y-por-qué" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 2 · Quién, cuándo y por qué
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-3--la-dosis-texto-y-datos-estructurados" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 3 · La dosis: texto y datos estructurados
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-4--la-justificación-superficie-corporal" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 4 · La justificación: superficie corporal
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-a-paso-la-administración-del-primer-ciclo" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso a paso: la administración del primer ciclo
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Paso a paso: la administración del primer ciclo">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paso-1--el-mínimo-estado-medicamento-paciente-y-momento" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 1 · El mínimo: estado, medicamento, paciente y momento
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-2--quién-la-administró-y-por-qué-orden" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 2 · Quién la administró y por qué orden
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-3--cuánto-y-cómo-se-administró" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 3 · Cuánto y cómo se administró
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#el-tamoxifeno-otra-receta-otro-ciclo-de-vida" class="md-nav__link">
+    <span class="md-ellipsis">
+      El tamoxifeno: otra receta, otro ciclo de vida
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ejercicios-en-el-servidor" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ejercicios en el servidor
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Ejercicios en el servidor">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#15h-y-15i--error-a-propósito-la-receta-sin-intención" class="md-nav__link">
+    <span class="md-ellipsis">
+      15h y 15i · Error a propósito: la receta sin intención
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#autoevaluación" class="md-nav__link">
+    <span class="md-ellipsis">
+      Autoevaluación
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#resumen" class="md-nav__link">
+    <span class="md-ellipsis">
+      Resumen
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ejecutar-este-módulo" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ejecutar este módulo
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+    <a href="https://github.com/f-slg/aprende-fhir/edit/main/modulos/15-medicamentos/README.md" title="Editar esta página" class="md-content__button md-icon">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
+    </a>
+  
+  
+
+
+<h1 id="módulo-15--medicamentos">Módulo 15 · Medicamentos<a class="headerlink" href="#módulo-15--medicamentos" title="Permanent link">&para;</a></h1>
+<p><a href="../14-citas/">← Módulo 14</a> · <a href="../../">Inicio</a> · <a href="../16-seguimiento/">Módulo 16 →</a></p>
+<blockquote>
+<p><strong>Nivel:</strong> intermedio · <strong>Duración:</strong> 90 minutos · <strong>Necesitas:</strong> módulos 06, 11 y 14</p>
+</blockquote>
+<h2 id="lo-que-vas-a-aprender">Lo que vas a aprender<a class="headerlink" href="#lo-que-vas-a-aprender" title="Permanent link">&para;</a></h2>
+<ol>
+<li>La diferencia entre <strong>prescribir</strong> (MedicationRequest) y <strong>administrar</strong>
+   (MedicationAdministration).</li>
+<li>A expresar una dosis con texto y con datos estructurados (<code>Dosage</code>).</li>
+<li>A justificar una dosis con una observación (<code>supportingInformation</code>).</li>
+<li>El <strong>ciclo de vida</strong> de una receta: activa → suspendida.</li>
+</ol>
+<h2 id="la-historia">La historia<a class="headerlink" href="#la-historia" title="Permanent link">&para;</a></h2>
+<p>Son las actividades 2 y 3 del plan del comité (módulo 12).</p>
+<p><strong>Quimioterapia.</strong> El 1 de julio de 2025 se pesa y se mide a Luis: 72 kg y
+1,57 m. Su <strong>superficie corporal</strong> es 1,77 m². La dosis de <strong>doxorrubicina</strong>
+es 60 mg/m² × 1,77 m² = <strong>106,2 mg</strong> por vía intravenosa, cada 21 días, 4
+ciclos. El primer ciclo se administra el 2 de julio, de 09:00 a 09:30, en la cita
+del módulo 14. Dos
+horas después, Luis tiene náuseas leves.</p>
+<p><strong>Hormonoterapia.</strong> Como el tumor es receptor de estrógeno positivo, el 15 de
+octubre se prescribe <strong>tamoxifeno</strong> 20 mg diarios por vía oral, durante 5
+años. Luis toma la primera dosis en casa al día siguiente. En febrero de
+2026 se suspende por intolerancia: sofocos intensos y dolor articular, que
+Luis informa en el cuestionario de seguimiento del módulo 16.</p>
+<blockquote>
+<p>Antes de prescribir, el sistema puede revisar las alergias del módulo 07:
+Luis es alérgico a la penicilina, no a estos medicamentos.</p>
+</blockquote>
+<hr />
+<h2 id="ficha-del-recurso-medicationrequest">Ficha del recurso: MedicationRequest<a class="headerlink" href="#ficha-del-recurso-medicationrequest" title="Permanent link">&para;</a></h2>
+<p><strong>¿Qué es?</strong> Una <strong>orden o propuesta</strong> de que el paciente reciba un
+medicamento: la receta de un tratamiento ambulatorio o la indicación de un
+paciente hospitalizado.</p>
+<p><strong>¿Para qué se usa?</strong> Para la <strong>prescripción</strong>: qué medicamento, cuánto,
+cómo, por cuánto tiempo, quién lo ordena y por qué.</p>
+<p><strong>¿Cuándo usar otro recurso?</strong> Repasa la tabla del módulo 07:
+MedicationStatement (lo que el paciente dice que toma), MedicationDispense
+(lo que se entregó) y MedicationAdministration (lo que se administró).</p>
+<p><strong>Elementos principales</strong> (<a href="https://hl7.org/fhir/R4/medicationrequest.html">https://hl7.org/fhir/R4/medicationrequest.html</a>):</p>
+<!-- ficha MedicationRequest -->
+<table>
+<thead>
+<tr>
+<th>Elemento</th>
+<th>Card.</th>
+<th>Tipo</th>
+<th>Para qué sirve</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>identifier</code></td>
+<td>0..*</td>
+<td>Identifier</td>
+<td>Número de la receta.</td>
+</tr>
+<tr>
+<td><code>status</code> ⚑</td>
+<td><strong>1..1</strong></td>
+<td>code</td>
+<td><code>active</code>, <code>on-hold</code>, <code>cancelled</code>, <code>completed</code>, <code>stopped</code>, <code>draft</code>...</td>
+</tr>
+<tr>
+<td><code>statusReason</code></td>
+<td>0..1</td>
+<td>CodeableConcept</td>
+<td>Por qué se suspendió o canceló.</td>
+</tr>
+<tr>
+<td><code>intent</code> ⚑</td>
+<td><strong>1..1</strong></td>
+<td>code</td>
+<td><code>proposal</code>, <code>plan</code>, <code>order</code>, <code>original-order</code>...</td>
+</tr>
+<tr>
+<td><code>category</code></td>
+<td>0..*</td>
+<td>CodeableConcept</td>
+<td><code>inpatient</code>, <code>outpatient</code>, <code>community</code>, <code>discharge</code>.</td>
+</tr>
+<tr>
+<td><code>priority</code></td>
+<td>0..1</td>
+<td>code</td>
+<td><code>routine</code>, <code>urgent</code>, <code>asap</code>, <code>stat</code>.</td>
+</tr>
+<tr>
+<td><code>medication[x]</code></td>
+<td><strong>1..1</strong></td>
+<td>CodeableConcept | Reference(Medication)</td>
+<td>Qué medicamento.</td>
+</tr>
+<tr>
+<td><code>subject</code></td>
+<td><strong>1..1</strong></td>
+<td>Reference(Patient | Group)</td>
+<td>Para quién.</td>
+</tr>
+<tr>
+<td><code>encounter</code></td>
+<td>0..1</td>
+<td>Reference(Encounter)</td>
+<td>En qué atención.</td>
+</tr>
+<tr>
+<td><code>supportingInformation</code></td>
+<td>0..*</td>
+<td>Reference(Resource)</td>
+<td>Datos que justifican la orden: peso, superficie corporal.</td>
+</tr>
+<tr>
+<td><code>authoredOn</code></td>
+<td>0..1</td>
+<td>dateTime</td>
+<td>Cuándo se prescribió.</td>
+</tr>
+<tr>
+<td><code>requester</code></td>
+<td>0..1</td>
+<td>Reference(Practitioner | PractitionerRole | Organization | Patient | …)</td>
+<td>Quién prescribe.</td>
+</tr>
+<tr>
+<td><code>reasonCode</code></td>
+<td>0..*</td>
+<td>CodeableConcept</td>
+<td>Por qué, codificado.</td>
+</tr>
+<tr>
+<td><code>reasonReference</code></td>
+<td>0..*</td>
+<td>Reference(Condition | Observation)</td>
+<td>Por qué, como referencia a una Condition.</td>
+</tr>
+<tr>
+<td><code>basedOn</code></td>
+<td>0..*</td>
+<td>Reference(CarePlan | MedicationRequest | ServiceRequest | ImmunizationRecommendation)</td>
+<td>El plan del que forma parte.</td>
+</tr>
+<tr>
+<td><code>note</code></td>
+<td>0..*</td>
+<td>Annotation</td>
+<td>Notas.</td>
+</tr>
+<tr>
+<td><code>dosageInstruction</code></td>
+<td>0..*</td>
+<td>Dosage</td>
+<td>Cómo tomarlo.</td>
+</tr>
+<tr>
+<td><code>dispenseRequest</code></td>
+<td>0..1</td>
+<td>BackboneElement</td>
+<td>Cuánto entregar en farmacia y cuántas veces.</td>
+</tr>
+<tr>
+<td><code>substitution</code></td>
+<td>0..1</td>
+<td>BackboneElement</td>
+<td>Si se permite el genérico.</td>
+</tr>
+<tr>
+<td><code>priorPrescription</code></td>
+<td>0..1</td>
+<td>Reference(MedicationRequest)</td>
+<td>La receta a la que reemplaza.</td>
+</tr>
+</tbody>
+</table>
+<!-- /ficha -->
+
+<h2 id="ficha-del-recurso-medicationadministration">Ficha del recurso: MedicationAdministration<a class="headerlink" href="#ficha-del-recurso-medicationadministration" title="Permanent link">&para;</a></h2>
+<p><strong>¿Qué es?</strong> El registro de que un medicamento <strong>se administró</strong> a un
+paciente: cuándo, cuánto, por qué vía y quién.</p>
+<p><strong>¿Para qué se usa?</strong> Para la hoja de administración de medicamentos de
+enfermería, la quimioterapia, los tratamientos supervisados (como el de la
+tuberculosis) y la trazabilidad de cada dosis.</p>
+<p><strong>Elementos principales</strong> (<a href="https://hl7.org/fhir/R4/medicationadministration.html">https://hl7.org/fhir/R4/medicationadministration.html</a>):</p>
+<!-- ficha MedicationAdministration -->
+<table>
+<thead>
+<tr>
+<th>Elemento</th>
+<th>Card.</th>
+<th>Tipo</th>
+<th>Para qué sirve</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>status</code> ⚑</td>
+<td><strong>1..1</strong></td>
+<td>code</td>
+<td><code>in-progress</code>, <code>not-done</code>, <code>on-hold</code>, <code>completed</code>, <code>entered-in-error</code>, <code>stopped</code>.</td>
+</tr>
+<tr>
+<td><code>statusReason</code></td>
+<td>0..*</td>
+<td>CodeableConcept</td>
+<td>Por qué no se administró.</td>
+</tr>
+<tr>
+<td><code>category</code></td>
+<td>0..1</td>
+<td>CodeableConcept</td>
+<td><code>inpatient</code>, <code>outpatient</code> o <code>community</code>.</td>
+</tr>
+<tr>
+<td><code>medication[x]</code></td>
+<td><strong>1..1</strong></td>
+<td>CodeableConcept | Reference(Medication)</td>
+<td>Qué medicamento.</td>
+</tr>
+<tr>
+<td><code>subject</code></td>
+<td><strong>1..1</strong></td>
+<td>Reference(Patient | Group)</td>
+<td>A quién.</td>
+</tr>
+<tr>
+<td><code>context</code></td>
+<td>0..1</td>
+<td>Reference(Encounter | EpisodeOfCare)</td>
+<td>En qué atención.</td>
+</tr>
+<tr>
+<td><code>supportingInformation</code></td>
+<td>0..*</td>
+<td>Reference(Resource)</td>
+<td>Datos que la justifican.</td>
+</tr>
+<tr>
+<td><code>effective[x]</code></td>
+<td><strong>1..1</strong></td>
+<td>dateTime | Period</td>
+<td>Cuándo: un momento o un periodo (una infusión).</td>
+</tr>
+<tr>
+<td><code>performer</code></td>
+<td>0..*</td>
+<td>BackboneElement</td>
+<td>Quién la administró.</td>
+</tr>
+<tr>
+<td><code>reasonCode</code></td>
+<td>0..*</td>
+<td>CodeableConcept</td>
+<td>Por qué, codificado.</td>
+</tr>
+<tr>
+<td><code>reasonReference</code></td>
+<td>0..*</td>
+<td>Reference(Condition | Observation | DiagnosticReport)</td>
+<td>Por qué, como referencia.</td>
+</tr>
+<tr>
+<td><code>request</code></td>
+<td>0..1</td>
+<td>Reference(MedicationRequest)</td>
+<td>La orden que se cumple.</td>
+</tr>
+<tr>
+<td><code>note</code></td>
+<td>0..*</td>
+<td>Annotation</td>
+<td>Notas: eventos, observaciones.</td>
+</tr>
+<tr>
+<td><code>dosage</code></td>
+<td>0..1</td>
+<td>BackboneElement</td>
+<td>Lo que se administró realmente.</td>
+</tr>
+<tr>
+<td><code>dosage.route</code></td>
+<td>0..1</td>
+<td>CodeableConcept</td>
+<td>Por qué vía.</td>
+</tr>
+<tr>
+<td><code>dosage.dose</code></td>
+<td>0..1</td>
+<td>Quantity</td>
+<td>Cuánto.</td>
+</tr>
+<tr>
+<td><code>dosage.rate[x]</code></td>
+<td>0..1</td>
+<td>Ratio | Quantity</td>
+<td>A qué velocidad (en una infusión).</td>
+</tr>
+</tbody>
+</table>
+<!-- /ficha -->
+
+<p><strong>La estructura <code>Dosage</code></strong>, que se usa en MedicationRequest,
+MedicationStatement y otros, combina siempre dos cosas:</p>
+<ul>
+<li><code>text</code>: la indicación como la leería una persona ("20 mg por vía oral una
+  vez al día, durante 5 años");</li>
+<li>datos estructurados para las máquinas: <code>timing</code> (frecuencia y duración),
+  <code>route</code> (vía) y <code>doseAndRate</code> (dosis).</li>
+</ul>
+<hr />
+<h2 id="paso-a-paso-la-superficie-corporal">Paso a paso: la superficie corporal<a class="headerlink" href="#paso-a-paso-la-superficie-corporal" title="Permanent link">&para;</a></h2>
+<p>La dosis de quimioterapia depende de la superficie corporal, así que primero
+se registra como observación (LOINC <code>8277-6</code>, categoría <code>vital-signs</code>). Ya
+sabes construirla (módulo 06):
+<a href="soluciones/15a_observation_superficie_corporal.json"><code>15a_observation_superficie_corporal.json</code></a>.</p>
+<h2 id="paso-a-paso-la-prescripción-de-doxorrubicina">Paso a paso: la prescripción de doxorrubicina<a class="headerlink" href="#paso-a-paso-la-prescripción-de-doxorrubicina" title="Permanent link">&para;</a></h2>
+<h3 id="paso-1--el-mínimo-estado-intención-medicamento-y-paciente">Paso 1 · El mínimo: estado, intención, medicamento y paciente<a class="headerlink" href="#paso-1--el-mínimo-estado-intención-medicamento-y-paciente" title="Permanent link">&para;</a></h3>
+<!-- paso 15b 1 -->
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"resourceType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"MedicationRequest"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"active"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"intent"</span><span class="p">:</span><span class="w"> </span><span class="s2">"order"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"medicationCodeableConcept"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"coding"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"system"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://snomed.info/sct"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"372817009"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Doxorubicin"</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Doxorrubicina"</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"subject"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Patient/{{patientId}}"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Luis Alberto Paredes Cevallos"</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<!-- /paso -->
+
+<p><code>intent: order</code> dice que es una <strong>orden</strong> que se debe cumplir. Una propuesta
+del comité de tumores sería <code>proposal</code>; un plan, <code>plan</code>.</p>
+<h3 id="paso-2--quién-cuándo-y-por-qué">Paso 2 · Quién, cuándo y por qué<a class="headerlink" href="#paso-2--quién-cuándo-y-por-qué" title="Permanent link">&para;</a></h3>
+<!-- paso 15b 2 -->
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"category"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"coding"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">"system"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://terminology.hl7.org/CodeSystem/medicationrequest-category"</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"outpatient"</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Outpatient"</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">      </span><span class="p">]</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">],</span>
+<span class="w">  </span><span class="nt">"authoredOn"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2025-07-01"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"requester"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Practitioner/{{practitionerId}}"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Dra. Andrea Lucía Salazar Moreno"</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"reasonReference"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Condition/{{conditionCancerId}}"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Carcinoma ductal infiltrante de mama izquierda"</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div>
+<!-- /paso -->
+
+<h3 id="paso-3--la-dosis-texto-y-datos-estructurados">Paso 3 · La dosis: texto y datos estructurados<a class="headerlink" href="#paso-3--la-dosis-texto-y-datos-estructurados" title="Permanent link">&para;</a></h3>
+<!-- paso 15b 3 -->
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"dosageInstruction"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"60 mg/m² (106,2 mg) por vía intravenosa cada 21 días, 4 ciclos"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"timing"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"repeat"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">"count"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"frequency"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"period"</span><span class="p">:</span><span class="w"> </span><span class="mi">21</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"periodUnit"</span><span class="p">:</span><span class="w"> </span><span class="s2">"d"</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">      </span><span class="p">},</span>
+<span class="w">      </span><span class="nt">"route"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"coding"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">          </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">"system"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://snomed.info/sct"</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"47625008"</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Intravenous route"</span>
+<span class="w">          </span><span class="p">}</span>
+<span class="w">        </span><span class="p">],</span>
+<span class="w">        </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Vía intravenosa"</span>
+<span class="w">      </span><span class="p">},</span>
+<span class="w">      </span><span class="nt">"doseAndRate"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">"doseQuantity"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">"value"</span><span class="p">:</span><span class="w"> </span><span class="mf">106.2</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"unit"</span><span class="p">:</span><span class="w"> </span><span class="s2">"mg"</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"system"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://unitsofmeasure.org"</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"mg"</span>
+<span class="w">          </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">      </span><span class="p">]</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div>
+<!-- /paso -->
+
+<p><code>timing.repeat</code>: una vez (<code>frequency: 1</code>) cada 21 días (<code>period: 21</code>,
+<code>periodUnit: d</code>), 4 veces (<code>count: 4</code>). La vía intravenosa con SNOMED
+<code>47625008</code> y la dosis con UCUM (<code>mg</code>).</p>
+<h3 id="paso-4--la-justificación-superficie-corporal">Paso 4 · La justificación: superficie corporal<a class="headerlink" href="#paso-4--la-justificación-superficie-corporal" title="Permanent link">&para;</a></h3>
+<!-- paso 15b 4 -->
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"supportingInformation"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Observation/{{obsBSAId}}"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Superficie corporal 1,77 m²"</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">],</span>
+<span class="w">  </span><span class="nt">"identifier"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"system"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://f-slg.github.io/aprende-fhir/sid/receta"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"RX-2025-0101"</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">],</span>
+<span class="w">  </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"generated"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"div"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;div xmlns=\"http://www.w3.org/1999/xhtml\"&gt;&lt;p&gt;Doxorrubicina 60 mg/m² (106,2 mg) IV cada 21 días, 4 ciclos.&lt;/p&gt;&lt;/div&gt;"</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<!-- /paso -->
+
+<p><code>supportingInformation</code> apunta a la observación de 1,77 m²: cualquiera puede
+verificar el cálculo de 60 mg/m² × 1,77 m² = 106,2 mg. Solución:
+<a href="soluciones/15b_medicationrequest_doxorrubicina.json"><code>15b_medicationrequest_doxorrubicina.json</code></a>.</p>
+<h2 id="paso-a-paso-la-administración-del-primer-ciclo">Paso a paso: la administración del primer ciclo<a class="headerlink" href="#paso-a-paso-la-administración-del-primer-ciclo" title="Permanent link">&para;</a></h2>
+<h3 id="paso-1--el-mínimo-estado-medicamento-paciente-y-momento">Paso 1 · El mínimo: estado, medicamento, paciente y momento<a class="headerlink" href="#paso-1--el-mínimo-estado-medicamento-paciente-y-momento" title="Permanent link">&para;</a></h3>
+<!-- paso 15c 1 -->
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"resourceType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"MedicationAdministration"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"completed"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"medicationCodeableConcept"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"coding"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"system"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://snomed.info/sct"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"372817009"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Doxorubicin"</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Doxorrubicina"</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"subject"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Patient/{{patientId}}"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Luis Alberto Paredes Cevallos"</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"effectivePeriod"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"start"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2025-07-02T09:00:00-05:00"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"end"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2025-07-02T09:30:00-05:00"</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<!-- /paso -->
+
+<p><code>effectivePeriod</code>, no <code>effectiveDateTime</code>: una infusión dura un tiempo, de
+09:00 a 09:30.</p>
+<h3 id="paso-2--quién-la-administró-y-por-qué-orden">Paso 2 · Quién la administró y por qué orden<a class="headerlink" href="#paso-2--quién-la-administró-y-por-qué-orden" title="Permanent link">&para;</a></h3>
+<!-- paso 15c 2 -->
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"category"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"coding"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"system"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://terminology.hl7.org/CodeSystem/medication-admin-category"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"outpatient"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Outpatient"</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"performer"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"actor"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Practitioner/{{practitionerId}}"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Dra. Andrea Lucía Salazar Moreno"</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">],</span>
+<span class="w">  </span><span class="nt">"request"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"MedicationRequest/{{medReqDoxoId}}"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Doxorrubicina 60 mg/m²"</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"reasonReference"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Condition/{{conditionCancerId}}"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Carcinoma ductal infiltrante de mama izquierda"</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">],</span>
+<span class="w">  </span><span class="nt">"supportingInformation"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Observation/{{obsBSAId}}"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Superficie corporal 1,77 m²"</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div>
+<!-- /paso -->
+
+<p><code>request</code> enlaza la administración con la receta: así se sabe qué orden se
+está cumpliendo.</p>
+<h3 id="paso-3--cuánto-y-cómo-se-administró">Paso 3 · Cuánto y cómo se administró<a class="headerlink" href="#paso-3--cuánto-y-cómo-se-administró" title="Permanent link">&para;</a></h3>
+<!-- paso 15c 3 -->
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"dosage"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"106,2 mg diluidos en 100 mL de solución salina, en 30 minutos"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"route"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"coding"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">"system"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://snomed.info/sct"</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"47625008"</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Intravenous route"</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">      </span><span class="p">],</span>
+<span class="w">      </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Vía intravenosa"</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="nt">"dose"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"value"</span><span class="p">:</span><span class="w"> </span><span class="mf">106.2</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"unit"</span><span class="p">:</span><span class="w"> </span><span class="s2">"mg"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"system"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://unitsofmeasure.org"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"mg"</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="nt">"rateQuantity"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"value"</span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"unit"</span><span class="p">:</span><span class="w"> </span><span class="s2">"mL/h"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"system"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://unitsofmeasure.org"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"mL/h"</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"generated"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"div"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;div xmlns=\"http://www.w3.org/1999/xhtml\"&gt;&lt;p&gt;Primer ciclo de doxorrubicina: 106,2 mg IV en 30 minutos, 2 de julio de 2025.&lt;/p&gt;&lt;/div&gt;"</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<!-- /paso -->
+
+<p><code>rateQuantity</code>: 200 mL/h, la velocidad de la infusión. Solución:
+<a href="soluciones/15c_medicationadministration_doxorrubicina.json"><code>15c_medicationadministration_doxorrubicina.json</code></a>.</p>
+<p><strong>15d · El evento posterior.</strong> Las náuseas se registran con una nota en la
+misma administración. Lo que cambia:</p>
+<!-- diferencia 15d -->
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{{medAdminDoxoId}}"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"note"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2025-07-02T11:00:00-05:00"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Náuseas grado 1 dos horas después de la infusión; se administró ondansetrón 8 mg VO."</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div>
+<!-- /diferencia -->
+
+<h2 id="el-tamoxifeno-otra-receta-otro-ciclo-de-vida">El tamoxifeno: otra receta, otro ciclo de vida<a class="headerlink" href="#el-tamoxifeno-otra-receta-otro-ciclo-de-vida" title="Permanent link">&para;</a></h2>
+<p>La receta de tamoxifeno sigue el mismo modelo que la de doxorrubicina. Lo que
+cambia:</p>
+<!-- diferencia 15e -->
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"identifier"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"system"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://f-slg.github.io/aprende-fhir/sid/receta"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"RX-2025-0207"</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">],</span>
+<span class="w">  </span><span class="nt">"medicationCodeableConcept"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"coding"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"system"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://snomed.info/sct"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"373345002"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Tamoxifen"</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Tamoxifeno"</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"authoredOn"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2025-10-15"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"dosageInstruction"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"20 mg por vía oral una vez al día, durante 5 años"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"timing"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"repeat"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">"frequency"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"period"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"periodUnit"</span><span class="p">:</span><span class="w"> </span><span class="s2">"d"</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"boundsDuration"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">"value"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"unit"</span><span class="p">:</span><span class="w"> </span><span class="s2">"años"</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"system"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://unitsofmeasure.org"</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"a"</span>
+<span class="w">          </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">      </span><span class="p">},</span>
+<span class="w">      </span><span class="nt">"route"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"coding"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">          </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">"system"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://snomed.info/sct"</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"26643006"</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Oral route"</span>
+<span class="w">          </span><span class="p">}</span>
+<span class="w">        </span><span class="p">],</span>
+<span class="w">        </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Vía oral"</span>
+<span class="w">      </span><span class="p">},</span>
+<span class="w">      </span><span class="nt">"doseAndRate"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">"doseQuantity"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">"value"</span><span class="p">:</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"unit"</span><span class="p">:</span><span class="w"> </span><span class="s2">"mg"</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"system"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://unitsofmeasure.org"</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"mg"</span>
+<span class="w">          </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">      </span><span class="p">]</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">],</span>
+<span class="w">  </span><span class="nt">"dispenseRequest"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"numberOfRepeatsAllowed"</span><span class="p">:</span><span class="w"> </span><span class="mi">11</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"quantity"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"value"</span><span class="p">:</span><span class="w"> </span><span class="mi">30</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"unit"</span><span class="p">:</span><span class="w"> </span><span class="s2">"comprimidos"</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="nt">"expectedSupplyDuration"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"value"</span><span class="p">:</span><span class="w"> </span><span class="mi">30</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"unit"</span><span class="p">:</span><span class="w"> </span><span class="s2">"días"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"system"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://unitsofmeasure.org"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"d"</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<!-- /diferencia -->
+
+<p>Fíjate en <code>dispenseRequest</code>: 30 comprimidos por entrega, para 30 días, con 11
+repeticiones (un año de tratamiento por receta). Solución:
+<a href="soluciones/15e_medicationrequest_tamoxifeno.json"><code>15e_medicationrequest_tamoxifeno.json</code></a>.</p>
+<p>La primera dosis la toma <strong>el propio Luis en su casa</strong>: la administración
+tiene <code>category: community</code> y <code>performer</code> es el paciente
+(<a href="soluciones/15f_medicationadministration_tamoxifeno.json"><code>15f_medicationadministration_tamoxifeno.json</code></a>).</p>
+<p><strong>15g · Suspender.</strong> En febrero de 2026 la receta se suspende. No se borra:
+se actualiza con <code>status: stopped</code> y el motivo. Lo que cambia:</p>
+<!-- diferencia 15g -->
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{{medReqTamoxId}}"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"stopped"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"statusReason"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Intolerancia: sofocos intensos y dolor articular"</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"note"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2026-02-10T10:00:00-05:00"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Se suspende el tamoxifeno por intolerancia; se valorará una alternativa en oncología."</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div>
+<!-- /diferencia -->
+
+<hr />
+<h2 id="ejercicios-en-el-servidor">Ejercicios en el servidor<a class="headerlink" href="#ejercicios-en-el-servidor" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Paso</th>
+<th>Petición</th>
+<th>Guarda</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>15a</td>
+<td><code>POST /Observation</code> (superficie corporal)</td>
+<td><code>obsBSAId</code></td>
+</tr>
+<tr>
+<td>15b</td>
+<td><code>POST /MedicationRequest</code> (doxorrubicina)</td>
+<td><code>medReqDoxoId</code></td>
+</tr>
+<tr>
+<td>15c</td>
+<td><code>POST /MedicationAdministration</code></td>
+<td><code>medAdminDoxoId</code></td>
+</tr>
+<tr>
+<td>15d</td>
+<td><code>PUT /MedicationAdministration/{{medAdminDoxoId}}</code></td>
+<td></td>
+</tr>
+<tr>
+<td>15e</td>
+<td><code>POST /MedicationRequest</code> (tamoxifeno)</td>
+<td><code>medReqTamoxId</code></td>
+</tr>
+<tr>
+<td>15f</td>
+<td><code>POST /MedicationAdministration</code></td>
+<td><code>medAdminTamoxId</code></td>
+</tr>
+<tr>
+<td>15g</td>
+<td><code>PUT /MedicationRequest/{{medReqTamoxId}}</code> (stopped)</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="15h-y-15i--error-a-propósito-la-receta-sin-intención">15h y 15i · Error a propósito: la receta sin intención<a class="headerlink" href="#15h-y-15i--error-a-propósito-la-receta-sin-intención" title="Permanent link">&para;</a></h3>
+<p>Envía (<a href="errores/15e1_receta_sin_intencion.json"><code>15e1_receta_sin_intencion.json</code></a>)
+una receta sin <code>intent</code>. <strong>El servidor responde <code>201 Created</code>.</strong> El validador
+lo detecta:</p>
+<div class="highlight"><pre><span></span><code>MedicationRequest.intent: minimum required = 1, but only found 0
+</code></pre></div>
+<p>¿Es una orden o una propuesta? Sin <code>intent</code>, una farmacia no sabe si debe
+dispensar. Bórrala con <code>DELETE {{FHIRURL}}/MedicationRequest/{{errorMedReqId}}</code>.</p>
+<h2 id="autoevaluación">Autoevaluación<a class="headerlink" href="#autoevaluación" title="Permanent link">&para;</a></h2>
+<details>
+<summary>1. La enfermera registra que administró la dosis de las 08:00. ¿Qué recurso?</summary>
+<p><strong>MedicationAdministration</strong>, con <code>request</code> apuntando a la MedicationRequest
+que se cumple.</p>
+</details>
+<details>
+<summary>2. ¿Por qué no se borra la receta de tamoxifeno al suspenderla?</summary>
+<p>Porque es parte de la historia del paciente: se prescribió, se tomó y se
+suspendió por intolerancia. Esa información sirve para no volver a
+indicarlo. Se actualiza a <code>stopped</code> con su <code>statusReason</code>.</p>
+</details>
+<details>
+<summary>3. ¿Para qué sirve <code>supportingInformation</code> en la receta de doxorrubicina?</summary>
+<p>Para enlazar los datos que justifican la dosis (la superficie corporal), de
+modo que se pueda verificar el cálculo.</p>
+</details>
+<h2 id="resumen">Resumen<a class="headerlink" href="#resumen" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>MedicationRequest</strong> es la orden; <strong>MedicationAdministration</strong>, lo que se
+  administró; <code>request</code> las enlaza.</li>
+<li><code>Dosage</code> combina un texto para personas y datos estructurados.</li>
+<li>Una receta se suspende con <code>stopped</code>, no se borra.</li>
+</ul>
+<h2 id="ejecutar-este-módulo">Ejecutar este módulo<a class="headerlink" href="#ejecutar-este-módulo" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Postman:</strong> carpeta <em>15 · Medicamentos</em>.</li>
+<li><strong>curl:</strong> <code>curl/taller.sh 15</code></li>
+<li><strong>R:</strong></li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="n">recetas</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">fhir_buscar</span><span class="p">(</span><span class="s">"MedicationRequest?subject=Patient/{{patientId}}"</span><span class="p">)</span>
+<span class="nf">fhir_tabla</span><span class="p">(</span><span class="n">recetas</span><span class="p">,</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<span class="w">  </span><span class="n">medicamento</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kr">function</span><span class="p">(</span><span class="n">r</span><span class="p">)</span><span class="w"> </span><span class="n">r</span><span class="o">$</span><span class="n">medicationCodeableConcept</span><span class="o">$</span><span class="n">text</span><span class="p">,</span>
+<span class="w">  </span><span class="n">estado</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="kr">function</span><span class="p">(</span><span class="n">r</span><span class="p">)</span><span class="w"> </span><span class="n">r</span><span class="o">$</span><span class="n">status</span><span class="p">,</span>
+<span class="w">  </span><span class="n">motivo</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="kr">function</span><span class="p">(</span><span class="n">r</span><span class="p">)</span><span class="w"> </span><span class="n">r</span><span class="o">$</span><span class="n">statusReason</span><span class="o">$</span><span class="n">text</span><span class="w"> </span><span class="o">%||%</span><span class="w"> </span><span class="s">""</span>
+<span class="p">))</span>
+</code></pre></div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Volver al principio
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Pie" >
+        
+          
+          <a href="../14-citas/" class="md-footer__link md-footer__link--prev" aria-label="Anterior: 14 · Citas">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Anterior
+              </span>
+              <div class="md-ellipsis">
+                14 · Citas
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../16-seguimiento/" class="md-footer__link md-footer__link--next" aria-label="Siguiente: 16 · Seguimiento: cuestionarios y resultados informados por el paciente">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Siguiente
+              </span>
+              <div class="md-ellipsis">
+                16 · Seguimiento: cuestionarios y resultados informados por el paciente
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Contenido CC BY 4.0 · Código MIT · HL7® y FHIR® son marcas registradas de Health Level Seven International; este taller no implica afiliación ni aval de HL7.
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.sections", "navigation.expand", "navigation.footer", "navigation.top", "navigation.tracking", "toc.follow", "search.highlight", "search.suggest", "content.code.copy", "content.action.edit"], "search": "../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.525ec568.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,1956 @@
+
+<!doctype html>
+<html lang="es" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Taller práctico de HL7 FHIR R4 en español, paso a paso, con un caso clínico ecuatoriano ficticio. Para Postman, R o curl.">
+      
+      
+        <meta name="author" content="Dr. Fabricio Salas Guerrero">
+      
+      
+        <link rel="canonical" href="https://f-slg.github.io/aprende-fhir/modulos/02-patient/">
+      
+      
+        <link rel="prev" href="../01-fundamentos/">
+      
+      
+        <link rel="next" href="../03-transacciones/">
+      
+      
+      <link rel="icon" href="../../imagenes/logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.39">
+    
+    
+      
+        <title>02 · Patient: el paciente - Aprende FHIR desde cero</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.8c3ca2c6.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../estilos/taller.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#módulo-02--patient-el-paciente" class="md-skip">
+          Saltar a contenido
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabecera">
+    <a href="../.." title="Aprende FHIR desde cero" class="md-header__button md-logo" aria-label="Aprende FHIR desde cero" data-md-component="logo">
+      
+  <img src="../../imagenes/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Aprende FHIR desde cero
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              02 · Patient: el paciente
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Cambiar a modo oscuro"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo oscuro" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Cambiar a modo claro"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo claro" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Búsqueda" placeholder="Búsqueda" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Buscar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpiar" aria-label="Limpiar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando búsqueda
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/f-slg/aprende-fhir" title="Ir al repositorio" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    f-slg/aprende-fhir
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navegación" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Aprende FHIR desde cero" class="md-nav__button md-logo" aria-label="Aprende FHIR desde cero" data-md-component="logo">
+      
+  <img src="../../imagenes/logo.png" alt="logo">
+
+    </a>
+    Aprende FHIR desde cero
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/f-slg/aprende-fhir" title="Ir al repositorio" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    f-slg/aprende-fhir
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Inicio
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Nivel básico
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Nivel básico
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01-fundamentos/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    01 · Fundamentos
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    02 · Patient: el paciente
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    02 · Patient: el paciente
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#lo-que-vas-a-aprender" class="md-nav__link">
+    <span class="md-ellipsis">
+      Lo que vas a aprender
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#la-historia" class="md-nav__link">
+    <span class="md-ellipsis">
+      La historia
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ficha-del-recurso-patient" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ficha del recurso: Patient
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-a-paso-construir-el-paciente" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso a paso: construir el paciente
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Paso a paso: construir el paciente">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paso-1--el-mínimo-un-paciente-vacío" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 1 · El mínimo: un paciente vacío
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-2--los-identificadores-cédula-e-historia-clínica" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 2 · Los identificadores: cédula e historia clínica
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-3--el-nombre-primero-simple" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 3 · El nombre, primero simple
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-4--los-dos-apellidos-y-el-nombre-de-uso-habitual" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 4 · Los dos apellidos y el nombre de uso habitual
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-5--datos-demográficos" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 5 · Datos demográficos
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-6--dirección-idioma-y-lugar-de-nacimiento" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 6 · Dirección, idioma y lugar de nacimiento
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-7--la-narrativa" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 7 · La narrativa
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ejercicios-en-el-servidor" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ejercicios en el servidor
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Ejercicios en el servidor">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#02a--crear-el-paciente" class="md-nav__link">
+    <span class="md-ellipsis">
+      02a · Crear el paciente
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#02b--leerlo" class="md-nav__link">
+    <span class="md-ellipsis">
+      02b · Leerlo
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#02c--buscarlo-por-cédula" class="md-nav__link">
+    <span class="md-ellipsis">
+      02c · Buscarlo por cédula
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#02d--buscarlo-por-nombre" class="md-nav__link">
+    <span class="md-ellipsis">
+      02d · Buscarlo por nombre
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#02e--actualizarlo" class="md-nav__link">
+    <span class="md-ellipsis">
+      02e · Actualizarlo
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#02f--el-historial" class="md-nav__link">
+    <span class="md-ellipsis">
+      02f · El historial
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#02g--error-a-propósito-la-fecha-con-formato-local" class="md-nav__link">
+    <span class="md-ellipsis">
+      02g · Error a propósito: la fecha con formato local
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#autoevaluación" class="md-nav__link">
+    <span class="md-ellipsis">
+      Autoevaluación
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#resumen" class="md-nav__link">
+    <span class="md-ellipsis">
+      Resumen
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ejecutar-este-módulo" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ejecutar este módulo
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03-transacciones/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    03 · Transacciones: varios recursos a la vez
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04-profesionales-y-organizaciones/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    04 · Profesionales y organizaciones
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05-diagnostico-y-encuentro/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    05 · Diagnóstico y encuentro
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06-observaciones/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    06 · Observaciones: signos vitales y tipos de valor
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Nivel intermedio
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Nivel intermedio
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07-antecedentes/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    07 · Antecedentes: alergias, medicación habitual y familia
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08-vacunacion/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    08 · Vacunación
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../09-documentos-clinicos/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    09 · Documentos clínicos
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10-ordenes-y-derivacion/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    10 · Órdenes y derivación
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../11-anatomia-patologica/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    11 · Anatomía patológica
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../12-plan-y-consentimiento/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    12 · Plan y consentimiento
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../13-procedimientos/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    13 · Procedimientos
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../14-citas/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    14 · Citas
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../15-medicamentos/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    15 · Medicamentos
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../16-seguimiento/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    16 · Seguimiento: cuestionarios y resultados informados por el paciente
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Nivel avanzado
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Nivel avanzado
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../17-busquedas-y-versiones/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    17 · Búsquedas avanzadas y versiones
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../18-terminologias-y-perfiles/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    18 · Terminologías y perfiles
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../19-resumen-ips/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    19 · Resumen del paciente (IPS)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#lo-que-vas-a-aprender" class="md-nav__link">
+    <span class="md-ellipsis">
+      Lo que vas a aprender
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#la-historia" class="md-nav__link">
+    <span class="md-ellipsis">
+      La historia
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ficha-del-recurso-patient" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ficha del recurso: Patient
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paso-a-paso-construir-el-paciente" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso a paso: construir el paciente
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Paso a paso: construir el paciente">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paso-1--el-mínimo-un-paciente-vacío" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 1 · El mínimo: un paciente vacío
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-2--los-identificadores-cédula-e-historia-clínica" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 2 · Los identificadores: cédula e historia clínica
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-3--el-nombre-primero-simple" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 3 · El nombre, primero simple
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-4--los-dos-apellidos-y-el-nombre-de-uso-habitual" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 4 · Los dos apellidos y el nombre de uso habitual
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-5--datos-demográficos" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 5 · Datos demográficos
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-6--dirección-idioma-y-lugar-de-nacimiento" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 6 · Dirección, idioma y lugar de nacimiento
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-7--la-narrativa" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paso 7 · La narrativa
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ejercicios-en-el-servidor" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ejercicios en el servidor
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Ejercicios en el servidor">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#02a--crear-el-paciente" class="md-nav__link">
+    <span class="md-ellipsis">
+      02a · Crear el paciente
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#02b--leerlo" class="md-nav__link">
+    <span class="md-ellipsis">
+      02b · Leerlo
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#02c--buscarlo-por-cédula" class="md-nav__link">
+    <span class="md-ellipsis">
+      02c · Buscarlo por cédula
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#02d--buscarlo-por-nombre" class="md-nav__link">
+    <span class="md-ellipsis">
+      02d · Buscarlo por nombre
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#02e--actualizarlo" class="md-nav__link">
+    <span class="md-ellipsis">
+      02e · Actualizarlo
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#02f--el-historial" class="md-nav__link">
+    <span class="md-ellipsis">
+      02f · El historial
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#02g--error-a-propósito-la-fecha-con-formato-local" class="md-nav__link">
+    <span class="md-ellipsis">
+      02g · Error a propósito: la fecha con formato local
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#autoevaluación" class="md-nav__link">
+    <span class="md-ellipsis">
+      Autoevaluación
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#resumen" class="md-nav__link">
+    <span class="md-ellipsis">
+      Resumen
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ejecutar-este-módulo" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ejecutar este módulo
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+    <a href="https://github.com/f-slg/aprende-fhir/edit/main/modulos/02-patient/README.md" title="Editar esta página" class="md-content__button md-icon">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
+    </a>
+  
+  
+
+
+<h1 id="módulo-02--patient-el-paciente">Módulo 02 · Patient: el paciente<a class="headerlink" href="#módulo-02--patient-el-paciente" title="Permanent link">&para;</a></h1>
+<p><a href="../01-fundamentos/">← Módulo 01</a> · <a href="../../">Inicio</a> · <a href="../03-transacciones/">Módulo 03 →</a></p>
+<blockquote>
+<p><strong>Nivel:</strong> básico · <strong>Duración:</strong> 60 minutos · <strong>Necesitas:</strong> módulo 01</p>
+</blockquote>
+<h2 id="lo-que-vas-a-aprender">Lo que vas a aprender<a class="headerlink" href="#lo-que-vas-a-aprender" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Qué es el recurso <strong>Patient</strong>, para qué se usa y qué contiene.</li>
+<li>A construirlo <strong>paso a paso</strong>, desde un paciente vacío hasta uno completo.</li>
+<li>A crearlo, leerlo, buscarlo y actualizarlo en el servidor.</li>
+<li>A ver su <strong>historial de versiones</strong>.</li>
+</ol>
+<h2 id="la-historia">La historia<a class="headerlink" href="#la-historia" title="Permanent link">&para;</a></h2>
+<p><strong>Luis Alberto Paredes Cevallos</strong> nació el 12 de marzo de 1979 en Riobamba y
+vive en Quito. Llega por primera vez al <em>Hospital General Docente Ejemplo</em>.
+Antes de cualquier atención, hay que registrarlo: en FHIR eso es crear su
+recurso <strong>Patient</strong>.</p>
+<p>Sus datos (ficticios):</p>
+<table>
+<thead>
+<tr>
+<th>Dato</th>
+<th>Valor</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cédula</td>
+<td><code>9900000017</code> (empieza con <code>99</code>, un código de provincia que no existe)</td>
+</tr>
+<tr>
+<td>Historia clínica</td>
+<td><code>HC-000123</code></td>
+</tr>
+<tr>
+<td>Nombre</td>
+<td>Luis Alberto Paredes Cevallos; le dicen Luis Paredes</td>
+</tr>
+<tr>
+<td>Sexo / nacimiento</td>
+<td>masculino · 12 de marzo de 1979, en Riobamba (Chimborazo)</td>
+</tr>
+<tr>
+<td>Dirección</td>
+<td>Av. de los Ejemplos N00-00 y calle Ficticia, Quito</td>
+</tr>
+<tr>
+<td>Idioma</td>
+<td>español</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="ficha-del-recurso-patient">Ficha del recurso: Patient<a class="headerlink" href="#ficha-del-recurso-patient" title="Permanent link">&para;</a></h2>
+<p><strong>¿Qué es?</strong> El registro <strong>demográfico y administrativo</strong> de una persona que
+recibe atención de salud: quién es, cómo se le identifica y cómo se le
+contacta. No contiene información clínica.</p>
+<p><strong>¿Para qué se usa?</strong> Es el centro de casi todo en FHIR. Las consultas, los
+diagnósticos, los signos vitales, las vacunas y las recetas apuntan a un
+Patient con una referencia (<code>subject</code> o <code>patient</code>). Por eso es lo primero que
+se crea.</p>
+<p><strong>¿Cuándo usar otro recurso?</strong></p>
+<ul>
+<li>Para un profesional de salud: <strong>Practitioner</strong> (módulo 04).</li>
+<li>Para un familiar o contacto del paciente: <strong>RelatedPerson</strong>, o el elemento
+  <code>contact</code> del propio Patient.</li>
+<li>Para los diagnósticos, alergias o antecedentes: recursos clínicos como
+  <strong>Condition</strong> o <strong>AllergyIntolerance</strong>, que apuntan al Patient. Nunca dentro
+  de él.</li>
+</ul>
+<p><strong>Elementos principales</strong> (especificación completa:
+<a href="https://hl7.org/fhir/R4/patient.html">https://hl7.org/fhir/R4/patient.html</a>):</p>
+<!-- ficha Patient -->
+<table>
+<thead>
+<tr>
+<th>Elemento</th>
+<th>Card.</th>
+<th>Tipo</th>
+<th>Para qué sirve</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>identifier</code></td>
+<td>0..*</td>
+<td>Identifier</td>
+<td>Identificadores del mundo real: cédula, historia clínica, pasaporte.</td>
+</tr>
+<tr>
+<td><code>active</code> ⚑</td>
+<td>0..1</td>
+<td>boolean</td>
+<td>Si el registro está en uso. Se pone <code>false</code> cuando se fusionan duplicados.</td>
+</tr>
+<tr>
+<td><code>name</code></td>
+<td>0..*</td>
+<td>HumanName</td>
+<td>Nombres de la persona: oficial, de uso habitual, de soltera...</td>
+</tr>
+<tr>
+<td><code>telecom</code></td>
+<td>0..*</td>
+<td>ContactPoint</td>
+<td>Teléfonos y correos.</td>
+</tr>
+<tr>
+<td><code>gender</code></td>
+<td>0..1</td>
+<td>code</td>
+<td>Sexo administrativo: <code>male</code>, <code>female</code>, <code>other</code> o <code>unknown</code>.</td>
+</tr>
+<tr>
+<td><code>birthDate</code></td>
+<td>0..1</td>
+<td>date</td>
+<td>Fecha de nacimiento (año-mes-día).</td>
+</tr>
+<tr>
+<td><code>deceased[x]</code> ⚑</td>
+<td>0..1</td>
+<td>boolean | dateTime</td>
+<td>Si falleció: <code>true</code>/<code>false</code> o la fecha de fallecimiento.</td>
+</tr>
+<tr>
+<td><code>address</code></td>
+<td>0..*</td>
+<td>Address</td>
+<td>Direcciones de domicilio o de trabajo.</td>
+</tr>
+<tr>
+<td><code>maritalStatus</code></td>
+<td>0..1</td>
+<td>CodeableConcept</td>
+<td>Estado civil.</td>
+</tr>
+<tr>
+<td><code>contact</code></td>
+<td>0..*</td>
+<td>BackboneElement</td>
+<td>Personas de contacto: familiar, tutor, a quién avisar.</td>
+</tr>
+<tr>
+<td><code>communication</code></td>
+<td>0..*</td>
+<td>BackboneElement</td>
+<td>Idiomas que habla y cuál prefiere.</td>
+</tr>
+<tr>
+<td><code>generalPractitioner</code></td>
+<td>0..*</td>
+<td>Reference(Organization | Practitioner | PractitionerRole)</td>
+<td>Su médico o centro de salud de cabecera.</td>
+</tr>
+<tr>
+<td><code>managingOrganization</code></td>
+<td>0..1</td>
+<td>Reference(Organization)</td>
+<td>La organización que custodia este registro.</td>
+</tr>
+<tr>
+<td><code>link</code> ⚑</td>
+<td>0..*</td>
+<td>BackboneElement</td>
+<td>Enlaces a otros registros de la misma persona (duplicados fusionados).</td>
+</tr>
+</tbody>
+</table>
+<!-- /ficha -->
+
+<p><strong>Ningún elemento es obligatorio</strong>: un <code>{"resourceType": "Patient"}</code> es
+válido. En la práctica, cada país o programa define con un <strong>perfil</strong> qué
+datos exige (por ejemplo, cédula, nombre, sexo y fecha de nacimiento).</p>
+<p><strong>Con qué se relaciona:</strong> todos los recursos clínicos apuntan al Patient.
+Él solo apunta, si acaso, a su médico de cabecera y a la organización que lo
+custodia.</p>
+<hr />
+<h2 id="paso-a-paso-construir-el-paciente">Paso a paso: construir el paciente<a class="headerlink" href="#paso-a-paso-construir-el-paciente" title="Permanent link">&para;</a></h2>
+<p>Vas a construir el recurso de a poco. Cada paso es un recurso <strong>válido</strong>: si
+quieres, envíalo al servidor o valídalo antes de seguir. Todas las versiones
+intermedias están en <a href="pasos/"><code>pasos/</code></a>.</p>
+<h3 id="paso-1--el-mínimo-un-paciente-vacío">Paso 1 · El mínimo: un paciente vacío<a class="headerlink" href="#paso-1--el-mínimo-un-paciente-vacío" title="Permanent link">&para;</a></h3>
+<!-- paso 02a 1 -->
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"resourceType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Patient"</span>
+<span class="p">}</span>
+</code></pre></div>
+<!-- /paso -->
+
+<p>Es válido, pero no sirve de nada: no sabemos quién es. <code>resourceType</code> es lo
+único que todo recurso lleva siempre.</p>
+<h3 id="paso-2--los-identificadores-cédula-e-historia-clínica">Paso 2 · Los identificadores: cédula e historia clínica<a class="headerlink" href="#paso-2--los-identificadores-cédula-e-historia-clínica" title="Permanent link">&para;</a></h3>
+<!-- paso 02a 2 -->
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"identifier"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"use"</span><span class="p">:</span><span class="w"> </span><span class="s2">"official"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"coding"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">          </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">"system"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://terminology.hl7.org/CodeSystem/v2-0203"</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"NI"</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"National unique individual identifier"</span>
+<span class="w">          </span><span class="p">}</span>
+<span class="w">        </span><span class="p">],</span>
+<span class="w">        </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Cédula de identidad"</span>
+<span class="w">      </span><span class="p">},</span>
+<span class="w">      </span><span class="nt">"system"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://f-slg.github.io/aprende-fhir/sid/cedula"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"9900000017"</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"use"</span><span class="p">:</span><span class="w"> </span><span class="s2">"usual"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"coding"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">          </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">"system"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://terminology.hl7.org/CodeSystem/v2-0203"</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"MR"</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Medical record number"</span>
+<span class="w">          </span><span class="p">}</span>
+<span class="w">        </span><span class="p">],</span>
+<span class="w">        </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Historia clínica"</span>
+<span class="w">      </span><span class="p">},</span>
+<span class="w">      </span><span class="nt">"system"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://f-slg.github.io/aprende-fhir/sid/historia-clinica/hospital-general-docente-ejemplo"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"HC-000123"</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div>
+<!-- /paso -->
+
+<p>Cada identificador tiene cuatro partes:</p>
+<ul>
+<li><code>system</code>: <strong>quién emite</strong> el identificador, expresado como una dirección
+  única. Aquí usamos direcciones didácticas del taller; en un sistema real se
+  usa la que defina la guía nacional (por ejemplo, la del Registro Civil para
+  la cédula).</li>
+<li><code>value</code>: el número.</li>
+<li><code>type</code>: <strong>qué clase</strong> de identificador es, con la tabla <code>v2-0203</code> de HL7:
+  <code>NI</code> (identificador nacional) para la cédula y <code>MR</code> (<em>medical record</em>) para
+  la historia clínica.</li>
+<li><code>use</code>: <code>official</code> para la cédula y <code>usual</code> para el que se usa a diario.</li>
+</ul>
+<p>La pareja <strong><code>system</code> + <code>value</code></strong> identifica a la persona sin ambigüedad. Con
+ella se busca al paciente en el ejercicio 02c.</p>
+<blockquote>
+<p><strong>Sobre un aviso del validador.</strong> Al validar verás: <em>"None of the codings
+provided are in the value set 'IdentifierType'"</em>. La lista sugerida de FHIR
+R4 para <code>type</code> no incluye <code>NI</code>. Esa lista es <strong>extensible</strong>: se puede usar
+otro código cuando ninguno de la lista sirve, y para una cédula ninguno
+sirve. Es un aviso, no un error.</p>
+</blockquote>
+<h3 id="paso-3--el-nombre-primero-simple">Paso 3 · El nombre, primero simple<a class="headerlink" href="#paso-3--el-nombre-primero-simple" title="Permanent link">&para;</a></h3>
+<!-- paso 02a 3 -->
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"use"</span><span class="p">:</span><span class="w"> </span><span class="s2">"official"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Luis Alberto Paredes Cevallos"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"family"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Paredes Cevallos"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"given"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="s2">"Luis"</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">"Alberto"</span>
+<span class="w">      </span><span class="p">]</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div>
+<!-- /paso -->
+
+<p><code>family</code> es el apellido y <code>given</code> la lista de nombres de pila. <code>text</code> es el
+nombre completo como se escribe. <code>name</code> es una lista (<code>0..*</code>), porque una
+persona puede tener varios nombres.</p>
+<h3 id="paso-4--los-dos-apellidos-y-el-nombre-de-uso-habitual">Paso 4 · Los dos apellidos y el nombre de uso habitual<a class="headerlink" href="#paso-4--los-dos-apellidos-y-el-nombre-de-uso-habitual" title="Permanent link">&para;</a></h3>
+<!-- paso 02a 4 -->
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"use"</span><span class="p">:</span><span class="w"> </span><span class="s2">"official"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Luis Alberto Paredes Cevallos"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"family"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Paredes Cevallos"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"_family"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"extension"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">          </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://hl7.org/fhir/StructureDefinition/humanname-fathers-family"</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"valueString"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Paredes"</span>
+<span class="w">          </span><span class="p">},</span>
+<span class="w">          </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://hl7.org/fhir/StructureDefinition/humanname-mothers-family"</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"valueString"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Cevallos"</span>
+<span class="w">          </span><span class="p">}</span>
+<span class="w">        </span><span class="p">]</span>
+<span class="w">      </span><span class="p">},</span>
+<span class="w">      </span><span class="nt">"given"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="s2">"Luis"</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">"Alberto"</span>
+<span class="w">      </span><span class="p">]</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"use"</span><span class="p">:</span><span class="w"> </span><span class="s2">"usual"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Luis Paredes"</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div>
+<!-- /paso -->
+
+<p>En Ecuador usamos dos apellidos, pero <code>family</code> es un solo texto. FHIR lo
+resuelve con <strong>extensiones</strong>, elementos adicionales definidos por HL7 para
+lo que no está en el recurso base:</p>
+<ul>
+<li><code>humanname-fathers-family</code>: apellido paterno.</li>
+<li><code>humanname-mothers-family</code>: apellido materno.</li>
+</ul>
+<p>Las extensiones de un valor simple como <code>family</code> van en un elemento hermano
+con guion bajo: <code>_family</code>. Además agregamos un segundo nombre con
+<code>use: "usual"</code>: <em>Luis Paredes</em>, como lo conocen todos.</p>
+<h3 id="paso-5--datos-demográficos">Paso 5 · Datos demográficos<a class="headerlink" href="#paso-5--datos-demográficos" title="Permanent link">&para;</a></h3>
+<!-- paso 02a 5 -->
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"active"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"gender"</span><span class="p">:</span><span class="w"> </span><span class="s2">"male"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"birthDate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1979-03-12"</span>
+<span class="p">}</span>
+</code></pre></div>
+<!-- /paso -->
+
+<ul>
+<li><code>gender</code> es un <strong>code</strong>: solo admite <code>male</code>, <code>female</code>, <code>other</code> o
+  <code>unknown</code>, en inglés. <code>"masculino"</code> lo rechaza el servidor.</li>
+<li><code>birthDate</code> es una <strong>date</strong>: siempre <code>AAAA-MM-DD</code>.</li>
+<li><code>active: true</code> indica que el registro está en uso.</li>
+</ul>
+<h3 id="paso-6--dirección-idioma-y-lugar-de-nacimiento">Paso 6 · Dirección, idioma y lugar de nacimiento<a class="headerlink" href="#paso-6--dirección-idioma-y-lugar-de-nacimiento" title="Permanent link">&para;</a></h3>
+<!-- paso 02a 6 -->
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"address"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"use"</span><span class="p">:</span><span class="w"> </span><span class="s2">"home"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"physical"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"line"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="s2">"Av. de los Ejemplos N00-00 y calle Ficticia"</span>
+<span class="w">      </span><span class="p">],</span>
+<span class="w">      </span><span class="nt">"city"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Quito"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"district"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Quito"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Pichincha"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"country"</span><span class="p">:</span><span class="w"> </span><span class="s2">"EC"</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">],</span>
+<span class="w">  </span><span class="nt">"communication"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"language"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"coding"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">          </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">"system"</span><span class="p">:</span><span class="w"> </span><span class="s2">"urn:ietf:bcp:47"</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"es"</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Spanish"</span>
+<span class="w">          </span><span class="p">}</span>
+<span class="w">        </span><span class="p">],</span>
+<span class="w">        </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Español"</span>
+<span class="w">      </span><span class="p">},</span>
+<span class="w">      </span><span class="nt">"preferred"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">],</span>
+<span class="w">  </span><span class="nt">"extension"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://hl7.org/fhir/StructureDefinition/patient-birthPlace"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"valueAddress"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"city"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Riobamba"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Chimborazo"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"country"</span><span class="p">:</span><span class="w"> </span><span class="s2">"EC"</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div>
+<!-- /paso -->
+
+<ul>
+<li><code>address</code>: <code>use</code> (domicilio) y <code>type</code> (dirección física), con calle,
+  ciudad, provincia (<code>state</code>) y país (<code>EC</code>, código ISO).</li>
+<li><code>communication.language</code>: el idioma con el código <code>es</code> de la norma BCP 47;
+  <code>preferred: true</code> indica que es el que prefiere.</li>
+<li><code>extension</code> con <code>patient-birthPlace</code>: el lugar de nacimiento no está en
+  Patient, así que también se registra con una extensión estándar. Fíjate
+  que va en <code>extension</code> del recurso, no en <code>_family</code>.</li>
+</ul>
+<h3 id="paso-7--la-narrativa">Paso 7 · La narrativa<a class="headerlink" href="#paso-7--la-narrativa" title="Permanent link">&para;</a></h3>
+<!-- paso 02a 7 -->
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"generated"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"div"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;div xmlns=\"http://www.w3.org/1999/xhtml\"&gt;&lt;p&gt;Luis Alberto Paredes Cevallos, hombre, nacido el 12 de marzo de 1979 en Riobamba.&lt;/p&gt;&lt;p&gt;Cédula ficticia 9900000017 · Historia clínica HC-000123.&lt;/p&gt;&lt;/div&gt;"</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<!-- /paso -->
+
+<p><code>text</code> es un resumen para personas en HTML. <code>status: "generated"</code> indica que
+se generó a partir de los datos estructurados. El <code>div</code> debe llevar
+<code>xmlns="http://www.w3.org/1999/xhtml"</code>. Con este paso el recurso queda
+completo: es la solución <a href="soluciones/02a_patient_crear.json"><code>02a_patient_crear.json</code></a>.</p>
+<hr />
+<h2 id="ejercicios-en-el-servidor">Ejercicios en el servidor<a class="headerlink" href="#ejercicios-en-el-servidor" title="Permanent link">&para;</a></h2>
+<h3 id="02a--crear-el-paciente">02a · Crear el paciente<a class="headerlink" href="#02a--crear-el-paciente" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="err">POST {{FHIRURL}}/Patient</span>
+<span class="err">Content-Type: application/fhir+json</span>
+
+<span class="err">(el recurso del paso 7)</span>
+</code></pre></div>
+<p>Respuesta esperada: <strong><code>201 Created</code></strong>. En el cuerpo verás el recurso con dos
+cosas nuevas: <code>id</code> (por ejemplo <code>1000</code>) y <code>meta</code> (versión <code>1</code> y fecha). En
+Postman, el <code>id</code> se guarda solo en la variable <code>patientId</code>.</p>
+<h3 id="02b--leerlo">02b · Leerlo<a class="headerlink" href="#02b--leerlo" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="err">GET {{FHIRURL}}/Patient/{{patientId}}</span>
+</code></pre></div>
+<p>Compara lo que enviaste con lo que devuelve. ¿Está todo? ¿Qué agregó el
+servidor?</p>
+<h3 id="02c--buscarlo-por-cédula">02c · Buscarlo por cédula<a class="headerlink" href="#02c--buscarlo-por-cédula" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="err">GET {{FHIRURL}}/Patient?identifier=https://f-slg.github.io/aprende-fhir/sid/cedula|9900000017</span>
+</code></pre></div>
+<p>El parámetro <code>identifier</code> usa el formato <code>system|value</code>. Devuelve un <code>Bundle</code>
+con un solo resultado.</p>
+<h3 id="02d--buscarlo-por-nombre">02d · Buscarlo por nombre<a class="headerlink" href="#02d--buscarlo-por-nombre" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="err">GET {{FHIRURL}}/Patient?family=Paredes&amp;given=Luis</span>
+</code></pre></div>
+<p>Los parámetros se combinan con <code>&amp;</code> (y lógico). La búsqueda por texto no es
+exacta: <code>family=Pare</code> también encuentra a Paredes. Por eso, para encontrar a
+una persona concreta, la búsqueda segura es por identificador.</p>
+<h3 id="02e--actualizarlo">02e · Actualizarlo<a class="headerlink" href="#02e--actualizarlo" title="Permanent link">&para;</a></h3>
+<p>Luis da su teléfono, <code>+593 99 000 0000</code>, y su estado civil: casado. Se envía
+con <code>PUT</code> <strong>el recurso completo</strong>, con su <code>id</code>. Esto es lo que cambia
+respecto del paso 7 (además de la narrativa):</p>
+<!-- diferencia 02e -->
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{{patientId}}"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"telecom"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"system"</span><span class="p">:</span><span class="w"> </span><span class="s2">"phone"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"+593 99 000 0000"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"use"</span><span class="p">:</span><span class="w"> </span><span class="s2">"mobile"</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">],</span>
+<span class="w">  </span><span class="nt">"maritalStatus"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"coding"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"system"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://terminology.hl7.org/CodeSystem/v3-MaritalStatus"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"M"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Married"</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Casado"</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<!-- /diferencia -->
+
+<div class="highlight"><pre><span></span><code><span class="err">PUT {{FHIRURL}}/Patient/{{patientId}}</span>
+</code></pre></div>
+<p>Solución completa: <a href="soluciones/02e_patient_actualizar.json"><code>02e_patient_actualizar.json</code></a>.</p>
+<blockquote>
+<p><strong><code>PUT</code> reemplaza todo.</strong> Si en la actualización olvidas la dirección, el
+servidor guarda un paciente <strong>sin dirección</strong>. No es un error: es lo que le
+pediste.</p>
+</blockquote>
+<h3 id="02f--el-historial">02f · El historial<a class="headerlink" href="#02f--el-historial" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="err">GET {{FHIRURL}}/Patient/{{patientId}}/_history</span>
+</code></pre></div>
+<p>Devuelve un <code>Bundle</code> de tipo <code>history</code> con las dos versiones. Mira
+<code>meta.versionId</code> (<code>1</code> y <code>2</code>) y <code>meta.lastUpdated</code>. Nada se pierde: siempre
+puedes saber qué decía el registro antes de un cambio.</p>
+<h3 id="02g--error-a-propósito-la-fecha-con-formato-local">02g · Error a propósito: la fecha con formato local<a class="headerlink" href="#02g--error-a-propósito-la-fecha-con-formato-local" title="Permanent link">&para;</a></h3>
+<p>Envía (<a href="errores/02e1_fecha_formato_local.json"><code>02e1_fecha_formato_local.json</code></a>):</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="w"> </span><span class="nt">"resourceType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Patient"</span><span class="p">,</span><span class="w"> </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Luis Alberto Paredes Cevallos"</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">],</span><span class="w"> </span><span class="nt">"birthDate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"12/03/1979"</span><span class="w"> </span><span class="p">}</span>
+</code></pre></div>
+<p>El servidor responde <strong><code>400</code></strong>:</p>
+<div class="highlight"><pre><span></span><code>HAPI-1821: [element="birthDate"] Invalid attribute value "12/03/1979": Invalid date/time format
+</code></pre></div>
+<p>En FHIR, las fechas siempre van como <code>1979-03-12</code>. Así no hay dudas de si
+<code>12/03</code> es el 12 de marzo o el 3 de diciembre.</p>
+<h2 id="autoevaluación">Autoevaluación<a class="headerlink" href="#autoevaluación" title="Permanent link">&para;</a></h2>
+<details>
+<summary>1. ¿Por qué el nombre usa extensiones para los dos apellidos?</summary>
+<p>Porque <code>HumanName.family</code> es un solo texto. Las extensiones estándar
+<code>humanname-fathers-family</code> y <code>humanname-mothers-family</code> permiten guardar cada
+apellido por separado sin perder el texto completo.</p>
+</details>
+<details>
+<summary>2. Envías un <code>PUT</code> solo con el teléfono nuevo. ¿Qué pasa con el nombre y la cédula?</summary>
+<p>Se pierden: <code>PUT</code> reemplaza el recurso completo por lo que envíes. Siempre se
+envía el recurso entero, con su <code>id</code>.</p>
+</details>
+<details>
+<summary>3. ¿Qué búsqueda usarías para no confundir a Luis con otro paciente del mismo nombre?</summary>
+<p>La búsqueda por identificador: <code>Patient?identifier=&lt;system&gt;|&lt;valor de la cédula&gt;</code>.</p>
+</details>
+<details>
+<summary>4. ¿Dónde registrarías que Luis es alérgico a la penicilina?</summary>
+<p>En un recurso <strong>AllergyIntolerance</strong> que apunte a Luis, no dentro del Patient
+(módulo 07).</p>
+</details>
+<h2 id="resumen">Resumen<a class="headerlink" href="#resumen" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Patient</strong> guarda la identidad y los datos administrativos; nada clínico.</li>
+<li>La pareja <code>system</code> + <code>value</code> del <code>identifier</code> identifica a la persona.</li>
+<li>Las <strong>extensiones</strong> agregan lo que el recurso base no tiene, como los dos
+  apellidos o el lugar de nacimiento.</li>
+<li><code>PUT</code> reemplaza el recurso completo y crea una nueva versión;
+  <code>_history</code> muestra todas.</li>
+</ul>
+<h2 id="ejecutar-este-módulo">Ejecutar este módulo<a class="headerlink" href="#ejecutar-este-módulo" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Postman:</strong> carpeta <em>02 · Patient</em>.</li>
+<li><strong>curl:</strong> <code>curl/taller.sh 02</code></li>
+<li><strong>R:</strong></li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="nf">source</span><span class="p">(</span><span class="s">"r/fhir.R"</span><span class="p">)</span>
+<span class="n">p</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">fhir_crear</span><span class="p">(</span><span class="s">"Patient"</span><span class="p">,</span><span class="w"> </span><span class="s">"modulos/02-patient/soluciones/02a_patient_crear.json"</span><span class="p">,</span>
+<span class="w">                </span><span class="n">guarda</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"patientId"</span><span class="p">)</span>
+<span class="n">p</span><span class="o">$</span><span class="n">id</span>
+<span class="nf">fhir_actualizar</span><span class="p">(</span><span class="s">"Patient/{{patientId}}"</span><span class="p">,</span><span class="w"> </span><span class="s">"modulos/02-patient/soluciones/02e_patient_actualizar.json"</span><span class="p">)</span>
+<span class="nf">fhir_leer</span><span class="p">(</span><span class="s">"Patient/{{patientId}}/_history"</span><span class="p">)</span><span class="o">$</span><span class="n">total</span>
+</code></pre></div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Volver al principio
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Pie" >
+        
+          
+          <a href="../01-fundamentos/" class="md-footer__link md-footer__link--prev" aria-label="Anterior: 01 · Fundamentos">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Anterior
+              </span>
+              <div class="md-ellipsis">
+                01 · Fundamentos
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../03-transacciones/" class="md-footer__link md-footer__link--next" aria-label="Siguiente: 03 · Transacciones: varios recursos a la vez">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Siguiente
+              </span>
+              <div class="md-ellipsis">
+                03 · Transacciones: varios recursos a la vez
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Contenido CC BY 4.0 · Código MIT · HL7® y FHIR® son marcas registradas de Health Level Seven International; este taller no implica afiliación ni aval de HL7.
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.sections", "navigation.expand", "navigation.footer", "navigation.top", "navigation.tracking", "toc.follow", "search.highlight", "search.suggest", "content.code.copy", "content.action.edit"], "search": "../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.525ec568.min.js"></script>
+      
+    
+  </body>
+</html>

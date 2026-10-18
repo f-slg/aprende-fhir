@@ -1,0 +1,22 @@
+{
+  "resourceType": "Composition",
+  "status": "final",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "8716-3",
+        "display": "Vital signs note"
+      }
+    ],
+    "text": "Nota de signos vitales"
+  },
+  "date": "2025-03-20T08:00:00-05:00",
+  "author": [
+    {
+      "reference": "Practitioner/{{practitionerId}}",
+      "display": "Dra. Andrea Lucía Salazar Moreno"
+    }
+  ],
+  "title": "Signos vitales - consulta del 20 de marzo de 2025"
+}

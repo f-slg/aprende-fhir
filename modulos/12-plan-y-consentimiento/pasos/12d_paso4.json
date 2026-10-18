@@ -1,0 +1,140 @@
+{
+  "resourceType": "CarePlan",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Plan de tratamiento del comité de tumores (20 de mayo de 2025):</p><p>1) mastectomía parcial; 2) quimioterapia con doxorrubicina, 4 ciclos; 3) hormonoterapia con tamoxifeno por 5 años.</p></div>"
+  },
+  "identifier": [
+    {
+      "system": "https://f-slg.github.io/aprende-fhir/sid/plan",
+      "value": "PLAN-2025-0001"
+    }
+  ],
+  "status": "active",
+  "intent": "plan",
+  "category": [
+    {
+      "text": "Plan de tratamiento oncológico"
+    }
+  ],
+  "title": "Plan de tratamiento del cáncer de mama",
+  "description": "Tratamiento acordado por el comité de tumores de mama.",
+  "subject": {
+    "reference": "Patient/{{patientId}}",
+    "display": "Luis Alberto Paredes Cevallos"
+  },
+  "period": {
+    "start": "2025-05-20",
+    "end": "2030-10-31"
+  },
+  "created": "2025-05-20",
+  "author": {
+    "reference": "PractitionerRole/{{oncologistRoleId}}",
+    "display": "Dr. Ruiz · Oncología clínica"
+  },
+  "careTeam": [
+    {
+      "reference": "CareTeam/{{careTeamId}}",
+      "display": "Comité de tumores de mama"
+    }
+  ],
+  "addresses": [
+    {
+      "reference": "Condition/{{conditionCancerId}}",
+      "display": "Carcinoma ductal infiltrante de mama izquierda"
+    }
+  ],
+  "goal": [
+    {
+      "reference": "Goal/{{goalControlId}}",
+      "display": "Sin evidencia de enfermedad"
+    },
+    {
+      "reference": "Goal/{{goalQualityId}}",
+      "display": "Mantener la funcionalidad"
+    }
+  ],
+  "activity": [
+    {
+      "detail": {
+        "kind": "ServiceRequest",
+        "code": {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "64368001",
+              "display": "Partial mastectomy"
+            }
+          ],
+          "text": "Mastectomía parcial"
+        },
+        "status": "scheduled",
+        "scheduledPeriod": {
+          "start": "2025-06-10",
+          "end": "2025-06-10"
+        },
+        "performer": [
+          {
+            "reference": "PractitionerRole/{{oncologistRoleId}}",
+            "display": "Dr. Ruiz · Oncología clínica"
+          }
+        ],
+        "description": "Mastectomía parcial de la mama izquierda"
+      }
+    },
+    {
+      "detail": {
+        "kind": "MedicationRequest",
+        "code": {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "367336001",
+              "display": "Chemotherapy"
+            }
+          ],
+          "text": "Quimioterapia"
+        },
+        "status": "not-started",
+        "scheduledPeriod": {
+          "start": "2025-07-01",
+          "end": "2025-09-30"
+        },
+        "performer": [
+          {
+            "reference": "PractitionerRole/{{oncologistRoleId}}",
+            "display": "Dr. Ruiz · Oncología clínica"
+          }
+        ],
+        "description": "Doxorrubicina 60 mg/m² cada 21 días, 4 ciclos"
+      }
+    },
+    {
+      "detail": {
+        "kind": "MedicationRequest",
+        "code": {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "169413002",
+              "display": "Hormone therapy"
+            }
+          ],
+          "text": "Hormonoterapia"
+        },
+        "status": "not-started",
+        "scheduledPeriod": {
+          "start": "2025-10-15",
+          "end": "2030-10-15"
+        },
+        "performer": [
+          {
+            "reference": "PractitionerRole/{{oncologistRoleId}}",
+            "display": "Dr. Ruiz · Oncología clínica"
+          }
+        ],
+        "description": "Tamoxifeno 20 mg diarios por 5 años"
+      }
+    }
+  ]
+}

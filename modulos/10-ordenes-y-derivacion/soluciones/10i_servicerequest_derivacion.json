@@ -1,0 +1,84 @@
+{
+  "resourceType": "ServiceRequest",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Derivación a Oncología Clínica por nódulo mamario BI-RADS 4 en estudio.</p></div>"
+  },
+  "identifier": [
+    {
+      "system": "https://f-slg.github.io/aprende-fhir/sid/orden",
+      "value": "ORD-2025-0103"
+    }
+  ],
+  "status": "active",
+  "intent": "order",
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "3457005",
+          "display": "Patient referral"
+        }
+      ],
+      "text": "Derivación"
+    }
+  ],
+  "priority": "urgent",
+  "code": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "3457005",
+        "display": "Patient referral"
+      }
+    ],
+    "text": "Derivación a Oncología Clínica"
+  },
+  "subject": {
+    "reference": "Patient/{{patientId}}",
+    "display": "Luis Alberto Paredes Cevallos"
+  },
+  "encounter": {
+    "reference": "Encounter/{{noduleEncounterId}}",
+    "display": "Consulta por nódulo mamario, 22 de abril de 2025"
+  },
+  "authoredOn": "2025-04-28T09:05:00-05:00",
+  "requester": {
+    "reference": "PractitionerRole/{{salazarRoleId}}",
+    "display": "Dra. Salazar · Medicina general"
+  },
+  "performerType": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "394593009",
+        "display": "Medical oncology"
+      }
+    ],
+    "text": "Oncología clínica"
+  },
+  "performer": [
+    {
+      "reference": "PractitionerRole/{{oncologistRoleId}}",
+      "display": "Dr. Ruiz · Oncología clínica"
+    }
+  ],
+  "reasonReference": [
+    {
+      "reference": "DiagnosticReport/{{ultrasoundReportId}}",
+      "display": "Ecografía BI-RADS 4"
+    }
+  ],
+  "supportingInfo": [
+    {
+      "reference": "FamilyMemberHistory/{{motherHistoryId}}",
+      "display": "Madre con cáncer de mama a los 52 años"
+    }
+  ],
+  "note": [
+    {
+      "text": "Paciente varón de 46 años con nódulo sospechoso y madre con cáncer de mama. Se solicita valoración prioritaria."
+    }
+  ]
+}
