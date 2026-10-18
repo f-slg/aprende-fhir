@@ -1,0 +1,1276 @@
+{
+  "info": {
+    "_postman_id": "e3a0c9ad-2ebd-5150-a3d6-8f2bbe814ef5",
+    "name": "Aprende FHIR · Nivel avanzado",
+    "description": "Taller de HL7 FHIR R4 con un caso clínico ecuatoriano ficticio. Ejecuta las peticiones en orden: cada POST guarda el id creado en una variable de la colección (y del entorno, si elegiste uno) que usan las peticiones siguientes. Elige el entorno hapi-publico o hapi-local, o cambia la variable FHIRURL. Solo datos sintéticos.\n\nhttps://github.com/f-slg/aprende-fhir",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "17 · Búsquedas avanzadas y versiones",
+      "item": [
+        {
+          "name": "17a · Encadenada: signos vitales por la cédula del paciente",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Cache-Control",
+                "value": "no-cache"
+              }
+            ],
+            "url": "{{FHIRURL}}/Observation?subject.identifier=https://f-slg.github.io/aprende-fhir/sid/cedula|9900000017&category=vital-signs"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "17b · Encadenada con tipo: encuentros de los pacientes Paredes Luis",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Cache-Control",
+                "value": "no-cache"
+              }
+            ],
+            "url": "{{FHIRURL}}/Encounter?subject:Patient.family=Paredes&subject:Patient.given=Luis"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "17c · Inversa (_has): pacientes con cáncer de mama",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Cache-Control",
+                "value": "no-cache"
+              }
+            ],
+            "url": "{{FHIRURL}}/Patient?_has:Condition:subject:code=http://snomed.info/sct|254837009"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "17d · Prefijo gt: frecuencia cardíaca mayor que 100",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Cache-Control",
+                "value": "no-cache"
+              }
+            ],
+            "url": "{{FHIRURL}}/Observation?subject=Patient/{{patientId}}&code=http://loinc.org|8867-4&value-quantity=gt100"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "17e · Rango de fechas: encuentros de abril de 2025",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Cache-Control",
+                "value": "no-cache"
+              }
+            ],
+            "url": "{{FHIRURL}}/Encounter?subject=Patient/{{patientId}}&date=ge2025-04-01&date=lt2025-05-01"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "17f · Modificador :exact",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Cache-Control",
+                "value": "no-cache"
+              }
+            ],
+            "url": "{{FHIRURL}}/Patient?family:exact=Paredes%20Cevallos"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "17g · Modificador :not: condiciones no resueltas",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Cache-Control",
+                "value": "no-cache"
+              }
+            ],
+            "url": "{{FHIRURL}}/Condition?subject=Patient/{{patientId}}&clinical-status:not=resolved"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "17h · Modificador :missing: observaciones sin encuentro",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Cache-Control",
+                "value": "no-cache"
+              }
+            ],
+            "url": "{{FHIRURL}}/Observation?subject=Patient/{{patientId}}&encounter:missing=true"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "17i · Solo contar: _summary=count",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Cache-Control",
+                "value": "no-cache"
+              }
+            ],
+            "url": "{{FHIRURL}}/Observation?subject=Patient/{{patientId}}&_summary=count"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "17j · Solo algunos elementos: _elements",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Cache-Control",
+                "value": "no-cache"
+              }
+            ],
+            "url": "{{FHIRURL}}/Observation?subject=Patient/{{patientId}}&category=vital-signs&_elements=code,value"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "17k · La medición más reciente: _sort y _count",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Cache-Control",
+                "value": "no-cache"
+              }
+            ],
+            "url": "{{FHIRURL}}/Observation?subject=Patient/{{patientId}}&code=http://loinc.org|8867-4&_sort=-date&_count=1"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "17l · Paginación: 5 resultados por página",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Cache-Control",
+                "value": "no-cache"
+              }
+            ],
+            "url": "{{FHIRURL}}/Observation?subject=Patient/{{patientId}}&_count=5"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "17m · Leer una versión anterior (vread)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Cache-Control",
+                "value": "no-cache"
+              }
+            ],
+            "url": "{{FHIRURL}}/Patient/{{patientId}}/_history/1"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "17n · Qué cambió entre versiones ($diff)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Cache-Control",
+                "value": "no-cache"
+              }
+            ],
+            "url": "{{FHIRURL}}/Patient/{{patientId}}/$diff"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "17o · Actualizar con If-Match (versión 2)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "If-Match",
+                "value": "W/\"2\""
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Patient/{{patientId}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"Patient\",\n  \"id\": \"{{patientId}}\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Luis Alberto Paredes Cevallos, hombre, nacido el 12 de marzo de 1979 en Riobamba.</p><p>Cédula ficticia 9900000017 · Historia clínica HC-000123.</p><p>Teléfono +593 99 000 0000 · luis.paredes@correo.invalid · Casado.</p></div>\"\n  },\n  \"identifier\": [\n    {\n      \"use\": \"official\",\n      \"type\": {\n        \"coding\": [\n          {\n            \"system\": \"http://terminology.hl7.org/CodeSystem/v2-0203\",\n            \"code\": \"NI\",\n            \"display\": \"National unique individual identifier\"\n          }\n        ],\n        \"text\": \"Cédula de identidad\"\n      },\n      \"system\": \"https://f-slg.github.io/aprende-fhir/sid/cedula\",\n      \"value\": \"9900000017\"\n    },\n    {\n      \"use\": \"usual\",\n      \"type\": {\n        \"coding\": [\n          {\n            \"system\": \"http://terminology.hl7.org/CodeSystem/v2-0203\",\n            \"code\": \"MR\",\n            \"display\": \"Medical record number\"\n          }\n        ],\n        \"text\": \"Historia clínica\"\n      },\n      \"system\": \"https://f-slg.github.io/aprende-fhir/sid/historia-clinica/hospital-general-docente-ejemplo\",\n      \"value\": \"HC-000123\"\n    }\n  ],\n  \"active\": true,\n  \"name\": [\n    {\n      \"use\": \"official\",\n      \"text\": \"Luis Alberto Paredes Cevallos\",\n      \"family\": \"Paredes Cevallos\",\n      \"_family\": {\n        \"extension\": [\n          {\n            \"url\": \"http://hl7.org/fhir/StructureDefinition/humanname-fathers-family\",\n            \"valueString\": \"Paredes\"\n          },\n          {\n            \"url\": \"http://hl7.org/fhir/StructureDefinition/humanname-mothers-family\",\n            \"valueString\": \"Cevallos\"\n          }\n        ]\n      },\n      \"given\": [\n        \"Luis\",\n        \"Alberto\"\n      ]\n    },\n    {\n      \"use\": \"usual\",\n      \"text\": \"Luis Paredes\"\n    }\n  ],\n  \"gender\": \"male\",\n  \"birthDate\": \"1979-03-12\",\n  \"address\": [\n    {\n      \"use\": \"home\",\n      \"type\": \"physical\",\n      \"line\": [\n        \"Av. de los Ejemplos N00-00 y calle Ficticia\"\n      ],\n      \"city\": \"Quito\",\n      \"district\": \"Quito\",\n      \"state\": \"Pichincha\",\n      \"country\": \"EC\"\n    }\n  ],\n  \"communication\": [\n    {\n      \"language\": {\n        \"coding\": [\n          {\n            \"system\": \"urn:ietf:bcp:47\",\n            \"code\": \"es\",\n            \"display\": \"Spanish\"\n          }\n        ],\n        \"text\": \"Español\"\n      },\n      \"preferred\": true\n    }\n  ],\n  \"extension\": [\n    {\n      \"url\": \"http://hl7.org/fhir/StructureDefinition/patient-birthPlace\",\n      \"valueAddress\": {\n        \"city\": \"Riobamba\",\n        \"state\": \"Chimborazo\",\n        \"country\": \"EC\"\n      }\n    }\n  ],\n  \"telecom\": [\n    {\n      \"system\": \"phone\",\n      \"value\": \"+593 99 000 0000\",\n      \"use\": \"mobile\"\n    },\n    {\n      \"system\": \"email\",\n      \"value\": \"luis.paredes@correo.invalid\",\n      \"use\": \"home\"\n    }\n  ],\n  \"maritalStatus\": {\n    \"coding\": [\n      {\n        \"system\": \"http://terminology.hl7.org/CodeSystem/v3-MaritalStatus\",\n        \"code\": \"M\",\n        \"display\": \"Married\"\n      }\n    ],\n    \"text\": \"Casado\"\n  }\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/17-busquedas-y-versiones/soluciones/17a_patient_agregar_correo.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "17p · Error a propósito: actualizar con una versión vieja",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "If-Match",
+                "value": "W/\"2\""
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Patient/{{patientId}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"Patient\",\n  \"id\": \"{{patientId}}\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Luis Alberto Paredes Cevallos, hombre, nacido el 12 de marzo de 1979 en Riobamba.</p><p>Cédula ficticia 9900000017 · Historia clínica HC-000123.</p><p>Teléfono +593 99 000 0000 · luis.paredes@correo.invalid · Casado.</p></div>\"\n  },\n  \"identifier\": [\n    {\n      \"use\": \"official\",\n      \"type\": {\n        \"coding\": [\n          {\n            \"system\": \"http://terminology.hl7.org/CodeSystem/v2-0203\",\n            \"code\": \"NI\",\n            \"display\": \"National unique individual identifier\"\n          }\n        ],\n        \"text\": \"Cédula de identidad\"\n      },\n      \"system\": \"https://f-slg.github.io/aprende-fhir/sid/cedula\",\n      \"value\": \"9900000017\"\n    },\n    {\n      \"use\": \"usual\",\n      \"type\": {\n        \"coding\": [\n          {\n            \"system\": \"http://terminology.hl7.org/CodeSystem/v2-0203\",\n            \"code\": \"MR\",\n            \"display\": \"Medical record number\"\n          }\n        ],\n        \"text\": \"Historia clínica\"\n      },\n      \"system\": \"https://f-slg.github.io/aprende-fhir/sid/historia-clinica/hospital-general-docente-ejemplo\",\n      \"value\": \"HC-000123\"\n    }\n  ],\n  \"active\": true,\n  \"name\": [\n    {\n      \"use\": \"official\",\n      \"text\": \"Luis Alberto Paredes Cevallos\",\n      \"family\": \"Paredes Cevallos\",\n      \"_family\": {\n        \"extension\": [\n          {\n            \"url\": \"http://hl7.org/fhir/StructureDefinition/humanname-fathers-family\",\n            \"valueString\": \"Paredes\"\n          },\n          {\n            \"url\": \"http://hl7.org/fhir/StructureDefinition/humanname-mothers-family\",\n            \"valueString\": \"Cevallos\"\n          }\n        ]\n      },\n      \"given\": [\n        \"Luis\",\n        \"Alberto\"\n      ]\n    },\n    {\n      \"use\": \"usual\",\n      \"text\": \"Luis Paredes\"\n    }\n  ],\n  \"gender\": \"male\",\n  \"birthDate\": \"1979-03-12\",\n  \"address\": [\n    {\n      \"use\": \"home\",\n      \"type\": \"physical\",\n      \"line\": [\n        \"Av. de los Ejemplos N00-00 y calle Ficticia\"\n      ],\n      \"city\": \"Quito\",\n      \"district\": \"Quito\",\n      \"state\": \"Pichincha\",\n      \"country\": \"EC\"\n    }\n  ],\n  \"communication\": [\n    {\n      \"language\": {\n        \"coding\": [\n          {\n            \"system\": \"urn:ietf:bcp:47\",\n            \"code\": \"es\",\n            \"display\": \"Spanish\"\n          }\n        ],\n        \"text\": \"Español\"\n      },\n      \"preferred\": true\n    }\n  ],\n  \"extension\": [\n    {\n      \"url\": \"http://hl7.org/fhir/StructureDefinition/patient-birthPlace\",\n      \"valueAddress\": {\n        \"city\": \"Riobamba\",\n        \"state\": \"Chimborazo\",\n        \"country\": \"EC\"\n      }\n    }\n  ],\n  \"telecom\": [\n    {\n      \"system\": \"phone\",\n      \"value\": \"+593 99 000 0000\",\n      \"use\": \"mobile\"\n    },\n    {\n      \"system\": \"email\",\n      \"value\": \"luis.paredes@correo.invalid\",\n      \"use\": \"home\"\n    }\n  ],\n  \"maritalStatus\": {\n    \"coding\": [\n      {\n        \"system\": \"http://terminology.hl7.org/CodeSystem/v3-MaritalStatus\",\n        \"code\": \"M\",\n        \"display\": \"Married\"\n      }\n    ],\n    \"text\": \"Casado\"\n  }\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/17-busquedas-y-versiones/soluciones/17a_patient_agregar_correo.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"El servidor rechaza el error (4xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(400, 499);",
+                  "});",
+                  "console.log(pm.response.json().issue[0].diagnostics);"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "18 · Terminologías y perfiles",
+      "item": [
+        {
+          "name": "18a · Guardar el perfil del taller (StructureDefinition) (creación condicional)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "If-None-Exist",
+                "value": "url=https://f-slg.github.io/aprende-fhir/StructureDefinition/paciente-taller"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/StructureDefinition",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"StructureDefinition\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Perfil didáctico PacienteTaller: un Patient que debe tener al menos un identificador,</p><p>un nombre, el sexo y la fecha de nacimiento.</p></div>\"\n  },\n  \"url\": \"https://f-slg.github.io/aprende-fhir/StructureDefinition/paciente-taller\",\n  \"version\": \"1.0.0\",\n  \"name\": \"PacienteTaller\",\n  \"title\": \"Paciente del taller\",\n  \"status\": \"draft\",\n  \"date\": \"2026-10-18\",\n  \"publisher\": \"Aprende FHIR desde cero (ejemplo didáctico)\",\n  \"description\": \"Perfil didáctico de Patient: exige identificador, nombre, sexo y fecha de nacimiento.\",\n  \"fhirVersion\": \"4.0.1\",\n  \"kind\": \"resource\",\n  \"abstract\": false,\n  \"type\": \"Patient\",\n  \"baseDefinition\": \"http://hl7.org/fhir/StructureDefinition/Patient\",\n  \"derivation\": \"constraint\",\n  \"differential\": {\n    \"element\": [\n      {\n        \"id\": \"Patient\",\n        \"path\": \"Patient\",\n        \"short\": \"Paciente del taller\"\n      },\n      {\n        \"id\": \"Patient.identifier\",\n        \"path\": \"Patient.identifier\",\n        \"short\": \"Al menos un identificador (la cédula)\",\n        \"min\": 1\n      },\n      {\n        \"id\": \"Patient.name\",\n        \"path\": \"Patient.name\",\n        \"short\": \"Al menos un nombre\",\n        \"min\": 1\n      },\n      {\n        \"id\": \"Patient.gender\",\n        \"path\": \"Patient.gender\",\n        \"short\": \"Sexo administrativo obligatorio\",\n        \"min\": 1\n      },\n      {\n        \"id\": \"Patient.birthDate\",\n        \"path\": \"Patient.birthDate\",\n        \"short\": \"Fecha de nacimiento obligatoria\",\n        \"min\": 1\n      }\n    ]\n  }\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/18-terminologias-y-perfiles/soluciones/18a_structuredefinition_paciente_taller.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const id = pm.response.json().id;",
+                  "pm.collectionVariables.set(\"profileId\", id);",
+                  "if (pm.environment.name) pm.environment.set(\"profileId\", id);",
+                  "console.log(\"profileId = \" + id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "18b · Validar a Luis contra el perfil ($validate)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Patient/$validate?profile=https://f-slg.github.io/aprende-fhir/StructureDefinition/paciente-taller",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"Patient\",\n  \"id\": \"{{patientId}}\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Luis Alberto Paredes Cevallos, hombre, nacido el 12 de marzo de 1979 en Riobamba.</p><p>Cédula ficticia 9900000017 · Historia clínica HC-000123.</p><p>Teléfono +593 99 000 0000 · Casado.</p></div>\"\n  },\n  \"identifier\": [\n    {\n      \"use\": \"official\",\n      \"type\": {\n        \"coding\": [\n          {\n            \"system\": \"http://terminology.hl7.org/CodeSystem/v2-0203\",\n            \"code\": \"NI\",\n            \"display\": \"National unique individual identifier\"\n          }\n        ],\n        \"text\": \"Cédula de identidad\"\n      },\n      \"system\": \"https://f-slg.github.io/aprende-fhir/sid/cedula\",\n      \"value\": \"9900000017\"\n    },\n    {\n      \"use\": \"usual\",\n      \"type\": {\n        \"coding\": [\n          {\n            \"system\": \"http://terminology.hl7.org/CodeSystem/v2-0203\",\n            \"code\": \"MR\",\n            \"display\": \"Medical record number\"\n          }\n        ],\n        \"text\": \"Historia clínica\"\n      },\n      \"system\": \"https://f-slg.github.io/aprende-fhir/sid/historia-clinica/hospital-general-docente-ejemplo\",\n      \"value\": \"HC-000123\"\n    }\n  ],\n  \"active\": true,\n  \"name\": [\n    {\n      \"use\": \"official\",\n      \"text\": \"Luis Alberto Paredes Cevallos\",\n      \"family\": \"Paredes Cevallos\",\n      \"_family\": {\n        \"extension\": [\n          {\n            \"url\": \"http://hl7.org/fhir/StructureDefinition/humanname-fathers-family\",\n            \"valueString\": \"Paredes\"\n          },\n          {\n            \"url\": \"http://hl7.org/fhir/StructureDefinition/humanname-mothers-family\",\n            \"valueString\": \"Cevallos\"\n          }\n        ]\n      },\n      \"given\": [\n        \"Luis\",\n        \"Alberto\"\n      ]\n    },\n    {\n      \"use\": \"usual\",\n      \"text\": \"Luis Paredes\"\n    }\n  ],\n  \"gender\": \"male\",\n  \"birthDate\": \"1979-03-12\",\n  \"address\": [\n    {\n      \"use\": \"home\",\n      \"type\": \"physical\",\n      \"line\": [\n        \"Av. de los Ejemplos N00-00 y calle Ficticia\"\n      ],\n      \"city\": \"Quito\",\n      \"district\": \"Quito\",\n      \"state\": \"Pichincha\",\n      \"country\": \"EC\"\n    }\n  ],\n  \"communication\": [\n    {\n      \"language\": {\n        \"coding\": [\n          {\n            \"system\": \"urn:ietf:bcp:47\",\n            \"code\": \"es\",\n            \"display\": \"Spanish\"\n          }\n        ],\n        \"text\": \"Español\"\n      },\n      \"preferred\": true\n    }\n  ],\n  \"extension\": [\n    {\n      \"url\": \"http://hl7.org/fhir/StructureDefinition/patient-birthPlace\",\n      \"valueAddress\": {\n        \"city\": \"Riobamba\",\n        \"state\": \"Chimborazo\",\n        \"country\": \"EC\"\n      }\n    }\n  ],\n  \"telecom\": [\n    {\n      \"system\": \"phone\",\n      \"value\": \"+593 99 000 0000\",\n      \"use\": \"mobile\"\n    }\n  ],\n  \"maritalStatus\": {\n    \"coding\": [\n      {\n        \"system\": \"http://terminology.hl7.org/CodeSystem/v3-MaritalStatus\",\n        \"code\": \"M\",\n        \"display\": \"Married\"\n      }\n    ],\n    \"text\": \"Casado\"\n  }\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/02-patient/soluciones/02e_patient_actualizar.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "18c · Error a propósito: validar un paciente sin fecha de nacimiento",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Patient/$validate?profile=https://f-slg.github.io/aprende-fhir/StructureDefinition/paciente-taller",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"Patient\",\n  \"identifier\": [\n    {\n      \"system\": \"https://f-slg.github.io/aprende-fhir/sid/cedula\",\n      \"value\": \"9800000012\"\n    }\n  ],\n  \"name\": [\n    {\n      \"text\": \"Paciente de prueba sin fecha de nacimiento\"\n    }\n  ],\n  \"gender\": \"male\"\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/18-terminologias-y-perfiles/errores/18e1_paciente_sin_fecha.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "18d · El servidor también valida sin perfil",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Observation/$validate",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"Observation\",\n  \"status\": \"final\",\n  \"subject\": {\n    \"reference\": \"Patient/{{patientId}}\"\n  },\n  \"valueQuantity\": {\n    \"value\": 38.4,\n    \"unit\": \"°C\",\n    \"system\": \"http://unitsofmeasure.org\",\n    \"code\": \"Cel\"\n  }\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/06-observaciones/errores/06e2_observacion_sin_codigo.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "18e · Crear el sistema de códigos ECOG (CodeSystem) (creación condicional)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "If-None-Exist",
+                "value": "url=https://f-slg.github.io/aprende-fhir/CodeSystem/ecog"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/CodeSystem",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"CodeSystem\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Escala de funcionalidad ECOG (versión didáctica): 0 a 4.</p></div>\"\n  },\n  \"url\": \"https://f-slg.github.io/aprende-fhir/CodeSystem/ecog\",\n  \"version\": \"1.0.0\",\n  \"name\": \"EscalaECOG\",\n  \"title\": \"Escala de funcionalidad ECOG (versión didáctica)\",\n  \"status\": \"active\",\n  \"date\": \"2026-10-18\",\n  \"publisher\": \"Aprende FHIR desde cero (ejemplo didáctico)\",\n  \"description\": \"Códigos de la escala de funcionalidad ECOG, con descripciones en español.\",\n  \"caseSensitive\": true,\n  \"content\": \"complete\",\n  \"count\": 5,\n  \"concept\": [\n    {\n      \"code\": \"0\",\n      \"display\": \"Actividad normal sin limitaciones\"\n    },\n    {\n      \"code\": \"1\",\n      \"display\": \"Síntomas, pero ambulatorio y capaz de trabajos ligeros\"\n    },\n    {\n      \"code\": \"2\",\n      \"display\": \"Ambulatorio y capaz de cuidarse, pero no de trabajar\"\n    },\n    {\n      \"code\": \"3\",\n      \"display\": \"En cama o sentado más de la mitad del día\"\n    },\n    {\n      \"code\": \"4\",\n      \"display\": \"Completamente incapacitado, en cama\"\n    }\n  ]\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/18-terminologias-y-perfiles/soluciones/18b_codesystem_ecog.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const id = pm.response.json().id;",
+                  "pm.collectionVariables.set(\"codeSystemId\", id);",
+                  "if (pm.environment.name) pm.environment.set(\"codeSystemId\", id);",
+                  "console.log(\"codeSystemId = \" + id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "18f · Crear el conjunto de valores ECOG (ValueSet) (creación condicional)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "If-None-Exist",
+                "value": "url=https://f-slg.github.io/aprende-fhir/ValueSet/ecog"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/ValueSet",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"ValueSet\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Valores de la escala ECOG: todos los códigos del CodeSystem EscalaECOG.</p></div>\"\n  },\n  \"url\": \"https://f-slg.github.io/aprende-fhir/ValueSet/ecog\",\n  \"version\": \"1.0.0\",\n  \"name\": \"ValoresECOG\",\n  \"title\": \"Valores de la escala ECOG\",\n  \"status\": \"active\",\n  \"date\": \"2026-10-18\",\n  \"publisher\": \"Aprende FHIR desde cero (ejemplo didáctico)\",\n  \"description\": \"Conjunto de valores con todos los códigos de la escala ECOG del taller.\",\n  \"compose\": {\n    \"include\": [\n      {\n        \"system\": \"https://f-slg.github.io/aprende-fhir/CodeSystem/ecog\"\n      }\n    ]\n  }\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/18-terminologias-y-perfiles/soluciones/18c_valueset_ecog.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const id = pm.response.json().id;",
+                  "pm.collectionVariables.set(\"valueSetId\", id);",
+                  "if (pm.environment.name) pm.environment.set(\"valueSetId\", id);",
+                  "console.log(\"valueSetId = \" + id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "18g · $lookup: qué significa el código 1",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/CodeSystem/$lookup?system=https://f-slg.github.io/aprende-fhir/CodeSystem/ecog&code=1"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "18h · $validate-code: el código 1 está en el conjunto",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/ValueSet/$validate-code?url=https://f-slg.github.io/aprende-fhir/ValueSet/ecog&system=https://f-slg.github.io/aprende-fhir/CodeSystem/ecog&code=1"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "18i · $validate-code: el código 9 no existe",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/ValueSet/$validate-code?url=https://f-slg.github.io/aprende-fhir/ValueSet/ecog&system=https://f-slg.github.io/aprende-fhir/CodeSystem/ecog&code=9"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "18j · Servidor de terminología: $lookup de un código LOINC",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{TXURL}}/CodeSystem/$lookup?system=http://loinc.org&code=8310-5"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "18k · Servidor de terminología: $lookup de un código SNOMED CT",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{TXURL}}/CodeSystem/$lookup?system=http://snomed.info/sct&code=254837009"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "18l · Servidor de terminología: $subsumes (jerarquía de SNOMED CT)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{TXURL}}/CodeSystem/$subsumes?system=http://snomed.info/sct&codeA=363346000&codeB=254837009"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "18m · Servidor de terminología: $validate-code de 'masculino'",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{TXURL}}/ValueSet/$validate-code?url=http://hl7.org/fhir/ValueSet/administrative-gender&system=http://hl7.org/fhir/administrative-gender&code=masculino"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "18n · Servidor de terminología: $expand de la criticidad de alergias",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{TXURL}}/ValueSet/$expand?url=http://hl7.org/fhir/ValueSet/allergy-intolerance-criticality"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "19 · Resumen del paciente (IPS)",
+      "item": [
+        {
+          "name": "19a · Composition del resumen del paciente (IPS)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Composition",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"Composition\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Resumen internacional del paciente (IPS) de Luis Alberto Paredes Cevallos,</p><p>emitido el 15 de febrero de 2026 por el servicio de Oncología Clínica.</p></div>\"\n  },\n  \"identifier\": {\n    \"system\": \"https://f-slg.github.io/aprende-fhir/sid/documento\",\n    \"value\": \"IPS-2026-0001\"\n  },\n  \"status\": \"final\",\n  \"type\": {\n    \"coding\": [\n      {\n        \"system\": \"http://loinc.org\",\n        \"code\": \"60591-5\",\n        \"display\": \"Patient summary Document\"\n      }\n    ],\n    \"text\": \"Resumen del paciente\"\n  },\n  \"subject\": {\n    \"reference\": \"Patient/{{patientId}}\",\n    \"display\": \"Luis Alberto Paredes Cevallos\"\n  },\n  \"date\": \"2026-02-15T10:00:00-05:00\",\n  \"author\": [\n    {\n      \"reference\": \"PractitionerRole/{{oncologistRoleId}}\",\n      \"display\": \"Dr. Ruiz · Oncología clínica\"\n    }\n  ],\n  \"title\": \"Resumen internacional del paciente\",\n  \"confidentiality\": \"N\",\n  \"custodian\": {\n    \"reference\": \"Organization/{{hospitalId}}\",\n    \"display\": \"Hospital General Docente Ejemplo\"\n  },\n  \"section\": [\n    {\n      \"title\": \"Problemas activos\",\n      \"code\": {\n        \"coding\": [\n          {\n            \"system\": \"http://loinc.org\",\n            \"code\": \"11450-4\",\n            \"display\": \"Problem list - Reported\"\n          }\n        ]\n      },\n      \"text\": {\n        \"status\": \"generated\",\n        \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Carcinoma ductal infiltrante de mama izquierda (activo, desde mayo de 2025).</p></div>\"\n      },\n      \"entry\": [\n        {\n          \"reference\": \"Condition/{{conditionCancerId}}\",\n          \"display\": \"Carcinoma ductal infiltrante de mama izquierda\"\n        }\n      ]\n    },\n    {\n      \"title\": \"Alergias e intolerancias\",\n      \"code\": {\n        \"coding\": [\n          {\n            \"system\": \"http://loinc.org\",\n            \"code\": \"48765-2\",\n            \"display\": \"Allergies and adverse reactions Document\"\n          }\n        ]\n      },\n      \"text\": {\n        \"status\": \"generated\",\n        \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Alergia a la penicilina, criticidad alta: urticaria generalizada.</p></div>\"\n      },\n      \"entry\": [\n        {\n          \"reference\": \"AllergyIntolerance/{{allergyId}}\",\n          \"display\": \"Alergia a la penicilina\"\n        }\n      ]\n    },\n    {\n      \"title\": \"Medicación\",\n      \"code\": {\n        \"coding\": [\n          {\n            \"system\": \"http://loinc.org\",\n            \"code\": \"10160-0\",\n            \"display\": \"History of Medication use Narrative\"\n          }\n        ]\n      },\n      \"text\": {\n        \"status\": \"generated\",\n        \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Losartán 50 mg por vía oral una vez al día (hipertensión arterial).</p></div>\"\n      },\n      \"entry\": [\n        {\n          \"reference\": \"MedicationStatement/{{medStatementId}}\",\n          \"display\": \"Losartán 50 mg diarios\"\n        }\n      ]\n    },\n    {\n      \"title\": \"Vacunas\",\n      \"code\": {\n        \"coding\": [\n          {\n            \"system\": \"http://loinc.org\",\n            \"code\": \"11369-6\",\n            \"display\": \"History of Immunization note\"\n          }\n        ]\n      },\n      \"text\": {\n        \"status\": \"generated\",\n        \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Influenza estacional (3 de abril de 2025).</p><p>Td, refuerzo (3 de abril de 2025).</p></div>\"\n      },\n      \"entry\": [\n        {\n          \"reference\": \"Immunization/{{fluImmunizationId}}\",\n          \"display\": \"Influenza, 3 de abril de 2025\"\n        },\n        {\n          \"reference\": \"Immunization/{{tdImmunizationId}}\",\n          \"display\": \"Td, 3 de abril de 2025\"\n        }\n      ]\n    },\n    {\n      \"title\": \"Procedimientos\",\n      \"code\": {\n        \"coding\": [\n          {\n            \"system\": \"http://loinc.org\",\n            \"code\": \"47519-4\",\n            \"display\": \"History of Procedures Document\"\n          }\n        ]\n      },\n      \"text\": {\n        \"status\": \"generated\",\n        \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Mastectomía parcial de mama izquierda (10 de junio de 2025), exitosa.</p></div>\"\n      },\n      \"entry\": [\n        {\n          \"reference\": \"Procedure/{{procedureId}}\",\n          \"display\": \"Mastectomía parcial\"\n        }\n      ]\n    },\n    {\n      \"title\": \"Resultados\",\n      \"code\": {\n        \"coding\": [\n          {\n            \"system\": \"http://loinc.org\",\n            \"code\": \"30954-2\",\n            \"display\": \"Relevant diagnostic tests/laboratory data note\"\n          }\n        ]\n      },\n      \"text\": {\n        \"status\": \"generated\",\n        \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Anatomía patológica: carcinoma ductal infiltrante de 3,5 cm, receptor de estrógeno positivo (Allred 8).</p></div>\"\n      },\n      \"entry\": [\n        {\n          \"reference\": \"DiagnosticReport/{{diagnosticReportId}}\",\n          \"display\": \"Informe de patología\"\n        }\n      ]\n    },\n    {\n      \"title\": \"Plan de tratamiento\",\n      \"code\": {\n        \"coding\": [\n          {\n            \"system\": \"http://loinc.org\",\n            \"code\": \"18776-5\",\n            \"display\": \"Plan of care note\"\n          }\n        ]\n      },\n      \"text\": {\n        \"status\": \"generated\",\n        \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Plan del comité de tumores: cirugía, quimioterapia (4 ciclos) y hormonoterapia;</p><p>tamoxifeno suspendido en febrero de 2026 por intolerancia.</p></div>\"\n      },\n      \"entry\": [\n        {\n          \"reference\": \"CarePlan/{{carePlanId}}\",\n          \"display\": \"Plan de tratamiento del cáncer de mama\"\n        }\n      ]\n    },\n    {\n      \"title\": \"Antecedentes\",\n      \"code\": {\n        \"coding\": [\n          {\n            \"system\": \"http://loinc.org\",\n            \"code\": \"11348-0\",\n            \"display\": \"History of Past illness note\"\n          }\n        ]\n      },\n      \"text\": {\n        \"status\": \"generated\",\n        \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Intoxicación alimentaria bacteriana (marzo de 2025), resuelta.</p></div>\"\n      },\n      \"entry\": [\n        {\n          \"reference\": \"Condition/{{conditionIntoxId}}\",\n          \"display\": \"Intoxicación alimentaria\"\n        }\n      ]\n    }\n  ]\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/19-resumen-ips/soluciones/19a_composition_ips.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const id = pm.response.json().id;",
+                  "pm.collectionVariables.set(\"compositionIpsId\", id);",
+                  "if (pm.environment.name) pm.environment.set(\"compositionIpsId\", id);",
+                  "console.log(\"compositionIpsId = \" + id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "19b · El servidor arma el documento ($document)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Composition/{{compositionIpsId}}/$document"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "19c · Guardar el IPS autocontenido",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Bundle",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"Bundle\",\n  \"identifier\": {\n    \"system\": \"https://f-slg.github.io/aprende-fhir/sid/documento\",\n    \"value\": \"IPS-2026-0002\"\n  },\n  \"type\": \"document\",\n  \"timestamp\": \"2026-02-15T10:05:00-05:00\",\n  \"entry\": [\n    {\n      \"fullUrl\": \"urn:uuid:71f58005-a7dd-50ea-b9a2-c9b70638ce0b\",\n      \"resource\": {\n        \"resourceType\": \"Composition\",\n        \"text\": {\n          \"status\": \"generated\",\n          \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Resumen internacional del paciente (IPS) de Luis Alberto Paredes Cevallos,</p><p>emitido el 15 de febrero de 2026 por el servicio de Oncología Clínica.</p></div>\"\n        },\n        \"identifier\": {\n          \"system\": \"https://f-slg.github.io/aprende-fhir/sid/documento\",\n          \"value\": \"IPS-2026-0002\"\n        },\n        \"status\": \"final\",\n        \"type\": {\n          \"coding\": [\n            {\n              \"system\": \"http://loinc.org\",\n              \"code\": \"60591-5\",\n              \"display\": \"Patient summary Document\"\n            }\n          ],\n          \"text\": \"Resumen del paciente\"\n        },\n        \"subject\": {\n          \"reference\": \"urn:uuid:e0a33887-7d17-5a74-b931-ff942cb15b50\",\n          \"display\": \"Luis Alberto Paredes Cevallos\"\n        },\n        \"date\": \"2026-02-15T10:00:00-05:00\",\n        \"author\": [\n          {\n            \"reference\": \"urn:uuid:dd91e0ce-7db7-5ab2-aca0-52a76742dfd5\",\n            \"display\": \"Dr. Ruiz · Oncología clínica\"\n          }\n        ],\n        \"title\": \"Resumen internacional del paciente\",\n        \"confidentiality\": \"N\",\n        \"custodian\": {\n          \"reference\": \"urn:uuid:57ab9932-e9b4-51d3-8dcd-658bedcb7cc7\",\n          \"display\": \"Hospital General Docente Ejemplo\"\n        },\n        \"section\": [\n          {\n            \"title\": \"Problemas activos\",\n            \"code\": {\n              \"coding\": [\n                {\n                  \"system\": \"http://loinc.org\",\n                  \"code\": \"11450-4\",\n                  \"display\": \"Problem list - Reported\"\n                }\n              ]\n            },\n            \"text\": {\n              \"status\": \"generated\",\n              \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Carcinoma ductal infiltrante de mama izquierda (activo, desde mayo de 2025).</p></div>\"\n            },\n            \"entry\": [\n              {\n                \"reference\": \"urn:uuid:a235f0f0-af9a-59ea-90b5-acfe6c6ee325\",\n                \"display\": \"Carcinoma ductal infiltrante de mama izquierda\"\n              }\n            ]\n          },\n          {\n            \"title\": \"Alergias e intolerancias\",\n            \"code\": {\n              \"coding\": [\n                {\n                  \"system\": \"http://loinc.org\",\n                  \"code\": \"48765-2\",\n                  \"display\": \"Allergies and adverse reactions Document\"\n                }\n              ]\n            },\n            \"text\": {\n              \"status\": \"generated\",\n              \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Alergia a la penicilina, criticidad alta: urticaria generalizada.</p></div>\"\n            },\n            \"entry\": [\n              {\n                \"reference\": \"urn:uuid:984c1250-8e4f-5638-8bff-fe5cb3396929\",\n                \"display\": \"Alergia a la penicilina\"\n              }\n            ]\n          },\n          {\n            \"title\": \"Medicación\",\n            \"code\": {\n              \"coding\": [\n                {\n                  \"system\": \"http://loinc.org\",\n                  \"code\": \"10160-0\",\n                  \"display\": \"History of Medication use Narrative\"\n                }\n              ]\n            },\n            \"text\": {\n              \"status\": \"generated\",\n              \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Losartán 50 mg por vía oral una vez al día (hipertensión arterial).</p></div>\"\n            },\n            \"entry\": [\n              {\n                \"reference\": \"urn:uuid:1c8d9299-5780-580f-8c4f-338a8adaf567\",\n                \"display\": \"Losartán 50 mg diarios\"\n              }\n            ]\n          },\n          {\n            \"title\": \"Vacunas\",\n            \"code\": {\n              \"coding\": [\n                {\n                  \"system\": \"http://loinc.org\",\n                  \"code\": \"11369-6\",\n                  \"display\": \"History of Immunization note\"\n                }\n              ]\n            },\n            \"text\": {\n              \"status\": \"generated\",\n              \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Influenza estacional (3 de abril de 2025).</p><p>Td, refuerzo (3 de abril de 2025).</p></div>\"\n            },\n            \"entry\": [\n              {\n                \"reference\": \"urn:uuid:1c23a482-34bb-5dc6-b674-31cd0c22e699\",\n                \"display\": \"Influenza, 3 de abril de 2025\"\n              },\n              {\n                \"reference\": \"urn:uuid:7a34d1ce-2f4f-5266-bcba-2bfbbc582b04\",\n                \"display\": \"Td, 3 de abril de 2025\"\n              }\n            ]\n          },\n          {\n            \"title\": \"Procedimientos\",\n            \"code\": {\n              \"coding\": [\n                {\n                  \"system\": \"http://loinc.org\",\n                  \"code\": \"47519-4\",\n                  \"display\": \"History of Procedures Document\"\n                }\n              ]\n            },\n            \"text\": {\n              \"status\": \"generated\",\n              \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Mastectomía parcial de mama izquierda (10 de junio de 2025), exitosa.</p></div>\"\n            },\n            \"entry\": [\n              {\n                \"reference\": \"urn:uuid:6d3eb46f-ac7b-58bc-9045-ff178b9f174a\",\n                \"display\": \"Mastectomía parcial\"\n              }\n            ]\n          },\n          {\n            \"title\": \"Resultados\",\n            \"code\": {\n              \"coding\": [\n                {\n                  \"system\": \"http://loinc.org\",\n                  \"code\": \"30954-2\",\n                  \"display\": \"Relevant diagnostic tests/laboratory data note\"\n                }\n              ]\n            },\n            \"text\": {\n              \"status\": \"generated\",\n              \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Anatomía patológica: carcinoma ductal infiltrante de 3,5 cm, receptor de estrógeno positivo (Allred 8).</p></div>\"\n            },\n            \"entry\": [\n              {\n                \"reference\": \"urn:uuid:700c2dc9-fcb4-56fe-b789-6b32667f9cd3\",\n                \"display\": \"Informe de patología\"\n              }\n            ]\n          },\n          {\n            \"title\": \"Plan de tratamiento\",\n            \"code\": {\n              \"coding\": [\n                {\n                  \"system\": \"http://loinc.org\",\n                  \"code\": \"18776-5\",\n                  \"display\": \"Plan of care note\"\n                }\n              ]\n            },\n            \"text\": {\n              \"status\": \"generated\",\n              \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Plan del comité de tumores: cirugía, quimioterapia (4 ciclos) y hormonoterapia;</p><p>tamoxifeno suspendido en febrero de 2026 por intolerancia.</p></div>\"\n            },\n            \"entry\": [\n              {\n                \"reference\": \"urn:uuid:c193b719-cfb2-5785-8823-e945606fdc45\",\n                \"display\": \"Plan de tratamiento del cáncer de mama\"\n              }\n            ]\n          },\n          {\n            \"title\": \"Antecedentes\",\n            \"code\": {\n              \"coding\": [\n                {\n                  \"system\": \"http://loinc.org\",\n                  \"code\": \"11348-0\",\n                  \"display\": \"History of Past illness note\"\n                }\n              ]\n            },\n            \"text\": {\n              \"status\": \"generated\",\n              \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Intoxicación alimentaria bacteriana (marzo de 2025), resuelta.</p></div>\"\n            },\n            \"entry\": [\n              {\n                \"reference\": \"urn:uuid:6fcc22a2-86d1-5ef6-a254-6f6770b5ef60\",\n                \"display\": \"Intoxicación alimentaria\"\n              }\n            ]\n          }\n        ]\n      }\n    },\n    {\n      \"fullUrl\": \"urn:uuid:e0a33887-7d17-5a74-b931-ff942cb15b50\",\n      \"resource\": {\n        \"resourceType\": \"Patient\",\n        \"text\": {\n          \"status\": \"generated\",\n          \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Luis Alberto Paredes Cevallos, hombre, nacido el 12 de marzo de 1979 en Riobamba.</p><p>Cédula ficticia 9900000017 · Historia clínica HC-000123.</p><p>Teléfono +593 99 000 0000 · Casado.</p></div>\"\n        },\n        \"identifier\": [\n          {\n            \"use\": \"official\",\n            \"type\": {\n              \"coding\": [\n                {\n                  \"system\": \"http://terminology.hl7.org/CodeSystem/v2-0203\",\n                  \"code\": \"NI\",\n                  \"display\": \"National unique individual identifier\"\n                }\n              ],\n              \"text\": \"Cédula de identidad\"\n            },\n            \"system\": \"https://f-slg.github.io/aprende-fhir/sid/cedula\",\n            \"value\": \"9900000017\"\n          },\n          {\n            \"use\": \"usual\",\n            \"type\": {\n              \"coding\": [\n                {\n                  \"system\": \"http://terminology.hl7.org/CodeSystem/v2-0203\",\n                  \"code\": \"MR\",\n                  \"display\": \"Medical record number\"\n                }\n              ],\n              \"text\": \"Historia clínica\"\n            },\n            \"system\": \"https://f-slg.github.io/aprende-fhir/sid/historia-clinica/hospital-general-docente-ejemplo\",\n            \"value\": \"HC-000123\"\n          }\n        ],\n        \"active\": true,\n        \"name\": [\n          {\n            \"use\": \"official\",\n            \"text\": \"Luis Alberto Paredes Cevallos\",\n            \"family\": \"Paredes Cevallos\",\n            \"_family\": {\n              \"extension\": [\n                {\n                  \"url\": \"http://hl7.org/fhir/StructureDefinition/humanname-fathers-family\",\n                  \"valueString\": \"Paredes\"\n                },\n                {\n                  \"url\": \"http://hl7.org/fhir/StructureDefinition/humanname-mothers-family\",\n                  \"valueString\": \"Cevallos\"\n                }\n              ]\n            },\n            \"given\": [\n              \"Luis\",\n              \"Alberto\"\n            ]\n          },\n          {\n            \"use\": \"usual\",\n            \"text\": \"Luis Paredes\"\n          }\n        ],\n        \"gender\": \"male\",\n        \"birthDate\": \"1979-03-12\",\n        \"address\": [\n          {\n            \"use\": \"home\",\n            \"type\": \"physical\",\n            \"line\": [\n              \"Av. de los Ejemplos N00-00 y calle Ficticia\"\n            ],\n            \"city\": \"Quito\",\n            \"district\": \"Quito\",\n            \"state\": \"Pichincha\",\n            \"country\": \"EC\"\n          }\n        ],\n        \"communication\": [\n          {\n            \"language\": {\n              \"coding\": [\n                {\n                  \"system\": \"urn:ietf:bcp:47\",\n                  \"code\": \"es\",\n                  \"display\": \"Spanish\"\n                }\n              ],\n              \"text\": \"Español\"\n            },\n            \"preferred\": true\n          }\n        ],\n        \"extension\": [\n          {\n            \"url\": \"http://hl7.org/fhir/StructureDefinition/patient-birthPlace\",\n            \"valueAddress\": {\n              \"city\": \"Riobamba\",\n              \"state\": \"Chimborazo\",\n              \"country\": \"EC\"\n            }\n          }\n        ],\n        \"telecom\": [\n          {\n            \"system\": \"phone\",\n            \"value\": \"+593 99 000 0000\",\n            \"use\": \"mobile\"\n          }\n        ],\n        \"maritalStatus\": {\n          \"coding\": [\n            {\n              \"system\": \"http://terminology.hl7.org/CodeSystem/v3-MaritalStatus\",\n              \"code\": \"M\",\n              \"display\": \"Married\"\n            }\n          ],\n          \"text\": \"Casado\"\n        }\n      }\n    },\n    {\n      \"fullUrl\": \"urn:uuid:a36b7bd8-06d2-5884-a3de-a13c48d07d5e\",\n      \"resource\": {\n        \"resourceType\": \"Practitioner\",\n        \"text\": {\n          \"status\": \"generated\",\n          \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Dr. Esteban Patricio Ruiz Montalvo, oncólogo clínico. Registro profesional ficticio RP-000733.</p></div>\"\n        },\n        \"identifier\": [\n          {\n            \"use\": \"official\",\n            \"system\": \"https://f-slg.github.io/aprende-fhir/sid/registro-profesional\",\n            \"value\": \"RP-000733\"\n          }\n        ],\n        \"active\": true,\n        \"name\": [\n          {\n            \"use\": \"official\",\n            \"text\": \"Dr. Esteban Patricio Ruiz Montalvo\",\n            \"prefix\": [\n              \"Dr.\"\n            ],\n            \"family\": \"Ruiz Montalvo\",\n            \"given\": [\n              \"Esteban\",\n              \"Patricio\"\n            ]\n          }\n        ],\n        \"gender\": \"male\",\n        \"qualification\": [\n          {\n            \"code\": {\n              \"coding\": [\n                {\n                  \"system\": \"http://terminology.hl7.org/CodeSystem/v2-0360\",\n                  \"code\": \"MD\",\n                  \"display\": \"Doctor of Medicine\"\n                }\n              ],\n              \"text\": \"Médico\"\n            }\n          }\n        ]\n      }\n    },\n    {\n      \"fullUrl\": \"urn:uuid:dd91e0ce-7db7-5ab2-aca0-52a76742dfd5\",\n      \"resource\": {\n        \"resourceType\": \"PractitionerRole\",\n        \"text\": {\n          \"status\": \"generated\",\n          \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Dr. Esteban Patricio Ruiz Montalvo: oncólogo clínico en el Hospital General Docente Ejemplo.</p></div>\"\n        },\n        \"active\": true,\n        \"practitioner\": {\n          \"reference\": \"urn:uuid:a36b7bd8-06d2-5884-a3de-a13c48d07d5e\",\n          \"display\": \"Dr. Esteban Patricio Ruiz Montalvo\"\n        },\n        \"organization\": {\n          \"reference\": \"urn:uuid:57ab9932-e9b4-51d3-8dcd-658bedcb7cc7\",\n          \"display\": \"Hospital General Docente Ejemplo\"\n        },\n        \"code\": [\n          {\n            \"coding\": [\n              {\n                \"system\": \"http://terminology.hl7.org/CodeSystem/practitioner-role\",\n                \"code\": \"doctor\",\n                \"display\": \"Doctor\"\n              }\n            ],\n            \"text\": \"Médico\"\n          }\n        ],\n        \"specialty\": [\n          {\n            \"coding\": [\n              {\n                \"system\": \"http://snomed.info/sct\",\n                \"code\": \"394593009\",\n                \"display\": \"Medical oncology\"\n              }\n            ],\n            \"text\": \"Oncología clínica\"\n          }\n        ]\n      }\n    },\n    {\n      \"fullUrl\": \"urn:uuid:57ab9932-e9b4-51d3-8dcd-658bedcb7cc7\",\n      \"resource\": {\n        \"resourceType\": \"Organization\",\n        \"text\": {\n          \"status\": \"generated\",\n          \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Hospital General Docente Ejemplo, parte de la Red de Servicios de Salud Ejemplo (ficticia).</p></div>\"\n        },\n        \"identifier\": [\n          {\n            \"system\": \"https://f-slg.github.io/aprende-fhir/sid/establecimiento\",\n            \"value\": \"HGDE-0001\"\n          }\n        ],\n        \"active\": true,\n        \"type\": [\n          {\n            \"coding\": [\n              {\n                \"system\": \"http://terminology.hl7.org/CodeSystem/organization-type\",\n                \"code\": \"prov\",\n                \"display\": \"Healthcare Provider\"\n              }\n            ]\n          }\n        ],\n        \"name\": \"Hospital General Docente Ejemplo\",\n        \"telecom\": [\n          {\n            \"system\": \"phone\",\n            \"value\": \"+593 2 000 0000\",\n            \"use\": \"work\"\n          }\n        ],\n        \"address\": [\n          {\n            \"line\": [\n              \"Av. Principal Ejemplo S00-00\"\n            ],\n            \"city\": \"Quito\",\n            \"state\": \"Pichincha\",\n            \"country\": \"EC\"\n          }\n        ]\n      }\n    },\n    {\n      \"fullUrl\": \"urn:uuid:a235f0f0-af9a-59ea-90b5-acfe6c6ee325\",\n      \"resource\": {\n        \"resourceType\": \"Condition\",\n        \"text\": {\n          \"status\": \"generated\",\n          \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Carcinoma ductal infiltrante de mama izquierda (activo, confirmado).</p><p>Diagnóstico: 13 de mayo de 2025.</p></div>\"\n        },\n        \"identifier\": [\n          {\n            \"system\": \"https://f-slg.github.io/aprende-fhir/sid/condicion\",\n            \"value\": \"COND-2025-0002\"\n          }\n        ],\n        \"clinicalStatus\": {\n          \"coding\": [\n            {\n              \"system\": \"http://terminology.hl7.org/CodeSystem/condition-clinical\",\n              \"code\": \"active\",\n              \"display\": \"Active\"\n            }\n          ]\n        },\n        \"verificationStatus\": {\n          \"coding\": [\n            {\n              \"system\": \"http://terminology.hl7.org/CodeSystem/condition-ver-status\",\n              \"code\": \"confirmed\",\n              \"display\": \"Confirmed\"\n            }\n          ]\n        },\n        \"category\": [\n          {\n            \"coding\": [\n              {\n                \"system\": \"http://terminology.hl7.org/CodeSystem/condition-category\",\n                \"code\": \"problem-list-item\",\n                \"display\": \"Problem List Item\"\n              }\n            ]\n          }\n        ],\n        \"code\": {\n          \"coding\": [\n            {\n              \"system\": \"http://hl7.org/fhir/sid/icd-10\",\n              \"code\": \"C50.9\",\n              \"display\": \"Breast, unspecified\"\n            },\n            {\n              \"system\": \"http://snomed.info/sct\",\n              \"code\": \"254837009\",\n              \"display\": \"Malignant neoplasm of breast\"\n            }\n          ],\n          \"text\": \"Carcinoma ductal infiltrante de mama izquierda\"\n        },\n        \"bodySite\": [\n          {\n            \"coding\": [\n              {\n                \"system\": \"http://snomed.info/sct\",\n                \"code\": \"80248007\",\n                \"display\": \"Left breast structure\"\n              }\n            ],\n            \"text\": \"Mama izquierda\"\n          }\n        ],\n        \"subject\": {\n          \"reference\": \"urn:uuid:e0a33887-7d17-5a74-b931-ff942cb15b50\",\n          \"display\": \"Luis Alberto Paredes Cevallos\"\n        },\n        \"onsetDateTime\": \"2025-05-13\",\n        \"recordedDate\": \"2025-05-13\",\n        \"evidence\": [\n          {\n            \"detail\": [\n              {\n                \"reference\": \"urn:uuid:700c2dc9-fcb4-56fe-b789-6b32667f9cd3\",\n                \"display\": \"Informe de patología AP-2025-0457\"\n              }\n            ]\n          }\n        ]\n      }\n    },\n    {\n      \"fullUrl\": \"urn:uuid:984c1250-8e4f-5638-8bff-fe5cb3396929\",\n      \"resource\": {\n        \"resourceType\": \"AllergyIntolerance\",\n        \"text\": {\n          \"status\": \"generated\",\n          \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Alergia a la penicilina (criticidad alta): urticaria generalizada en la adolescencia.</p></div>\"\n        },\n        \"identifier\": [\n          {\n            \"system\": \"https://f-slg.github.io/aprende-fhir/sid/alergia\",\n            \"value\": \"AL-2025-0001\"\n          }\n        ],\n        \"clinicalStatus\": {\n          \"coding\": [\n            {\n              \"system\": \"http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical\",\n              \"code\": \"active\",\n              \"display\": \"Active\"\n            }\n          ]\n        },\n        \"verificationStatus\": {\n          \"coding\": [\n            {\n              \"system\": \"http://terminology.hl7.org/CodeSystem/allergyintolerance-verification\",\n              \"code\": \"confirmed\",\n              \"display\": \"Confirmed\"\n            }\n          ]\n        },\n        \"type\": \"allergy\",\n        \"category\": [\n          \"medication\"\n        ],\n        \"criticality\": \"high\",\n        \"code\": {\n          \"coding\": [\n            {\n              \"system\": \"http://snomed.info/sct\",\n              \"code\": \"764146007\",\n              \"display\": \"Penicillin\"\n            }\n          ],\n          \"text\": \"Penicilina\"\n        },\n        \"patient\": {\n          \"reference\": \"urn:uuid:e0a33887-7d17-5a74-b931-ff942cb15b50\",\n          \"display\": \"Luis Alberto Paredes Cevallos\"\n        },\n        \"onsetString\": \"En la adolescencia\",\n        \"recordedDate\": \"2025-03-20\",\n        \"asserter\": {\n          \"reference\": \"urn:uuid:e0a33887-7d17-5a74-b931-ff942cb15b50\",\n          \"display\": \"Luis Alberto Paredes Cevallos\"\n        },\n        \"reaction\": [\n          {\n            \"substance\": {\n              \"coding\": [\n                {\n                  \"system\": \"http://snomed.info/sct\",\n                  \"code\": \"764146007\",\n                  \"display\": \"Penicillin\"\n                }\n              ],\n              \"text\": \"Penicilina\"\n            },\n            \"manifestation\": [\n              {\n                \"coding\": [\n                  {\n                    \"system\": \"http://snomed.info/sct\",\n                    \"code\": \"126485001\",\n                    \"display\": \"Urticaria\"\n                  }\n                ],\n                \"text\": \"Urticaria generalizada\"\n              }\n            ],\n            \"severity\": \"moderate\",\n            \"description\": \"Ronchas en todo el cuerpo a las pocas horas de una inyección de penicilina.\"\n          }\n        ]\n      }\n    },\n    {\n      \"fullUrl\": \"urn:uuid:1c8d9299-5780-580f-8c4f-338a8adaf567\",\n      \"resource\": {\n        \"resourceType\": \"MedicationStatement\",\n        \"text\": {\n          \"status\": \"generated\",\n          \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Toma losartán 50 mg por vía oral una vez al día para la hipertensión, desde 2021.</p></div>\"\n        },\n        \"status\": \"active\",\n        \"medicationCodeableConcept\": {\n          \"coding\": [\n            {\n              \"system\": \"http://snomed.info/sct\",\n              \"code\": \"373567002\",\n              \"display\": \"Losartan\"\n            }\n          ],\n          \"text\": \"Losartán\"\n        },\n        \"subject\": {\n          \"reference\": \"urn:uuid:e0a33887-7d17-5a74-b931-ff942cb15b50\",\n          \"display\": \"Luis Alberto Paredes Cevallos\"\n        },\n        \"effectivePeriod\": {\n          \"start\": \"2021-06\"\n        },\n        \"dateAsserted\": \"2025-03-20\",\n        \"informationSource\": {\n          \"reference\": \"urn:uuid:e0a33887-7d17-5a74-b931-ff942cb15b50\",\n          \"display\": \"Luis Alberto Paredes Cevallos\"\n        },\n        \"reasonCode\": [\n          {\n            \"coding\": [\n              {\n                \"system\": \"http://snomed.info/sct\",\n                \"code\": \"38341003\",\n                \"display\": \"Hypertensive disorder, systemic arterial\"\n              }\n            ],\n            \"text\": \"Hipertensión arterial\"\n          }\n        ],\n        \"dosage\": [\n          {\n            \"text\": \"50 mg por vía oral una vez al día\",\n            \"timing\": {\n              \"repeat\": {\n                \"frequency\": 1,\n                \"period\": 1,\n                \"periodUnit\": \"d\"\n              }\n            },\n            \"route\": {\n              \"coding\": [\n                {\n                  \"system\": \"http://snomed.info/sct\",\n                  \"code\": \"26643006\",\n                  \"display\": \"Oral route\"\n                }\n              ],\n              \"text\": \"Vía oral\"\n            },\n            \"doseAndRate\": [\n              {\n                \"doseQuantity\": {\n                  \"value\": 50,\n                  \"unit\": \"mg\",\n                  \"system\": \"http://unitsofmeasure.org\",\n                  \"code\": \"mg\"\n                }\n              }\n            ]\n          }\n        ]\n      }\n    },\n    {\n      \"fullUrl\": \"urn:uuid:1c23a482-34bb-5dc6-b674-31cd0c22e699\",\n      \"resource\": {\n        \"resourceType\": \"Immunization\",\n        \"text\": {\n          \"status\": \"generated\",\n          \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Vacuna contra la influenza estacional, 0,5 mL IM en el brazo izquierdo, lote FLU-25-0417.</p></div>\"\n        },\n        \"status\": \"completed\",\n        \"vaccineCode\": {\n          \"coding\": [\n            {\n              \"system\": \"http://hl7.org/fhir/sid/cvx\",\n              \"code\": \"141\",\n              \"display\": \"Influenza, split virus, trivalent, preservative\"\n            }\n          ],\n          \"text\": \"Influenza estacional\"\n        },\n        \"patient\": {\n          \"reference\": \"urn:uuid:e0a33887-7d17-5a74-b931-ff942cb15b50\",\n          \"display\": \"Luis Alberto Paredes Cevallos\"\n        },\n        \"occurrenceDateTime\": \"2025-04-03T10:10:00-05:00\",\n        \"recorded\": \"2025-04-03\",\n        \"primarySource\": true,\n        \"lotNumber\": \"FLU-25-0417\",\n        \"expirationDate\": \"2025-12-31\",\n        \"site\": {\n          \"coding\": [\n            {\n              \"system\": \"http://snomed.info/sct\",\n              \"code\": \"368208006\",\n              \"display\": \"Left upper arm structure\"\n            }\n          ],\n          \"text\": \"Brazo izquierdo\"\n        },\n        \"route\": {\n          \"coding\": [\n            {\n              \"system\": \"http://terminology.hl7.org/CodeSystem/v3-RouteOfAdministration\",\n              \"code\": \"IM\",\n              \"display\": \"Injection, intramuscular\"\n            }\n          ],\n          \"text\": \"Intramuscular\"\n        },\n        \"doseQuantity\": {\n          \"value\": 0.5,\n          \"unit\": \"mL\",\n          \"system\": \"http://unitsofmeasure.org\",\n          \"code\": \"mL\"\n        },\n        \"protocolApplied\": [\n          {\n            \"series\": \"Campaña de influenza 2025\",\n            \"targetDisease\": [\n              {\n                \"coding\": [\n                  {\n                    \"system\": \"http://snomed.info/sct\",\n                    \"code\": \"6142004\",\n                    \"display\": \"Influenza\"\n                  }\n                ],\n                \"text\": \"Influenza\"\n              }\n            ],\n            \"doseNumberPositiveInt\": 1\n          }\n        ]\n      }\n    },\n    {\n      \"fullUrl\": \"urn:uuid:7a34d1ce-2f4f-5266-bcba-2bfbbc582b04\",\n      \"resource\": {\n        \"resourceType\": \"Immunization\",\n        \"text\": {\n          \"status\": \"generated\",\n          \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Refuerzo de Td (tétanos y difteria), 0,5 mL IM en el brazo derecho, lote TD-24-1180.</p></div>\"\n        },\n        \"status\": \"completed\",\n        \"vaccineCode\": {\n          \"coding\": [\n            {\n              \"system\": \"http://hl7.org/fhir/sid/cvx\",\n              \"code\": \"09\",\n              \"display\": \"Td (adult), 2 Lf tetanus toxoid, preservative free, adsorbed\"\n            }\n          ],\n          \"text\": \"Td (tétanos y difteria, adultos)\"\n        },\n        \"patient\": {\n          \"reference\": \"urn:uuid:e0a33887-7d17-5a74-b931-ff942cb15b50\",\n          \"display\": \"Luis Alberto Paredes Cevallos\"\n        },\n        \"occurrenceDateTime\": \"2025-04-03T10:10:00-05:00\",\n        \"recorded\": \"2025-04-03\",\n        \"primarySource\": true,\n        \"lotNumber\": \"TD-24-1180\",\n        \"expirationDate\": \"2026-06-30\",\n        \"site\": {\n          \"coding\": [\n            {\n              \"system\": \"http://snomed.info/sct\",\n              \"code\": \"368209003\",\n              \"display\": \"Right upper arm structure\"\n            }\n          ],\n          \"text\": \"Brazo derecho\"\n        },\n        \"route\": {\n          \"coding\": [\n            {\n              \"system\": \"http://terminology.hl7.org/CodeSystem/v3-RouteOfAdministration\",\n              \"code\": \"IM\",\n              \"display\": \"Injection, intramuscular\"\n            }\n          ],\n          \"text\": \"Intramuscular\"\n        },\n        \"doseQuantity\": {\n          \"value\": 0.5,\n          \"unit\": \"mL\",\n          \"system\": \"http://unitsofmeasure.org\",\n          \"code\": \"mL\"\n        },\n        \"protocolApplied\": [\n          {\n            \"series\": \"Esquema de adultos (refuerzo cada 10 años)\",\n            \"targetDisease\": [\n              {\n                \"coding\": [\n                  {\n                    \"system\": \"http://snomed.info/sct\",\n                    \"code\": \"76902006\",\n                    \"display\": \"Tetanus\"\n                  }\n                ],\n                \"text\": \"Tétanos\"\n              }\n            ],\n            \"doseNumberPositiveInt\": 4,\n            \"seriesDosesPositiveInt\": 4\n          }\n        ]\n      }\n    },\n    {\n      \"fullUrl\": \"urn:uuid:6d3eb46f-ac7b-58bc-9045-ff178b9f174a\",\n      \"resource\": {\n        \"resourceType\": \"Procedure\",\n        \"text\": {\n          \"status\": \"generated\",\n          \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Mastectomía parcial de mama izquierda, 10 de junio de 2025.</p><p>Resultado: exitoso. Control en 2 semanas.</p></div>\"\n        },\n        \"identifier\": [\n          {\n            \"system\": \"https://f-slg.github.io/aprende-fhir/sid/procedimiento\",\n            \"value\": \"PROC-2025-0001\"\n          }\n        ],\n        \"basedOn\": [\n          {\n            \"reference\": \"urn:uuid:c193b719-cfb2-5785-8823-e945606fdc45\",\n            \"display\": \"Plan de tratamiento del cáncer de mama\"\n          }\n        ],\n        \"status\": \"completed\",\n        \"category\": {\n          \"coding\": [\n            {\n              \"system\": \"http://snomed.info/sct\",\n              \"code\": \"387713003\",\n              \"display\": \"Surgical procedure\"\n            }\n          ],\n          \"text\": \"Procedimiento quirúrgico\"\n        },\n        \"code\": {\n          \"coding\": [\n            {\n              \"system\": \"http://snomed.info/sct\",\n              \"code\": \"64368001\",\n              \"display\": \"Partial mastectomy\"\n            }\n          ],\n          \"text\": \"Mastectomía parcial\"\n        },\n        \"subject\": {\n          \"reference\": \"urn:uuid:e0a33887-7d17-5a74-b931-ff942cb15b50\",\n          \"display\": \"Luis Alberto Paredes Cevallos\"\n        },\n        \"performedDateTime\": \"2025-06-10T08:00:00-05:00\",\n        \"reasonReference\": [\n          {\n            \"reference\": \"urn:uuid:a235f0f0-af9a-59ea-90b5-acfe6c6ee325\",\n            \"display\": \"Carcinoma ductal infiltrante de mama izquierda\"\n          }\n        ],\n        \"bodySite\": [\n          {\n            \"coding\": [\n              {\n                \"system\": \"http://snomed.info/sct\",\n                \"code\": \"80248007\",\n                \"display\": \"Left breast structure\"\n              }\n            ],\n            \"text\": \"Mama izquierda\"\n          }\n        ],\n        \"outcome\": {\n          \"coding\": [\n            {\n              \"system\": \"http://snomed.info/sct\",\n              \"code\": \"385669000\",\n              \"display\": \"Successful\"\n            }\n          ],\n          \"text\": \"Exitoso\"\n        },\n        \"followUp\": [\n          {\n            \"text\": \"Control de herida quirúrgica en 2 semanas y valoración por oncología.\"\n          }\n        ],\n        \"note\": [\n          {\n            \"text\": \"Márgenes quirúrgicos libres de tumor.\"\n          }\n        ]\n      }\n    },\n    {\n      \"fullUrl\": \"urn:uuid:700c2dc9-fcb4-56fe-b789-6b32667f9cd3\",\n      \"resource\": {\n        \"resourceType\": \"DiagnosticReport\",\n        \"text\": {\n          \"status\": \"generated\",\n          \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Informe de anatomía patológica: carcinoma ductal infiltrante de mama izquierda de 3,5 cm,</p><p>receptor de estrógeno positivo (Allred 8).</p></div>\"\n        },\n        \"identifier\": [\n          {\n            \"system\": \"https://f-slg.github.io/aprende-fhir/sid/informe\",\n            \"value\": \"INF-AP-2025-0457\"\n          }\n        ],\n        \"status\": \"final\",\n        \"category\": [\n          {\n            \"coding\": [\n              {\n                \"system\": \"http://terminology.hl7.org/CodeSystem/v2-0074\",\n                \"code\": \"SP\",\n                \"display\": \"Surgical Pathology\"\n              }\n            ],\n            \"text\": \"Anatomía patológica\"\n          }\n        ],\n        \"code\": {\n          \"coding\": [\n            {\n              \"system\": \"http://loinc.org\",\n              \"code\": \"11526-1\",\n              \"display\": \"Pathology study\"\n            }\n          ],\n          \"text\": \"Estudio de patología\"\n        },\n        \"subject\": {\n          \"reference\": \"urn:uuid:e0a33887-7d17-5a74-b931-ff942cb15b50\",\n          \"display\": \"Luis Alberto Paredes Cevallos\"\n        },\n        \"effectiveDateTime\": \"2025-05-12\",\n        \"issued\": \"2025-05-13T12:00:00-05:00\",\n        \"performer\": [\n          {\n            \"reference\": \"urn:uuid:57ab9932-e9b4-51d3-8dcd-658bedcb7cc7\",\n            \"display\": \"Hospital General Docente Ejemplo\"\n          }\n        ],\n        \"conclusion\": \"Carcinoma ductal infiltrante de mama izquierda, 3,5 cm, receptor de estrógeno positivo.\",\n        \"conclusionCode\": [\n          {\n            \"coding\": [\n              {\n                \"system\": \"http://snomed.info/sct\",\n                \"code\": \"254837009\",\n                \"display\": \"Malignant neoplasm of breast\"\n              }\n            ],\n            \"text\": \"Cáncer de mama\"\n          }\n        ]\n      }\n    },\n    {\n      \"fullUrl\": \"urn:uuid:c193b719-cfb2-5785-8823-e945606fdc45\",\n      \"resource\": {\n        \"resourceType\": \"CarePlan\",\n        \"text\": {\n          \"status\": \"generated\",\n          \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Plan de tratamiento del comité de tumores (20 de mayo de 2025):</p><p>1) mastectomía parcial; 2) quimioterapia con doxorrubicina, 4 ciclos; 3) hormonoterapia con tamoxifeno por 5 años.</p></div>\"\n        },\n        \"identifier\": [\n          {\n            \"system\": \"https://f-slg.github.io/aprende-fhir/sid/plan\",\n            \"value\": \"PLAN-2025-0001\"\n          }\n        ],\n        \"status\": \"active\",\n        \"intent\": \"plan\",\n        \"category\": [\n          {\n            \"text\": \"Plan de tratamiento oncológico\"\n          }\n        ],\n        \"title\": \"Plan de tratamiento del cáncer de mama\",\n        \"description\": \"Tratamiento acordado por el comité de tumores de mama.\",\n        \"subject\": {\n          \"reference\": \"urn:uuid:e0a33887-7d17-5a74-b931-ff942cb15b50\",\n          \"display\": \"Luis Alberto Paredes Cevallos\"\n        },\n        \"period\": {\n          \"start\": \"2025-05-20\",\n          \"end\": \"2030-10-31\"\n        },\n        \"created\": \"2025-05-20\",\n        \"author\": {\n          \"reference\": \"urn:uuid:dd91e0ce-7db7-5ab2-aca0-52a76742dfd5\",\n          \"display\": \"Dr. Ruiz · Oncología clínica\"\n        },\n        \"addresses\": [\n          {\n            \"reference\": \"urn:uuid:a235f0f0-af9a-59ea-90b5-acfe6c6ee325\",\n            \"display\": \"Carcinoma ductal infiltrante de mama izquierda\"\n          }\n        ],\n        \"activity\": [\n          {\n            \"detail\": {\n              \"kind\": \"ServiceRequest\",\n              \"code\": {\n                \"coding\": [\n                  {\n                    \"system\": \"http://snomed.info/sct\",\n                    \"code\": \"64368001\",\n                    \"display\": \"Partial mastectomy\"\n                  }\n                ],\n                \"text\": \"Mastectomía parcial\"\n              },\n              \"status\": \"scheduled\",\n              \"scheduledPeriod\": {\n                \"start\": \"2025-06-10\",\n                \"end\": \"2025-06-10\"\n              },\n              \"performer\": [\n                {\n                  \"reference\": \"urn:uuid:dd91e0ce-7db7-5ab2-aca0-52a76742dfd5\",\n                  \"display\": \"Dr. Ruiz · Oncología clínica\"\n                }\n              ],\n              \"description\": \"Mastectomía parcial de la mama izquierda\"\n            }\n          },\n          {\n            \"detail\": {\n              \"kind\": \"MedicationRequest\",\n              \"code\": {\n                \"coding\": [\n                  {\n                    \"system\": \"http://snomed.info/sct\",\n                    \"code\": \"367336001\",\n                    \"display\": \"Chemotherapy\"\n                  }\n                ],\n                \"text\": \"Quimioterapia\"\n              },\n              \"status\": \"not-started\",\n              \"scheduledPeriod\": {\n                \"start\": \"2025-07-01\",\n                \"end\": \"2025-09-30\"\n              },\n              \"performer\": [\n                {\n                  \"reference\": \"urn:uuid:dd91e0ce-7db7-5ab2-aca0-52a76742dfd5\",\n                  \"display\": \"Dr. Ruiz · Oncología clínica\"\n                }\n              ],\n              \"description\": \"Doxorrubicina 60 mg/m² cada 21 días, 4 ciclos\"\n            }\n          },\n          {\n            \"detail\": {\n              \"kind\": \"MedicationRequest\",\n              \"code\": {\n                \"coding\": [\n                  {\n                    \"system\": \"http://snomed.info/sct\",\n                    \"code\": \"169413002\",\n                    \"display\": \"Hormone therapy\"\n                  }\n                ],\n                \"text\": \"Hormonoterapia\"\n              },\n              \"status\": \"not-started\",\n              \"scheduledPeriod\": {\n                \"start\": \"2025-10-15\",\n                \"end\": \"2030-10-15\"\n              },\n              \"performer\": [\n                {\n                  \"reference\": \"urn:uuid:dd91e0ce-7db7-5ab2-aca0-52a76742dfd5\",\n                  \"display\": \"Dr. Ruiz · Oncología clínica\"\n                }\n              ],\n              \"description\": \"Tamoxifeno 20 mg diarios por 5 años\"\n            }\n          }\n        ]\n      }\n    },\n    {\n      \"fullUrl\": \"urn:uuid:6fcc22a2-86d1-5ef6-a254-6f6770b5ef60\",\n      \"resource\": {\n        \"resourceType\": \"Condition\",\n        \"text\": {\n          \"status\": \"generated\",\n          \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Intoxicación alimentaria bacteriana, no especificada (moderada).</p><p>Inicio: 17 de marzo de 2025. Resuelta.</p></div>\"\n        },\n        \"identifier\": [\n          {\n            \"system\": \"https://f-slg.github.io/aprende-fhir/sid/condicion\",\n            \"value\": \"COND-2025-0001\"\n          }\n        ],\n        \"clinicalStatus\": {\n          \"coding\": [\n            {\n              \"system\": \"http://terminology.hl7.org/CodeSystem/condition-clinical\",\n              \"code\": \"resolved\",\n              \"display\": \"Resolved\"\n            }\n          ]\n        },\n        \"verificationStatus\": {\n          \"coding\": [\n            {\n              \"system\": \"http://terminology.hl7.org/CodeSystem/condition-ver-status\",\n              \"code\": \"confirmed\",\n              \"display\": \"Confirmed\"\n            }\n          ]\n        },\n        \"category\": [\n          {\n            \"coding\": [\n              {\n                \"system\": \"http://terminology.hl7.org/CodeSystem/condition-category\",\n                \"code\": \"encounter-diagnosis\",\n                \"display\": \"Encounter Diagnosis\"\n              }\n            ]\n          }\n        ],\n        \"severity\": {\n          \"coding\": [\n            {\n              \"system\": \"http://snomed.info/sct\",\n              \"code\": \"6736007\",\n              \"display\": \"Moderate (severity modifier)\"\n            }\n          ],\n          \"text\": \"Moderada\"\n        },\n        \"code\": {\n          \"coding\": [\n            {\n              \"system\": \"http://hl7.org/fhir/sid/icd-10\",\n              \"code\": \"A05.9\",\n              \"display\": \"Bacterial foodborne intoxication, unspecified\"\n            }\n          ],\n          \"text\": \"Intoxicación alimentaria bacteriana, no especificada\"\n        },\n        \"subject\": {\n          \"reference\": \"urn:uuid:e0a33887-7d17-5a74-b931-ff942cb15b50\",\n          \"display\": \"Luis Alberto Paredes Cevallos\"\n        },\n        \"onsetDateTime\": \"2025-03-17\",\n        \"abatementDateTime\": \"2025-03-24\",\n        \"recordedDate\": \"2025-03-20\",\n        \"evidence\": [\n          {\n            \"code\": [\n              {\n                \"coding\": [\n                  {\n                    \"system\": \"http://snomed.info/sct\",\n                    \"code\": \"422587007\",\n                    \"display\": \"Nausea\"\n                  }\n                ],\n                \"text\": \"Náuseas\"\n              },\n              {\n                \"coding\": [\n                  {\n                    \"system\": \"http://snomed.info/sct\",\n                    \"code\": \"422400008\",\n                    \"display\": \"Vomiting\"\n                  }\n                ],\n                \"text\": \"Vómito\"\n              },\n              {\n                \"coding\": [\n                  {\n                    \"system\": \"http://snomed.info/sct\",\n                    \"code\": \"21522001\",\n                    \"display\": \"Abdominal pain\"\n                  }\n                ],\n                \"text\": \"Dolor abdominal\"\n              },\n              {\n                \"coding\": [\n                  {\n                    \"system\": \"http://snomed.info/sct\",\n                    \"code\": \"62315008\",\n                    \"display\": \"Diarrhea\"\n                  }\n                ],\n                \"text\": \"Diarrea\"\n              }\n            ]\n          }\n        ]\n      }\n    }\n  ]\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/19-resumen-ips/soluciones/19b_bundle_ips.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const id = pm.response.json().id;",
+                  "pm.collectionVariables.set(\"bundleIpsId\", id);",
+                  "if (pm.environment.name) pm.environment.set(\"bundleIpsId\", id);",
+                  "console.log(\"bundleIpsId = \" + id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "19d · Leer el IPS",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Bundle/{{bundleIpsId}}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "19e · Error a propósito: un IPS sin la sección de alergias",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Bundle",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"Bundle\",\n  \"identifier\": {\n    \"system\": \"https://f-slg.github.io/aprende-fhir/sid/documento\",\n    \"value\": \"IPS-2026-0099\"\n  },\n  \"type\": \"document\",\n  \"timestamp\": \"2026-02-15T10:05:00-05:00\",\n  \"entry\": [\n    {\n      \"fullUrl\": \"urn:uuid:71f58005-a7dd-50ea-b9a2-c9b70638ce0b\",\n      \"resource\": {\n        \"resourceType\": \"Composition\",\n        \"text\": {\n          \"status\": \"generated\",\n          \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Resumen internacional del paciente (IPS) de Luis Alberto Paredes Cevallos,</p><p>emitido el 15 de febrero de 2026 por el servicio de Oncología Clínica.</p></div>\"\n        },\n        \"identifier\": {\n          \"system\": \"https://f-slg.github.io/aprende-fhir/sid/documento\",\n          \"value\": \"IPS-2026-0099\"\n        },\n        \"status\": \"final\",\n        \"type\": {\n          \"coding\": [\n            {\n              \"system\": \"http://loinc.org\",\n              \"code\": \"60591-5\",\n              \"display\": \"Patient summary Document\"\n            }\n          ],\n          \"text\": \"Resumen del paciente\"\n        },\n        \"subject\": {\n          \"reference\": \"urn:uuid:e0a33887-7d17-5a74-b931-ff942cb15b50\",\n          \"display\": \"Luis Alberto Paredes Cevallos\"\n        },\n        \"date\": \"2026-02-15T10:00:00-05:00\",\n        \"author\": [\n          {\n            \"reference\": \"urn:uuid:dd91e0ce-7db7-5ab2-aca0-52a76742dfd5\",\n            \"display\": \"Dr. Ruiz · Oncología clínica\"\n          }\n        ],\n        \"title\": \"Resumen internacional del paciente\",\n        \"confidentiality\": \"N\",\n        \"custodian\": {\n          \"reference\": \"urn:uuid:57ab9932-e9b4-51d3-8dcd-658bedcb7cc7\",\n          \"display\": \"Hospital General Docente Ejemplo\"\n        },\n        \"section\": [\n          {\n            \"title\": \"Problemas activos\",\n            \"code\": {\n              \"coding\": [\n                {\n                  \"system\": \"http://loinc.org\",\n                  \"code\": \"11450-4\",\n                  \"display\": \"Problem list - Reported\"\n                }\n              ]\n            },\n            \"text\": {\n              \"status\": \"generated\",\n              \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Carcinoma ductal infiltrante de mama izquierda (activo, desde mayo de 2025).</p></div>\"\n            },\n            \"entry\": [\n              {\n                \"reference\": \"urn:uuid:a235f0f0-af9a-59ea-90b5-acfe6c6ee325\",\n                \"display\": \"Carcinoma ductal infiltrante de mama izquierda\"\n              }\n            ]\n          },\n          {\n            \"title\": \"Medicación\",\n            \"code\": {\n              \"coding\": [\n                {\n                  \"system\": \"http://loinc.org\",\n                  \"code\": \"10160-0\",\n                  \"display\": \"History of Medication use Narrative\"\n                }\n              ]\n            },\n            \"text\": {\n              \"status\": \"generated\",\n              \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Losartán 50 mg por vía oral una vez al día (hipertensión arterial).</p></div>\"\n            },\n            \"entry\": [\n              {\n                \"reference\": \"urn:uuid:1c8d9299-5780-580f-8c4f-338a8adaf567\",\n                \"display\": \"Losartán 50 mg diarios\"\n              }\n            ]\n          },\n          {\n            \"title\": \"Vacunas\",\n            \"code\": {\n              \"coding\": [\n                {\n                  \"system\": \"http://loinc.org\",\n                  \"code\": \"11369-6\",\n                  \"display\": \"History of Immunization note\"\n                }\n              ]\n            },\n            \"text\": {\n              \"status\": \"generated\",\n              \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Influenza estacional (3 de abril de 2025).</p><p>Td, refuerzo (3 de abril de 2025).</p></div>\"\n            },\n            \"entry\": [\n              {\n                \"reference\": \"urn:uuid:1c23a482-34bb-5dc6-b674-31cd0c22e699\",\n                \"display\": \"Influenza, 3 de abril de 2025\"\n              },\n              {\n                \"reference\": \"urn:uuid:7a34d1ce-2f4f-5266-bcba-2bfbbc582b04\",\n                \"display\": \"Td, 3 de abril de 2025\"\n              }\n            ]\n          },\n          {\n            \"title\": \"Procedimientos\",\n            \"code\": {\n              \"coding\": [\n                {\n                  \"system\": \"http://loinc.org\",\n                  \"code\": \"47519-4\",\n                  \"display\": \"History of Procedures Document\"\n                }\n              ]\n            },\n            \"text\": {\n              \"status\": \"generated\",\n              \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Mastectomía parcial de mama izquierda (10 de junio de 2025), exitosa.</p></div>\"\n            },\n            \"entry\": [\n              {\n                \"reference\": \"urn:uuid:6d3eb46f-ac7b-58bc-9045-ff178b9f174a\",\n                \"display\": \"Mastectomía parcial\"\n              }\n            ]\n          },\n          {\n            \"title\": \"Resultados\",\n            \"code\": {\n              \"coding\": [\n                {\n                  \"system\": \"http://loinc.org\",\n                  \"code\": \"30954-2\",\n                  \"display\": \"Relevant diagnostic tests/laboratory data note\"\n                }\n              ]\n            },\n            \"text\": {\n              \"status\": \"generated\",\n              \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Anatomía patológica: carcinoma ductal infiltrante de 3,5 cm, receptor de estrógeno positivo (Allred 8).</p></div>\"\n            },\n            \"entry\": [\n              {\n                \"reference\": \"urn:uuid:700c2dc9-fcb4-56fe-b789-6b32667f9cd3\",\n                \"display\": \"Informe de patología\"\n              }\n            ]\n          },\n          {\n            \"title\": \"Plan de tratamiento\",\n            \"code\": {\n              \"coding\": [\n                {\n                  \"system\": \"http://loinc.org\",\n                  \"code\": \"18776-5\",\n                  \"display\": \"Plan of care note\"\n                }\n              ]\n            },\n            \"text\": {\n              \"status\": \"generated\",\n              \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Plan del comité de tumores: cirugía, quimioterapia (4 ciclos) y hormonoterapia;</p><p>tamoxifeno suspendido en febrero de 2026 por intolerancia.</p></div>\"\n            },\n            \"entry\": [\n              {\n                \"reference\": \"urn:uuid:c193b719-cfb2-5785-8823-e945606fdc45\",\n                \"display\": \"Plan de tratamiento del cáncer de mama\"\n              }\n            ]\n          },\n          {\n            \"title\": \"Antecedentes\",\n            \"code\": {\n              \"coding\": [\n                {\n                  \"system\": \"http://loinc.org\",\n                  \"code\": \"11348-0\",\n                  \"display\": \"History of Past illness note\"\n                }\n              ]\n            },\n            \"text\": {\n              \"status\": \"generated\",\n              \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Intoxicación alimentaria bacteriana (marzo de 2025), resuelta.</p></div>\"\n            },\n            \"entry\": [\n              {\n                \"reference\": \"urn:uuid:6fcc22a2-86d1-5ef6-a254-6f6770b5ef60\",\n                \"display\": \"Intoxicación alimentaria\"\n              }\n            ]\n          }\n        ]\n      }\n    },\n    {\n      \"fullUrl\": \"urn:uuid:e0a33887-7d17-5a74-b931-ff942cb15b50\",\n      \"resource\": {\n        \"resourceType\": \"Patient\",\n        \"text\": {\n          \"status\": \"generated\",\n          \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Luis Alberto Paredes Cevallos, hombre, nacido el 12 de marzo de 1979 en Riobamba.</p><p>Cédula ficticia 9900000017 · Historia clínica HC-000123.</p><p>Teléfono +593 99 000 0000 · Casado.</p></div>\"\n        },\n        \"identifier\": [\n          {\n            \"use\": \"official\",\n            \"type\": {\n              \"coding\": [\n                {\n                  \"system\": \"http://terminology.hl7.org/CodeSystem/v2-0203\",\n                  \"code\": \"NI\",\n                  \"display\": \"National unique individual identifier\"\n                }\n              ],\n              \"text\": \"Cédula de identidad\"\n            },\n            \"system\": \"https://f-slg.github.io/aprende-fhir/sid/cedula\",\n            \"value\": \"9900000017\"\n          },\n          {\n            \"use\": \"usual\",\n            \"type\": {\n              \"coding\": [\n                {\n                  \"system\": \"http://terminology.hl7.org/CodeSystem/v2-0203\",\n                  \"code\": \"MR\",\n                  \"display\": \"Medical record number\"\n                }\n              ],\n              \"text\": \"Historia clínica\"\n            },\n            \"system\": \"https://f-slg.github.io/aprende-fhir/sid/historia-clinica/hospital-general-docente-ejemplo\",\n            \"value\": \"HC-000123\"\n          }\n        ],\n        \"active\": true,\n        \"name\": [\n          {\n            \"use\": \"official\",\n            \"text\": \"Luis Alberto Paredes Cevallos\",\n            \"family\": \"Paredes Cevallos\",\n            \"_family\": {\n              \"extension\": [\n                {\n                  \"url\": \"http://hl7.org/fhir/StructureDefinition/humanname-fathers-family\",\n                  \"valueString\": \"Paredes\"\n                },\n                {\n                  \"url\": \"http://hl7.org/fhir/StructureDefinition/humanname-mothers-family\",\n                  \"valueString\": \"Cevallos\"\n                }\n              ]\n            },\n            \"given\": [\n              \"Luis\",\n              \"Alberto\"\n            ]\n          },\n          {\n            \"use\": \"usual\",\n            \"text\": \"Luis Paredes\"\n          }\n        ],\n        \"gender\": \"male\",\n        \"birthDate\": \"1979-03-12\",\n        \"address\": [\n          {\n            \"use\": \"home\",\n            \"type\": \"physical\",\n            \"line\": [\n              \"Av. de los Ejemplos N00-00 y calle Ficticia\"\n            ],\n            \"city\": \"Quito\",\n            \"district\": \"Quito\",\n            \"state\": \"Pichincha\",\n            \"country\": \"EC\"\n          }\n        ],\n        \"communication\": [\n          {\n            \"language\": {\n              \"coding\": [\n                {\n                  \"system\": \"urn:ietf:bcp:47\",\n                  \"code\": \"es\",\n                  \"display\": \"Spanish\"\n                }\n              ],\n              \"text\": \"Español\"\n            },\n            \"preferred\": true\n          }\n        ],\n        \"extension\": [\n          {\n            \"url\": \"http://hl7.org/fhir/StructureDefinition/patient-birthPlace\",\n            \"valueAddress\": {\n              \"city\": \"Riobamba\",\n              \"state\": \"Chimborazo\",\n              \"country\": \"EC\"\n            }\n          }\n        ],\n        \"telecom\": [\n          {\n            \"system\": \"phone\",\n            \"value\": \"+593 99 000 0000\",\n            \"use\": \"mobile\"\n          }\n        ],\n        \"maritalStatus\": {\n          \"coding\": [\n            {\n              \"system\": \"http://terminology.hl7.org/CodeSystem/v3-MaritalStatus\",\n              \"code\": \"M\",\n              \"display\": \"Married\"\n            }\n          ],\n          \"text\": \"Casado\"\n        }\n      }\n    },\n    {\n      \"fullUrl\": \"urn:uuid:a36b7bd8-06d2-5884-a3de-a13c48d07d5e\",\n      \"resource\": {\n        \"resourceType\": \"Practitioner\",\n        \"text\": {\n          \"status\": \"generated\",\n          \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Dr. Esteban Patricio Ruiz Montalvo, oncólogo clínico. Registro profesional ficticio RP-000733.</p></div>\"\n        },\n        \"identifier\": [\n          {\n            \"use\": \"official\",\n            \"system\": \"https://f-slg.github.io/aprende-fhir/sid/registro-profesional\",\n            \"value\": \"RP-000733\"\n          }\n        ],\n        \"active\": true,\n        \"name\": [\n          {\n            \"use\": \"official\",\n            \"text\": \"Dr. Esteban Patricio Ruiz Montalvo\",\n            \"prefix\": [\n              \"Dr.\"\n            ],\n            \"family\": \"Ruiz Montalvo\",\n            \"given\": [\n              \"Esteban\",\n              \"Patricio\"\n            ]\n          }\n        ],\n        \"gender\": \"male\",\n        \"qualification\": [\n          {\n            \"code\": {\n              \"coding\": [\n                {\n                  \"system\": \"http://terminology.hl7.org/CodeSystem/v2-0360\",\n                  \"code\": \"MD\",\n                  \"display\": \"Doctor of Medicine\"\n                }\n              ],\n              \"text\": \"Médico\"\n            }\n          }\n        ]\n      }\n    },\n    {\n      \"fullUrl\": \"urn:uuid:dd91e0ce-7db7-5ab2-aca0-52a76742dfd5\",\n      \"resource\": {\n        \"resourceType\": \"PractitionerRole\",\n        \"text\": {\n          \"status\": \"generated\",\n          \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Dr. Esteban Patricio Ruiz Montalvo: oncólogo clínico en el Hospital General Docente Ejemplo.</p></div>\"\n        },\n        \"active\": true,\n        \"practitioner\": {\n          \"reference\": \"urn:uuid:a36b7bd8-06d2-5884-a3de-a13c48d07d5e\",\n          \"display\": \"Dr. Esteban Patricio Ruiz Montalvo\"\n        },\n        \"organization\": {\n          \"reference\": \"urn:uuid:57ab9932-e9b4-51d3-8dcd-658bedcb7cc7\",\n          \"display\": \"Hospital General Docente Ejemplo\"\n        },\n        \"code\": [\n          {\n            \"coding\": [\n              {\n                \"system\": \"http://terminology.hl7.org/CodeSystem/practitioner-role\",\n                \"code\": \"doctor\",\n                \"display\": \"Doctor\"\n              }\n            ],\n            \"text\": \"Médico\"\n          }\n        ],\n        \"specialty\": [\n          {\n            \"coding\": [\n              {\n                \"system\": \"http://snomed.info/sct\",\n                \"code\": \"394593009\",\n                \"display\": \"Medical oncology\"\n              }\n            ],\n            \"text\": \"Oncología clínica\"\n          }\n        ]\n      }\n    },\n    {\n      \"fullUrl\": \"urn:uuid:57ab9932-e9b4-51d3-8dcd-658bedcb7cc7\",\n      \"resource\": {\n        \"resourceType\": \"Organization\",\n        \"text\": {\n          \"status\": \"generated\",\n          \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Hospital General Docente Ejemplo, parte de la Red de Servicios de Salud Ejemplo (ficticia).</p></div>\"\n        },\n        \"identifier\": [\n          {\n            \"system\": \"https://f-slg.github.io/aprende-fhir/sid/establecimiento\",\n            \"value\": \"HGDE-0001\"\n          }\n        ],\n        \"active\": true,\n        \"type\": [\n          {\n            \"coding\": [\n              {\n                \"system\": \"http://terminology.hl7.org/CodeSystem/organization-type\",\n                \"code\": \"prov\",\n                \"display\": \"Healthcare Provider\"\n              }\n            ]\n          }\n        ],\n        \"name\": \"Hospital General Docente Ejemplo\",\n        \"telecom\": [\n          {\n            \"system\": \"phone\",\n            \"value\": \"+593 2 000 0000\",\n            \"use\": \"work\"\n          }\n        ],\n        \"address\": [\n          {\n            \"line\": [\n              \"Av. Principal Ejemplo S00-00\"\n            ],\n            \"city\": \"Quito\",\n            \"state\": \"Pichincha\",\n            \"country\": \"EC\"\n          }\n        ]\n      }\n    },\n    {\n      \"fullUrl\": \"urn:uuid:a235f0f0-af9a-59ea-90b5-acfe6c6ee325\",\n      \"resource\": {\n        \"resourceType\": \"Condition\",\n        \"text\": {\n          \"status\": \"generated\",\n          \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Carcinoma ductal infiltrante de mama izquierda (activo, confirmado).</p><p>Diagnóstico: 13 de mayo de 2025.</p></div>\"\n        },\n        \"identifier\": [\n          {\n            \"system\": \"https://f-slg.github.io/aprende-fhir/sid/condicion\",\n            \"value\": \"COND-2025-0002\"\n          }\n        ],\n        \"clinicalStatus\": {\n          \"coding\": [\n            {\n              \"system\": \"http://terminology.hl7.org/CodeSystem/condition-clinical\",\n              \"code\": \"active\",\n              \"display\": \"Active\"\n            }\n          ]\n        },\n        \"verificationStatus\": {\n          \"coding\": [\n            {\n              \"system\": \"http://terminology.hl7.org/CodeSystem/condition-ver-status\",\n              \"code\": \"confirmed\",\n              \"display\": \"Confirmed\"\n            }\n          ]\n        },\n        \"category\": [\n          {\n            \"coding\": [\n              {\n                \"system\": \"http://terminology.hl7.org/CodeSystem/condition-category\",\n                \"code\": \"problem-list-item\",\n                \"display\": \"Problem List Item\"\n              }\n            ]\n          }\n        ],\n        \"code\": {\n          \"coding\": [\n            {\n              \"system\": \"http://hl7.org/fhir/sid/icd-10\",\n              \"code\": \"C50.9\",\n              \"display\": \"Breast, unspecified\"\n            },\n            {\n              \"system\": \"http://snomed.info/sct\",\n              \"code\": \"254837009\",\n              \"display\": \"Malignant neoplasm of breast\"\n            }\n          ],\n          \"text\": \"Carcinoma ductal infiltrante de mama izquierda\"\n        },\n        \"bodySite\": [\n          {\n            \"coding\": [\n              {\n                \"system\": \"http://snomed.info/sct\",\n                \"code\": \"80248007\",\n                \"display\": \"Left breast structure\"\n              }\n            ],\n            \"text\": \"Mama izquierda\"\n          }\n        ],\n        \"subject\": {\n          \"reference\": \"urn:uuid:e0a33887-7d17-5a74-b931-ff942cb15b50\",\n          \"display\": \"Luis Alberto Paredes Cevallos\"\n        },\n        \"onsetDateTime\": \"2025-05-13\",\n        \"recordedDate\": \"2025-05-13\",\n        \"evidence\": [\n          {\n            \"detail\": [\n              {\n                \"reference\": \"urn:uuid:700c2dc9-fcb4-56fe-b789-6b32667f9cd3\",\n                \"display\": \"Informe de patología AP-2025-0457\"\n              }\n            ]\n          }\n        ]\n      }\n    },\n    {\n      \"fullUrl\": \"urn:uuid:1c8d9299-5780-580f-8c4f-338a8adaf567\",\n      \"resource\": {\n        \"resourceType\": \"MedicationStatement\",\n        \"text\": {\n          \"status\": \"generated\",\n          \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Toma losartán 50 mg por vía oral una vez al día para la hipertensión, desde 2021.</p></div>\"\n        },\n        \"status\": \"active\",\n        \"medicationCodeableConcept\": {\n          \"coding\": [\n            {\n              \"system\": \"http://snomed.info/sct\",\n              \"code\": \"373567002\",\n              \"display\": \"Losartan\"\n            }\n          ],\n          \"text\": \"Losartán\"\n        },\n        \"subject\": {\n          \"reference\": \"urn:uuid:e0a33887-7d17-5a74-b931-ff942cb15b50\",\n          \"display\": \"Luis Alberto Paredes Cevallos\"\n        },\n        \"effectivePeriod\": {\n          \"start\": \"2021-06\"\n        },\n        \"dateAsserted\": \"2025-03-20\",\n        \"informationSource\": {\n          \"reference\": \"urn:uuid:e0a33887-7d17-5a74-b931-ff942cb15b50\",\n          \"display\": \"Luis Alberto Paredes Cevallos\"\n        },\n        \"reasonCode\": [\n          {\n            \"coding\": [\n              {\n                \"system\": \"http://snomed.info/sct\",\n                \"code\": \"38341003\",\n                \"display\": \"Hypertensive disorder, systemic arterial\"\n              }\n            ],\n            \"text\": \"Hipertensión arterial\"\n          }\n        ],\n        \"dosage\": [\n          {\n            \"text\": \"50 mg por vía oral una vez al día\",\n            \"timing\": {\n              \"repeat\": {\n                \"frequency\": 1,\n                \"period\": 1,\n                \"periodUnit\": \"d\"\n              }\n            },\n            \"route\": {\n              \"coding\": [\n                {\n                  \"system\": \"http://snomed.info/sct\",\n                  \"code\": \"26643006\",\n                  \"display\": \"Oral route\"\n                }\n              ],\n              \"text\": \"Vía oral\"\n            },\n            \"doseAndRate\": [\n              {\n                \"doseQuantity\": {\n                  \"value\": 50,\n                  \"unit\": \"mg\",\n                  \"system\": \"http://unitsofmeasure.org\",\n                  \"code\": \"mg\"\n                }\n              }\n            ]\n          }\n        ]\n      }\n    },\n    {\n      \"fullUrl\": \"urn:uuid:1c23a482-34bb-5dc6-b674-31cd0c22e699\",\n      \"resource\": {\n        \"resourceType\": \"Immunization\",\n        \"text\": {\n          \"status\": \"generated\",\n          \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Vacuna contra la influenza estacional, 0,5 mL IM en el brazo izquierdo, lote FLU-25-0417.</p></div>\"\n        },\n        \"status\": \"completed\",\n        \"vaccineCode\": {\n          \"coding\": [\n            {\n              \"system\": \"http://hl7.org/fhir/sid/cvx\",\n              \"code\": \"141\",\n              \"display\": \"Influenza, split virus, trivalent, preservative\"\n            }\n          ],\n          \"text\": \"Influenza estacional\"\n        },\n        \"patient\": {\n          \"reference\": \"urn:uuid:e0a33887-7d17-5a74-b931-ff942cb15b50\",\n          \"display\": \"Luis Alberto Paredes Cevallos\"\n        },\n        \"occurrenceDateTime\": \"2025-04-03T10:10:00-05:00\",\n        \"recorded\": \"2025-04-03\",\n        \"primarySource\": true,\n        \"lotNumber\": \"FLU-25-0417\",\n        \"expirationDate\": \"2025-12-31\",\n        \"site\": {\n          \"coding\": [\n            {\n              \"system\": \"http://snomed.info/sct\",\n              \"code\": \"368208006\",\n              \"display\": \"Left upper arm structure\"\n            }\n          ],\n          \"text\": \"Brazo izquierdo\"\n        },\n        \"route\": {\n          \"coding\": [\n            {\n              \"system\": \"http://terminology.hl7.org/CodeSystem/v3-RouteOfAdministration\",\n              \"code\": \"IM\",\n              \"display\": \"Injection, intramuscular\"\n            }\n          ],\n          \"text\": \"Intramuscular\"\n        },\n        \"doseQuantity\": {\n          \"value\": 0.5,\n          \"unit\": \"mL\",\n          \"system\": \"http://unitsofmeasure.org\",\n          \"code\": \"mL\"\n        },\n        \"protocolApplied\": [\n          {\n            \"series\": \"Campaña de influenza 2025\",\n            \"targetDisease\": [\n              {\n                \"coding\": [\n                  {\n                    \"system\": \"http://snomed.info/sct\",\n                    \"code\": \"6142004\",\n                    \"display\": \"Influenza\"\n                  }\n                ],\n                \"text\": \"Influenza\"\n              }\n            ],\n            \"doseNumberPositiveInt\": 1\n          }\n        ]\n      }\n    },\n    {\n      \"fullUrl\": \"urn:uuid:7a34d1ce-2f4f-5266-bcba-2bfbbc582b04\",\n      \"resource\": {\n        \"resourceType\": \"Immunization\",\n        \"text\": {\n          \"status\": \"generated\",\n          \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Refuerzo de Td (tétanos y difteria), 0,5 mL IM en el brazo derecho, lote TD-24-1180.</p></div>\"\n        },\n        \"status\": \"completed\",\n        \"vaccineCode\": {\n          \"coding\": [\n            {\n              \"system\": \"http://hl7.org/fhir/sid/cvx\",\n              \"code\": \"09\",\n              \"display\": \"Td (adult), 2 Lf tetanus toxoid, preservative free, adsorbed\"\n            }\n          ],\n          \"text\": \"Td (tétanos y difteria, adultos)\"\n        },\n        \"patient\": {\n          \"reference\": \"urn:uuid:e0a33887-7d17-5a74-b931-ff942cb15b50\",\n          \"display\": \"Luis Alberto Paredes Cevallos\"\n        },\n        \"occurrenceDateTime\": \"2025-04-03T10:10:00-05:00\",\n        \"recorded\": \"2025-04-03\",\n        \"primarySource\": true,\n        \"lotNumber\": \"TD-24-1180\",\n        \"expirationDate\": \"2026-06-30\",\n        \"site\": {\n          \"coding\": [\n            {\n              \"system\": \"http://snomed.info/sct\",\n              \"code\": \"368209003\",\n              \"display\": \"Right upper arm structure\"\n            }\n          ],\n          \"text\": \"Brazo derecho\"\n        },\n        \"route\": {\n          \"coding\": [\n            {\n              \"system\": \"http://terminology.hl7.org/CodeSystem/v3-RouteOfAdministration\",\n              \"code\": \"IM\",\n              \"display\": \"Injection, intramuscular\"\n            }\n          ],\n          \"text\": \"Intramuscular\"\n        },\n        \"doseQuantity\": {\n          \"value\": 0.5,\n          \"unit\": \"mL\",\n          \"system\": \"http://unitsofmeasure.org\",\n          \"code\": \"mL\"\n        },\n        \"protocolApplied\": [\n          {\n            \"series\": \"Esquema de adultos (refuerzo cada 10 años)\",\n            \"targetDisease\": [\n              {\n                \"coding\": [\n                  {\n                    \"system\": \"http://snomed.info/sct\",\n                    \"code\": \"76902006\",\n                    \"display\": \"Tetanus\"\n                  }\n                ],\n                \"text\": \"Tétanos\"\n              }\n            ],\n            \"doseNumberPositiveInt\": 4,\n            \"seriesDosesPositiveInt\": 4\n          }\n        ]\n      }\n    },\n    {\n      \"fullUrl\": \"urn:uuid:6d3eb46f-ac7b-58bc-9045-ff178b9f174a\",\n      \"resource\": {\n        \"resourceType\": \"Procedure\",\n        \"text\": {\n          \"status\": \"generated\",\n          \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Mastectomía parcial de mama izquierda, 10 de junio de 2025.</p><p>Resultado: exitoso. Control en 2 semanas.</p></div>\"\n        },\n        \"identifier\": [\n          {\n            \"system\": \"https://f-slg.github.io/aprende-fhir/sid/procedimiento\",\n            \"value\": \"PROC-2025-0001\"\n          }\n        ],\n        \"basedOn\": [\n          {\n            \"reference\": \"urn:uuid:c193b719-cfb2-5785-8823-e945606fdc45\",\n            \"display\": \"Plan de tratamiento del cáncer de mama\"\n          }\n        ],\n        \"status\": \"completed\",\n        \"category\": {\n          \"coding\": [\n            {\n              \"system\": \"http://snomed.info/sct\",\n              \"code\": \"387713003\",\n              \"display\": \"Surgical procedure\"\n            }\n          ],\n          \"text\": \"Procedimiento quirúrgico\"\n        },\n        \"code\": {\n          \"coding\": [\n            {\n              \"system\": \"http://snomed.info/sct\",\n              \"code\": \"64368001\",\n              \"display\": \"Partial mastectomy\"\n            }\n          ],\n          \"text\": \"Mastectomía parcial\"\n        },\n        \"subject\": {\n          \"reference\": \"urn:uuid:e0a33887-7d17-5a74-b931-ff942cb15b50\",\n          \"display\": \"Luis Alberto Paredes Cevallos\"\n        },\n        \"performedDateTime\": \"2025-06-10T08:00:00-05:00\",\n        \"reasonReference\": [\n          {\n            \"reference\": \"urn:uuid:a235f0f0-af9a-59ea-90b5-acfe6c6ee325\",\n            \"display\": \"Carcinoma ductal infiltrante de mama izquierda\"\n          }\n        ],\n        \"bodySite\": [\n          {\n            \"coding\": [\n              {\n                \"system\": \"http://snomed.info/sct\",\n                \"code\": \"80248007\",\n                \"display\": \"Left breast structure\"\n              }\n            ],\n            \"text\": \"Mama izquierda\"\n          }\n        ],\n        \"outcome\": {\n          \"coding\": [\n            {\n              \"system\": \"http://snomed.info/sct\",\n              \"code\": \"385669000\",\n              \"display\": \"Successful\"\n            }\n          ],\n          \"text\": \"Exitoso\"\n        },\n        \"followUp\": [\n          {\n            \"text\": \"Control de herida quirúrgica en 2 semanas y valoración por oncología.\"\n          }\n        ],\n        \"note\": [\n          {\n            \"text\": \"Márgenes quirúrgicos libres de tumor.\"\n          }\n        ]\n      }\n    },\n    {\n      \"fullUrl\": \"urn:uuid:700c2dc9-fcb4-56fe-b789-6b32667f9cd3\",\n      \"resource\": {\n        \"resourceType\": \"DiagnosticReport\",\n        \"text\": {\n          \"status\": \"generated\",\n          \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Informe de anatomía patológica: carcinoma ductal infiltrante de mama izquierda de 3,5 cm,</p><p>receptor de estrógeno positivo (Allred 8).</p></div>\"\n        },\n        \"identifier\": [\n          {\n            \"system\": \"https://f-slg.github.io/aprende-fhir/sid/informe\",\n            \"value\": \"INF-AP-2025-0457\"\n          }\n        ],\n        \"status\": \"final\",\n        \"category\": [\n          {\n            \"coding\": [\n              {\n                \"system\": \"http://terminology.hl7.org/CodeSystem/v2-0074\",\n                \"code\": \"SP\",\n                \"display\": \"Surgical Pathology\"\n              }\n            ],\n            \"text\": \"Anatomía patológica\"\n          }\n        ],\n        \"code\": {\n          \"coding\": [\n            {\n              \"system\": \"http://loinc.org\",\n              \"code\": \"11526-1\",\n              \"display\": \"Pathology study\"\n            }\n          ],\n          \"text\": \"Estudio de patología\"\n        },\n        \"subject\": {\n          \"reference\": \"urn:uuid:e0a33887-7d17-5a74-b931-ff942cb15b50\",\n          \"display\": \"Luis Alberto Paredes Cevallos\"\n        },\n        \"effectiveDateTime\": \"2025-05-12\",\n        \"issued\": \"2025-05-13T12:00:00-05:00\",\n        \"performer\": [\n          {\n            \"reference\": \"urn:uuid:57ab9932-e9b4-51d3-8dcd-658bedcb7cc7\",\n            \"display\": \"Hospital General Docente Ejemplo\"\n          }\n        ],\n        \"conclusion\": \"Carcinoma ductal infiltrante de mama izquierda, 3,5 cm, receptor de estrógeno positivo.\",\n        \"conclusionCode\": [\n          {\n            \"coding\": [\n              {\n                \"system\": \"http://snomed.info/sct\",\n                \"code\": \"254837009\",\n                \"display\": \"Malignant neoplasm of breast\"\n              }\n            ],\n            \"text\": \"Cáncer de mama\"\n          }\n        ]\n      }\n    },\n    {\n      \"fullUrl\": \"urn:uuid:c193b719-cfb2-5785-8823-e945606fdc45\",\n      \"resource\": {\n        \"resourceType\": \"CarePlan\",\n        \"text\": {\n          \"status\": \"generated\",\n          \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Plan de tratamiento del comité de tumores (20 de mayo de 2025):</p><p>1) mastectomía parcial; 2) quimioterapia con doxorrubicina, 4 ciclos; 3) hormonoterapia con tamoxifeno por 5 años.</p></div>\"\n        },\n        \"identifier\": [\n          {\n            \"system\": \"https://f-slg.github.io/aprende-fhir/sid/plan\",\n            \"value\": \"PLAN-2025-0001\"\n          }\n        ],\n        \"status\": \"active\",\n        \"intent\": \"plan\",\n        \"category\": [\n          {\n            \"text\": \"Plan de tratamiento oncológico\"\n          }\n        ],\n        \"title\": \"Plan de tratamiento del cáncer de mama\",\n        \"description\": \"Tratamiento acordado por el comité de tumores de mama.\",\n        \"subject\": {\n          \"reference\": \"urn:uuid:e0a33887-7d17-5a74-b931-ff942cb15b50\",\n          \"display\": \"Luis Alberto Paredes Cevallos\"\n        },\n        \"period\": {\n          \"start\": \"2025-05-20\",\n          \"end\": \"2030-10-31\"\n        },\n        \"created\": \"2025-05-20\",\n        \"author\": {\n          \"reference\": \"urn:uuid:dd91e0ce-7db7-5ab2-aca0-52a76742dfd5\",\n          \"display\": \"Dr. Ruiz · Oncología clínica\"\n        },\n        \"addresses\": [\n          {\n            \"reference\": \"urn:uuid:a235f0f0-af9a-59ea-90b5-acfe6c6ee325\",\n            \"display\": \"Carcinoma ductal infiltrante de mama izquierda\"\n          }\n        ],\n        \"activity\": [\n          {\n            \"detail\": {\n              \"kind\": \"ServiceRequest\",\n              \"code\": {\n                \"coding\": [\n                  {\n                    \"system\": \"http://snomed.info/sct\",\n                    \"code\": \"64368001\",\n                    \"display\": \"Partial mastectomy\"\n                  }\n                ],\n                \"text\": \"Mastectomía parcial\"\n              },\n              \"status\": \"scheduled\",\n              \"scheduledPeriod\": {\n                \"start\": \"2025-06-10\",\n                \"end\": \"2025-06-10\"\n              },\n              \"performer\": [\n                {\n                  \"reference\": \"urn:uuid:dd91e0ce-7db7-5ab2-aca0-52a76742dfd5\",\n                  \"display\": \"Dr. Ruiz · Oncología clínica\"\n                }\n              ],\n              \"description\": \"Mastectomía parcial de la mama izquierda\"\n            }\n          },\n          {\n            \"detail\": {\n              \"kind\": \"MedicationRequest\",\n              \"code\": {\n                \"coding\": [\n                  {\n                    \"system\": \"http://snomed.info/sct\",\n                    \"code\": \"367336001\",\n                    \"display\": \"Chemotherapy\"\n                  }\n                ],\n                \"text\": \"Quimioterapia\"\n              },\n              \"status\": \"not-started\",\n              \"scheduledPeriod\": {\n                \"start\": \"2025-07-01\",\n                \"end\": \"2025-09-30\"\n              },\n              \"performer\": [\n                {\n                  \"reference\": \"urn:uuid:dd91e0ce-7db7-5ab2-aca0-52a76742dfd5\",\n                  \"display\": \"Dr. Ruiz · Oncología clínica\"\n                }\n              ],\n              \"description\": \"Doxorrubicina 60 mg/m² cada 21 días, 4 ciclos\"\n            }\n          },\n          {\n            \"detail\": {\n              \"kind\": \"MedicationRequest\",\n              \"code\": {\n                \"coding\": [\n                  {\n                    \"system\": \"http://snomed.info/sct\",\n                    \"code\": \"169413002\",\n                    \"display\": \"Hormone therapy\"\n                  }\n                ],\n                \"text\": \"Hormonoterapia\"\n              },\n              \"status\": \"not-started\",\n              \"scheduledPeriod\": {\n                \"start\": \"2025-10-15\",\n                \"end\": \"2030-10-15\"\n              },\n              \"performer\": [\n                {\n                  \"reference\": \"urn:uuid:dd91e0ce-7db7-5ab2-aca0-52a76742dfd5\",\n                  \"display\": \"Dr. Ruiz · Oncología clínica\"\n                }\n              ],\n              \"description\": \"Tamoxifeno 20 mg diarios por 5 años\"\n            }\n          }\n        ]\n      }\n    },\n    {\n      \"fullUrl\": \"urn:uuid:6fcc22a2-86d1-5ef6-a254-6f6770b5ef60\",\n      \"resource\": {\n        \"resourceType\": \"Condition\",\n        \"text\": {\n          \"status\": \"generated\",\n          \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Intoxicación alimentaria bacteriana, no especificada (moderada).</p><p>Inicio: 17 de marzo de 2025. Resuelta.</p></div>\"\n        },\n        \"identifier\": [\n          {\n            \"system\": \"https://f-slg.github.io/aprende-fhir/sid/condicion\",\n            \"value\": \"COND-2025-0001\"\n          }\n        ],\n        \"clinicalStatus\": {\n          \"coding\": [\n            {\n              \"system\": \"http://terminology.hl7.org/CodeSystem/condition-clinical\",\n              \"code\": \"resolved\",\n              \"display\": \"Resolved\"\n            }\n          ]\n        },\n        \"verificationStatus\": {\n          \"coding\": [\n            {\n              \"system\": \"http://terminology.hl7.org/CodeSystem/condition-ver-status\",\n              \"code\": \"confirmed\",\n              \"display\": \"Confirmed\"\n            }\n          ]\n        },\n        \"category\": [\n          {\n            \"coding\": [\n              {\n                \"system\": \"http://terminology.hl7.org/CodeSystem/condition-category\",\n                \"code\": \"encounter-diagnosis\",\n                \"display\": \"Encounter Diagnosis\"\n              }\n            ]\n          }\n        ],\n        \"severity\": {\n          \"coding\": [\n            {\n              \"system\": \"http://snomed.info/sct\",\n              \"code\": \"6736007\",\n              \"display\": \"Moderate (severity modifier)\"\n            }\n          ],\n          \"text\": \"Moderada\"\n        },\n        \"code\": {\n          \"coding\": [\n            {\n              \"system\": \"http://hl7.org/fhir/sid/icd-10\",\n              \"code\": \"A05.9\",\n              \"display\": \"Bacterial foodborne intoxication, unspecified\"\n            }\n          ],\n          \"text\": \"Intoxicación alimentaria bacteriana, no especificada\"\n        },\n        \"subject\": {\n          \"reference\": \"urn:uuid:e0a33887-7d17-5a74-b931-ff942cb15b50\",\n          \"display\": \"Luis Alberto Paredes Cevallos\"\n        },\n        \"onsetDateTime\": \"2025-03-17\",\n        \"abatementDateTime\": \"2025-03-24\",\n        \"recordedDate\": \"2025-03-20\",\n        \"evidence\": [\n          {\n            \"code\": [\n              {\n                \"coding\": [\n                  {\n                    \"system\": \"http://snomed.info/sct\",\n                    \"code\": \"422587007\",\n                    \"display\": \"Nausea\"\n                  }\n                ],\n                \"text\": \"Náuseas\"\n              },\n              {\n                \"coding\": [\n                  {\n                    \"system\": \"http://snomed.info/sct\",\n                    \"code\": \"422400008\",\n                    \"display\": \"Vomiting\"\n                  }\n                ],\n                \"text\": \"Vómito\"\n              },\n              {\n                \"coding\": [\n                  {\n                    \"system\": \"http://snomed.info/sct\",\n                    \"code\": \"21522001\",\n                    \"display\": \"Abdominal pain\"\n                  }\n                ],\n                \"text\": \"Dolor abdominal\"\n              },\n              {\n                \"coding\": [\n                  {\n                    \"system\": \"http://snomed.info/sct\",\n                    \"code\": \"62315008\",\n                    \"display\": \"Diarrhea\"\n                  }\n                ],\n                \"text\": \"Diarrea\"\n              }\n            ]\n          }\n        ]\n      }\n    }\n  ]\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/19-resumen-ips/errores/19e1_ips_sin_alergias.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const id = pm.response.json().id;",
+                  "pm.collectionVariables.set(\"errorIpsId\", id);",
+                  "if (pm.environment.name) pm.environment.set(\"errorIpsId\", id);",
+                  "console.log(\"errorIpsId = \" + id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "19f · Borrar el IPS incompleto",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Bundle/{{errorIpsId}}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "19g · Expediente completo del paciente ($everything)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Patient/{{patientId}}/$everything"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "FHIRURL",
+      "value": "https://hapi.fhir.org/baseR4"
+    },
+    {
+      "key": "TXURL",
+      "value": "https://tx.fhir.org/r4"
+    },
+    {
+      "key": "profileId",
+      "value": ""
+    },
+    {
+      "key": "codeSystemId",
+      "value": ""
+    },
+    {
+      "key": "valueSetId",
+      "value": ""
+    },
+    {
+      "key": "compositionIpsId",
+      "value": ""
+    },
+    {
+      "key": "bundleIpsId",
+      "value": ""
+    },
+    {
+      "key": "errorIpsId",
+      "value": ""
+    }
+  ]
+}

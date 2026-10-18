@@ -90,13 +90,17 @@ El repositorio viene preconfigurado para VS Code. Ábrelo con
 
 1. En la barra lateral, abre **Postman** e inicia sesión (la extensión usa tu
    cuenta de Postman, la gratuita basta).
-2. **Import** → elige `postman/aprende-fhir.postman_collection.json`.
+2. **Import** (icono de la barra de título del panel, o `Ctrl+Mayús+P` →
+   *Postman: Import*). El botón aparece después de iniciar sesión y elegir un
+   *workspace*. La extensión rechaza colecciones grandes, así que importa las
+   tres partes de `postman/niveles/` en lugar de la colección completa:
+   `1-basico`, `2-intermedio` y `3-avanzado`.
 3. Importa también un entorno de la carpeta `postman/`:
    - `hapi-publico.postman_environment.json`: servidor público de HAPI.
    - `hapi-local.postman_environment.json`: tu HAPI en `http://localhost:8080/fhir`.
 4. Selecciona el entorno arriba a la derecha y ejecuta las peticiones en orden
-   con **Send**. Cada `POST` guarda el `id` en las variables de la colección, así
-   que los módulos siguientes ya lo encuentran. Para correrla entera, usa
+   con **Send**. Cada `POST` guarda el `id` en el entorno seleccionado, así que
+   los módulos siguientes (aunque estén en otra parte) ya lo encuentran. Para correrla entera, usa
    **Run** sobre la colección.
 
 Con el README del módulo abierto a un lado (vista previa: `Ctrl+Shift+V`) y
@@ -267,7 +271,8 @@ modulos/NN-tema/README.md       explicación, ejercicios y pistas
 modulos/NN-tema/soluciones/     recursos FHIR de solución (JSON)
 modulos/NN-tema/pasos/          versiones intermedias de la construcción paso a paso
 modulos/NN-tema/errores/        errores a propósito
-postman/                        colección y entornos de Postman (público y local)
+postman/                        colección completa y entornos de Postman (público y local)
+postman/niveles/                la misma colección en tres partes (básico, intermedio, avanzado)
 .vscode/                        tareas y extensiones recomendadas para VS Code
 r/                              funciones y scripts para R/RStudio
 curl/                           script para la terminal

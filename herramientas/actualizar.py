@@ -154,14 +154,24 @@ for md in sorted(glob.glob(os.path.join(RAIZ, "modulos", "*", "README.md"))):
         escribir(md, nuevo)
 
 # --- 3. Postman ---------------------------------------------------------------------------
-destino = os.path.join(RAIZ, "postman", "aprende-fhir.postman_collection.json")
-antes = open(destino, encoding="utf-8").read() if os.path.exists(destino) else ""
+def colecciones():
+    return {r: open(r, encoding="utf-8").read()
+            for r in glob.glob(os.path.join(RAIZ, "postman", "**", "*.postman_collection.json"),
+                               recursive=True)}
+
+
+antes = colecciones()
 subprocess.run([sys.executable, os.path.join(RAIZ, "herramientas", "construir_postman.py")],
                check=True, capture_output=True)
-if open(destino, encoding="utf-8").read() != antes:
-    cambios.append("postman/aprende-fhir.postman_collection.json")
-    if comprobar:
-        open(destino, "w", encoding="utf-8").write(antes)
+despues = colecciones()
+for r in sorted(set(antes) | set(despues)):
+    if antes.get(r) != despues.get(r):
+        cambios.append(os.path.relpath(r, RAIZ))
+        if comprobar:
+            if r in antes:
+                open(r, "w", encoding="utf-8").write(antes[r])
+            else:
+                os.remove(r)
 
 if comprobar and cambios:
     print("No están al día (ejecuta python3 herramientas/actualizar.py):")

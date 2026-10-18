@@ -1,9 +1,15 @@
-"""Genera postman/aprende-fhir.postman_collection.json a partir de herramientas/pasos.json.
+"""Genera las colecciones de Postman a partir de herramientas/pasos.json.
+
+- postman/aprende-fhir.postman_collection.json: el taller completo.
+- postman/niveles/N-nivel.postman_collection.json: el mismo taller en tres partes, más
+  livianas de importar (la extensión de Postman para VS Code rechaza colecciones grandes).
+  Los ids pasan de una parte a otra a través del entorno seleccionado.
 
 Uso: python3 herramientas/construir_postman.py
 """
 import json
 import os
+import uuid
 
 raiz = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 manifiesto = json.load(open(os.path.join(raiz, "herramientas", "pasos.json"), encoding="utf-8"))
@@ -55,6 +61,7 @@ def peticion(paso):
     if "guarda" in paso:
         pruebas += ['const id = pm.response.json().id;',
                     f'pm.collectionVariables.set("{paso["guarda"]}", id);',
+                    f'if (pm.environment.name) pm.environment.set("{paso["guarda"]}", id);',
                     f'console.log("{paso["guarda"]} = " + id);']
     item = {"name": f'{paso["id"]} · {paso["nombre"]}', "request": req,
             "event": [{"listen": "test", "script": {"type": "text/javascript", "exec": pruebas}}]}
@@ -66,25 +73,46 @@ carpetas = {}
 for paso in manifiesto["pasos"]:
     carpetas.setdefault(paso["modulo"], []).append(peticion(paso))
 
-variables = [{"key": "FHIRURL", "value": "https://hapi.fhir.org/baseR4"},
-             {"key": "TXURL", "value": "https://tx.fhir.org/r4"}]
-variables += [{"key": p["guarda"], "value": ""} for p in manifiesto["pasos"] if "guarda" in p]
-coleccion = {
-    "info": {
-        "name": "Aprende FHIR desde cero",
-        "description": ("Taller de HL7 FHIR R4 con un caso clínico ecuatoriano ficticio. "
-                        "Ejecuta las peticiones en orden: cada POST guarda el id creado en una "
-                        "variable de la colección que usan las peticiones siguientes. Cambia la "
-                        "variable FHIRURL para usar otro servidor. Solo datos sintéticos.\n\n"
-                        "https://github.com/f-slg/aprende-fhir"),
-        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    },
-    "item": [{"name": TITULOS[m], "item": items} for m, items in carpetas.items()],
-    "variable": variables,
-}
-destino = os.path.join(raiz, "postman", "aprende-fhir.postman_collection.json")
-os.makedirs(os.path.dirname(destino), exist_ok=True)
-with open(destino, "w", encoding="utf-8") as f:
-    json.dump(coleccion, f, ensure_ascii=False, indent=2)
-    f.write("\n")
-print("Escrito:", os.path.relpath(destino, raiz))
+BASE = [{"key": "FHIRURL", "value": "https://hapi.fhir.org/baseR4"},
+        {"key": "TXURL", "value": "https://tx.fhir.org/r4"}]
+DESCRIPCION = ("Taller de HL7 FHIR R4 con un caso clínico ecuatoriano ficticio. "
+               "Ejecuta las peticiones en orden: cada POST guarda el id creado en una "
+               "variable de la colección (y del entorno, si elegiste uno) que usan las "
+               "peticiones siguientes. Elige el entorno hapi-publico o hapi-local, o cambia "
+               "la variable FHIRURL. Solo datos sintéticos.\n\n"
+               "https://github.com/f-slg/aprende-fhir")
+NIVELES = [("1-basico", "Nivel básico", range(1, 7)),
+           ("2-intermedio", "Nivel intermedio", range(7, 17)),
+           ("3-avanzado", "Nivel avanzado", range(17, 20))]
+
+
+def coleccion(nombre, modulos, clave):
+    pasos = [p for p in manifiesto["pasos"] if p["modulo"] in modulos]
+    variables = BASE + [{"key": p["guarda"], "value": ""} for p in pasos if "guarda" in p]
+    return {
+        "info": {
+            "_postman_id": str(uuid.uuid5(uuid.NAMESPACE_URL, "aprende-fhir/" + clave)),
+            "name": nombre,
+            "description": DESCRIPCION,
+            "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+        },
+        "item": [{"name": TITULOS[m], "item": carpetas[m]} for m in modulos],
+        "variable": variables,
+    }
+
+
+def guardar(objeto, ruta):
+    destino = os.path.join(raiz, "postman", ruta)
+    os.makedirs(os.path.dirname(destino), exist_ok=True)
+    with open(destino, "w", encoding="utf-8") as f:
+        json.dump(objeto, f, ensure_ascii=False, indent=2)
+        f.write("\n")
+    print("Escrito:", os.path.relpath(destino, raiz))
+
+
+guardar(coleccion("Aprende FHIR desde cero", list(carpetas), "completo"),
+        "aprende-fhir.postman_collection.json")
+for clave, titulo, rango in NIVELES:
+    modulos = [m for m in carpetas if int(m[:2]) in rango]
+    guardar(coleccion(f"Aprende FHIR · {titulo}", modulos, clave),
+            f"niveles/{clave}.postman_collection.json")
