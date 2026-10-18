@@ -1,0 +1,33 @@
+{
+  "resourceType": "Organization",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Red de Servicios de Salud Ejemplo (organización ficticia).</p></div>"
+  },
+  "identifier": [
+    {
+      "system": "https://f-slg.github.io/aprende-fhir/sid/establecimiento",
+      "value": "RED-0001"
+    }
+  ],
+  "active": true,
+  "type": [
+    {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/organization-type",
+          "code": "prov",
+          "display": "Healthcare Provider"
+        }
+      ]
+    }
+  ],
+  "name": "Red de Servicios de Salud Ejemplo",
+  "address": [
+    {
+      "city": "Quito",
+      "state": "Pichincha",
+      "country": "EC"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "resourceType": "MedicationStatement",
+  "status": "active",
+  "medicationCodeableConcept": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "373567002",
+        "display": "Losartan"
+      }
+    ],
+    "text": "Losartán"
+  },
+  "subject": {
+    "reference": "Patient/{{patientId}}",
+    "display": "Luis Alberto Paredes Cevallos"
+  }
+}

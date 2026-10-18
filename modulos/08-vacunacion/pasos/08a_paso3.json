@@ -1,0 +1,44 @@
+{
+  "resourceType": "Immunization",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Vacuna contra la influenza NO aplicada el 20 de marzo de 2025: se difiere por fiebre (38,4 °C).</p></div>"
+  },
+  "status": "not-done",
+  "statusReason": {
+    "coding": [
+      {
+        "system": "http://terminology.hl7.org/CodeSystem/v3-ActReason",
+        "code": "MEDPREC",
+        "display": "medical precaution"
+      }
+    ],
+    "text": "Precaución médica: enfermedad aguda con fiebre"
+  },
+  "vaccineCode": {
+    "coding": [
+      {
+        "system": "http://hl7.org/fhir/sid/cvx",
+        "code": "141",
+        "display": "Influenza, split virus, trivalent, preservative"
+      }
+    ],
+    "text": "Influenza estacional"
+  },
+  "patient": {
+    "reference": "Patient/{{patientId}}",
+    "display": "Luis Alberto Paredes Cevallos"
+  },
+  "encounter": {
+    "reference": "Encounter/{{encounterId}}",
+    "display": "Consulta por dolor abdominal"
+  },
+  "occurrenceDateTime": "2025-03-20T08:00:00-05:00",
+  "recorded": "2025-03-20",
+  "primarySource": true,
+  "note": [
+    {
+      "text": "Se indica volver al vacunatorio cuando esté sin fiebre."
+    }
+  ]
+}

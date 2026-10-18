@@ -1,0 +1,16 @@
+{
+  "resourceType": "MedicationRequest",
+  "status": "active",
+  "medicationCodeableConcept": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "373345002",
+        "display": "Tamoxifen"
+      }
+    ]
+  },
+  "subject": {
+    "reference": "Patient/{{patientId}}"
+  }
+}

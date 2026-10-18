@@ -1,0 +1,44 @@
+{
+  "resourceType": "Specimen",
+  "type": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "258435002",
+        "display": "Tumor tissue sample"
+      }
+    ],
+    "text": "Tejido tumoral"
+  },
+  "subject": {
+    "reference": "Patient/{{patientId}}",
+    "display": "Luis Alberto Paredes Cevallos"
+  },
+  "collection": {
+    "collector": {
+      "reference": "Practitioner/{{practitionerId}}",
+      "display": "Dra. Andrea Lucía Salazar Moreno"
+    },
+    "collectedDateTime": "2025-05-06T09:00:00-05:00",
+    "method": {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "129314006",
+          "display": "Biopsy - action"
+        }
+      ],
+      "text": "Biopsia"
+    },
+    "bodySite": {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "80248007",
+          "display": "Left breast structure"
+        }
+      ],
+      "text": "Mama izquierda"
+    }
+  }
+}

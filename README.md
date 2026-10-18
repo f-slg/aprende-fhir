@@ -18,20 +18,30 @@
 
 ---
 
-Un recorrido de **10 módulos** para aprender FHIR haciendo: crearás, buscarás,
-corregirás y enlazarás **15 tipos de recursos** siguiendo a un mismo paciente,
-desde una consulta por intoxicación alimentaria hasta el tratamiento de un
-cáncer de mama. Cada módulo explica los conceptos, propone ejercicios con
-pistas y trae la solución.
+Un recorrido para aprender FHIR haciendo, **paso a paso**: crearás, buscarás,
+corregirás y enlazarás **20 tipos de recursos** siguiendo a un mismo paciente,
+desde su primera consulta hasta el tratamiento de un cáncer de mama.
+
+En cada módulo:
+
+- una **ficha de cada recurso**: qué es, para qué se usa, cuándo usar otro y
+  sus elementos principales, con la cardinalidad y el tipo tomados de la
+  especificación oficial;
+- la **construcción paso a paso**: del recurso mínimo al completo, campo por
+  campo, explicando cada decisión (todas las versiones intermedias son
+  válidas);
+- **errores a propósito**, con la respuesta real del servidor, para aprender
+  a leerlos;
+- autoevaluación y resumen.
 
 - **Para quién:** profesionales de salud, epidemiólogos, estudiantes y equipos
   técnicos que se acercan por primera vez a FHIR. No hace falta saber
   programar.
 - **Tres formas de practicar** con el mismo contenido: Postman, R/RStudio o
   curl.
-- **Recursos validados:** cada solución se revisa automáticamente con el
-  [validador oficial de HL7](https://github.com/hapifhir/org.hl7.fhir.core) en
-  cada cambio. Todo el taller se probó de principio a fin en un servidor
+- **Recursos validados:** las 46 soluciones y sus 73 versiones intermedias se
+  revisan con el [validador oficial de HL7](https://github.com/hapifhir/org.hl7.fhir.core)
+  en cada cambio, y el taller completo se ejecuta en un servidor
   [HAPI FHIR](https://hapifhir.io/).
 
 > **Solo datos ficticios.** Las personas, las cédulas (empiezan con `99`, un
@@ -70,28 +80,67 @@ y usar `http://localhost:8080/fhir`.
 
 ## Módulos
 
+El taller tiene tres niveles y 19 módulos. Los módulos disponibles se pueden
+seguir en orden; los marcados *en preparación* llegarán en las próximas
+etapas.
+
+**Nivel básico**
+
 | | Módulo | Recursos | Aprendes a... |
 |---|---|---|---|
-| 01 | [Fundamentos](modulos/01-fundamentos/README.md) | CapabilityStatement, Bundle | Qué es un recurso, la API REST y qué sabe hacer un servidor |
-| 02 | [Patient](modulos/02-patient/README.md) | Patient | Crear, leer, buscar, actualizar y ver el historial |
-| 03 | [Transacciones](modulos/03-transacciones/README.md) | Bundle `transaction` | Enviar varios recursos a la vez y evitar duplicados |
+| 01 | [Fundamentos](modulos/01-fundamentos/README.md) | CapabilityStatement, OperationOutcome | Qué es FHIR, los tipos de datos, la cardinalidad, la API REST y los dos tipos de error |
+| 02 | [Patient](modulos/02-patient/README.md) | Patient | Construir un paciente paso a paso; crear, leer, buscar, actualizar y ver el historial |
+| 03 | [Transacciones](modulos/03-transacciones/README.md) | Bundle `transaction` | Enviar varios recursos a la vez, todo o nada, sin duplicados |
 | 04 | [Profesionales y organizaciones](modulos/04-profesionales-y-organizaciones/README.md) | Practitioner, Organization | Modelar a la médica y la jerarquía de establecimientos |
-| 05 | [Diagnóstico y encuentro](modulos/05-diagnostico-y-encuentro/README.md) | Condition, Encounter | Usar CIE-10 y SNOMED CT, y traer recursos con `_include` |
+| 05 | [Diagnóstico y encuentro](modulos/05-diagnostico-y-encuentro/README.md) | Condition, Encounter | Codificar con CIE-10 y SNOMED CT y traer recursos con `_include` |
 | 06 | [Observaciones](modulos/06-observaciones/README.md) | Observation | Signos vitales con LOINC y UCUM, y los tipos de `value[x]` |
-| 07 | [Documentos clínicos](modulos/07-documentos-clinicos/README.md) | Composition, Bundle `document` | Crear un documento autocontenido e inmutable |
-| 08 | [Anatomía patológica](modulos/08-anatomia-patologica/README.md) | BodyStructure, Specimen, DiagnosticReport | Registrar una biopsia, corregir resultados y emitir un informe |
-| 09 | [Procedimientos](modulos/09-procedimientos/README.md) | Procedure | Registrar una cirugía con su motivo y resultado |
-| 10 | [Medicamentos](modulos/10-medicamentos/README.md) | MedicationRequest, MedicationAdministration | Prescribir, administrar, suspender y recuperar todo con `$everything` |
+
+**Nivel intermedio**
+
+| | Módulo | Recursos | Aprendes a... |
+|---|---|---|---|
+| 07 | [Antecedentes](modulos/07-antecedentes/README.md) | AllergyIntolerance, MedicationStatement, FamilyMemberHistory | Registrar alergias, medicación habitual y antecedentes familiares |
+| 08 | [Vacunación](modulos/08-vacunacion/README.md) | Immunization | Registrar vacunas aplicadas y diferidas, con lote y dosis del esquema |
+| 09 | [Documentos clínicos](modulos/09-documentos-clinicos/README.md) | Composition, Bundle `document` | Crear un documento autocontenido e inmutable |
+| 10 | Órdenes y derivación · *en preparación* | ServiceRequest, PractitionerRole, Location | Pedir estudios y derivar a otro servicio |
+| 11 | [Anatomía patológica](modulos/11-anatomia-patologica/README.md) | BodyStructure, Specimen, DiagnosticReport | Registrar una biopsia, corregir resultados y emitir un informe |
+| 12 | Plan y consentimiento · *en preparación* | CarePlan, Goal, Consent | Registrar la decisión del comité y el consentimiento |
+| 13 | [Procedimientos](modulos/13-procedimientos/README.md) | Procedure | Registrar una cirugía con su motivo y resultado |
+| 14 | Citas · *en preparación* | Schedule, Slot, Appointment | Agendar los ciclos de quimioterapia |
+| 15 | [Medicamentos](modulos/15-medicamentos/README.md) | MedicationRequest, MedicationAdministration | Prescribir, administrar, suspender y recuperar todo con `$everything` |
+| 16 | Seguimiento · *en preparación* | Questionnaire, QuestionnaireResponse | Aplicar escalas de dolor y calidad de vida |
+
+**Nivel avanzado** · *en preparación*
+
+| | Módulo | Aprendes a... |
+|---|---|---|
+| 17 | Búsquedas avanzadas y versiones | `_revinclude`, búsquedas encadenadas, `_has` y control de concurrencia con `If-Match` |
+| 18 | Terminologías y perfiles | `$lookup`, `$validate-code` y una introducción a los perfiles y guías de implementación |
+| 19 | Resumen del paciente (IPS) | Armar el resumen internacional del paciente con todo lo aprendido |
 
 ## El caso
 
 **Luis Alberto Paredes Cevallos**, 46 años, nacido en Riobamba y residente en
 Quito, consulta en el *Hospital General Docente Ejemplo* por dolor abdominal,
 náuseas y diarrea. La Dra. Andrea Salazar diagnostica una intoxicación
-alimentaria. Meses después, una biopsia de un nódulo en la mama izquierda
-confirma un **carcinoma ductal infiltrante** con receptor de estrógeno
-positivo. Luis recibe cirugía, quimioterapia con doxorrubicina y
-hormonoterapia con tamoxifeno, que se suspende por intolerancia.
+alimentaria y, en la anamnesis, registra su **alergia a la penicilina**, el
+**losartán** que toma por hipertensión y un dato importante: **su madre tuvo
+cáncer de mama**. Como Luis tiene fiebre, las vacunas se difieren; dos
+semanas después recibe la de la influenza y el refuerzo de Td.
+
+Meses más tarde, una biopsia de un nódulo en la mama izquierda confirma un
+**carcinoma ductal infiltrante** con receptor de estrógeno positivo. Luis
+recibe cirugía, quimioterapia con doxorrubicina y hormonoterapia con
+tamoxifeno, que se suspende por intolerancia.
+
+| Fecha | Qué pasa | Módulos |
+|---|---|---|
+| 20-mar-2025 | Consulta: diagnóstico, signos vitales, antecedentes, vacunas diferidas | 02 a 08 |
+| 03-abr-2025 | Vacunatorio: influenza y Td | 08 |
+| 06 a 13-may-2025 | Biopsia, informe de patología y diagnóstico de cáncer | 11 |
+| 10-jun-2025 | Mastectomía parcial | 13 |
+| 02-jul-2025 | Primer ciclo de doxorrubicina | 15 |
+| 15-oct-2025 → feb-2026 | Tamoxifeno, suspendido por intolerancia | 15 |
 
 Así se enlazan los recursos que crearás:
 
@@ -104,6 +153,11 @@ flowchart LR
   E --> Dr
   E --> H
   E -->|diagnosis| C1[Condition<br/>intoxicación]
+  Al[AllergyIntolerance<br/>penicilina] --> P
+  MS[MedicationStatement<br/>losartán] --> P
+  FH[FamilyMemberHistory<br/>madre y padre] --> P
+  Im[Immunization<br/>influenza y Td] --> P
+  Im --> En([Practitioner<br/>enfermera])
   SV[Observation<br/>signos vitales] --> E
   Doc[Composition<br/>nota de signos vitales] --> SV
   BS[BodyStructure<br/>tumor] --> P
@@ -128,13 +182,19 @@ HL7. Necesitas tener Java instalado:
 herramientas/validar.sh
 ```
 
-El script descarga el validador la primera vez, valida todos los JSON de
-`modulos/*/soluciones/` contra FHIR R4 (estructura, cardinalidades y códigos
-LOINC, SNOMED CT y CIE-10) y resume los errores. Agrega `--avisos` al final
+El script descarga el validador la primera vez y valida contra FHIR R4
+(estructura, cardinalidades, reglas y códigos LOINC, SNOMED CT, CIE-10 y CVX)
+todas las soluciones y versiones intermedias. Además comprueba que el
+validador detecte cada error a propósito. Agrega `--avisos` al final
 para ver también las advertencias. También puedes validar un recurso suelto
 en <https://validator.fhir.org/>.
 
 ## Preguntas frecuentes
+
+**¿Por qué el servidor aceptó un recurso con errores?** Muchos servidores no
+validan todo al guardar: descartan elementos desconocidos o aceptan recursos
+a los que les falta algo obligatorio. El módulo 01 lo explica y cada módulo
+tiene un error a propósito de cada tipo. Valida siempre tus recursos.
 
 **¿Por qué aparece varias veces el mismo paciente?** Cada `POST` crea un
 recurso nuevo. Si ejecutas el taller dos veces, tendrás dos "Luis". Es un
@@ -153,15 +213,22 @@ real se usan las que defina la guía de implementación nacional.
 ```
 modulos/NN-tema/README.md       explicación, ejercicios y pistas
 modulos/NN-tema/soluciones/     recursos FHIR de solución (JSON)
+modulos/NN-tema/pasos/          versiones intermedias de la construcción paso a paso
+modulos/NN-tema/errores/        errores a propósito
 postman/                        colección de Postman
 r/                              funciones y scripts para R/RStudio
 curl/                           script para la terminal
-herramientas/pasos.json         lista ordenada de pasos del taller
+herramientas/pasos.json         lista ordenada de pasos del taller (y errores esperados)
+herramientas/construccion.json  qué campos agrega cada paso de la construcción
+herramientas/actualizar.py      genera los pasos, las fichas y Postman
 herramientas/validar.sh         validación con el validador oficial de HL7
 ```
 
-Si cambias un recurso o un paso, regenera la colección de Postman con
-`python3 herramientas/construir_postman.py`.
+Si cambias una solución, un paso o un README, ejecuta
+`python3 herramientas/actualizar.py`: regenera las versiones intermedias,
+rellena en los README las fichas (con la cardinalidad y el tipo de la
+especificación oficial) y los bloques de cada paso, y actualiza la colección
+de Postman. Después, valida con `herramientas/validar.sh`.
 
 ## Contribuir
 

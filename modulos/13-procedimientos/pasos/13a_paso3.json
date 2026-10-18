@@ -1,0 +1,63 @@
+{
+  "resourceType": "Procedure",
+  "status": "completed",
+  "category": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "387713003",
+        "display": "Surgical procedure"
+      }
+    ],
+    "text": "Procedimiento quirúrgico"
+  },
+  "code": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "64368001",
+        "display": "Partial mastectomy"
+      }
+    ],
+    "text": "Mastectomía parcial"
+  },
+  "subject": {
+    "reference": "Patient/{{patientId}}",
+    "display": "Luis Alberto Paredes Cevallos"
+  },
+  "performedDateTime": "2025-06-10T08:00:00-05:00",
+  "recorder": {
+    "reference": "Practitioner/{{practitionerId}}",
+    "display": "Dra. Andrea Lucía Salazar Moreno"
+  },
+  "performer": [
+    {
+      "actor": {
+        "reference": "Practitioner/{{practitionerId}}",
+        "display": "Dra. Andrea Lucía Salazar Moreno"
+      },
+      "onBehalfOf": {
+        "reference": "Organization/{{hospitalId}}",
+        "display": "Hospital General Docente Ejemplo"
+      }
+    }
+  ],
+  "reasonReference": [
+    {
+      "reference": "Condition/{{conditionCancerId}}",
+      "display": "Carcinoma ductal infiltrante de mama izquierda"
+    }
+  ],
+  "bodySite": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "80248007",
+          "display": "Left breast structure"
+        }
+      ],
+      "text": "Mama izquierda"
+    }
+  ]
+}

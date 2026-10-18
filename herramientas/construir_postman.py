@@ -14,10 +14,12 @@ TITULOS = {
     "04-profesionales-y-organizaciones": "04 · Profesionales y organizaciones",
     "05-diagnostico-y-encuentro": "05 · Diagnóstico y encuentro",
     "06-observaciones": "06 · Observaciones",
-    "07-documentos-clinicos": "07 · Documentos clínicos",
-    "08-anatomia-patologica": "08 · Anatomía patológica",
-    "09-procedimientos": "09 · Procedimientos",
-    "10-medicamentos": "10 · Medicamentos",
+    "07-antecedentes": "07 · Antecedentes",
+    "08-vacunacion": "08 · Vacunación",
+    "09-documentos-clinicos": "09 · Documentos clínicos",
+    "11-anatomia-patologica": "11 · Anatomía patológica",
+    "13-procedimientos": "13 · Procedimientos",
+    "15-medicamentos": "15 · Medicamentos",
 }
 
 def peticion(paso):
@@ -31,9 +33,15 @@ def peticion(paso):
         with open(os.path.join(raiz, paso["archivo"]), encoding="utf-8") as f:
             req["body"] = {"mode": "raw", "raw": f.read(),
                            "options": {"raw": {"language": "json"}}}
-    pruebas = ['pm.test("Respuesta exitosa (2xx)", function () {',
-               '    pm.expect(pm.response.code).to.be.within(200, 299);',
-               '});']
+    if paso.get("espera", {}).get("servidor") == "rechaza":
+        pruebas = ['pm.test("El servidor rechaza el error (4xx)", function () {',
+                   '    pm.expect(pm.response.code).to.be.within(400, 499);',
+                   '});',
+                   'console.log(pm.response.json().issue[0].diagnostics);']
+    else:
+        pruebas = ['pm.test("Respuesta exitosa (2xx)", function () {',
+                   '    pm.expect(pm.response.code).to.be.within(200, 299);',
+                   '});']
     if "guarda" in paso:
         pruebas += ['const id = pm.response.json().id;',
                     f'pm.collectionVariables.set("{paso["guarda"]}", id);',

@@ -10,7 +10,7 @@
 set -euo pipefail
 raiz="$(cd "$(dirname "$0")/.." && pwd)"
 FHIRURL="${FHIRURL:-https://hapi.fhir.org/baseR4}"
-hasta="${1:-10}"
+hasta="${1:-19}"
 declare -A ids
 
 sustituir() {   # reemplaza {{variable}} por los ids guardados
@@ -38,12 +38,18 @@ for ((i = 0; i < n; i++)); do
   codigo=$(curl "${args[@]}" "$url")
   guarda=$(jq -r '.guarda // empty' <<<"$paso")
   extra=""
-  if [ -n "$guarda" ]; then
+  if [ -n "$guarda" ] && [ "${codigo:0:1}" = "2" ]; then
     ids[$guarda]=$(jq -r .id /tmp/aprende-fhir-respuesta.json)
     extra=" → $guarda = ${ids[$guarda]}"
   fi
   printf '%s %-4s %-6s %s%s\n' "$codigo" "$id" "$metodo" "$nombre" "$extra"
-  if [ "${codigo:0:1}" != "2" ]; then
+  espera=$(jq -r '.espera.servidor // "acepta"' <<<"$paso")
+  if [ "$espera" = "rechaza" ]; then
+    if [ "${codigo:0:1}" != "4" ]; then
+      echo "El paso $id debía ser rechazado por el servidor y respondió $codigo" >&2; exit 1
+    fi
+    echo "     ↳ rechazado, como se esperaba: $(jq -r '.issue[0].diagnostics' /tmp/aprende-fhir-respuesta.json | cut -c1-110)"
+  elif [ "${codigo:0:1}" != "2" ]; then
     echo "Error en el paso $id. Respuesta del servidor:" >&2
     jq '.issue // .' /tmp/aprende-fhir-respuesta.json >&2
     exit 1

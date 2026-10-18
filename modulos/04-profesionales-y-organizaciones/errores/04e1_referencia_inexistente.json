@@ -1,0 +1,7 @@
+{
+  "resourceType": "Organization",
+  "name": "Centro de Salud Ejemplo",
+  "partOf": {
+    "reference": "Organization/no-existe-123"
+  }
+}

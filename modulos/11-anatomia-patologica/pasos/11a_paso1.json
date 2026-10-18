@@ -1,0 +1,7 @@
+{
+  "resourceType": "BodyStructure",
+  "patient": {
+    "reference": "Patient/{{patientId}}",
+    "display": "Luis Alberto Paredes Cevallos"
+  }
+}

@@ -59,6 +59,142 @@
               }
             }
           ]
+        },
+        {
+          "name": "01c · Error a propósito: tipo de recurso en español",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Patient",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"Paciente\",\n  \"gender\": \"male\"\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/01-fundamentos/errores/01e1_resourcetype_en_espanol.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"El servidor rechaza el error (4xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(400, 499);",
+                  "});",
+                  "console.log(pm.response.json().issue[0].diagnostics);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "01d · Error a propósito: elemento en español (se pierde en silencio)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Patient",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"Patient\",\n  \"nombre\": [\n    {\n      \"text\": \"Luis Alberto Paredes Cevallos\"\n    }\n  ],\n  \"gender\": \"male\"\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/01-fundamentos/errores/01e2_elemento_en_espanol.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const id = pm.response.json().id;",
+                  "pm.collectionVariables.set(\"errorPatientId\", id);",
+                  "console.log(\"errorPatientId = \" + id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "01e · Leer lo que guardó el servidor",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Patient/{{errorPatientId}}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "01f · Borrar el paciente de prueba",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Patient/{{errorPatientId}}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
         }
       ]
     },
@@ -247,6 +383,47 @@
                   "pm.test(\"Respuesta exitosa (2xx)\", function () {",
                   "    pm.expect(pm.response.code).to.be.within(200, 299);",
                   "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "02g · Error a propósito: fecha con formato local",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Patient",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"Patient\",\n  \"name\": [\n    {\n      \"text\": \"Luis Alberto Paredes Cevallos\"\n    }\n  ],\n  \"birthDate\": \"12/03/1979\"\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/02-patient/errores/02e1_fecha_formato_local.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"El servidor rechaza el error (4xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(400, 499);",
+                  "});",
+                  "console.log(pm.response.json().issue[0].diagnostics);"
                 ]
               }
             }
@@ -482,6 +659,47 @@
               }
             }
           ]
+        },
+        {
+          "name": "04e · Error a propósito: referencia a una organización que no existe",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Organization",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"Organization\",\n  \"name\": \"Centro de Salud Ejemplo\",\n  \"partOf\": {\n    \"reference\": \"Organization/no-existe-123\"\n  }\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/04-profesionales-y-organizaciones/errores/04e1_referencia_inexistente.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"El servidor rechaza el error (4xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(400, 499);",
+                  "});",
+                  "console.log(pm.response.json().issue[0].diagnostics);"
+                ]
+              }
+            }
+          ]
         }
       ]
     },
@@ -595,6 +813,47 @@
                   "pm.test(\"Respuesta exitosa (2xx)\", function () {",
                   "    pm.expect(pm.response.code).to.be.within(200, 299);",
                   "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "05d · Error a propósito: estado en español",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Encounter",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"Encounter\",\n  \"status\": \"terminado\",\n  \"class\": {\n    \"system\": \"http://terminology.hl7.org/CodeSystem/v3-ActCode\",\n    \"code\": \"AMB\",\n    \"display\": \"ambulatory\"\n  },\n  \"subject\": {\n    \"reference\": \"Patient/{{patientId}}\"\n  }\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/05-diagnostico-y-encuentro/errores/05e1_estado_en_espanol.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"El servidor rechaza el error (4xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(400, 499);",
+                  "});",
+                  "console.log(pm.response.json().issue[0].diagnostics);"
                 ]
               }
             }
@@ -962,14 +1221,694 @@
               }
             }
           ]
+        },
+        {
+          "name": "06j · Error a propósito: decimal con coma",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Observation",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"Observation\",\n  \"status\": \"final\",\n  \"code\": {\n    \"coding\": [\n      {\n        \"system\": \"http://loinc.org\",\n        \"code\": \"8310-5\",\n        \"display\": \"Body temperature\"\n      }\n    ]\n  },\n  \"subject\": {\n    \"reference\": \"Patient/{{patientId}}\"\n  },\n  \"valueQuantity\": {\n    \"value\": \"38,4\",\n    \"unit\": \"°C\",\n    \"system\": \"http://unitsofmeasure.org\",\n    \"code\": \"Cel\"\n  }\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/06-observaciones/errores/06e1_decimal_con_coma.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"El servidor rechaza el error (4xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(400, 499);",
+                  "});",
+                  "console.log(pm.response.json().issue[0].diagnostics);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "06k · Error a propósito: observación sin código (el servidor la acepta)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Observation",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"Observation\",\n  \"status\": \"final\",\n  \"subject\": {\n    \"reference\": \"Patient/{{patientId}}\"\n  },\n  \"valueQuantity\": {\n    \"value\": 38.4,\n    \"unit\": \"°C\",\n    \"system\": \"http://unitsofmeasure.org\",\n    \"code\": \"Cel\"\n  }\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/06-observaciones/errores/06e2_observacion_sin_codigo.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const id = pm.response.json().id;",
+                  "pm.collectionVariables.set(\"errorObsId\", id);",
+                  "console.log(\"errorObsId = \" + id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "06l · Borrar la observación inválida",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Observation/{{errorObsId}}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
         }
       ]
     },
     {
-      "name": "07 · Documentos clínicos",
+      "name": "07 · Antecedentes",
       "item": [
         {
-          "name": "07a · Composition de signos vitales",
+          "name": "07a · Alergia a la penicilina",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/AllergyIntolerance",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"AllergyIntolerance\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Alergia a la penicilina (criticidad alta): urticaria generalizada en la adolescencia.</p></div>\"\n  },\n  \"identifier\": [\n    {\n      \"system\": \"https://f-slg.github.io/aprende-fhir/sid/alergia\",\n      \"value\": \"AL-2025-0001\"\n    }\n  ],\n  \"clinicalStatus\": {\n    \"coding\": [\n      {\n        \"system\": \"http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical\",\n        \"code\": \"active\",\n        \"display\": \"Active\"\n      }\n    ]\n  },\n  \"verificationStatus\": {\n    \"coding\": [\n      {\n        \"system\": \"http://terminology.hl7.org/CodeSystem/allergyintolerance-verification\",\n        \"code\": \"confirmed\",\n        \"display\": \"Confirmed\"\n      }\n    ]\n  },\n  \"type\": \"allergy\",\n  \"category\": [\n    \"medication\"\n  ],\n  \"criticality\": \"high\",\n  \"code\": {\n    \"coding\": [\n      {\n        \"system\": \"http://snomed.info/sct\",\n        \"code\": \"764146007\",\n        \"display\": \"Penicillin\"\n      }\n    ],\n    \"text\": \"Penicilina\"\n  },\n  \"patient\": {\n    \"reference\": \"Patient/{{patientId}}\",\n    \"display\": \"Luis Alberto Paredes Cevallos\"\n  },\n  \"encounter\": {\n    \"reference\": \"Encounter/{{encounterId}}\",\n    \"display\": \"Consulta por dolor abdominal\"\n  },\n  \"onsetString\": \"En la adolescencia\",\n  \"recordedDate\": \"2025-03-20\",\n  \"recorder\": {\n    \"reference\": \"Practitioner/{{practitionerId}}\",\n    \"display\": \"Dra. Andrea Lucía Salazar Moreno\"\n  },\n  \"asserter\": {\n    \"reference\": \"Patient/{{patientId}}\",\n    \"display\": \"Luis Alberto Paredes Cevallos\"\n  },\n  \"reaction\": [\n    {\n      \"substance\": {\n        \"coding\": [\n          {\n            \"system\": \"http://snomed.info/sct\",\n            \"code\": \"764146007\",\n            \"display\": \"Penicillin\"\n          }\n        ],\n        \"text\": \"Penicilina\"\n      },\n      \"manifestation\": [\n        {\n          \"coding\": [\n            {\n              \"system\": \"http://snomed.info/sct\",\n              \"code\": \"126485001\",\n              \"display\": \"Urticaria\"\n            }\n          ],\n          \"text\": \"Urticaria generalizada\"\n        }\n      ],\n      \"severity\": \"moderate\",\n      \"description\": \"Ronchas en todo el cuerpo a las pocas horas de una inyección de penicilina.\"\n    }\n  ]\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/07-antecedentes/soluciones/07a_allergyintolerance_penicilina.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const id = pm.response.json().id;",
+                  "pm.collectionVariables.set(\"allergyId\", id);",
+                  "console.log(\"allergyId = \" + id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "07b · Medicación habitual: losartán",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/MedicationStatement",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"MedicationStatement\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Toma losartán 50 mg por vía oral una vez al día para la hipertensión, desde 2021.</p></div>\"\n  },\n  \"status\": \"active\",\n  \"medicationCodeableConcept\": {\n    \"coding\": [\n      {\n        \"system\": \"http://snomed.info/sct\",\n        \"code\": \"373567002\",\n        \"display\": \"Losartan\"\n      }\n    ],\n    \"text\": \"Losartán\"\n  },\n  \"subject\": {\n    \"reference\": \"Patient/{{patientId}}\",\n    \"display\": \"Luis Alberto Paredes Cevallos\"\n  },\n  \"context\": {\n    \"reference\": \"Encounter/{{encounterId}}\",\n    \"display\": \"Consulta por dolor abdominal\"\n  },\n  \"effectivePeriod\": {\n    \"start\": \"2021-06\"\n  },\n  \"dateAsserted\": \"2025-03-20\",\n  \"informationSource\": {\n    \"reference\": \"Patient/{{patientId}}\",\n    \"display\": \"Luis Alberto Paredes Cevallos\"\n  },\n  \"reasonCode\": [\n    {\n      \"coding\": [\n        {\n          \"system\": \"http://snomed.info/sct\",\n          \"code\": \"38341003\",\n          \"display\": \"Hypertensive disorder, systemic arterial\"\n        }\n      ],\n      \"text\": \"Hipertensión arterial\"\n    }\n  ],\n  \"dosage\": [\n    {\n      \"text\": \"50 mg por vía oral una vez al día\",\n      \"timing\": {\n        \"repeat\": {\n          \"frequency\": 1,\n          \"period\": 1,\n          \"periodUnit\": \"d\"\n        }\n      },\n      \"route\": {\n        \"coding\": [\n          {\n            \"system\": \"http://snomed.info/sct\",\n            \"code\": \"26643006\",\n            \"display\": \"Oral route\"\n          }\n        ],\n        \"text\": \"Vía oral\"\n      },\n      \"doseAndRate\": [\n        {\n          \"doseQuantity\": {\n            \"value\": 50,\n            \"unit\": \"mg\",\n            \"system\": \"http://unitsofmeasure.org\",\n            \"code\": \"mg\"\n          }\n        }\n      ]\n    }\n  ]\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/07-antecedentes/soluciones/07b_medicationstatement_losartan.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const id = pm.response.json().id;",
+                  "pm.collectionVariables.set(\"medStatementId\", id);",
+                  "console.log(\"medStatementId = \" + id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "07c · Antecedente familiar: madre",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/FamilyMemberHistory",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"FamilyMemberHistory\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Madre: cáncer de mama diagnosticado a los 52 años; falleció a los 60.</p></div>\"\n  },\n  \"status\": \"completed\",\n  \"patient\": {\n    \"reference\": \"Patient/{{patientId}}\",\n    \"display\": \"Luis Alberto Paredes Cevallos\"\n  },\n  \"date\": \"2025-03-20\",\n  \"name\": \"Rosa Cevallos (madre)\",\n  \"relationship\": {\n    \"coding\": [\n      {\n        \"system\": \"http://terminology.hl7.org/CodeSystem/v3-RoleCode\",\n        \"code\": \"MTH\",\n        \"display\": \"mother\"\n      }\n    ],\n    \"text\": \"Madre\"\n  },\n  \"sex\": {\n    \"coding\": [\n      {\n        \"system\": \"http://hl7.org/fhir/administrative-gender\",\n        \"code\": \"female\",\n        \"display\": \"Female\"\n      }\n    ],\n    \"text\": \"Femenino\"\n  },\n  \"deceasedAge\": {\n    \"value\": 60,\n    \"unit\": \"años\",\n    \"system\": \"http://unitsofmeasure.org\",\n    \"code\": \"a\"\n  },\n  \"condition\": [\n    {\n      \"code\": {\n        \"coding\": [\n          {\n            \"system\": \"http://snomed.info/sct\",\n            \"code\": \"254837009\",\n            \"display\": \"Malignant neoplasm of breast\"\n          }\n        ],\n        \"text\": \"Cáncer de mama\"\n      },\n      \"contributedToDeath\": true,\n      \"onsetAge\": {\n        \"value\": 52,\n        \"unit\": \"años\",\n        \"system\": \"http://unitsofmeasure.org\",\n        \"code\": \"a\"\n      }\n    }\n  ]\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/07-antecedentes/soluciones/07c_familymemberhistory_madre.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "07d · Antecedente familiar: padre",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/FamilyMemberHistory",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"FamilyMemberHistory\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Padre: diabetes mellitus tipo 2 desde los 55 años; vivo.</p></div>\"\n  },\n  \"status\": \"completed\",\n  \"patient\": {\n    \"reference\": \"Patient/{{patientId}}\",\n    \"display\": \"Luis Alberto Paredes Cevallos\"\n  },\n  \"date\": \"2025-03-20\",\n  \"relationship\": {\n    \"coding\": [\n      {\n        \"system\": \"http://terminology.hl7.org/CodeSystem/v3-RoleCode\",\n        \"code\": \"FTH\",\n        \"display\": \"father\"\n      }\n    ],\n    \"text\": \"Padre\"\n  },\n  \"sex\": {\n    \"coding\": [\n      {\n        \"system\": \"http://hl7.org/fhir/administrative-gender\",\n        \"code\": \"male\",\n        \"display\": \"Male\"\n      }\n    ],\n    \"text\": \"Masculino\"\n  },\n  \"deceasedBoolean\": false,\n  \"condition\": [\n    {\n      \"code\": {\n        \"coding\": [\n          {\n            \"system\": \"http://snomed.info/sct\",\n            \"code\": \"44054006\",\n            \"display\": \"Diabetes mellitus type 2\"\n          }\n        ],\n        \"text\": \"Diabetes mellitus tipo 2\"\n      },\n      \"onsetAge\": {\n        \"value\": 55,\n        \"unit\": \"años\",\n        \"system\": \"http://unitsofmeasure.org\",\n        \"code\": \"a\"\n      }\n    }\n  ]\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/07-antecedentes/soluciones/07d_familymemberhistory_padre.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "07e · Alergias activas del paciente",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/AllergyIntolerance?patient=Patient/{{patientId}}&clinical-status=active"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "07f · Antecedentes familiares del paciente",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/FamilyMemberHistory?patient=Patient/{{patientId}}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "07g · Error a propósito: criticidad en español",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/AllergyIntolerance",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"AllergyIntolerance\",\n  \"patient\": {\n    \"reference\": \"Patient/{{patientId}}\"\n  },\n  \"code\": {\n    \"coding\": [\n      {\n        \"system\": \"http://snomed.info/sct\",\n        \"code\": \"764146007\",\n        \"display\": \"Penicillin\"\n      }\n    ]\n  },\n  \"criticality\": \"alta\"\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/07-antecedentes/errores/07e1_criticidad_en_espanol.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"El servidor rechaza el error (4xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(400, 499);",
+                  "});",
+                  "console.log(pm.response.json().issue[0].diagnostics);"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "08 · Vacunación",
+      "item": [
+        {
+          "name": "08a · Vacuna diferida por fiebre (not-done)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Immunization",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"Immunization\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Vacuna contra la influenza NO aplicada el 20 de marzo de 2025: se difiere por fiebre (38,4 °C).</p></div>\"\n  },\n  \"status\": \"not-done\",\n  \"statusReason\": {\n    \"coding\": [\n      {\n        \"system\": \"http://terminology.hl7.org/CodeSystem/v3-ActReason\",\n        \"code\": \"MEDPREC\",\n        \"display\": \"medical precaution\"\n      }\n    ],\n    \"text\": \"Precaución médica: enfermedad aguda con fiebre\"\n  },\n  \"vaccineCode\": {\n    \"coding\": [\n      {\n        \"system\": \"http://hl7.org/fhir/sid/cvx\",\n        \"code\": \"141\",\n        \"display\": \"Influenza, split virus, trivalent, preservative\"\n      }\n    ],\n    \"text\": \"Influenza estacional\"\n  },\n  \"patient\": {\n    \"reference\": \"Patient/{{patientId}}\",\n    \"display\": \"Luis Alberto Paredes Cevallos\"\n  },\n  \"encounter\": {\n    \"reference\": \"Encounter/{{encounterId}}\",\n    \"display\": \"Consulta por dolor abdominal\"\n  },\n  \"occurrenceDateTime\": \"2025-03-20T08:00:00-05:00\",\n  \"recorded\": \"2025-03-20\",\n  \"primarySource\": true,\n  \"note\": [\n    {\n      \"text\": \"Se indica volver al vacunatorio cuando esté sin fiebre.\"\n    }\n  ]\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/08-vacunacion/soluciones/08a_immunization_diferida.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "08b · Crear a la enfermera",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Practitioner",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"Practitioner\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Lcda. Rosa Elena Quishpe Tenesaca, licenciada en enfermería. Registro profesional ficticio RP-000892.</p></div>\"\n  },\n  \"identifier\": [\n    {\n      \"use\": \"official\",\n      \"system\": \"https://f-slg.github.io/aprende-fhir/sid/registro-profesional\",\n      \"value\": \"RP-000892\"\n    }\n  ],\n  \"active\": true,\n  \"name\": [\n    {\n      \"use\": \"official\",\n      \"text\": \"Lcda. Rosa Elena Quishpe Tenesaca\",\n      \"prefix\": [\n        \"Lcda.\"\n      ],\n      \"family\": \"Quishpe Tenesaca\",\n      \"given\": [\n        \"Rosa\",\n        \"Elena\"\n      ]\n    }\n  ],\n  \"gender\": \"female\",\n  \"qualification\": [\n    {\n      \"code\": {\n        \"text\": \"Licenciatura en Enfermería\"\n      }\n    }\n  ]\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/08-vacunacion/soluciones/08b_practitioner_enfermera.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const id = pm.response.json().id;",
+                  "pm.collectionVariables.set(\"nursePractitionerId\", id);",
+                  "console.log(\"nursePractitionerId = \" + id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "08c · Atención en el vacunatorio",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Encounter",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"Encounter\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Atención en el vacunatorio, 3 de abril de 2025, 10:00 a 10:20.</p></div>\"\n  },\n  \"identifier\": [\n    {\n      \"system\": \"https://f-slg.github.io/aprende-fhir/sid/encuentro\",\n      \"value\": \"ENC-2025-0002\"\n    }\n  ],\n  \"status\": \"finished\",\n  \"class\": {\n    \"system\": \"http://terminology.hl7.org/CodeSystem/v3-ActCode\",\n    \"code\": \"AMB\",\n    \"display\": \"ambulatory\"\n  },\n  \"type\": [\n    {\n      \"coding\": [\n        {\n          \"system\": \"http://snomed.info/sct\",\n          \"code\": \"33879002\",\n          \"display\": \"Administration of vaccine to produce active immunity\"\n        }\n      ],\n      \"text\": \"Vacunación\"\n    }\n  ],\n  \"subject\": {\n    \"reference\": \"Patient/{{patientId}}\",\n    \"display\": \"Luis Alberto Paredes Cevallos\"\n  },\n  \"participant\": [\n    {\n      \"type\": [\n        {\n          \"coding\": [\n            {\n              \"system\": \"http://terminology.hl7.org/CodeSystem/v3-ParticipationType\",\n              \"code\": \"PPRF\",\n              \"display\": \"primary performer\"\n            }\n          ]\n        }\n      ],\n      \"individual\": {\n        \"reference\": \"Practitioner/{{nursePractitionerId}}\",\n        \"display\": \"Lcda. Rosa Elena Quishpe Tenesaca\"\n      }\n    }\n  ],\n  \"period\": {\n    \"start\": \"2025-04-03T10:00:00-05:00\",\n    \"end\": \"2025-04-03T10:20:00-05:00\"\n  },\n  \"serviceProvider\": {\n    \"reference\": \"Organization/{{hospitalId}}\",\n    \"display\": \"Hospital General Docente Ejemplo\"\n  }\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/08-vacunacion/soluciones/08c_encounter_vacunacion.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const id = pm.response.json().id;",
+                  "pm.collectionVariables.set(\"vaccinationEncounterId\", id);",
+                  "console.log(\"vaccinationEncounterId = \" + id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "08d · Vacuna contra la influenza",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Immunization",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"Immunization\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Vacuna contra la influenza estacional, 0,5 mL IM en el brazo izquierdo, lote FLU-25-0417.</p></div>\"\n  },\n  \"status\": \"completed\",\n  \"vaccineCode\": {\n    \"coding\": [\n      {\n        \"system\": \"http://hl7.org/fhir/sid/cvx\",\n        \"code\": \"141\",\n        \"display\": \"Influenza, split virus, trivalent, preservative\"\n      }\n    ],\n    \"text\": \"Influenza estacional\"\n  },\n  \"patient\": {\n    \"reference\": \"Patient/{{patientId}}\",\n    \"display\": \"Luis Alberto Paredes Cevallos\"\n  },\n  \"encounter\": {\n    \"reference\": \"Encounter/{{vaccinationEncounterId}}\",\n    \"display\": \"Vacunatorio, 3 de abril de 2025\"\n  },\n  \"occurrenceDateTime\": \"2025-04-03T10:10:00-05:00\",\n  \"recorded\": \"2025-04-03\",\n  \"primarySource\": true,\n  \"lotNumber\": \"FLU-25-0417\",\n  \"expirationDate\": \"2025-12-31\",\n  \"site\": {\n    \"coding\": [\n      {\n        \"system\": \"http://snomed.info/sct\",\n        \"code\": \"368208006\",\n        \"display\": \"Left upper arm structure\"\n      }\n    ],\n    \"text\": \"Brazo izquierdo\"\n  },\n  \"route\": {\n    \"coding\": [\n      {\n        \"system\": \"http://terminology.hl7.org/CodeSystem/v3-RouteOfAdministration\",\n        \"code\": \"IM\",\n        \"display\": \"Injection, intramuscular\"\n      }\n    ],\n    \"text\": \"Intramuscular\"\n  },\n  \"doseQuantity\": {\n    \"value\": 0.5,\n    \"unit\": \"mL\",\n    \"system\": \"http://unitsofmeasure.org\",\n    \"code\": \"mL\"\n  },\n  \"performer\": [\n    {\n      \"function\": {\n        \"coding\": [\n          {\n            \"system\": \"http://terminology.hl7.org/CodeSystem/v2-0443\",\n            \"code\": \"AP\",\n            \"display\": \"Administering Provider\"\n          }\n        ],\n        \"text\": \"Vacunadora\"\n      },\n      \"actor\": {\n        \"reference\": \"Practitioner/{{nursePractitionerId}}\",\n        \"display\": \"Lcda. Rosa Elena Quishpe Tenesaca\"\n      }\n    }\n  ],\n  \"protocolApplied\": [\n    {\n      \"series\": \"Campaña de influenza 2025\",\n      \"targetDisease\": [\n        {\n          \"coding\": [\n            {\n              \"system\": \"http://snomed.info/sct\",\n              \"code\": \"6142004\",\n              \"display\": \"Influenza\"\n            }\n          ],\n          \"text\": \"Influenza\"\n        }\n      ],\n      \"doseNumberPositiveInt\": 1\n    }\n  ]\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/08-vacunacion/soluciones/08d_immunization_influenza.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "08e · Refuerzo de Td",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Immunization",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"Immunization\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Refuerzo de Td (tétanos y difteria), 0,5 mL IM en el brazo derecho, lote TD-24-1180.</p></div>\"\n  },\n  \"status\": \"completed\",\n  \"vaccineCode\": {\n    \"coding\": [\n      {\n        \"system\": \"http://hl7.org/fhir/sid/cvx\",\n        \"code\": \"09\",\n        \"display\": \"Td (adult), 2 Lf tetanus toxoid, preservative free, adsorbed\"\n      }\n    ],\n    \"text\": \"Td (tétanos y difteria, adultos)\"\n  },\n  \"patient\": {\n    \"reference\": \"Patient/{{patientId}}\",\n    \"display\": \"Luis Alberto Paredes Cevallos\"\n  },\n  \"encounter\": {\n    \"reference\": \"Encounter/{{vaccinationEncounterId}}\",\n    \"display\": \"Vacunatorio, 3 de abril de 2025\"\n  },\n  \"occurrenceDateTime\": \"2025-04-03T10:10:00-05:00\",\n  \"recorded\": \"2025-04-03\",\n  \"primarySource\": true,\n  \"lotNumber\": \"TD-24-1180\",\n  \"expirationDate\": \"2026-06-30\",\n  \"site\": {\n    \"coding\": [\n      {\n        \"system\": \"http://snomed.info/sct\",\n        \"code\": \"368209003\",\n        \"display\": \"Right upper arm structure\"\n      }\n    ],\n    \"text\": \"Brazo derecho\"\n  },\n  \"route\": {\n    \"coding\": [\n      {\n        \"system\": \"http://terminology.hl7.org/CodeSystem/v3-RouteOfAdministration\",\n        \"code\": \"IM\",\n        \"display\": \"Injection, intramuscular\"\n      }\n    ],\n    \"text\": \"Intramuscular\"\n  },\n  \"doseQuantity\": {\n    \"value\": 0.5,\n    \"unit\": \"mL\",\n    \"system\": \"http://unitsofmeasure.org\",\n    \"code\": \"mL\"\n  },\n  \"performer\": [\n    {\n      \"function\": {\n        \"coding\": [\n          {\n            \"system\": \"http://terminology.hl7.org/CodeSystem/v2-0443\",\n            \"code\": \"AP\",\n            \"display\": \"Administering Provider\"\n          }\n        ],\n        \"text\": \"Vacunadora\"\n      },\n      \"actor\": {\n        \"reference\": \"Practitioner/{{nursePractitionerId}}\",\n        \"display\": \"Lcda. Rosa Elena Quishpe Tenesaca\"\n      }\n    }\n  ],\n  \"protocolApplied\": [\n    {\n      \"series\": \"Esquema de adultos (refuerzo cada 10 años)\",\n      \"targetDisease\": [\n        {\n          \"coding\": [\n            {\n              \"system\": \"http://snomed.info/sct\",\n              \"code\": \"76902006\",\n              \"display\": \"Tetanus\"\n            }\n          ],\n          \"text\": \"Tétanos\"\n        }\n      ],\n      \"doseNumberPositiveInt\": 4,\n      \"seriesDosesPositiveInt\": 4\n    }\n  ]\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/08-vacunacion/soluciones/08e_immunization_td.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "08f · Carné de vacunación del paciente",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Immunization?patient=Patient/{{patientId}}&_sort=date"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "08g · Error a propósito: vacuna sin fecha (el servidor la acepta)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Immunization",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"Immunization\",\n  \"status\": \"completed\",\n  \"vaccineCode\": {\n    \"coding\": [\n      {\n        \"system\": \"http://hl7.org/fhir/sid/cvx\",\n        \"code\": \"141\",\n        \"display\": \"Influenza, split virus, trivalent, preservative\"\n      }\n    ]\n  },\n  \"patient\": {\n    \"reference\": \"Patient/{{patientId}}\"\n  }\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/08-vacunacion/errores/08e1_vacuna_sin_fecha.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const id = pm.response.json().id;",
+                  "pm.collectionVariables.set(\"errorImmId\", id);",
+                  "console.log(\"errorImmId = \" + id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "08h · Borrar la vacuna inválida",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Immunization/{{errorImmId}}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "09 · Documentos clínicos",
+      "item": [
+        {
+          "name": "09a · Composition de signos vitales",
           "request": {
             "method": "POST",
             "header": [
@@ -992,7 +1931,7 @@
                 }
               }
             },
-            "description": "Cuerpo: `modulos/07-documentos-clinicos/soluciones/07a_composition_signos_vitales.json`"
+            "description": "Cuerpo: `modulos/09-documentos-clinicos/soluciones/09a_composition_signos_vitales.json`"
           },
           "event": [
             {
@@ -1012,7 +1951,7 @@
           ]
         },
         {
-          "name": "07b · Documento clínico autocontenido (Bundle document)",
+          "name": "09b · Documento clínico autocontenido (Bundle document)",
           "request": {
             "method": "POST",
             "header": [
@@ -1035,7 +1974,7 @@
                 }
               }
             },
-            "description": "Cuerpo: `modulos/07-documentos-clinicos/soluciones/07b_bundle_document_signos_vitales.json`"
+            "description": "Cuerpo: `modulos/09-documentos-clinicos/soluciones/09b_bundle_document_signos_vitales.json`"
           },
           "event": [
             {
@@ -1055,7 +1994,7 @@
           ]
         },
         {
-          "name": "07c · Leer el documento",
+          "name": "09c · Leer el documento",
           "request": {
             "method": "GET",
             "header": [
@@ -1083,10 +2022,10 @@
       ]
     },
     {
-      "name": "08 · Anatomía patológica",
+      "name": "11 · Anatomía patológica",
       "item": [
         {
-          "name": "08a · Registrar el tumor (BodyStructure)",
+          "name": "11a · Registrar el tumor (BodyStructure)",
           "request": {
             "method": "POST",
             "header": [
@@ -1109,7 +2048,7 @@
                 }
               }
             },
-            "description": "Cuerpo: `modulos/08-anatomia-patologica/soluciones/08a_bodystructure_tumor.json`"
+            "description": "Cuerpo: `modulos/11-anatomia-patologica/soluciones/11a_bodystructure_tumor.json`"
           },
           "event": [
             {
@@ -1129,7 +2068,7 @@
           ]
         },
         {
-          "name": "08b · Precisar la ubicación del tumor",
+          "name": "11b · Precisar la ubicación del tumor",
           "request": {
             "method": "PUT",
             "header": [
@@ -1152,7 +2091,7 @@
                 }
               }
             },
-            "description": "Cuerpo: `modulos/08-anatomia-patologica/soluciones/08b_bodystructure_actualizar.json`"
+            "description": "Cuerpo: `modulos/11-anatomia-patologica/soluciones/11b_bodystructure_actualizar.json`"
           },
           "event": [
             {
@@ -1169,7 +2108,7 @@
           ]
         },
         {
-          "name": "08c · Registrar la biopsia (Specimen)",
+          "name": "11c · Registrar la biopsia (Specimen)",
           "request": {
             "method": "POST",
             "header": [
@@ -1192,7 +2131,7 @@
                 }
               }
             },
-            "description": "Cuerpo: `modulos/08-anatomia-patologica/soluciones/08c_specimen_crear.json`"
+            "description": "Cuerpo: `modulos/11-anatomia-patologica/soluciones/11c_specimen_crear.json`"
           },
           "event": [
             {
@@ -1212,7 +2151,7 @@
           ]
         },
         {
-          "name": "08d · Marcar la muestra como agotada",
+          "name": "11d · Marcar la muestra como agotada",
           "request": {
             "method": "PUT",
             "header": [
@@ -1235,7 +2174,7 @@
                 }
               }
             },
-            "description": "Cuerpo: `modulos/08-anatomia-patologica/soluciones/08d_specimen_actualizar.json`"
+            "description": "Cuerpo: `modulos/11-anatomia-patologica/soluciones/11d_specimen_actualizar.json`"
           },
           "event": [
             {
@@ -1252,7 +2191,7 @@
           ]
         },
         {
-          "name": "08e · Tamaño del tumor: 2,5 cm",
+          "name": "11e · Tamaño del tumor: 2,5 cm",
           "request": {
             "method": "POST",
             "header": [
@@ -1275,7 +2214,7 @@
                 }
               }
             },
-            "description": "Cuerpo: `modulos/08-anatomia-patologica/soluciones/08e_observation_tamano_tumor.json`"
+            "description": "Cuerpo: `modulos/11-anatomia-patologica/soluciones/11e_observation_tamano_tumor.json`"
           },
           "event": [
             {
@@ -1295,7 +2234,48 @@
           ]
         },
         {
-          "name": "08f · Corregir el tamaño a 3,5 cm (amended)",
+          "name": "11f · Error a propósito: actualizar sin id",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Observation/{{obsTumorId}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"Observation\",\n  \"status\": \"amended\",\n  \"code\": {\n    \"coding\": [\n      {\n        \"system\": \"http://snomed.info/sct\",\n        \"code\": \"263605001\",\n        \"display\": \"Length dimension of neoplasm\"\n      }\n    ]\n  },\n  \"subject\": {\n    \"reference\": \"Patient/{{patientId}}\"\n  },\n  \"valueQuantity\": {\n    \"value\": 3.5,\n    \"unit\": \"cm\",\n    \"system\": \"http://unitsofmeasure.org\",\n    \"code\": \"cm\"\n  }\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/11-anatomia-patologica/errores/11e1_actualizar_sin_id.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"El servidor rechaza el error (4xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(400, 499);",
+                  "});",
+                  "console.log(pm.response.json().issue[0].diagnostics);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "11g · Corregir el tamaño a 3,5 cm (amended)",
           "request": {
             "method": "PUT",
             "header": [
@@ -1318,7 +2298,7 @@
                 }
               }
             },
-            "description": "Cuerpo: `modulos/08-anatomia-patologica/soluciones/08f_observation_tamano_tumor_actualizar.json`"
+            "description": "Cuerpo: `modulos/11-anatomia-patologica/soluciones/11f_observation_tamano_tumor_actualizar.json`"
           },
           "event": [
             {
@@ -1335,7 +2315,33 @@
           ]
         },
         {
-          "name": "08g · Receptor de estrógeno positivo",
+          "name": "11h · Historial del tamaño del tumor",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Observation/{{obsTumorId}}/_history"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "11i · Receptor de estrógeno positivo",
           "request": {
             "method": "POST",
             "header": [
@@ -1358,7 +2364,7 @@
                 }
               }
             },
-            "description": "Cuerpo: `modulos/08-anatomia-patologica/soluciones/08g_observation_receptor_estrogeno.json`"
+            "description": "Cuerpo: `modulos/11-anatomia-patologica/soluciones/11g_observation_receptor_estrogeno.json`"
           },
           "event": [
             {
@@ -1378,7 +2384,7 @@
           ]
         },
         {
-          "name": "08h · Ampliar el resultado del receptor (amended)",
+          "name": "11j · Ampliar el resultado del receptor (amended)",
           "request": {
             "method": "PUT",
             "header": [
@@ -1401,7 +2407,7 @@
                 }
               }
             },
-            "description": "Cuerpo: `modulos/08-anatomia-patologica/soluciones/08h_observation_receptor_estrogeno_actualizar.json`"
+            "description": "Cuerpo: `modulos/11-anatomia-patologica/soluciones/11h_observation_receptor_estrogeno_actualizar.json`"
           },
           "event": [
             {
@@ -1418,7 +2424,7 @@
           ]
         },
         {
-          "name": "08i · Informe de anatomía patológica",
+          "name": "11k · Informe de anatomía patológica",
           "request": {
             "method": "POST",
             "header": [
@@ -1441,7 +2447,7 @@
                 }
               }
             },
-            "description": "Cuerpo: `modulos/08-anatomia-patologica/soluciones/08i_diagnosticreport_patologia.json`"
+            "description": "Cuerpo: `modulos/11-anatomia-patologica/soluciones/11i_diagnosticreport_patologia.json`"
           },
           "event": [
             {
@@ -1461,7 +2467,7 @@
           ]
         },
         {
-          "name": "08j · Diagnóstico de cáncer de mama",
+          "name": "11l · Diagnóstico de cáncer de mama",
           "request": {
             "method": "POST",
             "header": [
@@ -1484,7 +2490,7 @@
                 }
               }
             },
-            "description": "Cuerpo: `modulos/08-anatomia-patologica/soluciones/08j_condition_cancer_mama.json`"
+            "description": "Cuerpo: `modulos/11-anatomia-patologica/soluciones/11j_condition_cancer_mama.json`"
           },
           "event": [
             {
@@ -1504,7 +2510,7 @@
           ]
         },
         {
-          "name": "08k · Informe con sus resultados incluidos",
+          "name": "11m · Informe con sus resultados incluidos",
           "request": {
             "method": "GET",
             "header": [
@@ -1532,10 +2538,10 @@
       ]
     },
     {
-      "name": "09 · Procedimientos",
+      "name": "13 · Procedimientos",
       "item": [
         {
-          "name": "09a · Mastectomía parcial",
+          "name": "13a · Mastectomía parcial",
           "request": {
             "method": "POST",
             "header": [
@@ -1558,7 +2564,7 @@
                 }
               }
             },
-            "description": "Cuerpo: `modulos/09-procedimientos/soluciones/09a_procedure_mastectomia.json`"
+            "description": "Cuerpo: `modulos/13-procedimientos/soluciones/13a_procedure_mastectomia.json`"
           },
           "event": [
             {
@@ -1578,7 +2584,7 @@
           ]
         },
         {
-          "name": "09b · Agregar resultado y seguimiento",
+          "name": "13b · Agregar resultado y seguimiento",
           "request": {
             "method": "PUT",
             "header": [
@@ -1601,7 +2607,7 @@
                 }
               }
             },
-            "description": "Cuerpo: `modulos/09-procedimientos/soluciones/09b_procedure_actualizar.json`"
+            "description": "Cuerpo: `modulos/13-procedimientos/soluciones/13b_procedure_actualizar.json`"
           },
           "event": [
             {
@@ -1620,10 +2626,10 @@
       ]
     },
     {
-      "name": "10 · Medicamentos",
+      "name": "15 · Medicamentos",
       "item": [
         {
-          "name": "10a · Superficie corporal",
+          "name": "15a · Superficie corporal",
           "request": {
             "method": "POST",
             "header": [
@@ -1639,14 +2645,14 @@
             "url": "{{FHIRURL}}/Observation",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"resourceType\": \"Observation\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Superficie corporal: 1,77 m² (peso 72 kg, talla 1,58 m; Mosteller).</p></div>\"\n  },\n  \"status\": \"final\",\n  \"category\": [\n    {\n      \"coding\": [\n        {\n          \"system\": \"http://terminology.hl7.org/CodeSystem/observation-category\",\n          \"code\": \"vital-signs\",\n          \"display\": \"Vital Signs\"\n        }\n      ]\n    }\n  ],\n  \"code\": {\n    \"coding\": [\n      {\n        \"system\": \"http://loinc.org\",\n        \"code\": \"8277-6\",\n        \"display\": \"Body surface area\"\n      }\n    ],\n    \"text\": \"Superficie corporal\"\n  },\n  \"subject\": {\n    \"reference\": \"Patient/{{patientId}}\",\n    \"display\": \"Luis Alberto Paredes Cevallos\"\n  },\n  \"effectiveDateTime\": \"2025-07-01\",\n  \"performer\": [\n    {\n      \"reference\": \"Practitioner/{{practitionerId}}\",\n      \"display\": \"Dra. Andrea Lucía Salazar Moreno\"\n    }\n  ],\n  \"valueQuantity\": {\n    \"value\": 1.77,\n    \"unit\": \"m2\",\n    \"system\": \"http://unitsofmeasure.org\",\n    \"code\": \"m2\"\n  },\n  \"method\": {\n    \"text\": \"Fórmula de Mosteller\"\n  }\n}\n",
+              "raw": "{\n  \"resourceType\": \"Observation\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Superficie corporal: 1,77 m² (peso 72 kg, talla 1,57 m; Mosteller).</p></div>\"\n  },\n  \"status\": \"final\",\n  \"category\": [\n    {\n      \"coding\": [\n        {\n          \"system\": \"http://terminology.hl7.org/CodeSystem/observation-category\",\n          \"code\": \"vital-signs\",\n          \"display\": \"Vital Signs\"\n        }\n      ]\n    }\n  ],\n  \"code\": {\n    \"coding\": [\n      {\n        \"system\": \"http://loinc.org\",\n        \"code\": \"8277-6\",\n        \"display\": \"Body surface area\"\n      }\n    ],\n    \"text\": \"Superficie corporal\"\n  },\n  \"subject\": {\n    \"reference\": \"Patient/{{patientId}}\",\n    \"display\": \"Luis Alberto Paredes Cevallos\"\n  },\n  \"effectiveDateTime\": \"2025-07-01\",\n  \"performer\": [\n    {\n      \"reference\": \"Practitioner/{{practitionerId}}\",\n      \"display\": \"Dra. Andrea Lucía Salazar Moreno\"\n    }\n  ],\n  \"valueQuantity\": {\n    \"value\": 1.77,\n    \"unit\": \"m2\",\n    \"system\": \"http://unitsofmeasure.org\",\n    \"code\": \"m2\"\n  },\n  \"method\": {\n    \"text\": \"Fórmula de Mosteller\"\n  }\n}\n",
               "options": {
                 "raw": {
                   "language": "json"
                 }
               }
             },
-            "description": "Cuerpo: `modulos/10-medicamentos/soluciones/10a_observation_superficie_corporal.json`"
+            "description": "Cuerpo: `modulos/15-medicamentos/soluciones/15a_observation_superficie_corporal.json`"
           },
           "event": [
             {
@@ -1666,7 +2672,7 @@
           ]
         },
         {
-          "name": "10b · Prescribir doxorrubicina",
+          "name": "15b · Prescribir doxorrubicina",
           "request": {
             "method": "POST",
             "header": [
@@ -1689,7 +2695,7 @@
                 }
               }
             },
-            "description": "Cuerpo: `modulos/10-medicamentos/soluciones/10b_medicationrequest_doxorrubicina.json`"
+            "description": "Cuerpo: `modulos/15-medicamentos/soluciones/15b_medicationrequest_doxorrubicina.json`"
           },
           "event": [
             {
@@ -1709,7 +2715,7 @@
           ]
         },
         {
-          "name": "10c · Administrar el primer ciclo",
+          "name": "15c · Administrar el primer ciclo",
           "request": {
             "method": "POST",
             "header": [
@@ -1732,7 +2738,7 @@
                 }
               }
             },
-            "description": "Cuerpo: `modulos/10-medicamentos/soluciones/10c_medicationadministration_doxorrubicina.json`"
+            "description": "Cuerpo: `modulos/15-medicamentos/soluciones/15c_medicationadministration_doxorrubicina.json`"
           },
           "event": [
             {
@@ -1752,7 +2758,7 @@
           ]
         },
         {
-          "name": "10d · Registrar un evento posterior a la infusión",
+          "name": "15d · Registrar un evento posterior a la infusión",
           "request": {
             "method": "PUT",
             "header": [
@@ -1775,7 +2781,7 @@
                 }
               }
             },
-            "description": "Cuerpo: `modulos/10-medicamentos/soluciones/10d_medicationadministration_actualizar.json`"
+            "description": "Cuerpo: `modulos/15-medicamentos/soluciones/15d_medicationadministration_actualizar.json`"
           },
           "event": [
             {
@@ -1792,7 +2798,7 @@
           ]
         },
         {
-          "name": "10e · Prescribir tamoxifeno",
+          "name": "15e · Prescribir tamoxifeno",
           "request": {
             "method": "POST",
             "header": [
@@ -1815,7 +2821,7 @@
                 }
               }
             },
-            "description": "Cuerpo: `modulos/10-medicamentos/soluciones/10e_medicationrequest_tamoxifeno.json`"
+            "description": "Cuerpo: `modulos/15-medicamentos/soluciones/15e_medicationrequest_tamoxifeno.json`"
           },
           "event": [
             {
@@ -1835,7 +2841,7 @@
           ]
         },
         {
-          "name": "10f · Primera dosis autoadministrada",
+          "name": "15f · Primera dosis autoadministrada",
           "request": {
             "method": "POST",
             "header": [
@@ -1858,7 +2864,7 @@
                 }
               }
             },
-            "description": "Cuerpo: `modulos/10-medicamentos/soluciones/10f_medicationadministration_tamoxifeno.json`"
+            "description": "Cuerpo: `modulos/15-medicamentos/soluciones/15f_medicationadministration_tamoxifeno.json`"
           },
           "event": [
             {
@@ -1878,7 +2884,7 @@
           ]
         },
         {
-          "name": "10g · Suspender el tamoxifeno (stopped)",
+          "name": "15g · Suspender el tamoxifeno (stopped)",
           "request": {
             "method": "PUT",
             "header": [
@@ -1901,7 +2907,7 @@
                 }
               }
             },
-            "description": "Cuerpo: `modulos/10-medicamentos/soluciones/10g_medicationrequest_suspender.json`"
+            "description": "Cuerpo: `modulos/15-medicamentos/soluciones/15g_medicationrequest_suspender.json`"
           },
           "event": [
             {
@@ -1918,7 +2924,76 @@
           ]
         },
         {
-          "name": "10h · Expediente completo del paciente",
+          "name": "15h · Error a propósito: receta sin intención (el servidor la acepta)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/MedicationRequest",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"MedicationRequest\",\n  \"status\": \"active\",\n  \"medicationCodeableConcept\": {\n    \"coding\": [\n      {\n        \"system\": \"http://snomed.info/sct\",\n        \"code\": \"373345002\",\n        \"display\": \"Tamoxifen\"\n      }\n    ]\n  },\n  \"subject\": {\n    \"reference\": \"Patient/{{patientId}}\"\n  }\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/15-medicamentos/errores/15e1_receta_sin_intencion.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const id = pm.response.json().id;",
+                  "pm.collectionVariables.set(\"errorMedReqId\", id);",
+                  "console.log(\"errorMedReqId = \" + id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "15i · Borrar la receta inválida",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/MedicationRequest/{{errorMedReqId}}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "15j · Expediente completo del paciente",
           "request": {
             "method": "GET",
             "header": [
@@ -1950,6 +3025,10 @@
     {
       "key": "FHIRURL",
       "value": "https://hapi.fhir.org/baseR4"
+    },
+    {
+      "key": "errorPatientId",
+      "value": ""
     },
     {
       "key": "patientId",
@@ -1989,6 +3068,30 @@
     },
     {
       "key": "obsFCId",
+      "value": ""
+    },
+    {
+      "key": "errorObsId",
+      "value": ""
+    },
+    {
+      "key": "allergyId",
+      "value": ""
+    },
+    {
+      "key": "medStatementId",
+      "value": ""
+    },
+    {
+      "key": "nursePractitionerId",
+      "value": ""
+    },
+    {
+      "key": "vaccinationEncounterId",
+      "value": ""
+    },
+    {
+      "key": "errorImmId",
       "value": ""
     },
     {
@@ -2045,6 +3148,10 @@
     },
     {
       "key": "medAdminTamoxId",
+      "value": ""
+    },
+    {
+      "key": "errorMedReqId",
       "value": ""
     }
   ]

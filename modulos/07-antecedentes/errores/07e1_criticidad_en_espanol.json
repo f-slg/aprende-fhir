@@ -1,0 +1,16 @@
+{
+  "resourceType": "AllergyIntolerance",
+  "patient": {
+    "reference": "Patient/{{patientId}}"
+  },
+  "code": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "764146007",
+        "display": "Penicillin"
+      }
+    ]
+  },
+  "criticality": "alta"
+}

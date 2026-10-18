@@ -1,5 +1,5 @@
 {
-  "descripcion": "Pasos del taller en orden. Postman, curl y R se generan o se ejecutan a partir de esta lista.",
+  "descripcion": "Pasos del taller en orden. Postman, curl y R se generan o se ejecutan a partir de esta lista. Los pasos con 'espera' son errores a propósito: 'servidor' indica si el servidor debe rechazarlo o aceptarlo, y 'validador' si el validador oficial de HL7 debe detectarlo.",
   "pasos": [
     {
       "id": "01a",
@@ -14,6 +14,45 @@
       "nombre": "Buscar pacientes (primeros 5)",
       "metodo": "GET",
       "ruta": "Patient?_count=5"
+    },
+    {
+      "id": "01c",
+      "modulo": "01-fundamentos",
+      "nombre": "Error a propósito: tipo de recurso en español",
+      "metodo": "POST",
+      "ruta": "Patient",
+      "archivo": "modulos/01-fundamentos/errores/01e1_resourcetype_en_espanol.json",
+      "espera": {
+        "servidor": "rechaza",
+        "validador": "falla"
+      }
+    },
+    {
+      "id": "01d",
+      "modulo": "01-fundamentos",
+      "nombre": "Error a propósito: elemento en español (se pierde en silencio)",
+      "metodo": "POST",
+      "ruta": "Patient",
+      "archivo": "modulos/01-fundamentos/errores/01e2_elemento_en_espanol.json",
+      "espera": {
+        "servidor": "acepta",
+        "validador": "falla"
+      },
+      "guarda": "errorPatientId"
+    },
+    {
+      "id": "01e",
+      "modulo": "01-fundamentos",
+      "nombre": "Leer lo que guardó el servidor",
+      "metodo": "GET",
+      "ruta": "Patient/{{errorPatientId}}"
+    },
+    {
+      "id": "01f",
+      "modulo": "01-fundamentos",
+      "nombre": "Borrar el paciente de prueba",
+      "metodo": "DELETE",
+      "ruta": "Patient/{{errorPatientId}}"
     },
     {
       "id": "02a",
@@ -59,6 +98,18 @@
       "nombre": "Historial de versiones del paciente",
       "metodo": "GET",
       "ruta": "Patient/{{patientId}}/_history"
+    },
+    {
+      "id": "02g",
+      "modulo": "02-patient",
+      "nombre": "Error a propósito: fecha con formato local",
+      "metodo": "POST",
+      "ruta": "Patient",
+      "archivo": "modulos/02-patient/errores/02e1_fecha_formato_local.json",
+      "espera": {
+        "servidor": "rechaza",
+        "validador": "falla"
+      }
     },
     {
       "id": "03a",
@@ -110,6 +161,18 @@
       "ruta": "Organization?partof={{organizationId}}"
     },
     {
+      "id": "04e",
+      "modulo": "04-profesionales-y-organizaciones",
+      "nombre": "Error a propósito: referencia a una organización que no existe",
+      "metodo": "POST",
+      "ruta": "Organization",
+      "archivo": "modulos/04-profesionales-y-organizaciones/errores/04e1_referencia_inexistente.json",
+      "espera": {
+        "servidor": "rechaza",
+        "validador": "pasa"
+      }
+    },
+    {
       "id": "05a",
       "modulo": "05-diagnostico-y-encuentro",
       "nombre": "Registrar el diagnóstico de intoxicación",
@@ -133,6 +196,18 @@
       "nombre": "Encuentros del paciente con su diagnóstico",
       "metodo": "GET",
       "ruta": "Encounter?subject=Patient/{{patientId}}&_include=Encounter:diagnosis"
+    },
+    {
+      "id": "05d",
+      "modulo": "05-diagnostico-y-encuentro",
+      "nombre": "Error a propósito: estado en español",
+      "metodo": "POST",
+      "ruta": "Encounter",
+      "archivo": "modulos/05-diagnostico-y-encuentro/errores/05e1_estado_en_espanol.json",
+      "espera": {
+        "servidor": "rechaza",
+        "validador": "falla"
+      }
     },
     {
       "id": "06a",
@@ -210,204 +285,404 @@
       "ruta": "Observation?subject=Patient/{{patientId}}&category=vital-signs"
     },
     {
-      "id": "07a",
-      "modulo": "07-documentos-clinicos",
-      "nombre": "Composition de signos vitales",
+      "id": "06j",
+      "modulo": "06-observaciones",
+      "nombre": "Error a propósito: decimal con coma",
       "metodo": "POST",
-      "ruta": "Composition",
-      "archivo": "modulos/07-documentos-clinicos/soluciones/07a_composition_signos_vitales.json",
-      "guarda": "compositionId"
+      "ruta": "Observation",
+      "archivo": "modulos/06-observaciones/errores/06e1_decimal_con_coma.json",
+      "espera": {
+        "servidor": "rechaza",
+        "validador": "falla"
+      }
+    },
+    {
+      "id": "06k",
+      "modulo": "06-observaciones",
+      "nombre": "Error a propósito: observación sin código (el servidor la acepta)",
+      "metodo": "POST",
+      "ruta": "Observation",
+      "archivo": "modulos/06-observaciones/errores/06e2_observacion_sin_codigo.json",
+      "espera": {
+        "servidor": "acepta",
+        "validador": "falla"
+      },
+      "guarda": "errorObsId"
+    },
+    {
+      "id": "06l",
+      "modulo": "06-observaciones",
+      "nombre": "Borrar la observación inválida",
+      "metodo": "DELETE",
+      "ruta": "Observation/{{errorObsId}}"
+    },
+    {
+      "id": "07a",
+      "modulo": "07-antecedentes",
+      "nombre": "Alergia a la penicilina",
+      "metodo": "POST",
+      "ruta": "AllergyIntolerance",
+      "archivo": "modulos/07-antecedentes/soluciones/07a_allergyintolerance_penicilina.json",
+      "guarda": "allergyId"
     },
     {
       "id": "07b",
-      "modulo": "07-documentos-clinicos",
-      "nombre": "Documento clínico autocontenido (Bundle document)",
+      "modulo": "07-antecedentes",
+      "nombre": "Medicación habitual: losartán",
       "metodo": "POST",
-      "ruta": "Bundle",
-      "archivo": "modulos/07-documentos-clinicos/soluciones/07b_bundle_document_signos_vitales.json",
-      "guarda": "bundleDocId"
+      "ruta": "MedicationStatement",
+      "archivo": "modulos/07-antecedentes/soluciones/07b_medicationstatement_losartan.json",
+      "guarda": "medStatementId"
     },
     {
       "id": "07c",
-      "modulo": "07-documentos-clinicos",
+      "modulo": "07-antecedentes",
+      "nombre": "Antecedente familiar: madre",
+      "metodo": "POST",
+      "ruta": "FamilyMemberHistory",
+      "archivo": "modulos/07-antecedentes/soluciones/07c_familymemberhistory_madre.json"
+    },
+    {
+      "id": "07d",
+      "modulo": "07-antecedentes",
+      "nombre": "Antecedente familiar: padre",
+      "metodo": "POST",
+      "ruta": "FamilyMemberHistory",
+      "archivo": "modulos/07-antecedentes/soluciones/07d_familymemberhistory_padre.json"
+    },
+    {
+      "id": "07e",
+      "modulo": "07-antecedentes",
+      "nombre": "Alergias activas del paciente",
+      "metodo": "GET",
+      "ruta": "AllergyIntolerance?patient=Patient/{{patientId}}&clinical-status=active"
+    },
+    {
+      "id": "07f",
+      "modulo": "07-antecedentes",
+      "nombre": "Antecedentes familiares del paciente",
+      "metodo": "GET",
+      "ruta": "FamilyMemberHistory?patient=Patient/{{patientId}}"
+    },
+    {
+      "id": "07g",
+      "modulo": "07-antecedentes",
+      "nombre": "Error a propósito: criticidad en español",
+      "metodo": "POST",
+      "ruta": "AllergyIntolerance",
+      "archivo": "modulos/07-antecedentes/errores/07e1_criticidad_en_espanol.json",
+      "espera": {
+        "servidor": "rechaza",
+        "validador": "falla"
+      }
+    },
+    {
+      "id": "08a",
+      "modulo": "08-vacunacion",
+      "nombre": "Vacuna diferida por fiebre (not-done)",
+      "metodo": "POST",
+      "ruta": "Immunization",
+      "archivo": "modulos/08-vacunacion/soluciones/08a_immunization_diferida.json"
+    },
+    {
+      "id": "08b",
+      "modulo": "08-vacunacion",
+      "nombre": "Crear a la enfermera",
+      "metodo": "POST",
+      "ruta": "Practitioner",
+      "archivo": "modulos/08-vacunacion/soluciones/08b_practitioner_enfermera.json",
+      "guarda": "nursePractitionerId"
+    },
+    {
+      "id": "08c",
+      "modulo": "08-vacunacion",
+      "nombre": "Atención en el vacunatorio",
+      "metodo": "POST",
+      "ruta": "Encounter",
+      "archivo": "modulos/08-vacunacion/soluciones/08c_encounter_vacunacion.json",
+      "guarda": "vaccinationEncounterId"
+    },
+    {
+      "id": "08d",
+      "modulo": "08-vacunacion",
+      "nombre": "Vacuna contra la influenza",
+      "metodo": "POST",
+      "ruta": "Immunization",
+      "archivo": "modulos/08-vacunacion/soluciones/08d_immunization_influenza.json"
+    },
+    {
+      "id": "08e",
+      "modulo": "08-vacunacion",
+      "nombre": "Refuerzo de Td",
+      "metodo": "POST",
+      "ruta": "Immunization",
+      "archivo": "modulos/08-vacunacion/soluciones/08e_immunization_td.json"
+    },
+    {
+      "id": "08f",
+      "modulo": "08-vacunacion",
+      "nombre": "Carné de vacunación del paciente",
+      "metodo": "GET",
+      "ruta": "Immunization?patient=Patient/{{patientId}}&_sort=date"
+    },
+    {
+      "id": "08g",
+      "modulo": "08-vacunacion",
+      "nombre": "Error a propósito: vacuna sin fecha (el servidor la acepta)",
+      "metodo": "POST",
+      "ruta": "Immunization",
+      "archivo": "modulos/08-vacunacion/errores/08e1_vacuna_sin_fecha.json",
+      "espera": {
+        "servidor": "acepta",
+        "validador": "falla"
+      },
+      "guarda": "errorImmId"
+    },
+    {
+      "id": "08h",
+      "modulo": "08-vacunacion",
+      "nombre": "Borrar la vacuna inválida",
+      "metodo": "DELETE",
+      "ruta": "Immunization/{{errorImmId}}"
+    },
+    {
+      "id": "09a",
+      "modulo": "09-documentos-clinicos",
+      "nombre": "Composition de signos vitales",
+      "metodo": "POST",
+      "ruta": "Composition",
+      "archivo": "modulos/09-documentos-clinicos/soluciones/09a_composition_signos_vitales.json",
+      "guarda": "compositionId"
+    },
+    {
+      "id": "09b",
+      "modulo": "09-documentos-clinicos",
+      "nombre": "Documento clínico autocontenido (Bundle document)",
+      "metodo": "POST",
+      "ruta": "Bundle",
+      "archivo": "modulos/09-documentos-clinicos/soluciones/09b_bundle_document_signos_vitales.json",
+      "guarda": "bundleDocId"
+    },
+    {
+      "id": "09c",
+      "modulo": "09-documentos-clinicos",
       "nombre": "Leer el documento",
       "metodo": "GET",
       "ruta": "Bundle/{{bundleDocId}}"
     },
     {
-      "id": "08a",
-      "modulo": "08-anatomia-patologica",
+      "id": "11a",
+      "modulo": "11-anatomia-patologica",
       "nombre": "Registrar el tumor (BodyStructure)",
       "metodo": "POST",
       "ruta": "BodyStructure",
-      "archivo": "modulos/08-anatomia-patologica/soluciones/08a_bodystructure_tumor.json",
+      "archivo": "modulos/11-anatomia-patologica/soluciones/11a_bodystructure_tumor.json",
       "guarda": "bodyStructureId"
     },
     {
-      "id": "08b",
-      "modulo": "08-anatomia-patologica",
+      "id": "11b",
+      "modulo": "11-anatomia-patologica",
       "nombre": "Precisar la ubicación del tumor",
       "metodo": "PUT",
       "ruta": "BodyStructure/{{bodyStructureId}}",
-      "archivo": "modulos/08-anatomia-patologica/soluciones/08b_bodystructure_actualizar.json"
+      "archivo": "modulos/11-anatomia-patologica/soluciones/11b_bodystructure_actualizar.json"
     },
     {
-      "id": "08c",
-      "modulo": "08-anatomia-patologica",
+      "id": "11c",
+      "modulo": "11-anatomia-patologica",
       "nombre": "Registrar la biopsia (Specimen)",
       "metodo": "POST",
       "ruta": "Specimen",
-      "archivo": "modulos/08-anatomia-patologica/soluciones/08c_specimen_crear.json",
+      "archivo": "modulos/11-anatomia-patologica/soluciones/11c_specimen_crear.json",
       "guarda": "specimenId"
     },
     {
-      "id": "08d",
-      "modulo": "08-anatomia-patologica",
+      "id": "11d",
+      "modulo": "11-anatomia-patologica",
       "nombre": "Marcar la muestra como agotada",
       "metodo": "PUT",
       "ruta": "Specimen/{{specimenId}}",
-      "archivo": "modulos/08-anatomia-patologica/soluciones/08d_specimen_actualizar.json"
+      "archivo": "modulos/11-anatomia-patologica/soluciones/11d_specimen_actualizar.json"
     },
     {
-      "id": "08e",
-      "modulo": "08-anatomia-patologica",
+      "id": "11e",
+      "modulo": "11-anatomia-patologica",
       "nombre": "Tamaño del tumor: 2,5 cm",
       "metodo": "POST",
       "ruta": "Observation",
-      "archivo": "modulos/08-anatomia-patologica/soluciones/08e_observation_tamano_tumor.json",
+      "archivo": "modulos/11-anatomia-patologica/soluciones/11e_observation_tamano_tumor.json",
       "guarda": "obsTumorId"
     },
     {
-      "id": "08f",
-      "modulo": "08-anatomia-patologica",
+      "id": "11f",
+      "modulo": "11-anatomia-patologica",
+      "nombre": "Error a propósito: actualizar sin id",
+      "metodo": "PUT",
+      "ruta": "Observation/{{obsTumorId}}",
+      "archivo": "modulos/11-anatomia-patologica/errores/11e1_actualizar_sin_id.json",
+      "espera": {
+        "servidor": "rechaza",
+        "validador": "pasa"
+      }
+    },
+    {
+      "id": "11g",
+      "modulo": "11-anatomia-patologica",
       "nombre": "Corregir el tamaño a 3,5 cm (amended)",
       "metodo": "PUT",
       "ruta": "Observation/{{obsTumorId}}",
-      "archivo": "modulos/08-anatomia-patologica/soluciones/08f_observation_tamano_tumor_actualizar.json"
+      "archivo": "modulos/11-anatomia-patologica/soluciones/11f_observation_tamano_tumor_actualizar.json"
     },
     {
-      "id": "08g",
-      "modulo": "08-anatomia-patologica",
+      "id": "11h",
+      "modulo": "11-anatomia-patologica",
+      "nombre": "Historial del tamaño del tumor",
+      "metodo": "GET",
+      "ruta": "Observation/{{obsTumorId}}/_history"
+    },
+    {
+      "id": "11i",
+      "modulo": "11-anatomia-patologica",
       "nombre": "Receptor de estrógeno positivo",
       "metodo": "POST",
       "ruta": "Observation",
-      "archivo": "modulos/08-anatomia-patologica/soluciones/08g_observation_receptor_estrogeno.json",
+      "archivo": "modulos/11-anatomia-patologica/soluciones/11g_observation_receptor_estrogeno.json",
       "guarda": "obsREId"
     },
     {
-      "id": "08h",
-      "modulo": "08-anatomia-patologica",
+      "id": "11j",
+      "modulo": "11-anatomia-patologica",
       "nombre": "Ampliar el resultado del receptor (amended)",
       "metodo": "PUT",
       "ruta": "Observation/{{obsREId}}",
-      "archivo": "modulos/08-anatomia-patologica/soluciones/08h_observation_receptor_estrogeno_actualizar.json"
+      "archivo": "modulos/11-anatomia-patologica/soluciones/11h_observation_receptor_estrogeno_actualizar.json"
     },
     {
-      "id": "08i",
-      "modulo": "08-anatomia-patologica",
+      "id": "11k",
+      "modulo": "11-anatomia-patologica",
       "nombre": "Informe de anatomía patológica",
       "metodo": "POST",
       "ruta": "DiagnosticReport",
-      "archivo": "modulos/08-anatomia-patologica/soluciones/08i_diagnosticreport_patologia.json",
+      "archivo": "modulos/11-anatomia-patologica/soluciones/11i_diagnosticreport_patologia.json",
       "guarda": "diagnosticReportId"
     },
     {
-      "id": "08j",
-      "modulo": "08-anatomia-patologica",
+      "id": "11l",
+      "modulo": "11-anatomia-patologica",
       "nombre": "Diagnóstico de cáncer de mama",
       "metodo": "POST",
       "ruta": "Condition",
-      "archivo": "modulos/08-anatomia-patologica/soluciones/08j_condition_cancer_mama.json",
+      "archivo": "modulos/11-anatomia-patologica/soluciones/11j_condition_cancer_mama.json",
       "guarda": "conditionCancerId"
     },
     {
-      "id": "08k",
-      "modulo": "08-anatomia-patologica",
+      "id": "11m",
+      "modulo": "11-anatomia-patologica",
       "nombre": "Informe con sus resultados incluidos",
       "metodo": "GET",
       "ruta": "DiagnosticReport?subject=Patient/{{patientId}}&_include=DiagnosticReport:result"
     },
     {
-      "id": "09a",
-      "modulo": "09-procedimientos",
+      "id": "13a",
+      "modulo": "13-procedimientos",
       "nombre": "Mastectomía parcial",
       "metodo": "POST",
       "ruta": "Procedure",
-      "archivo": "modulos/09-procedimientos/soluciones/09a_procedure_mastectomia.json",
+      "archivo": "modulos/13-procedimientos/soluciones/13a_procedure_mastectomia.json",
       "guarda": "procedureId"
     },
     {
-      "id": "09b",
-      "modulo": "09-procedimientos",
+      "id": "13b",
+      "modulo": "13-procedimientos",
       "nombre": "Agregar resultado y seguimiento",
       "metodo": "PUT",
       "ruta": "Procedure/{{procedureId}}",
-      "archivo": "modulos/09-procedimientos/soluciones/09b_procedure_actualizar.json"
+      "archivo": "modulos/13-procedimientos/soluciones/13b_procedure_actualizar.json"
     },
     {
-      "id": "10a",
-      "modulo": "10-medicamentos",
+      "id": "15a",
+      "modulo": "15-medicamentos",
       "nombre": "Superficie corporal",
       "metodo": "POST",
       "ruta": "Observation",
-      "archivo": "modulos/10-medicamentos/soluciones/10a_observation_superficie_corporal.json",
+      "archivo": "modulos/15-medicamentos/soluciones/15a_observation_superficie_corporal.json",
       "guarda": "obsBSAId"
     },
     {
-      "id": "10b",
-      "modulo": "10-medicamentos",
+      "id": "15b",
+      "modulo": "15-medicamentos",
       "nombre": "Prescribir doxorrubicina",
       "metodo": "POST",
       "ruta": "MedicationRequest",
-      "archivo": "modulos/10-medicamentos/soluciones/10b_medicationrequest_doxorrubicina.json",
+      "archivo": "modulos/15-medicamentos/soluciones/15b_medicationrequest_doxorrubicina.json",
       "guarda": "medReqDoxoId"
     },
     {
-      "id": "10c",
-      "modulo": "10-medicamentos",
+      "id": "15c",
+      "modulo": "15-medicamentos",
       "nombre": "Administrar el primer ciclo",
       "metodo": "POST",
       "ruta": "MedicationAdministration",
-      "archivo": "modulos/10-medicamentos/soluciones/10c_medicationadministration_doxorrubicina.json",
+      "archivo": "modulos/15-medicamentos/soluciones/15c_medicationadministration_doxorrubicina.json",
       "guarda": "medAdminDoxoId"
     },
     {
-      "id": "10d",
-      "modulo": "10-medicamentos",
+      "id": "15d",
+      "modulo": "15-medicamentos",
       "nombre": "Registrar un evento posterior a la infusión",
       "metodo": "PUT",
       "ruta": "MedicationAdministration/{{medAdminDoxoId}}",
-      "archivo": "modulos/10-medicamentos/soluciones/10d_medicationadministration_actualizar.json"
+      "archivo": "modulos/15-medicamentos/soluciones/15d_medicationadministration_actualizar.json"
     },
     {
-      "id": "10e",
-      "modulo": "10-medicamentos",
+      "id": "15e",
+      "modulo": "15-medicamentos",
       "nombre": "Prescribir tamoxifeno",
       "metodo": "POST",
       "ruta": "MedicationRequest",
-      "archivo": "modulos/10-medicamentos/soluciones/10e_medicationrequest_tamoxifeno.json",
+      "archivo": "modulos/15-medicamentos/soluciones/15e_medicationrequest_tamoxifeno.json",
       "guarda": "medReqTamoxId"
     },
     {
-      "id": "10f",
-      "modulo": "10-medicamentos",
+      "id": "15f",
+      "modulo": "15-medicamentos",
       "nombre": "Primera dosis autoadministrada",
       "metodo": "POST",
       "ruta": "MedicationAdministration",
-      "archivo": "modulos/10-medicamentos/soluciones/10f_medicationadministration_tamoxifeno.json",
+      "archivo": "modulos/15-medicamentos/soluciones/15f_medicationadministration_tamoxifeno.json",
       "guarda": "medAdminTamoxId"
     },
     {
-      "id": "10g",
-      "modulo": "10-medicamentos",
+      "id": "15g",
+      "modulo": "15-medicamentos",
       "nombre": "Suspender el tamoxifeno (stopped)",
       "metodo": "PUT",
       "ruta": "MedicationRequest/{{medReqTamoxId}}",
-      "archivo": "modulos/10-medicamentos/soluciones/10g_medicationrequest_suspender.json"
+      "archivo": "modulos/15-medicamentos/soluciones/15g_medicationrequest_suspender.json"
     },
     {
-      "id": "10h",
-      "modulo": "10-medicamentos",
+      "id": "15h",
+      "modulo": "15-medicamentos",
+      "nombre": "Error a propósito: receta sin intención (el servidor la acepta)",
+      "metodo": "POST",
+      "ruta": "MedicationRequest",
+      "archivo": "modulos/15-medicamentos/errores/15e1_receta_sin_intencion.json",
+      "espera": {
+        "servidor": "acepta",
+        "validador": "falla"
+      },
+      "guarda": "errorMedReqId"
+    },
+    {
+      "id": "15i",
+      "modulo": "15-medicamentos",
+      "nombre": "Borrar la receta inválida",
+      "metodo": "DELETE",
+      "ruta": "MedicationRequest/{{errorMedReqId}}"
+    },
+    {
+      "id": "15j",
+      "modulo": "15-medicamentos",
       "nombre": "Expediente completo del paciente",
       "metodo": "GET",
       "ruta": "Patient/{{patientId}}/$everything"

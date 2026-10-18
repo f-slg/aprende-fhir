@@ -1,0 +1,14 @@
+{
+  "resourceType": "DiagnosticReport",
+  "status": "final",
+  "code": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "11526-1",
+        "display": "Pathology study"
+      }
+    ],
+    "text": "Estudio de patología"
+  }
+}

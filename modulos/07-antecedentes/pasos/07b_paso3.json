@@ -1,0 +1,78 @@
+{
+  "resourceType": "MedicationStatement",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Toma losartán 50 mg por vía oral una vez al día para la hipertensión, desde 2021.</p></div>"
+  },
+  "status": "active",
+  "medicationCodeableConcept": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "373567002",
+        "display": "Losartan"
+      }
+    ],
+    "text": "Losartán"
+  },
+  "subject": {
+    "reference": "Patient/{{patientId}}",
+    "display": "Luis Alberto Paredes Cevallos"
+  },
+  "context": {
+    "reference": "Encounter/{{encounterId}}",
+    "display": "Consulta por dolor abdominal"
+  },
+  "effectivePeriod": {
+    "start": "2021-06"
+  },
+  "dateAsserted": "2025-03-20",
+  "informationSource": {
+    "reference": "Patient/{{patientId}}",
+    "display": "Luis Alberto Paredes Cevallos"
+  },
+  "reasonCode": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "38341003",
+          "display": "Hypertensive disorder, systemic arterial"
+        }
+      ],
+      "text": "Hipertensión arterial"
+    }
+  ],
+  "dosage": [
+    {
+      "text": "50 mg por vía oral una vez al día",
+      "timing": {
+        "repeat": {
+          "frequency": 1,
+          "period": 1,
+          "periodUnit": "d"
+        }
+      },
+      "route": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "26643006",
+            "display": "Oral route"
+          }
+        ],
+        "text": "Vía oral"
+      },
+      "doseAndRate": [
+        {
+          "doseQuantity": {
+            "value": 50,
+            "unit": "mg",
+            "system": "http://unitsofmeasure.org",
+            "code": "mg"
+          }
+        }
+      ]
+    }
+  ]
+}

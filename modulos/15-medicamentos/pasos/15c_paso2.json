@@ -1,0 +1,55 @@
+{
+  "resourceType": "MedicationAdministration",
+  "status": "completed",
+  "category": {
+    "coding": [
+      {
+        "system": "http://terminology.hl7.org/CodeSystem/medication-admin-category",
+        "code": "outpatient",
+        "display": "Outpatient"
+      }
+    ]
+  },
+  "medicationCodeableConcept": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "372817009",
+        "display": "Doxorubicin"
+      }
+    ],
+    "text": "Doxorrubicina"
+  },
+  "subject": {
+    "reference": "Patient/{{patientId}}",
+    "display": "Luis Alberto Paredes Cevallos"
+  },
+  "effectivePeriod": {
+    "start": "2025-07-02T09:00:00-05:00",
+    "end": "2025-07-02T09:30:00-05:00"
+  },
+  "performer": [
+    {
+      "actor": {
+        "reference": "Practitioner/{{practitionerId}}",
+        "display": "Dra. Andrea Lucía Salazar Moreno"
+      }
+    }
+  ],
+  "reasonReference": [
+    {
+      "reference": "Condition/{{conditionCancerId}}",
+      "display": "Carcinoma ductal infiltrante de mama izquierda"
+    }
+  ],
+  "request": {
+    "reference": "MedicationRequest/{{medReqDoxoId}}",
+    "display": "Doxorrubicina 60 mg/m²"
+  },
+  "supportingInformation": [
+    {
+      "reference": "Observation/{{obsBSAId}}",
+      "display": "Superficie corporal 1,77 m²"
+    }
+  ]
+}

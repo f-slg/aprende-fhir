@@ -1,0 +1,37 @@
+{
+  "resourceType": "Practitioner",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Lcda. Rosa Elena Quishpe Tenesaca, licenciada en enfermería. Registro profesional ficticio RP-000892.</p></div>"
+  },
+  "identifier": [
+    {
+      "use": "official",
+      "system": "https://f-slg.github.io/aprende-fhir/sid/registro-profesional",
+      "value": "RP-000892"
+    }
+  ],
+  "active": true,
+  "name": [
+    {
+      "use": "official",
+      "text": "Lcda. Rosa Elena Quishpe Tenesaca",
+      "prefix": [
+        "Lcda."
+      ],
+      "family": "Quishpe Tenesaca",
+      "given": [
+        "Rosa",
+        "Elena"
+      ]
+    }
+  ],
+  "gender": "female",
+  "qualification": [
+    {
+      "code": {
+        "text": "Licenciatura en Enfermería"
+      }
+    }
+  ]
+}

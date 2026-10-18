@@ -6,6 +6,9 @@
 # -----------------------------------------------------------------------------
 library(httr2)
 
+# Operador "si es NULL, usar este otro valor" (incluido en R desde la versión 4.4)
+if (!exists("%||%", baseenv())) `%||%` <- function(a, b) if (is.null(a)) b else a
+
 # Servidor por defecto: el público de HAPI (solo datos sintéticos).
 # Para usar otro: Sys.setenv(FHIRURL = "http://localhost:8080/fhir")
 fhir_url <- function() Sys.getenv("FHIRURL", "https://hapi.fhir.org/baseR4")
@@ -30,7 +33,7 @@ fhir_sustituir <- function(texto) {
 #' @param archivo Archivo JSON con el cuerpo de la petición (POST y PUT).
 #' @param guarda Nombre con el que guardar el id del recurso creado.
 #' @return La respuesta del servidor como lista de R.
-fhir <- function(metodo, ruta = "", archivo = NULL, guarda = NULL) {
+fhir <- function(metodo, ruta = "", archivo = NULL, guarda = NULL, espera_rechazo = FALSE) {
   url <- paste0(fhir_url(), if (nzchar(ruta)) paste0("/", fhir_sustituir(ruta)))
   req <- request(url) |>
     req_method(metodo) |>
@@ -42,7 +45,14 @@ fhir <- function(metodo, ruta = "", archivo = NULL, guarda = NULL) {
     req <- req_body_raw(req, cuerpo, type = "application/fhir+json")
   }
   resp <- req_perform(req)
-  contenido <- resp_body_json(resp, simplifyVector = FALSE)
+  contenido <- if (length(resp_body_raw(resp))) resp_body_json(resp, simplifyVector = FALSE) else list()
+  if (espera_rechazo) {
+    if (resp_status(resp) < 400 || resp_status(resp) >= 500) {
+      stop("Se esperaba que el servidor rechazara la petición y respondió ", resp_status(resp),
+           call. = FALSE)
+    }
+    return(invisible(contenido))
+  }
   if (resp_status(resp) >= 300) {
     mensajes <- vapply(contenido$issue %||% list(), function(i) i$diagnostics %||% "", "")
     stop("El servidor respondió ", resp_status(resp), ":\n", paste(mensajes, collapse = "\n"),

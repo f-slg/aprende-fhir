@@ -33,13 +33,8 @@ jobs:
       - name: Validar los recursos (FHIR R4)
         run: herramientas/validar.sh
 
-      - name: Comprobar que la colección de Postman está al día
-        run: |
-          python3 herramientas/construir_postman.py
-          git diff --exit-code postman/ || {
-            echo "::error::La colección de Postman no coincide con herramientas/pasos.json. Ejecuta python3 herramientas/construir_postman.py"
-            exit 1
-          }
+      - name: Comprobar que pasos, fichas y Postman están al día
+        run: python3 herramientas/actualizar.py --comprobar
 
   taller:
     name: Taller completo en HAPI FHIR
@@ -60,7 +55,7 @@ jobs:
           done
           echo "::error::El servidor HAPI no respondió"; exit 1
 
-      - name: Ejecutar los 10 módulos con curl
+      - name: Ejecutar el taller completo con curl
         env:
           FHIRURL: http://localhost:8080/fhir
         run: curl/taller.sh

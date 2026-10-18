@@ -1,0 +1,19 @@
+{
+  "resourceType": "Immunization",
+  "status": "not-done",
+  "vaccineCode": {
+    "coding": [
+      {
+        "system": "http://hl7.org/fhir/sid/cvx",
+        "code": "141",
+        "display": "Influenza, split virus, trivalent, preservative"
+      }
+    ],
+    "text": "Influenza estacional"
+  },
+  "patient": {
+    "reference": "Patient/{{patientId}}",
+    "display": "Luis Alberto Paredes Cevallos"
+  },
+  "occurrenceDateTime": "2025-03-20T08:00:00-05:00"
+}

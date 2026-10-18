@@ -1,0 +1,22 @@
+{
+  "resourceType": "Observation",
+  "status": "amended",
+  "code": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "263605001",
+        "display": "Length dimension of neoplasm"
+      }
+    ]
+  },
+  "subject": {
+    "reference": "Patient/{{patientId}}"
+  },
+  "valueQuantity": {
+    "value": 3.5,
+    "unit": "cm",
+    "system": "http://unitsofmeasure.org",
+    "code": "cm"
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "resourceType": "Practitioner",
+  "identifier": [
+    {
+      "use": "official",
+      "system": "https://f-slg.github.io/aprende-fhir/sid/registro-profesional",
+      "value": "RP-000457"
+    }
+  ],
+  "active": true,
+  "name": [
+    {
+      "use": "official",
+      "text": "Dra. Andrea Lucía Salazar Moreno",
+      "prefix": [
+        "Dra."
+      ],
+      "family": "Salazar Moreno",
+      "given": [
+        "Andrea",
+        "Lucía"
+      ]
+    }
+  ],
+  "telecom": [
+    {
+      "system": "email",
+      "value": "andrea.salazar@hospital-ejemplo.invalid",
+      "use": "work"
+    }
+  ],
+  "gender": "female"
+}

@@ -1,0 +1,49 @@
+{
+  "resourceType": "Observation",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Superficie corporal: 1,77 m² (peso 72 kg, talla 1,57 m; Mosteller).</p></div>"
+  },
+  "status": "final",
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+          "code": "vital-signs",
+          "display": "Vital Signs"
+        }
+      ]
+    }
+  ],
+  "code": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "8277-6",
+        "display": "Body surface area"
+      }
+    ],
+    "text": "Superficie corporal"
+  },
+  "subject": {
+    "reference": "Patient/{{patientId}}",
+    "display": "Luis Alberto Paredes Cevallos"
+  },
+  "effectiveDateTime": "2025-07-01",
+  "performer": [
+    {
+      "reference": "Practitioner/{{practitionerId}}",
+      "display": "Dra. Andrea Lucía Salazar Moreno"
+    }
+  ],
+  "valueQuantity": {
+    "value": 1.77,
+    "unit": "m2",
+    "system": "http://unitsofmeasure.org",
+    "code": "m2"
+  },
+  "method": {
+    "text": "Fórmula de Mosteller"
+  }
+}
