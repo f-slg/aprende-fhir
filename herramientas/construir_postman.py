@@ -2,7 +2,7 @@
 
 - postman/aprende-fhir.postman_collection.json: el taller completo.
 - postman/niveles/N-nivel.postman_collection.json: el mismo taller en tres partes, más
-  livianas de importar (la extensión de Postman para VS Code rechaza colecciones grandes).
+  livianas de importar y de recorrer.
   Los ids pasan de una parte a otra a través del entorno seleccionado.
 
 Uso: python3 herramientas/construir_postman.py

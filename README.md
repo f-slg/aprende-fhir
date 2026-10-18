@@ -90,18 +90,23 @@ El repositorio viene preconfigurado para VS Code. Ábrelo con
 
 1. En la barra lateral, abre **Postman** e inicia sesión (la extensión usa tu
    cuenta de Postman, la gratuita basta).
-2. **Import** (icono de la barra de título del panel, o `Ctrl+Mayús+P` →
-   *Postman: Import*). El botón aparece después de iniciar sesión y elegir un
-   *workspace*. La extensión rechaza colecciones grandes, así que importa las
-   tres partes de `postman/niveles/` en lugar de la colección completa:
-   `1-basico`, `2-intermedio` y `3-avanzado`.
-3. Importa también un entorno de la carpeta `postman/`:
+2. Importa la colección **desde Postman web**. La extensión de VS Code puede
+   fallar al importar colecciones ("Could not import collection"), pero usa tu
+   misma cuenta: lo que importes en la web aparece solo en VS Code.
+   - Abre <https://go.postman.co>, entra en **My Workspace** y pulsa **Import**
+     (icono junto a *Collections*, o `Ctrl+O`). No uses el buscador de arriba.
+   - Pega el enlace de la colección:
+     `https://raw.githubusercontent.com/f-slg/aprende-fhir/main/postman/aprende-fhir.postman_collection.json`
+   - Si prefieres partes más pequeñas, en `postman/niveles/` está la misma
+     colección dividida en básico, intermedio y avanzado.
+3. Importa también un entorno de la carpeta `postman/` (desde la web o desde
+   la extensión, con **Import → File**; los entornos sí entran desde VS Code):
    - `hapi-publico.postman_environment.json`: servidor público de HAPI.
    - `hapi-local.postman_environment.json`: tu HAPI en `http://localhost:8080/fhir`.
 4. Selecciona el entorno arriba a la derecha y ejecuta las peticiones en orden
    con **Send**. Cada `POST` guarda el `id` en el entorno seleccionado, así que
-   los módulos siguientes (aunque estén en otra parte) ya lo encuentran. Para correrla entera, usa
-   **Run** sobre la colección.
+   los módulos siguientes (aunque estén en otra parte) ya lo encuentran. Para
+   correrla entera, usa **Run** sobre la colección.
 
 Con el README del módulo abierto a un lado (vista previa: `Ctrl+Shift+V`) y
 Postman al otro, sigues la explicación y ejecutas cada paso sin salir del editor.
