@@ -1,0 +1,89 @@
+site_name: Aprende FHIR desde cero
+site_description: >-
+  Taller práctico de HL7 FHIR R4 en español, paso a paso, con un caso clínico
+  ecuatoriano ficticio. Para Postman, R o curl.
+site_author: Dr. Fabricio Salas Guerrero
+site_url: https://f-slg.github.io/aprende-fhir/
+repo_url: https://github.com/f-slg/aprende-fhir
+repo_name: f-slg/aprende-fhir
+edit_uri: edit/main/
+copyright: >-
+  Contenido CC BY 4.0 · Código MIT · HL7® y FHIR® son marcas registradas de
+  Health Level Seven International; este taller no implica afiliación ni aval de HL7.
+
+docs_dir: docs
+site_dir: site
+
+theme:
+  name: material
+  language: es
+  logo: imagenes/logo.png
+  favicon: imagenes/logo.png
+  icon:
+    repo: fontawesome/brands/github
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/weather-night
+        name: Cambiar a modo oscuro
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/weather-sunny
+        name: Cambiar a modo claro
+  features:
+    - navigation.sections
+    - navigation.expand
+    - navigation.footer
+    - navigation.top
+    - navigation.tracking
+    - toc.follow
+    - search.highlight
+    - search.suggest
+    - content.code.copy
+    - content.action.edit
+
+extra_css:
+  - estilos/taller.css
+
+hooks:
+  - ganchos.py
+
+plugins:
+  - search:
+      lang: es
+
+markdown_extensions:
+  - attr_list
+  - md_in_html
+  - tables
+  - admonition
+  - toc:
+      permalink: true
+      slugify: !!python/object/apply:pymdownx.slugs.slugify
+        kwds:
+          case: lower
+  - pymdownx.highlight:
+      anchor_linenums: false
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+
+not_in_nav: |
+  /modulos/*/soluciones/*
+  /modulos/*/pasos/*
+  /modulos/*/errores/*
+
+validation:
+  links:
+    not_found: warn
+    anchors: warn
+    absolute_links: ignore
+    unrecognized_links: ignore

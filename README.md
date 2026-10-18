@@ -10,6 +10,9 @@
   <img src="https://img.shields.io/badge/idioma-espa%C3%B1ol-F2B705" alt="En español">
 </p>
 <p align="center">
+  <a href="https://f-slg.github.io/aprende-fhir/"><strong>Abrir el sitio web del taller</strong></a>
+</p>
+<p align="center">
   <a href="#elige-tu-camino">Empezar</a> ·
   <a href="#módulos">Módulos</a> ·
   <a href="#el-caso">El caso</a> ·
@@ -239,7 +242,13 @@ herramientas/pasos.json         lista ordenada de pasos del taller (y errores es
 herramientas/construccion.json  qué campos agrega cada paso de la construcción
 herramientas/actualizar.py      genera los pasos, las fichas y Postman
 herramientas/validar.sh         validación con el validador oficial de HL7
+herramientas/sitio/             sitio web (MkDocs Material) a partir de los README
 ```
+
+El **sitio web** (<https://f-slg.github.io/aprende-fhir/>) se arma con los
+mismos README y se publica solo en cada cambio. Para verlo en tu equipo:
+`pip install -r herramientas/sitio/requisitos.txt` y
+`python3 herramientas/sitio/construir.py --servir`.
 
 Si cambias una solución, un paso o un README, ejecuta
 `python3 herramientas/actualizar.py`: regenera las versiones intermedias,

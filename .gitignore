@@ -8,3 +8,6 @@
 
 # Sistema
 .DS_Store
+
+# Sitio web generado por herramientas/sitio/construir.py
+.sitio/

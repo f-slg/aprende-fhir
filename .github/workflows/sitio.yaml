@@ -1,0 +1,36 @@
+# Construye el sitio web del taller (MkDocs Material) y lo publica en GitHub Pages.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+name: sitio
+
+permissions: read-all
+
+jobs:
+  sitio:
+    runs-on: ubuntu-latest
+    concurrency:
+      group: sitio-${{ github.ref }}
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Instalar MkDocs Material
+        run: pip install -r herramientas/sitio/requisitos.txt
+
+      - name: Construir el sitio
+        run: python3 herramientas/sitio/construir.py
+
+      - name: Publicar en GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4.5.0
+        with:
+          branch: gh-pages
+          folder: .sitio/site
+          clean: true
