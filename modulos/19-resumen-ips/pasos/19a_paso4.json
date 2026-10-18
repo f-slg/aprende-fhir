@@ -1,0 +1,221 @@
+{
+  "resourceType": "Composition",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Resumen internacional del paciente (IPS) de Luis Alberto Paredes Cevallos,</p><p>emitido el 15 de febrero de 2026 por el servicio de Oncología Clínica.</p></div>"
+  },
+  "identifier": {
+    "system": "https://f-slg.github.io/aprende-fhir/sid/documento",
+    "value": "IPS-2026-0001"
+  },
+  "status": "final",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "60591-5",
+        "display": "Patient summary Document"
+      }
+    ],
+    "text": "Resumen del paciente"
+  },
+  "subject": {
+    "reference": "Patient/{{patientId}}",
+    "display": "Luis Alberto Paredes Cevallos"
+  },
+  "date": "2026-02-15T10:00:00-05:00",
+  "author": [
+    {
+      "reference": "PractitionerRole/{{oncologistRoleId}}",
+      "display": "Dr. Ruiz · Oncología clínica"
+    }
+  ],
+  "title": "Resumen internacional del paciente",
+  "confidentiality": "N",
+  "custodian": {
+    "reference": "Organization/{{hospitalId}}",
+    "display": "Hospital General Docente Ejemplo"
+  },
+  "section": [
+    {
+      "title": "Problemas activos",
+      "code": {
+        "coding": [
+          {
+            "system": "http://loinc.org",
+            "code": "11450-4",
+            "display": "Problem list - Reported"
+          }
+        ]
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Carcinoma ductal infiltrante de mama izquierda (activo, desde mayo de 2025).</p></div>"
+      },
+      "entry": [
+        {
+          "reference": "Condition/{{conditionCancerId}}",
+          "display": "Carcinoma ductal infiltrante de mama izquierda"
+        }
+      ]
+    },
+    {
+      "title": "Alergias e intolerancias",
+      "code": {
+        "coding": [
+          {
+            "system": "http://loinc.org",
+            "code": "48765-2",
+            "display": "Allergies and adverse reactions Document"
+          }
+        ]
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Alergia a la penicilina, criticidad alta: urticaria generalizada.</p></div>"
+      },
+      "entry": [
+        {
+          "reference": "AllergyIntolerance/{{allergyId}}",
+          "display": "Alergia a la penicilina"
+        }
+      ]
+    },
+    {
+      "title": "Medicación",
+      "code": {
+        "coding": [
+          {
+            "system": "http://loinc.org",
+            "code": "10160-0",
+            "display": "History of Medication use Narrative"
+          }
+        ]
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Losartán 50 mg por vía oral una vez al día (hipertensión arterial).</p></div>"
+      },
+      "entry": [
+        {
+          "reference": "MedicationStatement/{{medStatementId}}",
+          "display": "Losartán 50 mg diarios"
+        }
+      ]
+    },
+    {
+      "title": "Vacunas",
+      "code": {
+        "coding": [
+          {
+            "system": "http://loinc.org",
+            "code": "11369-6",
+            "display": "History of Immunization note"
+          }
+        ]
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Influenza estacional (3 de abril de 2025).</p><p>Td, refuerzo (3 de abril de 2025).</p></div>"
+      },
+      "entry": [
+        {
+          "reference": "Immunization/{{fluImmunizationId}}",
+          "display": "Influenza, 3 de abril de 2025"
+        },
+        {
+          "reference": "Immunization/{{tdImmunizationId}}",
+          "display": "Td, 3 de abril de 2025"
+        }
+      ]
+    },
+    {
+      "title": "Procedimientos",
+      "code": {
+        "coding": [
+          {
+            "system": "http://loinc.org",
+            "code": "47519-4",
+            "display": "History of Procedures Document"
+          }
+        ]
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Mastectomía parcial de mama izquierda (10 de junio de 2025), exitosa.</p></div>"
+      },
+      "entry": [
+        {
+          "reference": "Procedure/{{procedureId}}",
+          "display": "Mastectomía parcial"
+        }
+      ]
+    },
+    {
+      "title": "Resultados",
+      "code": {
+        "coding": [
+          {
+            "system": "http://loinc.org",
+            "code": "30954-2",
+            "display": "Relevant diagnostic tests/laboratory data note"
+          }
+        ]
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Anatomía patológica: carcinoma ductal infiltrante de 3,5 cm, receptor de estrógeno positivo (Allred 8).</p></div>"
+      },
+      "entry": [
+        {
+          "reference": "DiagnosticReport/{{diagnosticReportId}}",
+          "display": "Informe de patología"
+        }
+      ]
+    },
+    {
+      "title": "Plan de tratamiento",
+      "code": {
+        "coding": [
+          {
+            "system": "http://loinc.org",
+            "code": "18776-5",
+            "display": "Plan of care note"
+          }
+        ]
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Plan del comité de tumores: cirugía, quimioterapia (4 ciclos) y hormonoterapia;</p><p>tamoxifeno suspendido en febrero de 2026 por intolerancia.</p></div>"
+      },
+      "entry": [
+        {
+          "reference": "CarePlan/{{carePlanId}}",
+          "display": "Plan de tratamiento del cáncer de mama"
+        }
+      ]
+    },
+    {
+      "title": "Antecedentes",
+      "code": {
+        "coding": [
+          {
+            "system": "http://loinc.org",
+            "code": "11348-0",
+            "display": "History of Past illness note"
+          }
+        ]
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Intoxicación alimentaria bacteriana (marzo de 2025), resuelta.</p></div>"
+      },
+      "entry": [
+        {
+          "reference": "Condition/{{conditionIntoxId}}",
+          "display": "Intoxicación alimentaria"
+        }
+      ]
+    }
+  ]
+}

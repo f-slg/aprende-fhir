@@ -1,0 +1,6 @@
+{
+  "resourceType": "ValueSet",
+  "url": "https://f-slg.github.io/aprende-fhir/ValueSet/ecog",
+  "name": "ValoresECOG",
+  "status": "active"
+}

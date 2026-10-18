@@ -1295,5 +1295,242 @@
     ]
    }
   ]
+ },
+ "17a": {
+  "diferencia": "02e",
+  "archivo": "modulos/17-busquedas-y-versiones/soluciones/17a_patient_agregar_correo.json"
+ },
+ "18a": {
+  "archivo": "modulos/18-terminologias-y-perfiles/soluciones/18a_structuredefinition_paciente_taller.json",
+  "pasos": [
+   {
+    "titulo": "El mínimo: qué es, sobre qué recurso y de qué deriva",
+    "campos": [
+     "resourceType",
+     "url",
+     "name",
+     "status",
+     "fhirVersion",
+     "kind",
+     "abstract",
+     "type",
+     "baseDefinition",
+     "derivation"
+    ],
+    "parcial": {
+     "differential": {
+      "element": [
+       {
+        "id": "Patient",
+        "path": "Patient",
+        "short": "Paciente del taller"
+       }
+      ]
+     }
+    }
+   },
+   {
+    "titulo": "La primera restricción: al menos un identificador",
+    "parcial": {
+     "differential": {
+      "element": [
+       {
+        "id": "Patient",
+        "path": "Patient",
+        "short": "Paciente del taller"
+       },
+       {
+        "id": "Patient.identifier",
+        "path": "Patient.identifier",
+        "short": "Al menos un identificador (la cédula)",
+        "min": 1
+       }
+      ]
+     }
+    }
+   },
+   {
+    "titulo": "Las demás restricciones y los metadatos",
+    "campos": [
+     "differential",
+     "version",
+     "title",
+     "date",
+     "publisher",
+     "description",
+     "text"
+    ]
+   }
+  ]
+ },
+ "18b": {
+  "archivo": "modulos/18-terminologias-y-perfiles/soluciones/18b_codesystem_ecog.json",
+  "pasos": [
+   {
+    "titulo": "El mínimo: url, nombre, estado y contenido",
+    "campos": [
+     "resourceType",
+     "url",
+     "name",
+     "status",
+     "content"
+    ]
+   },
+   {
+    "titulo": "Los metadatos",
+    "campos": [
+     "version",
+     "title",
+     "date",
+     "publisher",
+     "description",
+     "caseSensitive"
+    ]
+   },
+   {
+    "titulo": "Los códigos",
+    "campos": [
+     "count",
+     "concept",
+     "text"
+    ]
+   }
+  ]
+ },
+ "18c": {
+  "archivo": "modulos/18-terminologias-y-perfiles/soluciones/18c_valueset_ecog.json",
+  "pasos": [
+   {
+    "titulo": "El mínimo: url, nombre y estado",
+    "campos": [
+     "resourceType",
+     "url",
+     "name",
+     "status"
+    ]
+   },
+   {
+    "titulo": "Qué códigos incluye",
+    "campos": [
+     "compose"
+    ]
+   },
+   {
+    "titulo": "Los metadatos",
+    "campos": [
+     "version",
+     "title",
+     "date",
+     "publisher",
+     "description",
+     "text"
+    ]
+   }
+  ]
+ },
+ "19a": {
+  "archivo": "modulos/19-resumen-ips/soluciones/19a_composition_ips.json",
+  "pasos": [
+   {
+    "titulo": "El mínimo: estado, tipo, paciente, fecha, autor y título",
+    "campos": [
+     "resourceType",
+     "status",
+     "type",
+     "subject",
+     "date",
+     "author",
+     "title"
+    ]
+   },
+   {
+    "titulo": "Identificador, confidencialidad y custodio",
+    "campos": [
+     "identifier",
+     "confidentiality",
+     "custodian"
+    ]
+   },
+   {
+    "titulo": "Las tres secciones obligatorias: problemas, alergias y medicación",
+    "parcial": {
+     "section": [
+      {
+       "title": "Problemas activos",
+       "code": {
+        "coding": [
+         {
+          "system": "http://loinc.org",
+          "code": "11450-4",
+          "display": "Problem list - Reported"
+         }
+        ]
+       },
+       "text": {
+        "status": "generated",
+        "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Carcinoma ductal infiltrante de mama izquierda (activo, desde mayo de 2025).</p></div>"
+       },
+       "entry": [
+        {
+         "reference": "Condition/{{conditionCancerId}}",
+         "display": "Carcinoma ductal infiltrante de mama izquierda"
+        }
+       ]
+      },
+      {
+       "title": "Alergias e intolerancias",
+       "code": {
+        "coding": [
+         {
+          "system": "http://loinc.org",
+          "code": "48765-2",
+          "display": "Allergies and adverse reactions Document"
+         }
+        ]
+       },
+       "text": {
+        "status": "generated",
+        "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Alergia a la penicilina, criticidad alta: urticaria generalizada.</p></div>"
+       },
+       "entry": [
+        {
+         "reference": "AllergyIntolerance/{{allergyId}}",
+         "display": "Alergia a la penicilina"
+        }
+       ]
+      },
+      {
+       "title": "Medicación",
+       "code": {
+        "coding": [
+         {
+          "system": "http://loinc.org",
+          "code": "10160-0",
+          "display": "History of Medication use Narrative"
+         }
+        ]
+       },
+       "text": {
+        "status": "generated",
+        "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Losartán 50 mg por vía oral una vez al día (hipertensión arterial).</p></div>"
+       },
+       "entry": [
+        {
+         "reference": "MedicationStatement/{{medStatementId}}",
+         "display": "Losartán 50 mg diarios"
+        }
+       ]
+      }
+     ]
+    }
+   },
+   {
+    "titulo": "Las secciones recomendadas y la narrativa",
+    "campos": [
+     "section",
+     "text"
+    ]
+   }
+  ]
  }
 }

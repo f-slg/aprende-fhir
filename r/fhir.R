@@ -12,6 +12,8 @@ if (!exists("%||%", baseenv())) `%||%` <- function(a, b) if (is.null(a)) b else 
 # Servidor por defecto: el público de HAPI (solo datos sintéticos).
 # Para usar otro: Sys.setenv(FHIRURL = "http://localhost:8080/fhir")
 fhir_url <- function() Sys.getenv("FHIRURL", "https://hapi.fhir.org/baseR4")
+# Servidor de terminología (módulo 18)
+tx_url <- function() Sys.getenv("TXURL", "https://tx.fhir.org/r4")
 
 # Ids guardados durante el taller (patientId, encounterId, ...)
 .fhir_ids <- new.env()
@@ -34,8 +36,8 @@ fhir_sustituir <- function(texto) {
 #' @param guarda Nombre con el que guardar el id del recurso creado.
 #' @return La respuesta del servidor como lista de R.
 fhir <- function(metodo, ruta = "", archivo = NULL, guarda = NULL, espera_rechazo = FALSE,
-                 encabezados = NULL) {
-  url <- paste0(fhir_url(), if (nzchar(ruta)) paste0("/", fhir_sustituir(ruta)))
+                 encabezados = NULL, base = fhir_url()) {
+  url <- paste0(base, if (nzchar(ruta)) paste0("/", fhir_sustituir(ruta)))
   req <- request(url) |>
     req_method(metodo) |>
     req_headers(Accept = "application/fhir+json") |>

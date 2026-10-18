@@ -54,7 +54,8 @@ agrupados por tema:
 | Diagnóstico | Observation, DiagnosticReport, Specimen, BodyStructure | Módulos 06, 10, 11 |
 | Medicación | MedicationRequest, MedicationAdministration, MedicationStatement, Immunization | Módulos 07, 08, 15 |
 | Documentos y formularios | Composition, Bundle, Questionnaire, QuestionnaireResponse, Consent | Módulos 03, 09, 12, 16 |
-| Infraestructura | CapabilityStatement, OperationOutcome | Este módulo |
+| Conformidad y terminología | StructureDefinition, CodeSystem, ValueSet | Módulo 18 |
+| Infraestructura | CapabilityStatement, OperationOutcome, Parameters | Este módulo y el 18 |
 
 Todos los recursos comparten la misma **anatomía**:
 

@@ -5,11 +5,13 @@
 #   curl/taller.sh                         # servidor público de HAPI
 #   FHIRURL=http://localhost:8080/fhir curl/taller.sh
 #   curl/taller.sh 06                      # solo hasta el módulo 06
+#   TXURL=... curl/taller.sh               # otro servidor de terminología (módulo 18)
 #
 # Requiere curl y jq. Solo datos sintéticos.
 set -euo pipefail
 raiz="$(cd "$(dirname "$0")/.." && pwd)"
 FHIRURL="${FHIRURL:-https://hapi.fhir.org/baseR4}"
+TXURL="${TXURL:-https://tx.fhir.org/r4}"   # servidor de terminología (módulo 18)
 hasta="${1:-19}"
 declare -A ids
 
@@ -27,7 +29,9 @@ for ((i = 0; i < n; i++)); do
   [ "${modulo:0:2}" \> "$hasta" ] && break
   metodo=$(jq -r .metodo <<<"$paso"); nombre=$(jq -r .nombre <<<"$paso")
   ruta=$(sustituir "$(jq -r .ruta <<<"$paso")")
-  url="$FHIRURL${ruta:+/$ruta}"
+  base="$FHIRURL"
+  [ "$(jq -r '.servidor // empty' <<<"$paso")" = "terminologia" ] && base="$TXURL"
+  url="$base${ruta:+/$ruta}"
   args=(-sS -o /tmp/aprende-fhir-respuesta.json -w '%{http_code}' -X "$metodo"
         -H 'Accept: application/fhir+json' --globoff)
   while IFS= read -r encabezado; do
@@ -38,7 +42,7 @@ for ((i = 0; i < n; i++)); do
     cuerpo=$(sustituir "$(cat "$raiz/$archivo")")
     args+=(-H 'Content-Type: application/fhir+json' --data-binary "$cuerpo")
   fi
-  codigo=$(curl "${args[@]}" "$url")
+  codigo=$(curl "${args[@]}" "$url") || true   # curl escribe 000 si no hay conexión
   guarda=$(jq -r '.guarda // empty' <<<"$paso")
   extra=""
   if [ -n "$guarda" ] && [ "${codigo:0:1}" = "2" ]; then
@@ -52,6 +56,8 @@ for ((i = 0; i < n; i++)); do
       echo "El paso $id debía ser rechazado por el servidor y respondió $codigo" >&2; exit 1
     fi
     echo "     ↳ rechazado, como se esperaba: $(jq -r '.issue[0].diagnostics' /tmp/aprende-fhir-respuesta.json | cut -c1-110)"
+  elif [ "${codigo:0:1}" != "2" ] && [ "$base" = "$TXURL" ]; then
+    echo "     ↳ aviso: el servidor de terminología no respondió ($codigo); se continúa sin este paso"
   elif [ "${codigo:0:1}" != "2" ]; then
     echo "Error en el paso $id. Respuesta del servidor:" >&2
     jq '.issue // .' /tmp/aprende-fhir-respuesta.json >&2

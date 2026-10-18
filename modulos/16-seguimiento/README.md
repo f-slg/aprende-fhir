@@ -1,6 +1,6 @@
 # Módulo 16 · Seguimiento: cuestionarios y resultados informados por el paciente
 
-[← Módulo 15](../15-medicamentos/README.md) · [Inicio](../../README.md)
+[← Módulo 15](../15-medicamentos/README.md) · [Inicio](../../README.md) · [Módulo 17 →](../17-busquedas-y-versiones/README.md)
 
 > **Nivel:** intermedio · **Duración:** 75 minutos · **Necesitas:** módulos 06 y 15
 
@@ -10,7 +10,6 @@
 2. A registrar las **respuestas** de un paciente con QuestionnaireResponse.
 3. A convertir una respuesta en un **dato analizable** (Observation con
    `derivedFrom`).
-4. A recuperar el **expediente completo** con `$everything`.
 
 ## La historia
 
@@ -505,10 +504,27 @@ Solución: [`16d_observation_dolor.json`](soluciones/16d_observation_dolor.json)
 
 | Paso | Petición | Guarda |
 |---|---|---|
-| 16a | `POST /Questionnaire` | `questionnaireId` |
+| 16a | `POST /Questionnaire` con `If-None-Exist` (abajo) | `questionnaireId` |
 | 16b | `POST /QuestionnaireResponse` (octubre) | `responseOctoberId` |
 | 16c | `POST /QuestionnaireResponse` (enero) | `responseJanuaryId` |
 | 16d | `POST /Observation` (dolor 6/10) | |
+
+### 16a · Un solo cuestionario por `url`: creación condicional
+
+Cada paciente crea su propio Patient, pero el cuestionario es **uno solo**
+para todos: su `url` lo identifica en todas partes. Si cada persona que hace
+el taller lo creara de nuevo, el servidor tendría muchas copias con la misma
+`url`. Por eso se crea con el encabezado `If-None-Exist`:
+
+```http
+POST {{FHIRURL}}/Questionnaire
+If-None-Exist: url=https://f-slg.github.io/aprende-fhir/Questionnaire/seguimiento-oncologico
+```
+
+Es la misma **creación condicional** del módulo 03 (`ifNoneExist` en una
+transacción), ahora como encabezado HTTP. La primera vez el servidor lo crea
+(`201`); las siguientes devuelve el que ya existe (`200`). Si hubiera **más
+de uno** con esa `url`, respondería `412`: no sabría cuál elegir.
 
 ### 16e · Las respuestas del paciente a este cuestionario
 
@@ -527,18 +543,6 @@ una respuesta con `"valueInteger": "seis"`. El servidor responde **`400`**:
 ```
 HAPI-1821: [element="valueInteger"] Invalid attribute value "seis": java.lang.NumberFormatException: For input string: "seis"
 ```
-
-### 16g · El expediente completo
-
-```http
-GET {{FHIRURL}}/Patient/{{patientId}}/$everything
-```
-
-`$everything` es una **operación**: las operaciones empiezan con `$` y hacen
-algo más que leer o buscar. Esta devuelve el paciente y **todo** lo que se
-relaciona con él. Después de los módulos 01 a 16 verás unos 29 tipos de
-recursos: el expediente completo de Luis, de la primera consulta al último
-cuestionario.
 
 ## Para pensar
 
@@ -580,30 +584,15 @@ respuesta original.
 - **QuestionnaireResponse** guarda las respuestas, enlazadas por `linkId` y
   con el tipo que pide cada pregunta.
 - Los datos clave se extraen como **Observation** con `derivedFrom`.
-- `$everything` reúne todo el expediente del paciente.
-
-## ¿Qué sigue?
-
-Completaste los niveles básico e intermedio. En la próxima etapa llega el
-**nivel avanzado**:
-
-- **17 · Búsquedas avanzadas y versiones:** búsquedas encadenadas, `_has`,
-  prefijos de comparación y control de concurrencia con `If-Match`.
-- **18 · Terminologías y perfiles:** `$lookup`, `$validate-code` y una
-  introducción a los perfiles y las guías de implementación.
-- **19 · Resumen del paciente (IPS):** armar el resumen internacional del
-  paciente de Luis con todo lo aprendido.
 
 ## Ejecutar este módulo
 
 - **Postman:** carpeta *16 · Seguimiento*.
-- **curl:** `curl/taller.sh 16` (o `curl/taller.sh` para todo el taller)
+- **curl:** `curl/taller.sh 16`
 - **R:**
 
   ```r
   dolor <- fhir_buscar("Observation?subject=Patient/{{patientId}}&code=http://loinc.org|72514-3")
   fhir_tabla(dolor, list(fecha = function(r) substr(r$effectiveDateTime, 1, 10),
                          dolor = function(r) r$valueInteger))
-  todo <- fhir_leer("Patient/{{patientId}}/$everything?_count=300")
-  table(vapply(todo$entry, function(e) e$resource$resourceType, ""))
   ```

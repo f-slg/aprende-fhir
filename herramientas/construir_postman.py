@@ -24,11 +24,15 @@ TITULOS = {
     "14-citas": "14 · Citas",
     "15-medicamentos": "15 · Medicamentos",
     "16-seguimiento": "16 · Seguimiento",
+    "17-busquedas-y-versiones": "17 · Búsquedas avanzadas y versiones",
+    "18-terminologias-y-perfiles": "18 · Terminologías y perfiles",
+    "19-resumen-ips": "19 · Resumen del paciente (IPS)",
 }
 
 def peticion(paso):
     ruta = paso["ruta"]
-    raw = "{{FHIRURL}}" + ("/" + ruta if ruta else "")
+    base = "{{TXURL}}" if paso.get("servidor") == "terminologia" else "{{FHIRURL}}"
+    raw = base + ("/" + ruta if ruta else "")
     req = {"method": paso["metodo"],
            "header": [{"key": "Accept", "value": "application/fhir+json"}],
            "url": raw}
@@ -62,7 +66,8 @@ carpetas = {}
 for paso in manifiesto["pasos"]:
     carpetas.setdefault(paso["modulo"], []).append(peticion(paso))
 
-variables = [{"key": "FHIRURL", "value": "https://hapi.fhir.org/baseR4"}]
+variables = [{"key": "FHIRURL", "value": "https://hapi.fhir.org/baseR4"},
+             {"key": "TXURL", "value": "https://tx.fhir.org/r4"}]
 variables += [{"key": p["guarda"], "value": ""} for p in manifiesto["pasos"] if "guarda" in p]
 coleccion = {
     "info": {

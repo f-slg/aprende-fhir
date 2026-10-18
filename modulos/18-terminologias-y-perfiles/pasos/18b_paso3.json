@@ -1,0 +1,40 @@
+{
+  "resourceType": "CodeSystem",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Escala de funcionalidad ECOG (versión didáctica): 0 a 4.</p></div>"
+  },
+  "url": "https://f-slg.github.io/aprende-fhir/CodeSystem/ecog",
+  "version": "1.0.0",
+  "name": "EscalaECOG",
+  "title": "Escala de funcionalidad ECOG (versión didáctica)",
+  "status": "active",
+  "date": "2026-10-18",
+  "publisher": "Aprende FHIR desde cero (ejemplo didáctico)",
+  "description": "Códigos de la escala de funcionalidad ECOG, con descripciones en español.",
+  "caseSensitive": true,
+  "content": "complete",
+  "count": 5,
+  "concept": [
+    {
+      "code": "0",
+      "display": "Actividad normal sin limitaciones"
+    },
+    {
+      "code": "1",
+      "display": "Síntomas, pero ambulatorio y capaz de trabajos ligeros"
+    },
+    {
+      "code": "2",
+      "display": "Ambulatorio y capaz de cuidarse, pero no de trabajar"
+    },
+    {
+      "code": "3",
+      "display": "En cama o sentado más de la mitad del día"
+    },
+    {
+      "code": "4",
+      "display": "Completamente incapacitado, en cama"
+    }
+  ]
+}

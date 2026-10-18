@@ -1,0 +1,26 @@
+{
+  "resourceType": "Composition",
+  "status": "final",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "60591-5",
+        "display": "Patient summary Document"
+      }
+    ],
+    "text": "Resumen del paciente"
+  },
+  "subject": {
+    "reference": "Patient/{{patientId}}",
+    "display": "Luis Alberto Paredes Cevallos"
+  },
+  "date": "2026-02-15T10:00:00-05:00",
+  "author": [
+    {
+      "reference": "PractitionerRole/{{oncologistRoleId}}",
+      "display": "Dr. Ruiz · Oncología clínica"
+    }
+  ],
+  "title": "Resumen internacional del paciente"
+}

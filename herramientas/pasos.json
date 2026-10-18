@@ -409,7 +409,8 @@
       "nombre": "Vacuna contra la influenza",
       "metodo": "POST",
       "ruta": "Immunization",
-      "archivo": "modulos/08-vacunacion/soluciones/08d_immunization_influenza.json"
+      "archivo": "modulos/08-vacunacion/soluciones/08d_immunization_influenza.json",
+      "guarda": "fluImmunizationId"
     },
     {
       "id": "08e",
@@ -417,7 +418,8 @@
       "nombre": "Refuerzo de Td",
       "metodo": "POST",
       "ruta": "Immunization",
-      "archivo": "modulos/08-vacunacion/soluciones/08e_immunization_td.json"
+      "archivo": "modulos/08-vacunacion/soluciones/08e_immunization_td.json",
+      "guarda": "tdImmunizationId"
     },
     {
       "id": "08f",
@@ -1000,11 +1002,14 @@
     {
       "id": "16a",
       "modulo": "16-seguimiento",
-      "nombre": "Crear el cuestionario (Questionnaire)",
+      "nombre": "Crear el cuestionario (Questionnaire) (creación condicional)",
       "metodo": "POST",
       "ruta": "Questionnaire",
       "archivo": "modulos/16-seguimiento/soluciones/16a_questionnaire_seguimiento.json",
-      "guarda": "questionnaireId"
+      "guarda": "questionnaireId",
+      "encabezados": {
+        "If-None-Exist": "url=https://f-slg.github.io/aprende-fhir/Questionnaire/seguimiento-oncologico"
+      }
     },
     {
       "id": "16b",
@@ -1052,11 +1057,372 @@
       }
     },
     {
-      "id": "16g",
-      "modulo": "16-seguimiento",
-      "nombre": "Expediente completo del paciente",
+      "id": "17a",
+      "modulo": "17-busquedas-y-versiones",
+      "nombre": "Encadenada: signos vitales por la cédula del paciente",
+      "metodo": "GET",
+      "ruta": "Observation?subject.identifier=https://f-slg.github.io/aprende-fhir/sid/cedula|9900000017&category=vital-signs",
+      "encabezados": {
+        "Cache-Control": "no-cache"
+      }
+    },
+    {
+      "id": "17b",
+      "modulo": "17-busquedas-y-versiones",
+      "nombre": "Encadenada con tipo: encuentros de los pacientes Paredes Luis",
+      "metodo": "GET",
+      "ruta": "Encounter?subject:Patient.family=Paredes&subject:Patient.given=Luis",
+      "encabezados": {
+        "Cache-Control": "no-cache"
+      }
+    },
+    {
+      "id": "17c",
+      "modulo": "17-busquedas-y-versiones",
+      "nombre": "Inversa (_has): pacientes con cáncer de mama",
+      "metodo": "GET",
+      "ruta": "Patient?_has:Condition:subject:code=http://snomed.info/sct|254837009",
+      "encabezados": {
+        "Cache-Control": "no-cache"
+      }
+    },
+    {
+      "id": "17d",
+      "modulo": "17-busquedas-y-versiones",
+      "nombre": "Prefijo gt: frecuencia cardíaca mayor que 100",
+      "metodo": "GET",
+      "ruta": "Observation?subject=Patient/{{patientId}}&code=http://loinc.org|8867-4&value-quantity=gt100",
+      "encabezados": {
+        "Cache-Control": "no-cache"
+      }
+    },
+    {
+      "id": "17e",
+      "modulo": "17-busquedas-y-versiones",
+      "nombre": "Rango de fechas: encuentros de abril de 2025",
+      "metodo": "GET",
+      "ruta": "Encounter?subject=Patient/{{patientId}}&date=ge2025-04-01&date=lt2025-05-01",
+      "encabezados": {
+        "Cache-Control": "no-cache"
+      }
+    },
+    {
+      "id": "17f",
+      "modulo": "17-busquedas-y-versiones",
+      "nombre": "Modificador :exact",
+      "metodo": "GET",
+      "ruta": "Patient?family:exact=Paredes%20Cevallos",
+      "encabezados": {
+        "Cache-Control": "no-cache"
+      }
+    },
+    {
+      "id": "17g",
+      "modulo": "17-busquedas-y-versiones",
+      "nombre": "Modificador :not: condiciones no resueltas",
+      "metodo": "GET",
+      "ruta": "Condition?subject=Patient/{{patientId}}&clinical-status:not=resolved",
+      "encabezados": {
+        "Cache-Control": "no-cache"
+      }
+    },
+    {
+      "id": "17h",
+      "modulo": "17-busquedas-y-versiones",
+      "nombre": "Modificador :missing: observaciones sin encuentro",
+      "metodo": "GET",
+      "ruta": "Observation?subject=Patient/{{patientId}}&encounter:missing=true",
+      "encabezados": {
+        "Cache-Control": "no-cache"
+      }
+    },
+    {
+      "id": "17i",
+      "modulo": "17-busquedas-y-versiones",
+      "nombre": "Solo contar: _summary=count",
+      "metodo": "GET",
+      "ruta": "Observation?subject=Patient/{{patientId}}&_summary=count",
+      "encabezados": {
+        "Cache-Control": "no-cache"
+      }
+    },
+    {
+      "id": "17j",
+      "modulo": "17-busquedas-y-versiones",
+      "nombre": "Solo algunos elementos: _elements",
+      "metodo": "GET",
+      "ruta": "Observation?subject=Patient/{{patientId}}&category=vital-signs&_elements=code,value",
+      "encabezados": {
+        "Cache-Control": "no-cache"
+      }
+    },
+    {
+      "id": "17k",
+      "modulo": "17-busquedas-y-versiones",
+      "nombre": "La medición más reciente: _sort y _count",
+      "metodo": "GET",
+      "ruta": "Observation?subject=Patient/{{patientId}}&code=http://loinc.org|8867-4&_sort=-date&_count=1",
+      "encabezados": {
+        "Cache-Control": "no-cache"
+      }
+    },
+    {
+      "id": "17l",
+      "modulo": "17-busquedas-y-versiones",
+      "nombre": "Paginación: 5 resultados por página",
+      "metodo": "GET",
+      "ruta": "Observation?subject=Patient/{{patientId}}&_count=5",
+      "encabezados": {
+        "Cache-Control": "no-cache"
+      }
+    },
+    {
+      "id": "17m",
+      "modulo": "17-busquedas-y-versiones",
+      "nombre": "Leer una versión anterior (vread)",
+      "metodo": "GET",
+      "ruta": "Patient/{{patientId}}/_history/1",
+      "encabezados": {
+        "Cache-Control": "no-cache"
+      }
+    },
+    {
+      "id": "17n",
+      "modulo": "17-busquedas-y-versiones",
+      "nombre": "Qué cambió entre versiones ($diff)",
+      "metodo": "GET",
+      "ruta": "Patient/{{patientId}}/$diff",
+      "encabezados": {
+        "Cache-Control": "no-cache"
+      }
+    },
+    {
+      "id": "17o",
+      "modulo": "17-busquedas-y-versiones",
+      "nombre": "Actualizar con If-Match (versión 2)",
+      "metodo": "PUT",
+      "ruta": "Patient/{{patientId}}",
+      "archivo": "modulos/17-busquedas-y-versiones/soluciones/17a_patient_agregar_correo.json",
+      "encabezados": {
+        "If-Match": "W/\"2\""
+      }
+    },
+    {
+      "id": "17p",
+      "modulo": "17-busquedas-y-versiones",
+      "nombre": "Error a propósito: actualizar con una versión vieja",
+      "metodo": "PUT",
+      "ruta": "Patient/{{patientId}}",
+      "archivo": "modulos/17-busquedas-y-versiones/soluciones/17a_patient_agregar_correo.json",
+      "encabezados": {
+        "If-Match": "W/\"2\""
+      },
+      "espera": {
+        "servidor": "rechaza",
+        "validador": "pasa"
+      }
+    },
+    {
+      "id": "18a",
+      "modulo": "18-terminologias-y-perfiles",
+      "nombre": "Guardar el perfil del taller (StructureDefinition) (creación condicional)",
+      "metodo": "POST",
+      "ruta": "StructureDefinition",
+      "archivo": "modulos/18-terminologias-y-perfiles/soluciones/18a_structuredefinition_paciente_taller.json",
+      "guarda": "profileId",
+      "encabezados": {
+        "If-None-Exist": "url=https://f-slg.github.io/aprende-fhir/StructureDefinition/paciente-taller"
+      }
+    },
+    {
+      "id": "18b",
+      "modulo": "18-terminologias-y-perfiles",
+      "nombre": "Validar a Luis contra el perfil ($validate)",
+      "metodo": "POST",
+      "ruta": "Patient/$validate?profile=https://f-slg.github.io/aprende-fhir/StructureDefinition/paciente-taller",
+      "archivo": "modulos/02-patient/soluciones/02e_patient_actualizar.json"
+    },
+    {
+      "id": "18c",
+      "modulo": "18-terminologias-y-perfiles",
+      "nombre": "Error a propósito: validar un paciente sin fecha de nacimiento",
+      "metodo": "POST",
+      "ruta": "Patient/$validate?profile=https://f-slg.github.io/aprende-fhir/StructureDefinition/paciente-taller",
+      "archivo": "modulos/18-terminologias-y-perfiles/errores/18e1_paciente_sin_fecha.json",
+      "espera": {
+        "servidor": "acepta",
+        "validador": "falla",
+        "perfil": "taller"
+      }
+    },
+    {
+      "id": "18d",
+      "modulo": "18-terminologias-y-perfiles",
+      "nombre": "El servidor también valida sin perfil",
+      "metodo": "POST",
+      "ruta": "Observation/$validate",
+      "archivo": "modulos/06-observaciones/errores/06e2_observacion_sin_codigo.json"
+    },
+    {
+      "id": "18e",
+      "modulo": "18-terminologias-y-perfiles",
+      "nombre": "Crear el sistema de códigos ECOG (CodeSystem) (creación condicional)",
+      "metodo": "POST",
+      "ruta": "CodeSystem",
+      "archivo": "modulos/18-terminologias-y-perfiles/soluciones/18b_codesystem_ecog.json",
+      "guarda": "codeSystemId",
+      "encabezados": {
+        "If-None-Exist": "url=https://f-slg.github.io/aprende-fhir/CodeSystem/ecog"
+      }
+    },
+    {
+      "id": "18f",
+      "modulo": "18-terminologias-y-perfiles",
+      "nombre": "Crear el conjunto de valores ECOG (ValueSet) (creación condicional)",
+      "metodo": "POST",
+      "ruta": "ValueSet",
+      "archivo": "modulos/18-terminologias-y-perfiles/soluciones/18c_valueset_ecog.json",
+      "guarda": "valueSetId",
+      "encabezados": {
+        "If-None-Exist": "url=https://f-slg.github.io/aprende-fhir/ValueSet/ecog"
+      }
+    },
+    {
+      "id": "18g",
+      "modulo": "18-terminologias-y-perfiles",
+      "nombre": "$lookup: qué significa el código 1",
+      "metodo": "GET",
+      "ruta": "CodeSystem/$lookup?system=https://f-slg.github.io/aprende-fhir/CodeSystem/ecog&code=1"
+    },
+    {
+      "id": "18h",
+      "modulo": "18-terminologias-y-perfiles",
+      "nombre": "$validate-code: el código 1 está en el conjunto",
+      "metodo": "GET",
+      "ruta": "ValueSet/$validate-code?url=https://f-slg.github.io/aprende-fhir/ValueSet/ecog&system=https://f-slg.github.io/aprende-fhir/CodeSystem/ecog&code=1"
+    },
+    {
+      "id": "18i",
+      "modulo": "18-terminologias-y-perfiles",
+      "nombre": "$validate-code: el código 9 no existe",
+      "metodo": "GET",
+      "ruta": "ValueSet/$validate-code?url=https://f-slg.github.io/aprende-fhir/ValueSet/ecog&system=https://f-slg.github.io/aprende-fhir/CodeSystem/ecog&code=9"
+    },
+    {
+      "id": "18j",
+      "modulo": "18-terminologias-y-perfiles",
+      "nombre": "Servidor de terminología: $lookup de un código LOINC",
+      "metodo": "GET",
+      "ruta": "CodeSystem/$lookup?system=http://loinc.org&code=8310-5",
+      "servidor": "terminologia"
+    },
+    {
+      "id": "18k",
+      "modulo": "18-terminologias-y-perfiles",
+      "nombre": "Servidor de terminología: $lookup de un código SNOMED CT",
+      "metodo": "GET",
+      "ruta": "CodeSystem/$lookup?system=http://snomed.info/sct&code=254837009",
+      "servidor": "terminologia"
+    },
+    {
+      "id": "18l",
+      "modulo": "18-terminologias-y-perfiles",
+      "nombre": "Servidor de terminología: $subsumes (jerarquía de SNOMED CT)",
+      "metodo": "GET",
+      "ruta": "CodeSystem/$subsumes?system=http://snomed.info/sct&codeA=363346000&codeB=254837009",
+      "servidor": "terminologia"
+    },
+    {
+      "id": "18m",
+      "modulo": "18-terminologias-y-perfiles",
+      "nombre": "Servidor de terminología: $validate-code de 'masculino'",
+      "metodo": "GET",
+      "ruta": "ValueSet/$validate-code?url=http://hl7.org/fhir/ValueSet/administrative-gender&system=http://hl7.org/fhir/administrative-gender&code=masculino",
+      "servidor": "terminologia"
+    },
+    {
+      "id": "18n",
+      "modulo": "18-terminologias-y-perfiles",
+      "nombre": "Servidor de terminología: $expand de la criticidad de alergias",
+      "metodo": "GET",
+      "ruta": "ValueSet/$expand?url=http://hl7.org/fhir/ValueSet/allergy-intolerance-criticality",
+      "servidor": "terminologia"
+    },
+    {
+      "id": "19a",
+      "modulo": "19-resumen-ips",
+      "nombre": "Composition del resumen del paciente (IPS)",
+      "metodo": "POST",
+      "ruta": "Composition",
+      "archivo": "modulos/19-resumen-ips/soluciones/19a_composition_ips.json",
+      "guarda": "compositionIpsId"
+    },
+    {
+      "id": "19b",
+      "modulo": "19-resumen-ips",
+      "nombre": "El servidor arma el documento ($document)",
+      "metodo": "GET",
+      "ruta": "Composition/{{compositionIpsId}}/$document"
+    },
+    {
+      "id": "19c",
+      "modulo": "19-resumen-ips",
+      "nombre": "Guardar el IPS autocontenido",
+      "metodo": "POST",
+      "ruta": "Bundle",
+      "archivo": "modulos/19-resumen-ips/soluciones/19b_bundle_ips.json",
+      "guarda": "bundleIpsId"
+    },
+    {
+      "id": "19d",
+      "modulo": "19-resumen-ips",
+      "nombre": "Leer el IPS",
+      "metodo": "GET",
+      "ruta": "Bundle/{{bundleIpsId}}"
+    },
+    {
+      "id": "19e",
+      "modulo": "19-resumen-ips",
+      "nombre": "Error a propósito: un IPS sin la sección de alergias",
+      "metodo": "POST",
+      "ruta": "Bundle",
+      "archivo": "modulos/19-resumen-ips/errores/19e1_ips_sin_alergias.json",
+      "guarda": "errorIpsId",
+      "espera": {
+        "servidor": "acepta",
+        "validador": "falla",
+        "perfil": "ips"
+      }
+    },
+    {
+      "id": "19f",
+      "modulo": "19-resumen-ips",
+      "nombre": "Borrar el IPS incompleto",
+      "metodo": "DELETE",
+      "ruta": "Bundle/{{errorIpsId}}"
+    },
+    {
+      "id": "19g",
+      "modulo": "19-resumen-ips",
+      "nombre": "Expediente completo del paciente ($everything)",
       "metodo": "GET",
       "ruta": "Patient/{{patientId}}/$everything"
     }
-  ]
+  ],
+  "perfiles": {
+    "taller": {
+      "ig": "modulos/18-terminologias-y-perfiles/soluciones/18a_structuredefinition_paciente_taller.json",
+      "perfil": "https://f-slg.github.io/aprende-fhir/StructureDefinition/paciente-taller",
+      "deben_pasar": [
+        "modulos/02-patient/soluciones/02e_patient_actualizar.json"
+      ]
+    },
+    "ips": {
+      "ig": "hl7.fhir.uv.ips#1.1.0",
+      "perfil": "http://hl7.org/fhir/uv/ips/StructureDefinition/Bundle-uv-ips",
+      "deben_pasar": [
+        "modulos/19-resumen-ips/soluciones/19b_bundle_ips.json"
+      ]
+    }
+  }
 }

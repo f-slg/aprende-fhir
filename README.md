@@ -19,8 +19,8 @@
 ---
 
 Un recorrido para aprender FHIR haciendo, **paso a paso**: crearás, buscarás,
-corregirás y enlazarás **33 tipos de recursos** siguiendo a un mismo paciente,
-desde su primera consulta hasta el tratamiento de un cáncer de mama.
+corregirás y enlazarás **36 tipos de recursos** siguiendo a un mismo paciente,
+desde su primera consulta hasta el resumen internacional (IPS) que lleva de viaje.
 
 En cada módulo:
 
@@ -39,7 +39,7 @@ En cada módulo:
   programar.
 - **Tres formas de practicar** con el mismo contenido: Postman, R/RStudio o
   curl.
-- **Recursos validados:** las 74 soluciones y sus 120 versiones intermedias se
+- **Recursos validados:** las 80 soluciones y sus 133 versiones intermedias se
   revisan con el [validador oficial de HL7](https://github.com/hapifhir/org.hl7.fhir.core)
   en cada cambio, y el taller completo se ejecuta en un servidor
   [HAPI FHIR](https://hapifhir.io/).
@@ -60,11 +60,12 @@ En cada módulo:
 Los tres caminos usan los mismos archivos JSON y la misma lista de pasos
 ([`herramientas/pasos.json`](herramientas/pasos.json)).
 
-### El servidor
+### Los servidores
 
 Por defecto se usa el servidor público de HAPI FHIR:
-`https://hapi.fhir.org/baseR4`. Para cambiarlo, edita la variable `FHIRURL`
-en Postman, o en R y curl:
+`https://hapi.fhir.org/baseR4` (variable `FHIRURL`). El módulo 18 usa además
+el servidor de terminología de HL7, `https://tx.fhir.org/r4` (variable
+`TXURL`). Para cambiarlos, edita las variables en Postman, o en R y curl:
 
 ```bash
 FHIRURL=http://localhost:8080/fhir curl/taller.sh
@@ -80,8 +81,7 @@ y usar `http://localhost:8080/fhir`.
 
 ## Módulos
 
-El taller tiene tres niveles y 19 módulos. Los niveles básico e intermedio
-están completos; el nivel avanzado llegará en la próxima etapa.
+El taller tiene tres niveles y 19 módulos, que se siguen en orden.
 
 **Nivel básico**
 
@@ -109,13 +109,13 @@ están completos; el nivel avanzado llegará en la próxima etapa.
 | 15 | [Medicamentos](modulos/15-medicamentos/README.md) | MedicationRequest, MedicationAdministration | Prescribir, administrar y suspender un tratamiento |
 | 16 | [Seguimiento](modulos/16-seguimiento/README.md) | Questionnaire, QuestionnaireResponse | Definir y responder un cuestionario, extraer datos y ver todo con `$everything` |
 
-**Nivel avanzado** · *en preparación*
+**Nivel avanzado**
 
-| | Módulo | Aprendes a... |
-|---|---|---|
-| 17 | Búsquedas avanzadas y versiones | Búsquedas encadenadas, `_has`, prefijos de comparación y control de concurrencia con `If-Match` |
-| 18 | Terminologías y perfiles | `$lookup`, `$validate-code` y una introducción a los perfiles y guías de implementación |
-| 19 | Resumen del paciente (IPS) | Armar el resumen internacional del paciente con todo lo aprendido |
+| | Módulo | Recursos | Aprendes a... |
+|---|---|---|---|
+| 17 | [Búsquedas avanzadas y versiones](modulos/17-busquedas-y-versiones/README.md) | — | Tipos de parámetros, prefijos, modificadores, búsquedas encadenadas e inversas (`_has`), paginación, versiones y `If-Match` |
+| 18 | [Terminologías y perfiles](modulos/18-terminologias-y-perfiles/README.md) | CodeSystem, ValueSet, StructureDefinition | `$lookup`, `$validate-code`, `$expand`, `$subsumes`; escribir un perfil y validar con `$validate` |
+| 19 | [Resumen del paciente (IPS)](modulos/19-resumen-ips/README.md) | Composition IPS, Bundle `document` | Armar el IPS de Luis, usar `$document` y validar contra la guía oficial IPS |
 
 ## El caso
 
@@ -132,7 +132,8 @@ sospechosa y una biopsia confirma un **carcinoma ductal infiltrante** con
 receptor de estrógeno positivo. El comité de tumores define el plan: cirugía,
 quimioterapia con doxorrubicina y hormonoterapia con tamoxifeno. Los
 cuestionarios de seguimiento muestran que el tamoxifeno le provoca sofocos y
-dolor articular, y se suspende.
+dolor articular, y se suspende. En febrero de 2026, antes de viajar, Luis
+recibe su **resumen internacional del paciente (IPS)**.
 
 | Fecha | Qué pasa | Módulos |
 |---|---|---|
@@ -146,6 +147,7 @@ dolor articular, y se suspende.
 | 02-jul-2025 | Primer ciclo de doxorrubicina | 15 |
 | 15-oct-2025 → feb-2026 | Tamoxifeno, suspendido por intolerancia | 15 |
 | oct-2025 y ene-2026 | Cuestionarios de seguimiento: aparecen los sofocos y el dolor articular | 16 |
+| 15-feb-2026 | Resumen internacional del paciente (IPS) para su viaje | 19 |
 
 Así se enlazan los recursos que crearás:
 
@@ -199,7 +201,8 @@ herramientas/validar.sh
 El script descarga el validador la primera vez y valida contra FHIR R4
 (estructura, cardinalidades, reglas y códigos LOINC, SNOMED CT, CIE-10 y CVX)
 todas las soluciones y versiones intermedias. Además comprueba que el
-validador detecte cada error a propósito. Agrega `--avisos` al final
+validador detecte cada error a propósito, y valida contra el **perfil del
+taller** (módulo 18) y contra la **guía oficial IPS** (módulo 19). Agrega `--avisos` al final
 para ver también las advertencias. También puedes validar un recurso suelto
 en <https://validator.fhir.org/>.
 

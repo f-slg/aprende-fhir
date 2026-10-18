@@ -15,8 +15,16 @@ cat("Servidor:", fhir_url(), "\n")
 for (p in pasos) {
   if (substr(p$modulo, 1, 2) > hasta) break
   rechazo <- identical(p$espera$servidor, "rechaza")
-  r <- fhir(p$metodo, p$ruta, p$archivo, if (!rechazo) p$guarda, espera_rechazo = rechazo,
-            encabezados = p$encabezados)
+  terminologia <- identical(p$servidor, "terminologia")
+  r <- tryCatch(
+    fhir(p$metodo, p$ruta, p$archivo, if (!rechazo) p$guarda, espera_rechazo = rechazo,
+         encabezados = p$encabezados, base = if (terminologia) tx_url() else fhir_url()),
+    error = function(e) {
+      if (!terminologia) stop(e)
+      cat(sprintf("AVISO %-4s el servidor de terminología no respondió; se continúa\n", p$id))
+      NULL
+    })
+  if (is.null(r)) next
   extra <- if (!is.null(p$guarda) && !rechazo) paste0(" -> ", p$guarda, " = ", r$id) else ""
   if (rechazo) extra <- paste0(" (rechazado, como se esperaba: ",
                                substr(r$issue[[1]]$diagnostics, 1, 70), "...)")

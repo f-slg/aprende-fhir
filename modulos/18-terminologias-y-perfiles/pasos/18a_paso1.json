@@ -1,0 +1,21 @@
+{
+  "resourceType": "StructureDefinition",
+  "url": "https://f-slg.github.io/aprende-fhir/StructureDefinition/paciente-taller",
+  "name": "PacienteTaller",
+  "status": "draft",
+  "fhirVersion": "4.0.1",
+  "kind": "resource",
+  "abstract": false,
+  "type": "Patient",
+  "baseDefinition": "http://hl7.org/fhir/StructureDefinition/Patient",
+  "derivation": "constraint",
+  "differential": {
+    "element": [
+      {
+        "id": "Patient",
+        "path": "Patient",
+        "short": "Paciente del taller"
+      }
+    ]
+  }
+}

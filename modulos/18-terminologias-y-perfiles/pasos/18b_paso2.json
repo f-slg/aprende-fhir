@@ -1,0 +1,13 @@
+{
+  "resourceType": "CodeSystem",
+  "url": "https://f-slg.github.io/aprende-fhir/CodeSystem/ecog",
+  "version": "1.0.0",
+  "name": "EscalaECOG",
+  "title": "Escala de funcionalidad ECOG (versión didáctica)",
+  "status": "active",
+  "date": "2026-10-18",
+  "publisher": "Aprende FHIR desde cero (ejemplo didáctico)",
+  "description": "Códigos de la escala de funcionalidad ECOG, con descripciones en español.",
+  "caseSensitive": true,
+  "content": "complete"
+}
