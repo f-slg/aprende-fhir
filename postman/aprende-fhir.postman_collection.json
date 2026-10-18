@@ -1,0 +1,2051 @@
+{
+  "info": {
+    "name": "Aprende FHIR desde cero",
+    "description": "Taller de HL7 FHIR R4 con un caso clínico ecuatoriano ficticio. Ejecuta las peticiones en orden: cada POST guarda el id creado en una variable de la colección que usan las peticiones siguientes. Cambia la variable FHIRURL para usar otro servidor. Solo datos sintéticos.\n\nhttps://github.com/f-slg/aprende-fhir",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "01 · Fundamentos",
+      "item": [
+        {
+          "name": "01a · Declaración de capacidades del servidor",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/metadata"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "01b · Buscar pacientes (primeros 5)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Patient?_count=5"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "02 · Patient",
+      "item": [
+        {
+          "name": "02a · Crear el paciente",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Patient",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"Patient\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Luis Alberto Paredes Cevallos, hombre, nacido el 12 de marzo de 1979 en Riobamba.</p><p>Cédula ficticia 9900000017 · Historia clínica HC-000123.</p></div>\"\n  },\n  \"identifier\": [\n    {\n      \"use\": \"official\",\n      \"type\": {\n        \"coding\": [\n          {\n            \"system\": \"http://terminology.hl7.org/CodeSystem/v2-0203\",\n            \"code\": \"NI\",\n            \"display\": \"National unique individual identifier\"\n          }\n        ],\n        \"text\": \"Cédula de identidad\"\n      },\n      \"system\": \"https://f-slg.github.io/aprende-fhir/sid/cedula\",\n      \"value\": \"9900000017\"\n    },\n    {\n      \"use\": \"usual\",\n      \"type\": {\n        \"coding\": [\n          {\n            \"system\": \"http://terminology.hl7.org/CodeSystem/v2-0203\",\n            \"code\": \"MR\",\n            \"display\": \"Medical record number\"\n          }\n        ],\n        \"text\": \"Historia clínica\"\n      },\n      \"system\": \"https://f-slg.github.io/aprende-fhir/sid/historia-clinica/hospital-general-docente-ejemplo\",\n      \"value\": \"HC-000123\"\n    }\n  ],\n  \"active\": true,\n  \"name\": [\n    {\n      \"use\": \"official\",\n      \"text\": \"Luis Alberto Paredes Cevallos\",\n      \"family\": \"Paredes Cevallos\",\n      \"_family\": {\n        \"extension\": [\n          {\n            \"url\": \"http://hl7.org/fhir/StructureDefinition/humanname-fathers-family\",\n            \"valueString\": \"Paredes\"\n          },\n          {\n            \"url\": \"http://hl7.org/fhir/StructureDefinition/humanname-mothers-family\",\n            \"valueString\": \"Cevallos\"\n          }\n        ]\n      },\n      \"given\": [\n        \"Luis\",\n        \"Alberto\"\n      ]\n    },\n    {\n      \"use\": \"usual\",\n      \"text\": \"Luis Paredes\"\n    }\n  ],\n  \"gender\": \"male\",\n  \"birthDate\": \"1979-03-12\",\n  \"address\": [\n    {\n      \"use\": \"home\",\n      \"type\": \"physical\",\n      \"line\": [\n        \"Av. de los Ejemplos N00-00 y calle Ficticia\"\n      ],\n      \"city\": \"Quito\",\n      \"district\": \"Quito\",\n      \"state\": \"Pichincha\",\n      \"country\": \"EC\"\n    }\n  ],\n  \"communication\": [\n    {\n      \"language\": {\n        \"coding\": [\n          {\n            \"system\": \"urn:ietf:bcp:47\",\n            \"code\": \"es\",\n            \"display\": \"Spanish\"\n          }\n        ],\n        \"text\": \"Español\"\n      },\n      \"preferred\": true\n    }\n  ],\n  \"extension\": [\n    {\n      \"url\": \"http://hl7.org/fhir/StructureDefinition/patient-birthPlace\",\n      \"valueAddress\": {\n        \"city\": \"Riobamba\",\n        \"state\": \"Chimborazo\",\n        \"country\": \"EC\"\n      }\n    }\n  ]\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/02-patient/soluciones/02a_patient_crear.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const id = pm.response.json().id;",
+                  "pm.collectionVariables.set(\"patientId\", id);",
+                  "console.log(\"patientId = \" + id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "02b · Leer el paciente por id",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Patient/{{patientId}}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "02c · Buscar el paciente por cédula",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Patient?identifier=https://f-slg.github.io/aprende-fhir/sid/cedula|9900000017"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "02d · Buscar el paciente por nombre",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Patient?family=Paredes&given=Luis"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "02e · Actualizar el paciente (teléfono y estado civil)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Patient/{{patientId}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"Patient\",\n  \"id\": \"{{patientId}}\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Luis Alberto Paredes Cevallos, hombre, nacido el 12 de marzo de 1979 en Riobamba.</p><p>Cédula ficticia 9900000017 · Historia clínica HC-000123.</p><p>Teléfono +593 99 000 0000 · Casado.</p></div>\"\n  },\n  \"identifier\": [\n    {\n      \"use\": \"official\",\n      \"type\": {\n        \"coding\": [\n          {\n            \"system\": \"http://terminology.hl7.org/CodeSystem/v2-0203\",\n            \"code\": \"NI\",\n            \"display\": \"National unique individual identifier\"\n          }\n        ],\n        \"text\": \"Cédula de identidad\"\n      },\n      \"system\": \"https://f-slg.github.io/aprende-fhir/sid/cedula\",\n      \"value\": \"9900000017\"\n    },\n    {\n      \"use\": \"usual\",\n      \"type\": {\n        \"coding\": [\n          {\n            \"system\": \"http://terminology.hl7.org/CodeSystem/v2-0203\",\n            \"code\": \"MR\",\n            \"display\": \"Medical record number\"\n          }\n        ],\n        \"text\": \"Historia clínica\"\n      },\n      \"system\": \"https://f-slg.github.io/aprende-fhir/sid/historia-clinica/hospital-general-docente-ejemplo\",\n      \"value\": \"HC-000123\"\n    }\n  ],\n  \"active\": true,\n  \"name\": [\n    {\n      \"use\": \"official\",\n      \"text\": \"Luis Alberto Paredes Cevallos\",\n      \"family\": \"Paredes Cevallos\",\n      \"_family\": {\n        \"extension\": [\n          {\n            \"url\": \"http://hl7.org/fhir/StructureDefinition/humanname-fathers-family\",\n            \"valueString\": \"Paredes\"\n          },\n          {\n            \"url\": \"http://hl7.org/fhir/StructureDefinition/humanname-mothers-family\",\n            \"valueString\": \"Cevallos\"\n          }\n        ]\n      },\n      \"given\": [\n        \"Luis\",\n        \"Alberto\"\n      ]\n    },\n    {\n      \"use\": \"usual\",\n      \"text\": \"Luis Paredes\"\n    }\n  ],\n  \"gender\": \"male\",\n  \"birthDate\": \"1979-03-12\",\n  \"address\": [\n    {\n      \"use\": \"home\",\n      \"type\": \"physical\",\n      \"line\": [\n        \"Av. de los Ejemplos N00-00 y calle Ficticia\"\n      ],\n      \"city\": \"Quito\",\n      \"district\": \"Quito\",\n      \"state\": \"Pichincha\",\n      \"country\": \"EC\"\n    }\n  ],\n  \"communication\": [\n    {\n      \"language\": {\n        \"coding\": [\n          {\n            \"system\": \"urn:ietf:bcp:47\",\n            \"code\": \"es\",\n            \"display\": \"Spanish\"\n          }\n        ],\n        \"text\": \"Español\"\n      },\n      \"preferred\": true\n    }\n  ],\n  \"extension\": [\n    {\n      \"url\": \"http://hl7.org/fhir/StructureDefinition/patient-birthPlace\",\n      \"valueAddress\": {\n        \"city\": \"Riobamba\",\n        \"state\": \"Chimborazo\",\n        \"country\": \"EC\"\n      }\n    }\n  ],\n  \"telecom\": [\n    {\n      \"system\": \"phone\",\n      \"value\": \"+593 99 000 0000\",\n      \"use\": \"mobile\"\n    }\n  ],\n  \"maritalStatus\": {\n    \"coding\": [\n      {\n        \"system\": \"http://terminology.hl7.org/CodeSystem/v3-MaritalStatus\",\n        \"code\": \"M\",\n        \"display\": \"Married\"\n      }\n    ],\n    \"text\": \"Casado\"\n  }\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/02-patient/soluciones/02e_patient_actualizar.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "02f · Historial de versiones del paciente",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Patient/{{patientId}}/_history"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "03 · Transacciones",
+      "item": [
+        {
+          "name": "03a · Crear a la familia en una transacción",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"Bundle\",\n  \"type\": \"transaction\",\n  \"entry\": [\n    {\n      \"fullUrl\": \"urn:uuid:f7c61a9c-0abc-5d6f-8814-2b25090472ff\",\n      \"resource\": {\n        \"resourceType\": \"Patient\",\n        \"text\": {\n          \"status\": \"generated\",\n          \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>María José Paredes Andrade, cédula ficticia 9900000025.</p></div>\"\n        },\n        \"identifier\": [\n          {\n            \"use\": \"official\",\n            \"type\": {\n              \"coding\": [\n                {\n                  \"system\": \"http://terminology.hl7.org/CodeSystem/v2-0203\",\n                  \"code\": \"NI\",\n                  \"display\": \"National unique individual identifier\"\n                }\n              ],\n              \"text\": \"Cédula de identidad\"\n            },\n            \"system\": \"https://f-slg.github.io/aprende-fhir/sid/cedula\",\n            \"value\": \"9900000025\"\n          }\n        ],\n        \"name\": [\n          {\n            \"use\": \"official\",\n            \"text\": \"María José Paredes Andrade\",\n            \"family\": \"Paredes Andrade\",\n            \"given\": [\n              \"María\",\n              \"José\"\n            ]\n          }\n        ],\n        \"gender\": \"female\",\n        \"birthDate\": \"2006-07-21\"\n      },\n      \"request\": {\n        \"method\": \"POST\",\n        \"url\": \"Patient\",\n        \"ifNoneExist\": \"identifier=https://f-slg.github.io/aprende-fhir/sid/cedula|9900000025\"\n      }\n    },\n    {\n      \"fullUrl\": \"urn:uuid:7e8908cb-6dc5-5d36-8da3-569708c9956d\",\n      \"resource\": {\n        \"resourceType\": \"Patient\",\n        \"text\": {\n          \"status\": \"generated\",\n          \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Carmen Elena Andrade Vega, cédula ficticia 9900000033.</p></div>\"\n        },\n        \"identifier\": [\n          {\n            \"use\": \"official\",\n            \"type\": {\n              \"coding\": [\n                {\n                  \"system\": \"http://terminology.hl7.org/CodeSystem/v2-0203\",\n                  \"code\": \"NI\",\n                  \"display\": \"National unique individual identifier\"\n                }\n              ],\n              \"text\": \"Cédula de identidad\"\n            },\n            \"system\": \"https://f-slg.github.io/aprende-fhir/sid/cedula\",\n            \"value\": \"9900000033\"\n          }\n        ],\n        \"name\": [\n          {\n            \"use\": \"official\",\n            \"text\": \"Carmen Elena Andrade Vega\",\n            \"family\": \"Andrade Vega\",\n            \"given\": [\n              \"Carmen\",\n              \"Elena\"\n            ]\n          }\n        ],\n        \"gender\": \"female\",\n        \"birthDate\": \"1981-11-02\"\n      },\n      \"request\": {\n        \"method\": \"POST\",\n        \"url\": \"Patient\",\n        \"ifNoneExist\": \"identifier=https://f-slg.github.io/aprende-fhir/sid/cedula|9900000033\"\n      }\n    },\n    {\n      \"fullUrl\": \"urn:uuid:9e683edb-5c5b-5a1e-87a1-fe0923235ea0\",\n      \"resource\": {\n        \"resourceType\": \"Patient\",\n        \"text\": {\n          \"status\": \"generated\",\n          \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Daniel Esteban Paredes Andrade, cédula ficticia 9900000041.</p></div>\"\n        },\n        \"identifier\": [\n          {\n            \"use\": \"official\",\n            \"type\": {\n              \"coding\": [\n                {\n                  \"system\": \"http://terminology.hl7.org/CodeSystem/v2-0203\",\n                  \"code\": \"NI\",\n                  \"display\": \"National unique individual identifier\"\n                }\n              ],\n              \"text\": \"Cédula de identidad\"\n            },\n            \"system\": \"https://f-slg.github.io/aprende-fhir/sid/cedula\",\n            \"value\": \"9900000041\"\n          }\n        ],\n        \"name\": [\n          {\n            \"use\": \"official\",\n            \"text\": \"Daniel Esteban Paredes Andrade\",\n            \"family\": \"Paredes Andrade\",\n            \"given\": [\n              \"Daniel\",\n              \"Esteban\"\n            ]\n          }\n        ],\n        \"gender\": \"male\",\n        \"birthDate\": \"2010-01-15\"\n      },\n      \"request\": {\n        \"method\": \"POST\",\n        \"url\": \"Patient\",\n        \"ifNoneExist\": \"identifier=https://f-slg.github.io/aprende-fhir/sid/cedula|9900000041\"\n      }\n    }\n  ]\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/03-transacciones/soluciones/03a_bundle_transaction_familia.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "03b · Buscar a los Paredes",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Patient?family=Paredes"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "04 · Profesionales y organizaciones",
+      "item": [
+        {
+          "name": "04a · Crear a la médica",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Practitioner",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"Practitioner\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Dra. Andrea Lucía Salazar Moreno, médica general. Registro profesional ficticio RP-000457.</p></div>\"\n  },\n  \"identifier\": [\n    {\n      \"use\": \"official\",\n      \"system\": \"https://f-slg.github.io/aprende-fhir/sid/registro-profesional\",\n      \"value\": \"RP-000457\"\n    }\n  ],\n  \"active\": true,\n  \"name\": [\n    {\n      \"use\": \"official\",\n      \"text\": \"Dra. Andrea Lucía Salazar Moreno\",\n      \"prefix\": [\n        \"Dra.\"\n      ],\n      \"family\": \"Salazar Moreno\",\n      \"given\": [\n        \"Andrea\",\n        \"Lucía\"\n      ]\n    }\n  ],\n  \"telecom\": [\n    {\n      \"system\": \"email\",\n      \"value\": \"andrea.salazar@hospital-ejemplo.invalid\",\n      \"use\": \"work\"\n    }\n  ],\n  \"gender\": \"female\",\n  \"qualification\": [\n    {\n      \"code\": {\n        \"coding\": [\n          {\n            \"system\": \"http://terminology.hl7.org/CodeSystem/v2-0360\",\n            \"code\": \"MD\",\n            \"display\": \"Doctor of Medicine\"\n          }\n        ],\n        \"text\": \"Médica\"\n      }\n    }\n  ]\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/04-profesionales-y-organizaciones/soluciones/04a_practitioner_crear.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const id = pm.response.json().id;",
+                  "pm.collectionVariables.set(\"practitionerId\", id);",
+                  "console.log(\"practitionerId = \" + id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "04b · Crear la red de servicios",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Organization",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"Organization\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Red de Servicios de Salud Ejemplo (organización ficticia).</p></div>\"\n  },\n  \"identifier\": [\n    {\n      \"system\": \"https://f-slg.github.io/aprende-fhir/sid/establecimiento\",\n      \"value\": \"RED-0001\"\n    }\n  ],\n  \"active\": true,\n  \"type\": [\n    {\n      \"coding\": [\n        {\n          \"system\": \"http://terminology.hl7.org/CodeSystem/organization-type\",\n          \"code\": \"prov\",\n          \"display\": \"Healthcare Provider\"\n        }\n      ]\n    }\n  ],\n  \"name\": \"Red de Servicios de Salud Ejemplo\",\n  \"address\": [\n    {\n      \"city\": \"Quito\",\n      \"state\": \"Pichincha\",\n      \"country\": \"EC\"\n    }\n  ]\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/04-profesionales-y-organizaciones/soluciones/04b_organization_red.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const id = pm.response.json().id;",
+                  "pm.collectionVariables.set(\"organizationId\", id);",
+                  "console.log(\"organizationId = \" + id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "04c · Crear el hospital (parte de la red)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Organization",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"Organization\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Hospital General Docente Ejemplo, parte de la Red de Servicios de Salud Ejemplo (ficticia).</p></div>\"\n  },\n  \"identifier\": [\n    {\n      \"system\": \"https://f-slg.github.io/aprende-fhir/sid/establecimiento\",\n      \"value\": \"HGDE-0001\"\n    }\n  ],\n  \"active\": true,\n  \"type\": [\n    {\n      \"coding\": [\n        {\n          \"system\": \"http://terminology.hl7.org/CodeSystem/organization-type\",\n          \"code\": \"prov\",\n          \"display\": \"Healthcare Provider\"\n        }\n      ]\n    }\n  ],\n  \"name\": \"Hospital General Docente Ejemplo\",\n  \"telecom\": [\n    {\n      \"system\": \"phone\",\n      \"value\": \"+593 2 000 0000\",\n      \"use\": \"work\"\n    }\n  ],\n  \"address\": [\n    {\n      \"line\": [\n        \"Av. Principal Ejemplo S00-00\"\n      ],\n      \"city\": \"Quito\",\n      \"state\": \"Pichincha\",\n      \"country\": \"EC\"\n    }\n  ],\n  \"partOf\": {\n    \"reference\": \"Organization/{{organizationId}}\",\n    \"display\": \"Red de Servicios de Salud Ejemplo\"\n  }\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/04-profesionales-y-organizaciones/soluciones/04c_organization_hospital.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const id = pm.response.json().id;",
+                  "pm.collectionVariables.set(\"hospitalId\", id);",
+                  "console.log(\"hospitalId = \" + id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "04d · Buscar los establecimientos de la red",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Organization?partof={{organizationId}}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "05 · Diagnóstico y encuentro",
+      "item": [
+        {
+          "name": "05a · Registrar el diagnóstico de intoxicación",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Condition",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"Condition\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Intoxicación alimentaria bacteriana, no especificada (moderada).</p><p>Inicio: 17 de marzo de 2025. Resuelta.</p></div>\"\n  },\n  \"identifier\": [\n    {\n      \"system\": \"https://f-slg.github.io/aprende-fhir/sid/condicion\",\n      \"value\": \"COND-2025-0001\"\n    }\n  ],\n  \"clinicalStatus\": {\n    \"coding\": [\n      {\n        \"system\": \"http://terminology.hl7.org/CodeSystem/condition-clinical\",\n        \"code\": \"resolved\",\n        \"display\": \"Resolved\"\n      }\n    ]\n  },\n  \"verificationStatus\": {\n    \"coding\": [\n      {\n        \"system\": \"http://terminology.hl7.org/CodeSystem/condition-ver-status\",\n        \"code\": \"confirmed\",\n        \"display\": \"Confirmed\"\n      }\n    ]\n  },\n  \"category\": [\n    {\n      \"coding\": [\n        {\n          \"system\": \"http://terminology.hl7.org/CodeSystem/condition-category\",\n          \"code\": \"encounter-diagnosis\",\n          \"display\": \"Encounter Diagnosis\"\n        }\n      ]\n    }\n  ],\n  \"severity\": {\n    \"coding\": [\n      {\n        \"system\": \"http://snomed.info/sct\",\n        \"code\": \"6736007\",\n        \"display\": \"Moderate (severity modifier)\"\n      }\n    ],\n    \"text\": \"Moderada\"\n  },\n  \"code\": {\n    \"coding\": [\n      {\n        \"system\": \"http://hl7.org/fhir/sid/icd-10\",\n        \"code\": \"A05.9\",\n        \"display\": \"Bacterial foodborne intoxication, unspecified\"\n      }\n    ],\n    \"text\": \"Intoxicación alimentaria bacteriana, no especificada\"\n  },\n  \"subject\": {\n    \"reference\": \"Patient/{{patientId}}\",\n    \"display\": \"Luis Alberto Paredes Cevallos\"\n  },\n  \"onsetDateTime\": \"2025-03-17\",\n  \"abatementDateTime\": \"2025-03-24\",\n  \"recordedDate\": \"2025-03-20\",\n  \"recorder\": {\n    \"reference\": \"Practitioner/{{practitionerId}}\",\n    \"display\": \"Dra. Andrea Lucía Salazar Moreno\"\n  },\n  \"asserter\": {\n    \"reference\": \"Practitioner/{{practitionerId}}\",\n    \"display\": \"Dra. Andrea Lucía Salazar Moreno\"\n  },\n  \"evidence\": [\n    {\n      \"code\": [\n        {\n          \"coding\": [\n            {\n              \"system\": \"http://snomed.info/sct\",\n              \"code\": \"422587007\",\n              \"display\": \"Nausea\"\n            }\n          ],\n          \"text\": \"Náuseas\"\n        },\n        {\n          \"coding\": [\n            {\n              \"system\": \"http://snomed.info/sct\",\n              \"code\": \"422400008\",\n              \"display\": \"Vomiting\"\n            }\n          ],\n          \"text\": \"Vómito\"\n        },\n        {\n          \"coding\": [\n            {\n              \"system\": \"http://snomed.info/sct\",\n              \"code\": \"21522001\",\n              \"display\": \"Abdominal pain\"\n            }\n          ],\n          \"text\": \"Dolor abdominal\"\n        },\n        {\n          \"coding\": [\n            {\n              \"system\": \"http://snomed.info/sct\",\n              \"code\": \"62315008\",\n              \"display\": \"Diarrhea\"\n            }\n          ],\n          \"text\": \"Diarrea\"\n        }\n      ]\n    }\n  ]\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/05-diagnostico-y-encuentro/soluciones/05a_condition_intoxicacion.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const id = pm.response.json().id;",
+                  "pm.collectionVariables.set(\"conditionIntoxId\", id);",
+                  "console.log(\"conditionIntoxId = \" + id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "05b · Registrar el encuentro",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Encounter",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"Encounter\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Consulta ambulatoria por dolor abdominal, náuseas y diarrea.</p><p>20 de marzo de 2025, 07:15 a 08:15 · Hospital General Docente Ejemplo · Dra. Andrea Lucía Salazar Moreno.</p></div>\"\n  },\n  \"identifier\": [\n    {\n      \"system\": \"https://f-slg.github.io/aprende-fhir/sid/encuentro\",\n      \"value\": \"ENC-2025-0001\"\n    }\n  ],\n  \"status\": \"finished\",\n  \"class\": {\n    \"system\": \"http://terminology.hl7.org/CodeSystem/v3-ActCode\",\n    \"code\": \"AMB\",\n    \"display\": \"ambulatory\"\n  },\n  \"serviceType\": {\n    \"coding\": [\n      {\n        \"system\": \"http://terminology.hl7.org/CodeSystem/service-type\",\n        \"code\": \"124\",\n        \"display\": \"General Practice\"\n      }\n    ],\n    \"text\": \"Medicina general\"\n  },\n  \"priority\": {\n    \"coding\": [\n      {\n        \"system\": \"http://terminology.hl7.org/CodeSystem/v3-ActPriority\",\n        \"code\": \"R\",\n        \"display\": \"routine\"\n      }\n    ],\n    \"text\": \"Rutina\"\n  },\n  \"subject\": {\n    \"reference\": \"Patient/{{patientId}}\",\n    \"display\": \"Luis Alberto Paredes Cevallos\"\n  },\n  \"participant\": [\n    {\n      \"type\": [\n        {\n          \"coding\": [\n            {\n              \"system\": \"http://terminology.hl7.org/CodeSystem/v3-ParticipationType\",\n              \"code\": \"ATND\",\n              \"display\": \"attender\"\n            }\n          ]\n        }\n      ],\n      \"individual\": {\n        \"reference\": \"Practitioner/{{practitionerId}}\",\n        \"display\": \"Dra. Andrea Lucía Salazar Moreno\"\n      }\n    }\n  ],\n  \"period\": {\n    \"start\": \"2025-03-20T07:15:00-05:00\",\n    \"end\": \"2025-03-20T08:15:00-05:00\"\n  },\n  \"reasonCode\": [\n    {\n      \"coding\": [\n        {\n          \"system\": \"http://snomed.info/sct\",\n          \"code\": \"21522001\",\n          \"display\": \"Abdominal pain\"\n        }\n      ],\n      \"text\": \"Dolor abdominal, náuseas y diarrea\"\n    }\n  ],\n  \"diagnosis\": [\n    {\n      \"condition\": {\n        \"reference\": \"Condition/{{conditionIntoxId}}\",\n        \"display\": \"Intoxicación alimentaria bacteriana\"\n      },\n      \"use\": {\n        \"coding\": [\n          {\n            \"system\": \"http://terminology.hl7.org/CodeSystem/diagnosis-role\",\n            \"code\": \"DD\",\n            \"display\": \"Discharge diagnosis\"\n          }\n        ]\n      },\n      \"rank\": 1\n    }\n  ],\n  \"serviceProvider\": {\n    \"reference\": \"Organization/{{hospitalId}}\",\n    \"display\": \"Hospital General Docente Ejemplo\"\n  }\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/05-diagnostico-y-encuentro/soluciones/05b_encounter_crear.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const id = pm.response.json().id;",
+                  "pm.collectionVariables.set(\"encounterId\", id);",
+                  "console.log(\"encounterId = \" + id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "05c · Encuentros del paciente con su diagnóstico",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Encounter?subject=Patient/{{patientId}}&_include=Encounter:diagnosis"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "06 · Observaciones",
+      "item": [
+        {
+          "name": "06a · Presión arterial (componentes)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Observation",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"Observation\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Presión arterial: 128/84 mmHg.</p></div>\"\n  },\n  \"status\": \"final\",\n  \"category\": [\n    {\n      \"coding\": [\n        {\n          \"system\": \"http://terminology.hl7.org/CodeSystem/observation-category\",\n          \"code\": \"vital-signs\",\n          \"display\": \"Vital Signs\"\n        }\n      ]\n    }\n  ],\n  \"code\": {\n    \"coding\": [\n      {\n        \"system\": \"http://loinc.org\",\n        \"code\": \"85354-9\",\n        \"display\": \"Blood pressure panel with all children optional\"\n      }\n    ],\n    \"text\": \"Presión arterial\"\n  },\n  \"subject\": {\n    \"reference\": \"Patient/{{patientId}}\",\n    \"display\": \"Luis Alberto Paredes Cevallos\"\n  },\n  \"encounter\": {\n    \"reference\": \"Encounter/{{encounterId}}\",\n    \"display\": \"Consulta por dolor abdominal\"\n  },\n  \"effectiveDateTime\": \"2025-03-20T07:30:00-05:00\",\n  \"performer\": [\n    {\n      \"reference\": \"Practitioner/{{practitionerId}}\",\n      \"display\": \"Dra. Andrea Lucía Salazar Moreno\"\n    }\n  ],\n  \"component\": [\n    {\n      \"code\": {\n        \"coding\": [\n          {\n            \"system\": \"http://loinc.org\",\n            \"code\": \"8480-6\",\n            \"display\": \"Systolic blood pressure\"\n          }\n        ],\n        \"text\": \"Presión sistólica\"\n      },\n      \"valueQuantity\": {\n        \"value\": 128,\n        \"unit\": \"mmHg\",\n        \"system\": \"http://unitsofmeasure.org\",\n        \"code\": \"mm[Hg]\"\n      }\n    },\n    {\n      \"code\": {\n        \"coding\": [\n          {\n            \"system\": \"http://loinc.org\",\n            \"code\": \"8462-4\",\n            \"display\": \"Diastolic blood pressure\"\n          }\n        ],\n        \"text\": \"Presión diastólica\"\n      },\n      \"valueQuantity\": {\n        \"value\": 84,\n        \"unit\": \"mmHg\",\n        \"system\": \"http://unitsofmeasure.org\",\n        \"code\": \"mm[Hg]\"\n      }\n    }\n  ]\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/06-observaciones/soluciones/06a_observation_presion_arterial.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const id = pm.response.json().id;",
+                  "pm.collectionVariables.set(\"obsPAId\", id);",
+                  "console.log(\"obsPAId = \" + id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "06b · Temperatura (valueQuantity)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Observation",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"Observation\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Temperatura corporal: 38,4 °C.</p></div>\"\n  },\n  \"status\": \"final\",\n  \"category\": [\n    {\n      \"coding\": [\n        {\n          \"system\": \"http://terminology.hl7.org/CodeSystem/observation-category\",\n          \"code\": \"vital-signs\",\n          \"display\": \"Vital Signs\"\n        }\n      ]\n    }\n  ],\n  \"code\": {\n    \"coding\": [\n      {\n        \"system\": \"http://loinc.org\",\n        \"code\": \"8310-5\",\n        \"display\": \"Body temperature\"\n      }\n    ],\n    \"text\": \"Temperatura corporal\"\n  },\n  \"subject\": {\n    \"reference\": \"Patient/{{patientId}}\",\n    \"display\": \"Luis Alberto Paredes Cevallos\"\n  },\n  \"encounter\": {\n    \"reference\": \"Encounter/{{encounterId}}\",\n    \"display\": \"Consulta por dolor abdominal\"\n  },\n  \"effectiveDateTime\": \"2025-03-20T07:30:00-05:00\",\n  \"performer\": [\n    {\n      \"reference\": \"Practitioner/{{practitionerId}}\",\n      \"display\": \"Dra. Andrea Lucía Salazar Moreno\"\n    }\n  ],\n  \"valueQuantity\": {\n    \"value\": 38.4,\n    \"unit\": \"°C\",\n    \"system\": \"http://unitsofmeasure.org\",\n    \"code\": \"Cel\"\n  }\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/06-observaciones/soluciones/06b_observation_temperatura.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const id = pm.response.json().id;",
+                  "pm.collectionVariables.set(\"obsTempId\", id);",
+                  "console.log(\"obsTempId = \" + id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "06c · Frecuencia respiratoria",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Observation",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"Observation\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Frecuencia respiratoria: 20 respiraciones por minuto.</p></div>\"\n  },\n  \"status\": \"final\",\n  \"category\": [\n    {\n      \"coding\": [\n        {\n          \"system\": \"http://terminology.hl7.org/CodeSystem/observation-category\",\n          \"code\": \"vital-signs\",\n          \"display\": \"Vital Signs\"\n        }\n      ]\n    }\n  ],\n  \"code\": {\n    \"coding\": [\n      {\n        \"system\": \"http://loinc.org\",\n        \"code\": \"9279-1\",\n        \"display\": \"Respiratory rate\"\n      }\n    ],\n    \"text\": \"Frecuencia respiratoria\"\n  },\n  \"subject\": {\n    \"reference\": \"Patient/{{patientId}}\",\n    \"display\": \"Luis Alberto Paredes Cevallos\"\n  },\n  \"encounter\": {\n    \"reference\": \"Encounter/{{encounterId}}\",\n    \"display\": \"Consulta por dolor abdominal\"\n  },\n  \"effectiveDateTime\": \"2025-03-20T07:30:00-05:00\",\n  \"performer\": [\n    {\n      \"reference\": \"Practitioner/{{practitionerId}}\",\n      \"display\": \"Dra. Andrea Lucía Salazar Moreno\"\n    }\n  ],\n  \"valueQuantity\": {\n    \"value\": 20,\n    \"unit\": \"respiraciones/min\",\n    \"system\": \"http://unitsofmeasure.org\",\n    \"code\": \"/min\"\n  }\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/06-observaciones/soluciones/06c_observation_frecuencia_respiratoria.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const id = pm.response.json().id;",
+                  "pm.collectionVariables.set(\"obsFRId\", id);",
+                  "console.log(\"obsFRId = \" + id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "06d · Frecuencia cardíaca",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Observation",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"Observation\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Frecuencia cardíaca: 102 latidos por minuto.</p></div>\"\n  },\n  \"status\": \"final\",\n  \"category\": [\n    {\n      \"coding\": [\n        {\n          \"system\": \"http://terminology.hl7.org/CodeSystem/observation-category\",\n          \"code\": \"vital-signs\",\n          \"display\": \"Vital Signs\"\n        }\n      ]\n    }\n  ],\n  \"code\": {\n    \"coding\": [\n      {\n        \"system\": \"http://loinc.org\",\n        \"code\": \"8867-4\",\n        \"display\": \"Heart rate\"\n      }\n    ],\n    \"text\": \"Frecuencia cardíaca\"\n  },\n  \"subject\": {\n    \"reference\": \"Patient/{{patientId}}\",\n    \"display\": \"Luis Alberto Paredes Cevallos\"\n  },\n  \"encounter\": {\n    \"reference\": \"Encounter/{{encounterId}}\",\n    \"display\": \"Consulta por dolor abdominal\"\n  },\n  \"effectiveDateTime\": \"2025-03-20T07:30:00-05:00\",\n  \"performer\": [\n    {\n      \"reference\": \"Practitioner/{{practitionerId}}\",\n      \"display\": \"Dra. Andrea Lucía Salazar Moreno\"\n    }\n  ],\n  \"valueQuantity\": {\n    \"value\": 102,\n    \"unit\": \"latidos/min\",\n    \"system\": \"http://unitsofmeasure.org\",\n    \"code\": \"/min\"\n  }\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/06-observaciones/soluciones/06d_observation_frecuencia_cardiaca.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const id = pm.response.json().id;",
+                  "pm.collectionVariables.set(\"obsFCId\", id);",
+                  "console.log(\"obsFCId = \" + id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "06e · Fiebre (valueBoolean)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Observation",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"Observation\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Fiebre: presente.</p></div>\"\n  },\n  \"status\": \"final\",\n  \"category\": [\n    {\n      \"coding\": [\n        {\n          \"system\": \"http://terminology.hl7.org/CodeSystem/observation-category\",\n          \"code\": \"exam\",\n          \"display\": \"Exam\"\n        }\n      ]\n    }\n  ],\n  \"code\": {\n    \"coding\": [\n      {\n        \"system\": \"http://snomed.info/sct\",\n        \"code\": \"386661006\",\n        \"display\": \"Fever\"\n      }\n    ],\n    \"text\": \"Fiebre\"\n  },\n  \"subject\": {\n    \"reference\": \"Patient/{{patientId}}\",\n    \"display\": \"Luis Alberto Paredes Cevallos\"\n  },\n  \"encounter\": {\n    \"reference\": \"Encounter/{{encounterId}}\",\n    \"display\": \"Consulta por dolor abdominal\"\n  },\n  \"effectiveDateTime\": \"2025-03-20T07:30:00-05:00\",\n  \"performer\": [\n    {\n      \"reference\": \"Practitioner/{{practitionerId}}\",\n      \"display\": \"Dra. Andrea Lucía Salazar Moreno\"\n    }\n  ],\n  \"valueBoolean\": true\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/06-observaciones/soluciones/06e_observation_fiebre_boolean.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "06f · Motivo de consulta (valueString)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Observation",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"Observation\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Motivo de consulta: dolor abdominal tipo cólico desde hace 3 días, con náuseas y diarrea.</p></div>\"\n  },\n  \"status\": \"final\",\n  \"category\": [\n    {\n      \"coding\": [\n        {\n          \"system\": \"http://terminology.hl7.org/CodeSystem/observation-category\",\n          \"code\": \"survey\",\n          \"display\": \"Survey\"\n        }\n      ]\n    }\n  ],\n  \"code\": {\n    \"coding\": [\n      {\n        \"system\": \"http://loinc.org\",\n        \"code\": \"10154-3\",\n        \"display\": \"Chief complaint Narrative - Reported\"\n      }\n    ],\n    \"text\": \"Motivo de consulta\"\n  },\n  \"subject\": {\n    \"reference\": \"Patient/{{patientId}}\",\n    \"display\": \"Luis Alberto Paredes Cevallos\"\n  },\n  \"encounter\": {\n    \"reference\": \"Encounter/{{encounterId}}\",\n    \"display\": \"Consulta por dolor abdominal\"\n  },\n  \"effectiveDateTime\": \"2025-03-20T07:30:00-05:00\",\n  \"performer\": [\n    {\n      \"reference\": \"Practitioner/{{practitionerId}}\",\n      \"display\": \"Dra. Andrea Lucía Salazar Moreno\"\n    }\n  ],\n  \"valueString\": \"Dolor abdominal tipo cólico desde hace 3 días, con náuseas y diarrea.\"\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/06-observaciones/soluciones/06f_observation_motivo_string.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "06g · Sangre oculta en heces (valueCodeableConcept)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Observation",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"Observation\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Sangre oculta en heces: positivo.</p></div>\"\n  },\n  \"status\": \"final\",\n  \"category\": [\n    {\n      \"coding\": [\n        {\n          \"system\": \"http://terminology.hl7.org/CodeSystem/observation-category\",\n          \"code\": \"laboratory\",\n          \"display\": \"Laboratory\"\n        }\n      ]\n    }\n  ],\n  \"code\": {\n    \"coding\": [\n      {\n        \"system\": \"http://loinc.org\",\n        \"code\": \"2335-8\",\n        \"display\": \"Hemoglobin [Presence] in Stool from gastrointestinal\"\n      }\n    ],\n    \"text\": \"Sangre oculta en heces\"\n  },\n  \"subject\": {\n    \"reference\": \"Patient/{{patientId}}\",\n    \"display\": \"Luis Alberto Paredes Cevallos\"\n  },\n  \"encounter\": {\n    \"reference\": \"Encounter/{{encounterId}}\",\n    \"display\": \"Consulta por dolor abdominal\"\n  },\n  \"effectiveDateTime\": \"2025-03-20T07:30:00-05:00\",\n  \"performer\": [\n    {\n      \"reference\": \"Practitioner/{{practitionerId}}\",\n      \"display\": \"Dra. Andrea Lucía Salazar Moreno\"\n    }\n  ],\n  \"valueCodeableConcept\": {\n    \"coding\": [\n      {\n        \"system\": \"http://snomed.info/sct\",\n        \"code\": \"10828004\",\n        \"display\": \"Positive\"\n      }\n    ],\n    \"text\": \"Positivo\"\n  }\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/06-observaciones/soluciones/06g_observation_sangre_oculta_codeable.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "06h · Título serológico (valueRatio)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Observation",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"Observation\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Título de anticuerpos contra Salmonella (reacción de Widal, antígeno O): 1:160.</p></div>\"\n  },\n  \"status\": \"final\",\n  \"category\": [\n    {\n      \"coding\": [\n        {\n          \"system\": \"http://terminology.hl7.org/CodeSystem/observation-category\",\n          \"code\": \"laboratory\",\n          \"display\": \"Laboratory\"\n        }\n      ]\n    }\n  ],\n  \"code\": {\n    \"text\": \"Salmonella typhi O, anticuerpos (título) en suero\"\n  },\n  \"subject\": {\n    \"reference\": \"Patient/{{patientId}}\",\n    \"display\": \"Luis Alberto Paredes Cevallos\"\n  },\n  \"encounter\": {\n    \"reference\": \"Encounter/{{encounterId}}\",\n    \"display\": \"Consulta por dolor abdominal\"\n  },\n  \"effectiveDateTime\": \"2025-03-20T07:30:00-05:00\",\n  \"performer\": [\n    {\n      \"reference\": \"Practitioner/{{practitionerId}}\",\n      \"display\": \"Dra. Andrea Lucía Salazar Moreno\"\n    }\n  ],\n  \"valueRatio\": {\n    \"numerator\": {\n      \"value\": 1\n    },\n    \"denominator\": {\n      \"value\": 160\n    }\n  }\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/06-observaciones/soluciones/06h_observation_titulo_ratio.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "06i · Signos vitales del paciente",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Observation?subject=Patient/{{patientId}}&category=vital-signs"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "07 · Documentos clínicos",
+      "item": [
+        {
+          "name": "07a · Composition de signos vitales",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Composition",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"Composition\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Nota de signos vitales del 20 de marzo de 2025.</p><p>Presión arterial 128/84 mmHg; Temperatura 38,4 °C; Frecuencia respiratoria 20/min; Frecuencia cardíaca 102/min.</p></div>\"\n  },\n  \"identifier\": {\n    \"system\": \"https://f-slg.github.io/aprende-fhir/sid/documento\",\n    \"value\": \"DOC-2025-0001\"\n  },\n  \"status\": \"final\",\n  \"type\": {\n    \"coding\": [\n      {\n        \"system\": \"http://loinc.org\",\n        \"code\": \"8716-3\",\n        \"display\": \"Vital signs note\"\n      }\n    ],\n    \"text\": \"Nota de signos vitales\"\n  },\n  \"subject\": {\n    \"reference\": \"Patient/{{patientId}}\",\n    \"display\": \"Luis Alberto Paredes Cevallos\"\n  },\n  \"encounter\": {\n    \"reference\": \"Encounter/{{encounterId}}\",\n    \"display\": \"Consulta por dolor abdominal\"\n  },\n  \"date\": \"2025-03-20T08:00:00-05:00\",\n  \"author\": [\n    {\n      \"reference\": \"Practitioner/{{practitionerId}}\",\n      \"display\": \"Dra. Andrea Lucía Salazar Moreno\"\n    }\n  ],\n  \"title\": \"Signos vitales - consulta del 20 de marzo de 2025\",\n  \"custodian\": {\n    \"reference\": \"Organization/{{hospitalId}}\",\n    \"display\": \"Hospital General Docente Ejemplo\"\n  },\n  \"section\": [\n    {\n      \"title\": \"Signos vitales\",\n      \"code\": {\n        \"coding\": [\n          {\n            \"system\": \"http://loinc.org\",\n            \"code\": \"8716-3\",\n            \"display\": \"Vital signs note\"\n          }\n        ],\n        \"text\": \"Nota de signos vitales\"\n      },\n      \"text\": {\n        \"status\": \"generated\",\n        \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Presión arterial 128/84 mmHg; Temperatura 38,4 °C; Frecuencia respiratoria 20/min; Frecuencia cardíaca 102/min.</p></div>\"\n      },\n      \"entry\": [\n        {\n          \"reference\": \"Observation/{{obsPAId}}\",\n          \"display\": \"Presión arterial 128/84 mmHg\"\n        },\n        {\n          \"reference\": \"Observation/{{obsTempId}}\",\n          \"display\": \"Temperatura 38,4 °C\"\n        },\n        {\n          \"reference\": \"Observation/{{obsFRId}}\",\n          \"display\": \"Frecuencia respiratoria 20/min\"\n        },\n        {\n          \"reference\": \"Observation/{{obsFCId}}\",\n          \"display\": \"Frecuencia cardíaca 102/min\"\n        }\n      ]\n    }\n  ]\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/07-documentos-clinicos/soluciones/07a_composition_signos_vitales.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const id = pm.response.json().id;",
+                  "pm.collectionVariables.set(\"compositionId\", id);",
+                  "console.log(\"compositionId = \" + id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "07b · Documento clínico autocontenido (Bundle document)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Bundle",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"Bundle\",\n  \"identifier\": {\n    \"system\": \"https://f-slg.github.io/aprende-fhir/sid/documento\",\n    \"value\": \"DOC-2025-0002\"\n  },\n  \"type\": \"document\",\n  \"timestamp\": \"2025-03-20T08:05:00-05:00\",\n  \"entry\": [\n    {\n      \"fullUrl\": \"urn:uuid:f2d231e7-98de-552d-a4b7-3746c969fc7d\",\n      \"resource\": {\n        \"resourceType\": \"Composition\",\n        \"text\": {\n          \"status\": \"generated\",\n          \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Nota de signos vitales del 20 de marzo de 2025.</p><p>Presión arterial 128/84 mmHg; Temperatura 38,4 °C; Frecuencia respiratoria 20/min; Frecuencia cardíaca 102/min.</p></div>\"\n        },\n        \"identifier\": {\n          \"system\": \"https://f-slg.github.io/aprende-fhir/sid/documento\",\n          \"value\": \"DOC-2025-0002\"\n        },\n        \"status\": \"final\",\n        \"type\": {\n          \"coding\": [\n            {\n              \"system\": \"http://loinc.org\",\n              \"code\": \"8716-3\",\n              \"display\": \"Vital signs note\"\n            }\n          ],\n          \"text\": \"Nota de signos vitales\"\n        },\n        \"subject\": {\n          \"reference\": \"urn:uuid:23ec1dbb-82a6-5861-a7e6-e740e360bbd1\",\n          \"display\": \"Luis Alberto Paredes Cevallos\"\n        },\n        \"date\": \"2025-03-20T08:00:00-05:00\",\n        \"author\": [\n          {\n            \"reference\": \"urn:uuid:bcc451cc-0c62-55f2-b2ac-7bb05c17b7d3\",\n            \"display\": \"Dra. Andrea Lucía Salazar Moreno\"\n          }\n        ],\n        \"title\": \"Signos vitales - consulta del 20 de marzo de 2025\",\n        \"custodian\": {\n          \"reference\": \"urn:uuid:da2c5e11-c915-559b-8a94-5300b874e626\",\n          \"display\": \"Hospital General Docente Ejemplo\"\n        },\n        \"section\": [\n          {\n            \"title\": \"Signos vitales\",\n            \"code\": {\n              \"coding\": [\n                {\n                  \"system\": \"http://loinc.org\",\n                  \"code\": \"8716-3\",\n                  \"display\": \"Vital signs note\"\n                }\n              ],\n              \"text\": \"Nota de signos vitales\"\n            },\n            \"text\": {\n              \"status\": \"generated\",\n              \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Presión arterial 128/84 mmHg; Temperatura 38,4 °C; Frecuencia respiratoria 20/min; Frecuencia cardíaca 102/min.</p></div>\"\n            },\n            \"entry\": [\n              {\n                \"reference\": \"urn:uuid:453da060-c4e9-52ef-b373-aedfa9e26711\",\n                \"display\": \"Presión arterial 128/84 mmHg\"\n              },\n              {\n                \"reference\": \"urn:uuid:8d27fb7c-9930-53dd-a567-2f2e4ed7a846\",\n                \"display\": \"Temperatura 38,4 °C\"\n              },\n              {\n                \"reference\": \"urn:uuid:d2df19f2-5d73-5898-bfd0-e5cbb017981f\",\n                \"display\": \"Frecuencia respiratoria 20/min\"\n              },\n              {\n                \"reference\": \"urn:uuid:80d55c13-a24b-53e1-86ff-30e1ba30e878\",\n                \"display\": \"Frecuencia cardíaca 102/min\"\n              }\n            ]\n          }\n        ]\n      }\n    },\n    {\n      \"fullUrl\": \"urn:uuid:23ec1dbb-82a6-5861-a7e6-e740e360bbd1\",\n      \"resource\": {\n        \"resourceType\": \"Patient\",\n        \"text\": {\n          \"status\": \"generated\",\n          \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Luis Alberto Paredes Cevallos, hombre, nacido el 12 de marzo de 1979 en Riobamba.</p><p>Cédula ficticia 9900000017 · Historia clínica HC-000123.</p></div>\"\n        },\n        \"identifier\": [\n          {\n            \"use\": \"official\",\n            \"type\": {\n              \"coding\": [\n                {\n                  \"system\": \"http://terminology.hl7.org/CodeSystem/v2-0203\",\n                  \"code\": \"NI\",\n                  \"display\": \"National unique individual identifier\"\n                }\n              ],\n              \"text\": \"Cédula de identidad\"\n            },\n            \"system\": \"https://f-slg.github.io/aprende-fhir/sid/cedula\",\n            \"value\": \"9900000017\"\n          },\n          {\n            \"use\": \"usual\",\n            \"type\": {\n              \"coding\": [\n                {\n                  \"system\": \"http://terminology.hl7.org/CodeSystem/v2-0203\",\n                  \"code\": \"MR\",\n                  \"display\": \"Medical record number\"\n                }\n              ],\n              \"text\": \"Historia clínica\"\n            },\n            \"system\": \"https://f-slg.github.io/aprende-fhir/sid/historia-clinica/hospital-general-docente-ejemplo\",\n            \"value\": \"HC-000123\"\n          }\n        ],\n        \"active\": true,\n        \"name\": [\n          {\n            \"use\": \"official\",\n            \"text\": \"Luis Alberto Paredes Cevallos\",\n            \"family\": \"Paredes Cevallos\",\n            \"_family\": {\n              \"extension\": [\n                {\n                  \"url\": \"http://hl7.org/fhir/StructureDefinition/humanname-fathers-family\",\n                  \"valueString\": \"Paredes\"\n                },\n                {\n                  \"url\": \"http://hl7.org/fhir/StructureDefinition/humanname-mothers-family\",\n                  \"valueString\": \"Cevallos\"\n                }\n              ]\n            },\n            \"given\": [\n              \"Luis\",\n              \"Alberto\"\n            ]\n          },\n          {\n            \"use\": \"usual\",\n            \"text\": \"Luis Paredes\"\n          }\n        ],\n        \"gender\": \"male\",\n        \"birthDate\": \"1979-03-12\",\n        \"address\": [\n          {\n            \"use\": \"home\",\n            \"type\": \"physical\",\n            \"line\": [\n              \"Av. de los Ejemplos N00-00 y calle Ficticia\"\n            ],\n            \"city\": \"Quito\",\n            \"district\": \"Quito\",\n            \"state\": \"Pichincha\",\n            \"country\": \"EC\"\n          }\n        ],\n        \"communication\": [\n          {\n            \"language\": {\n              \"coding\": [\n                {\n                  \"system\": \"urn:ietf:bcp:47\",\n                  \"code\": \"es\",\n                  \"display\": \"Spanish\"\n                }\n              ],\n              \"text\": \"Español\"\n            },\n            \"preferred\": true\n          }\n        ],\n        \"extension\": [\n          {\n            \"url\": \"http://hl7.org/fhir/StructureDefinition/patient-birthPlace\",\n            \"valueAddress\": {\n              \"city\": \"Riobamba\",\n              \"state\": \"Chimborazo\",\n              \"country\": \"EC\"\n            }\n          }\n        ]\n      }\n    },\n    {\n      \"fullUrl\": \"urn:uuid:bcc451cc-0c62-55f2-b2ac-7bb05c17b7d3\",\n      \"resource\": {\n        \"resourceType\": \"Practitioner\",\n        \"text\": {\n          \"status\": \"generated\",\n          \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Dra. Andrea Lucía Salazar Moreno, médica general. Registro profesional ficticio RP-000457.</p></div>\"\n        },\n        \"identifier\": [\n          {\n            \"use\": \"official\",\n            \"system\": \"https://f-slg.github.io/aprende-fhir/sid/registro-profesional\",\n            \"value\": \"RP-000457\"\n          }\n        ],\n        \"active\": true,\n        \"name\": [\n          {\n            \"use\": \"official\",\n            \"text\": \"Dra. Andrea Lucía Salazar Moreno\",\n            \"prefix\": [\n              \"Dra.\"\n            ],\n            \"family\": \"Salazar Moreno\",\n            \"given\": [\n              \"Andrea\",\n              \"Lucía\"\n            ]\n          }\n        ],\n        \"telecom\": [\n          {\n            \"system\": \"email\",\n            \"value\": \"andrea.salazar@hospital-ejemplo.invalid\",\n            \"use\": \"work\"\n          }\n        ],\n        \"gender\": \"female\",\n        \"qualification\": [\n          {\n            \"code\": {\n              \"coding\": [\n                {\n                  \"system\": \"http://terminology.hl7.org/CodeSystem/v2-0360\",\n                  \"code\": \"MD\",\n                  \"display\": \"Doctor of Medicine\"\n                }\n              ],\n              \"text\": \"Médica\"\n            }\n          }\n        ]\n      }\n    },\n    {\n      \"fullUrl\": \"urn:uuid:da2c5e11-c915-559b-8a94-5300b874e626\",\n      \"resource\": {\n        \"resourceType\": \"Organization\",\n        \"text\": {\n          \"status\": \"generated\",\n          \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Hospital General Docente Ejemplo, parte de la Red de Servicios de Salud Ejemplo (ficticia).</p></div>\"\n        },\n        \"identifier\": [\n          {\n            \"system\": \"https://f-slg.github.io/aprende-fhir/sid/establecimiento\",\n            \"value\": \"HGDE-0001\"\n          }\n        ],\n        \"active\": true,\n        \"type\": [\n          {\n            \"coding\": [\n              {\n                \"system\": \"http://terminology.hl7.org/CodeSystem/organization-type\",\n                \"code\": \"prov\",\n                \"display\": \"Healthcare Provider\"\n              }\n            ]\n          }\n        ],\n        \"name\": \"Hospital General Docente Ejemplo\",\n        \"telecom\": [\n          {\n            \"system\": \"phone\",\n            \"value\": \"+593 2 000 0000\",\n            \"use\": \"work\"\n          }\n        ],\n        \"address\": [\n          {\n            \"line\": [\n              \"Av. Principal Ejemplo S00-00\"\n            ],\n            \"city\": \"Quito\",\n            \"state\": \"Pichincha\",\n            \"country\": \"EC\"\n          }\n        ]\n      }\n    },\n    {\n      \"fullUrl\": \"urn:uuid:453da060-c4e9-52ef-b373-aedfa9e26711\",\n      \"resource\": {\n        \"resourceType\": \"Observation\",\n        \"text\": {\n          \"status\": \"generated\",\n          \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Presión arterial: 128/84 mmHg.</p></div>\"\n        },\n        \"status\": \"final\",\n        \"category\": [\n          {\n            \"coding\": [\n              {\n                \"system\": \"http://terminology.hl7.org/CodeSystem/observation-category\",\n                \"code\": \"vital-signs\",\n                \"display\": \"Vital Signs\"\n              }\n            ]\n          }\n        ],\n        \"code\": {\n          \"coding\": [\n            {\n              \"system\": \"http://loinc.org\",\n              \"code\": \"85354-9\",\n              \"display\": \"Blood pressure panel with all children optional\"\n            }\n          ],\n          \"text\": \"Presión arterial\"\n        },\n        \"subject\": {\n          \"reference\": \"urn:uuid:23ec1dbb-82a6-5861-a7e6-e740e360bbd1\",\n          \"display\": \"Luis Alberto Paredes Cevallos\"\n        },\n        \"effectiveDateTime\": \"2025-03-20T07:30:00-05:00\",\n        \"performer\": [\n          {\n            \"reference\": \"urn:uuid:bcc451cc-0c62-55f2-b2ac-7bb05c17b7d3\",\n            \"display\": \"Dra. Andrea Lucía Salazar Moreno\"\n          }\n        ],\n        \"component\": [\n          {\n            \"code\": {\n              \"coding\": [\n                {\n                  \"system\": \"http://loinc.org\",\n                  \"code\": \"8480-6\",\n                  \"display\": \"Systolic blood pressure\"\n                }\n              ],\n              \"text\": \"Presión sistólica\"\n            },\n            \"valueQuantity\": {\n              \"value\": 128,\n              \"unit\": \"mmHg\",\n              \"system\": \"http://unitsofmeasure.org\",\n              \"code\": \"mm[Hg]\"\n            }\n          },\n          {\n            \"code\": {\n              \"coding\": [\n                {\n                  \"system\": \"http://loinc.org\",\n                  \"code\": \"8462-4\",\n                  \"display\": \"Diastolic blood pressure\"\n                }\n              ],\n              \"text\": \"Presión diastólica\"\n            },\n            \"valueQuantity\": {\n              \"value\": 84,\n              \"unit\": \"mmHg\",\n              \"system\": \"http://unitsofmeasure.org\",\n              \"code\": \"mm[Hg]\"\n            }\n          }\n        ]\n      }\n    },\n    {\n      \"fullUrl\": \"urn:uuid:8d27fb7c-9930-53dd-a567-2f2e4ed7a846\",\n      \"resource\": {\n        \"resourceType\": \"Observation\",\n        \"text\": {\n          \"status\": \"generated\",\n          \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Temperatura corporal: 38,4 °C.</p></div>\"\n        },\n        \"status\": \"final\",\n        \"category\": [\n          {\n            \"coding\": [\n              {\n                \"system\": \"http://terminology.hl7.org/CodeSystem/observation-category\",\n                \"code\": \"vital-signs\",\n                \"display\": \"Vital Signs\"\n              }\n            ]\n          }\n        ],\n        \"code\": {\n          \"coding\": [\n            {\n              \"system\": \"http://loinc.org\",\n              \"code\": \"8310-5\",\n              \"display\": \"Body temperature\"\n            }\n          ],\n          \"text\": \"Temperatura corporal\"\n        },\n        \"subject\": {\n          \"reference\": \"urn:uuid:23ec1dbb-82a6-5861-a7e6-e740e360bbd1\",\n          \"display\": \"Luis Alberto Paredes Cevallos\"\n        },\n        \"effectiveDateTime\": \"2025-03-20T07:30:00-05:00\",\n        \"performer\": [\n          {\n            \"reference\": \"urn:uuid:bcc451cc-0c62-55f2-b2ac-7bb05c17b7d3\",\n            \"display\": \"Dra. Andrea Lucía Salazar Moreno\"\n          }\n        ],\n        \"valueQuantity\": {\n          \"value\": 38.4,\n          \"unit\": \"°C\",\n          \"system\": \"http://unitsofmeasure.org\",\n          \"code\": \"Cel\"\n        }\n      }\n    },\n    {\n      \"fullUrl\": \"urn:uuid:d2df19f2-5d73-5898-bfd0-e5cbb017981f\",\n      \"resource\": {\n        \"resourceType\": \"Observation\",\n        \"text\": {\n          \"status\": \"generated\",\n          \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Frecuencia respiratoria: 20 respiraciones por minuto.</p></div>\"\n        },\n        \"status\": \"final\",\n        \"category\": [\n          {\n            \"coding\": [\n              {\n                \"system\": \"http://terminology.hl7.org/CodeSystem/observation-category\",\n                \"code\": \"vital-signs\",\n                \"display\": \"Vital Signs\"\n              }\n            ]\n          }\n        ],\n        \"code\": {\n          \"coding\": [\n            {\n              \"system\": \"http://loinc.org\",\n              \"code\": \"9279-1\",\n              \"display\": \"Respiratory rate\"\n            }\n          ],\n          \"text\": \"Frecuencia respiratoria\"\n        },\n        \"subject\": {\n          \"reference\": \"urn:uuid:23ec1dbb-82a6-5861-a7e6-e740e360bbd1\",\n          \"display\": \"Luis Alberto Paredes Cevallos\"\n        },\n        \"effectiveDateTime\": \"2025-03-20T07:30:00-05:00\",\n        \"performer\": [\n          {\n            \"reference\": \"urn:uuid:bcc451cc-0c62-55f2-b2ac-7bb05c17b7d3\",\n            \"display\": \"Dra. Andrea Lucía Salazar Moreno\"\n          }\n        ],\n        \"valueQuantity\": {\n          \"value\": 20,\n          \"unit\": \"respiraciones/min\",\n          \"system\": \"http://unitsofmeasure.org\",\n          \"code\": \"/min\"\n        }\n      }\n    },\n    {\n      \"fullUrl\": \"urn:uuid:80d55c13-a24b-53e1-86ff-30e1ba30e878\",\n      \"resource\": {\n        \"resourceType\": \"Observation\",\n        \"text\": {\n          \"status\": \"generated\",\n          \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Frecuencia cardíaca: 102 latidos por minuto.</p></div>\"\n        },\n        \"status\": \"final\",\n        \"category\": [\n          {\n            \"coding\": [\n              {\n                \"system\": \"http://terminology.hl7.org/CodeSystem/observation-category\",\n                \"code\": \"vital-signs\",\n                \"display\": \"Vital Signs\"\n              }\n            ]\n          }\n        ],\n        \"code\": {\n          \"coding\": [\n            {\n              \"system\": \"http://loinc.org\",\n              \"code\": \"8867-4\",\n              \"display\": \"Heart rate\"\n            }\n          ],\n          \"text\": \"Frecuencia cardíaca\"\n        },\n        \"subject\": {\n          \"reference\": \"urn:uuid:23ec1dbb-82a6-5861-a7e6-e740e360bbd1\",\n          \"display\": \"Luis Alberto Paredes Cevallos\"\n        },\n        \"effectiveDateTime\": \"2025-03-20T07:30:00-05:00\",\n        \"performer\": [\n          {\n            \"reference\": \"urn:uuid:bcc451cc-0c62-55f2-b2ac-7bb05c17b7d3\",\n            \"display\": \"Dra. Andrea Lucía Salazar Moreno\"\n          }\n        ],\n        \"valueQuantity\": {\n          \"value\": 102,\n          \"unit\": \"latidos/min\",\n          \"system\": \"http://unitsofmeasure.org\",\n          \"code\": \"/min\"\n        }\n      }\n    }\n  ]\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/07-documentos-clinicos/soluciones/07b_bundle_document_signos_vitales.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const id = pm.response.json().id;",
+                  "pm.collectionVariables.set(\"bundleDocId\", id);",
+                  "console.log(\"bundleDocId = \" + id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "07c · Leer el documento",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Bundle/{{bundleDocId}}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "08 · Anatomía patológica",
+      "item": [
+        {
+          "name": "08a · Registrar el tumor (BodyStructure)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/BodyStructure",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"BodyStructure\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Tumor primario en mama izquierda: carcinoma ductal infiltrante.</p></div>\"\n  },\n  \"identifier\": [\n    {\n      \"system\": \"https://f-slg.github.io/aprende-fhir/sid/estructura-corporal\",\n      \"value\": \"EC-2025-0001\"\n    }\n  ],\n  \"active\": true,\n  \"morphology\": {\n    \"coding\": [\n      {\n        \"system\": \"http://snomed.info/sct\",\n        \"code\": \"82711006\",\n        \"display\": \"Infiltrating duct carcinoma\"\n      }\n    ],\n    \"text\": \"Carcinoma ductal infiltrante\"\n  },\n  \"location\": {\n    \"coding\": [\n      {\n        \"system\": \"http://snomed.info/sct\",\n        \"code\": \"80248007\",\n        \"display\": \"Left breast structure\"\n      }\n    ],\n    \"text\": \"Mama izquierda\"\n  },\n  \"description\": \"Carcinoma ductal infiltrante primario de mama izquierda\",\n  \"patient\": {\n    \"reference\": \"Patient/{{patientId}}\",\n    \"display\": \"Luis Alberto Paredes Cevallos\"\n  }\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/08-anatomia-patologica/soluciones/08a_bodystructure_tumor.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const id = pm.response.json().id;",
+                  "pm.collectionVariables.set(\"bodyStructureId\", id);",
+                  "console.log(\"bodyStructureId = \" + id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "08b · Precisar la ubicación del tumor",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/BodyStructure/{{bodyStructureId}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"BodyStructure\",\n  \"id\": \"{{bodyStructureId}}\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Tumor primario en mama izquierda: carcinoma ductal infiltrante.</p><p>Ubicación precisada: cuadrante superior externo.</p></div>\"\n  },\n  \"identifier\": [\n    {\n      \"system\": \"https://f-slg.github.io/aprende-fhir/sid/estructura-corporal\",\n      \"value\": \"EC-2025-0001\"\n    }\n  ],\n  \"active\": true,\n  \"morphology\": {\n    \"coding\": [\n      {\n        \"system\": \"http://snomed.info/sct\",\n        \"code\": \"82711006\",\n        \"display\": \"Infiltrating duct carcinoma\"\n      }\n    ],\n    \"text\": \"Carcinoma ductal infiltrante\"\n  },\n  \"location\": {\n    \"coding\": [\n      {\n        \"system\": \"http://snomed.info/sct\",\n        \"code\": \"80248007\",\n        \"display\": \"Left breast structure\"\n      }\n    ],\n    \"text\": \"Mama izquierda\"\n  },\n  \"description\": \"Carcinoma ductal infiltrante primario de mama izquierda, cuadrante superior externo\",\n  \"patient\": {\n    \"reference\": \"Patient/{{patientId}}\",\n    \"display\": \"Luis Alberto Paredes Cevallos\"\n  },\n  \"locationQualifier\": [\n    {\n      \"coding\": [\n        {\n          \"system\": \"http://snomed.info/sct\",\n          \"code\": \"7771000\",\n          \"display\": \"Left\"\n        }\n      ],\n      \"text\": \"Izquierdo\"\n    }\n  ]\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/08-anatomia-patologica/soluciones/08b_bodystructure_actualizar.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "08c · Registrar la biopsia (Specimen)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Specimen",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"Specimen\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Biopsia de tejido tumoral de mama izquierda (AP-2025-0457). Estado: available.</p></div>\"\n  },\n  \"identifier\": [\n    {\n      \"system\": \"https://f-slg.github.io/aprende-fhir/sid/muestra\",\n      \"value\": \"AP-2025-0457\"\n    }\n  ],\n  \"status\": \"available\",\n  \"type\": {\n    \"coding\": [\n      {\n        \"system\": \"http://snomed.info/sct\",\n        \"code\": \"258435002\",\n        \"display\": \"Tumor tissue sample\"\n      }\n    ],\n    \"text\": \"Tejido tumoral\"\n  },\n  \"subject\": {\n    \"reference\": \"Patient/{{patientId}}\",\n    \"display\": \"Luis Alberto Paredes Cevallos\"\n  },\n  \"receivedTime\": \"2025-05-06T10:30:00-05:00\",\n  \"collection\": {\n    \"collector\": {\n      \"reference\": \"Practitioner/{{practitionerId}}\",\n      \"display\": \"Dra. Andrea Lucía Salazar Moreno\"\n    },\n    \"collectedDateTime\": \"2025-05-06T09:00:00-05:00\",\n    \"method\": {\n      \"coding\": [\n        {\n          \"system\": \"http://snomed.info/sct\",\n          \"code\": \"129314006\",\n          \"display\": \"Biopsy - action\"\n        }\n      ],\n      \"text\": \"Biopsia\"\n    },\n    \"bodySite\": {\n      \"coding\": [\n        {\n          \"system\": \"http://snomed.info/sct\",\n          \"code\": \"80248007\",\n          \"display\": \"Left breast structure\"\n        }\n      ],\n      \"text\": \"Mama izquierda\"\n    }\n  }\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/08-anatomia-patologica/soluciones/08c_specimen_crear.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const id = pm.response.json().id;",
+                  "pm.collectionVariables.set(\"specimenId\", id);",
+                  "console.log(\"specimenId = \" + id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "08d · Marcar la muestra como agotada",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Specimen/{{specimenId}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"Specimen\",\n  \"id\": \"{{specimenId}}\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Biopsia de tejido tumoral de mama izquierda (AP-2025-0457). Estado: unavailable.</p></div>\"\n  },\n  \"identifier\": [\n    {\n      \"system\": \"https://f-slg.github.io/aprende-fhir/sid/muestra\",\n      \"value\": \"AP-2025-0457\"\n    }\n  ],\n  \"status\": \"unavailable\",\n  \"type\": {\n    \"coding\": [\n      {\n        \"system\": \"http://snomed.info/sct\",\n        \"code\": \"258435002\",\n        \"display\": \"Tumor tissue sample\"\n      }\n    ],\n    \"text\": \"Tejido tumoral\"\n  },\n  \"subject\": {\n    \"reference\": \"Patient/{{patientId}}\",\n    \"display\": \"Luis Alberto Paredes Cevallos\"\n  },\n  \"receivedTime\": \"2025-05-06T10:30:00-05:00\",\n  \"collection\": {\n    \"collector\": {\n      \"reference\": \"Practitioner/{{practitionerId}}\",\n      \"display\": \"Dra. Andrea Lucía Salazar Moreno\"\n    },\n    \"collectedDateTime\": \"2025-05-06T09:00:00-05:00\",\n    \"method\": {\n      \"coding\": [\n        {\n          \"system\": \"http://snomed.info/sct\",\n          \"code\": \"129314006\",\n          \"display\": \"Biopsy - action\"\n        }\n      ],\n      \"text\": \"Biopsia\"\n    },\n    \"bodySite\": {\n      \"coding\": [\n        {\n          \"system\": \"http://snomed.info/sct\",\n          \"code\": \"80248007\",\n          \"display\": \"Left breast structure\"\n        }\n      ],\n      \"text\": \"Mama izquierda\"\n    }\n  },\n  \"note\": [\n    {\n      \"text\": \"Muestra agotada tras los estudios de inmunohistoquímica.\"\n    }\n  ]\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/08-anatomia-patologica/soluciones/08d_specimen_actualizar.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "08e · Tamaño del tumor: 2,5 cm",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Observation",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"Observation\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Tamaño del tumor: 2,5 cm. Estado: final.</p></div>\"\n  },\n  \"status\": \"final\",\n  \"category\": [\n    {\n      \"coding\": [\n        {\n          \"system\": \"http://terminology.hl7.org/CodeSystem/observation-category\",\n          \"code\": \"laboratory\",\n          \"display\": \"Laboratory\"\n        }\n      ]\n    }\n  ],\n  \"code\": {\n    \"coding\": [\n      {\n        \"system\": \"http://snomed.info/sct\",\n        \"code\": \"263605001\",\n        \"display\": \"Length dimension of neoplasm\"\n      }\n    ],\n    \"text\": \"Tamaño del tumor\"\n  },\n  \"subject\": {\n    \"reference\": \"Patient/{{patientId}}\",\n    \"display\": \"Luis Alberto Paredes Cevallos\"\n  },\n  \"focus\": [\n    {\n      \"reference\": \"BodyStructure/{{bodyStructureId}}\",\n      \"display\": \"Tumor de mama izquierda\"\n    }\n  ],\n  \"effectiveDateTime\": \"2025-05-08\",\n  \"performer\": [\n    {\n      \"reference\": \"Practitioner/{{practitionerId}}\",\n      \"display\": \"Dra. Andrea Lucía Salazar Moreno\"\n    }\n  ],\n  \"valueQuantity\": {\n    \"value\": 2.5,\n    \"unit\": \"cm\",\n    \"system\": \"http://unitsofmeasure.org\",\n    \"code\": \"cm\"\n  },\n  \"bodySite\": {\n    \"coding\": [\n      {\n        \"system\": \"http://snomed.info/sct\",\n        \"code\": \"80248007\",\n        \"display\": \"Left breast structure\"\n      }\n    ],\n    \"text\": \"Mama izquierda\"\n  },\n  \"specimen\": {\n    \"reference\": \"Specimen/{{specimenId}}\",\n    \"display\": \"Biopsia AP-2025-0457\"\n  }\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/08-anatomia-patologica/soluciones/08e_observation_tamano_tumor.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const id = pm.response.json().id;",
+                  "pm.collectionVariables.set(\"obsTumorId\", id);",
+                  "console.log(\"obsTumorId = \" + id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "08f · Corregir el tamaño a 3,5 cm (amended)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Observation/{{obsTumorId}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"Observation\",\n  \"id\": \"{{obsTumorId}}\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Tamaño del tumor: 3,5 cm. Estado: amended.</p></div>\"\n  },\n  \"status\": \"amended\",\n  \"category\": [\n    {\n      \"coding\": [\n        {\n          \"system\": \"http://terminology.hl7.org/CodeSystem/observation-category\",\n          \"code\": \"laboratory\",\n          \"display\": \"Laboratory\"\n        }\n      ]\n    }\n  ],\n  \"code\": {\n    \"coding\": [\n      {\n        \"system\": \"http://snomed.info/sct\",\n        \"code\": \"263605001\",\n        \"display\": \"Length dimension of neoplasm\"\n      }\n    ],\n    \"text\": \"Tamaño del tumor\"\n  },\n  \"subject\": {\n    \"reference\": \"Patient/{{patientId}}\",\n    \"display\": \"Luis Alberto Paredes Cevallos\"\n  },\n  \"focus\": [\n    {\n      \"reference\": \"BodyStructure/{{bodyStructureId}}\",\n      \"display\": \"Tumor de mama izquierda\"\n    }\n  ],\n  \"effectiveDateTime\": \"2025-05-08\",\n  \"performer\": [\n    {\n      \"reference\": \"Practitioner/{{practitionerId}}\",\n      \"display\": \"Dra. Andrea Lucía Salazar Moreno\"\n    }\n  ],\n  \"valueQuantity\": {\n    \"value\": 3.5,\n    \"unit\": \"cm\",\n    \"system\": \"http://unitsofmeasure.org\",\n    \"code\": \"cm\"\n  },\n  \"bodySite\": {\n    \"coding\": [\n      {\n        \"system\": \"http://snomed.info/sct\",\n        \"code\": \"80248007\",\n        \"display\": \"Left breast structure\"\n      }\n    ],\n    \"text\": \"Mama izquierda\"\n  },\n  \"specimen\": {\n    \"reference\": \"Specimen/{{specimenId}}\",\n    \"display\": \"Biopsia AP-2025-0457\"\n  },\n  \"note\": [\n    {\n      \"text\": \"Corrección: la medición inicial de 2,5 cm se rectifica a 3,5 cm tras la revisión de la pieza.\"\n    }\n  ]\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/08-anatomia-patologica/soluciones/08f_observation_tamano_tumor_actualizar.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "08g · Receptor de estrógeno positivo",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Observation",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"Observation\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Receptor de estrógeno: positivo.</p></div>\"\n  },\n  \"status\": \"final\",\n  \"category\": [\n    {\n      \"coding\": [\n        {\n          \"system\": \"http://terminology.hl7.org/CodeSystem/observation-category\",\n          \"code\": \"laboratory\",\n          \"display\": \"Laboratory\"\n        }\n      ]\n    }\n  ],\n  \"code\": {\n    \"coding\": [\n      {\n        \"system\": \"http://loinc.org\",\n        \"code\": \"85337-4\",\n        \"display\": \"Estrogen receptor Ag [Presence] in Breast cancer specimen by Immune stain\"\n      }\n    ],\n    \"text\": \"Receptor de estrógeno\"\n  },\n  \"subject\": {\n    \"reference\": \"Patient/{{patientId}}\",\n    \"display\": \"Luis Alberto Paredes Cevallos\"\n  },\n  \"effectiveDateTime\": \"2025-05-12\",\n  \"performer\": [\n    {\n      \"reference\": \"Practitioner/{{practitionerId}}\",\n      \"display\": \"Dra. Andrea Lucía Salazar Moreno\"\n    }\n  ],\n  \"valueCodeableConcept\": {\n    \"coding\": [\n      {\n        \"system\": \"http://snomed.info/sct\",\n        \"code\": \"10828004\",\n        \"display\": \"Positive\"\n      }\n    ],\n    \"text\": \"Positivo\"\n  },\n  \"specimen\": {\n    \"reference\": \"Specimen/{{specimenId}}\",\n    \"display\": \"Biopsia AP-2025-0457\"\n  }\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/08-anatomia-patologica/soluciones/08g_observation_receptor_estrogeno.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const id = pm.response.json().id;",
+                  "pm.collectionVariables.set(\"obsREId\", id);",
+                  "console.log(\"obsREId = \" + id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "08h · Ampliar el resultado del receptor (amended)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Observation/{{obsREId}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"Observation\",\n  \"id\": \"{{obsREId}}\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Receptor de estrógeno: positivo.</p><p>90 % de células tumorales, puntuación de Allred 8.</p></div>\"\n  },\n  \"status\": \"amended\",\n  \"category\": [\n    {\n      \"coding\": [\n        {\n          \"system\": \"http://terminology.hl7.org/CodeSystem/observation-category\",\n          \"code\": \"laboratory\",\n          \"display\": \"Laboratory\"\n        }\n      ]\n    }\n  ],\n  \"code\": {\n    \"coding\": [\n      {\n        \"system\": \"http://loinc.org\",\n        \"code\": \"85337-4\",\n        \"display\": \"Estrogen receptor Ag [Presence] in Breast cancer specimen by Immune stain\"\n      }\n    ],\n    \"text\": \"Receptor de estrógeno\"\n  },\n  \"subject\": {\n    \"reference\": \"Patient/{{patientId}}\",\n    \"display\": \"Luis Alberto Paredes Cevallos\"\n  },\n  \"effectiveDateTime\": \"2025-05-12\",\n  \"performer\": [\n    {\n      \"reference\": \"Practitioner/{{practitionerId}}\",\n      \"display\": \"Dra. Andrea Lucía Salazar Moreno\"\n    }\n  ],\n  \"valueCodeableConcept\": {\n    \"coding\": [\n      {\n        \"system\": \"http://snomed.info/sct\",\n        \"code\": \"10828004\",\n        \"display\": \"Positive\"\n      }\n    ],\n    \"text\": \"Positivo\"\n  },\n  \"specimen\": {\n    \"reference\": \"Specimen/{{specimenId}}\",\n    \"display\": \"Biopsia AP-2025-0457\"\n  },\n  \"interpretation\": [\n    {\n      \"coding\": [\n        {\n          \"system\": \"http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation\",\n          \"code\": \"POS\",\n          \"display\": \"Positive\"\n        }\n      ]\n    }\n  ],\n  \"note\": [\n    {\n      \"text\": \"Positivo en el 90 % de las células tumorales, intensidad fuerte (Allred 8/8).\"\n    }\n  ]\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/08-anatomia-patologica/soluciones/08h_observation_receptor_estrogeno_actualizar.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "08i · Informe de anatomía patológica",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/DiagnosticReport",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"DiagnosticReport\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Informe de anatomía patológica: carcinoma ductal infiltrante de mama izquierda de 3,5 cm,</p><p>receptor de estrógeno positivo (Allred 8).</p></div>\"\n  },\n  \"identifier\": [\n    {\n      \"system\": \"https://f-slg.github.io/aprende-fhir/sid/informe\",\n      \"value\": \"INF-AP-2025-0457\"\n    }\n  ],\n  \"status\": \"final\",\n  \"category\": [\n    {\n      \"coding\": [\n        {\n          \"system\": \"http://terminology.hl7.org/CodeSystem/v2-0074\",\n          \"code\": \"SP\",\n          \"display\": \"Surgical Pathology\"\n        }\n      ],\n      \"text\": \"Anatomía patológica\"\n    }\n  ],\n  \"code\": {\n    \"coding\": [\n      {\n        \"system\": \"http://loinc.org\",\n        \"code\": \"11526-1\",\n        \"display\": \"Pathology study\"\n      }\n    ],\n    \"text\": \"Estudio de patología\"\n  },\n  \"subject\": {\n    \"reference\": \"Patient/{{patientId}}\",\n    \"display\": \"Luis Alberto Paredes Cevallos\"\n  },\n  \"effectiveDateTime\": \"2025-05-12\",\n  \"issued\": \"2025-05-13T12:00:00-05:00\",\n  \"performer\": [\n    {\n      \"reference\": \"Organization/{{hospitalId}}\",\n      \"display\": \"Hospital General Docente Ejemplo\"\n    }\n  ],\n  \"resultsInterpreter\": [\n    {\n      \"reference\": \"Practitioner/{{practitionerId}}\",\n      \"display\": \"Dra. Andrea Lucía Salazar Moreno\"\n    }\n  ],\n  \"specimen\": [\n    {\n      \"reference\": \"Specimen/{{specimenId}}\",\n      \"display\": \"Biopsia AP-2025-0457\"\n    }\n  ],\n  \"result\": [\n    {\n      \"reference\": \"Observation/{{obsTumorId}}\",\n      \"display\": \"Tamaño del tumor 3,5 cm\"\n    },\n    {\n      \"reference\": \"Observation/{{obsREId}}\",\n      \"display\": \"Receptor de estrógeno positivo\"\n    }\n  ],\n  \"conclusion\": \"Carcinoma ductal infiltrante de mama izquierda, 3,5 cm, receptor de estrógeno positivo.\",\n  \"conclusionCode\": [\n    {\n      \"coding\": [\n        {\n          \"system\": \"http://snomed.info/sct\",\n          \"code\": \"254837009\",\n          \"display\": \"Malignant neoplasm of breast\"\n        }\n      ],\n      \"text\": \"Cáncer de mama\"\n    }\n  ]\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/08-anatomia-patologica/soluciones/08i_diagnosticreport_patologia.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const id = pm.response.json().id;",
+                  "pm.collectionVariables.set(\"diagnosticReportId\", id);",
+                  "console.log(\"diagnosticReportId = \" + id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "08j · Diagnóstico de cáncer de mama",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Condition",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"Condition\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Carcinoma ductal infiltrante de mama izquierda (activo, confirmado).</p><p>Diagnóstico: 13 de mayo de 2025.</p></div>\"\n  },\n  \"identifier\": [\n    {\n      \"system\": \"https://f-slg.github.io/aprende-fhir/sid/condicion\",\n      \"value\": \"COND-2025-0002\"\n    }\n  ],\n  \"clinicalStatus\": {\n    \"coding\": [\n      {\n        \"system\": \"http://terminology.hl7.org/CodeSystem/condition-clinical\",\n        \"code\": \"active\",\n        \"display\": \"Active\"\n      }\n    ]\n  },\n  \"verificationStatus\": {\n    \"coding\": [\n      {\n        \"system\": \"http://terminology.hl7.org/CodeSystem/condition-ver-status\",\n        \"code\": \"confirmed\",\n        \"display\": \"Confirmed\"\n      }\n    ]\n  },\n  \"category\": [\n    {\n      \"coding\": [\n        {\n          \"system\": \"http://terminology.hl7.org/CodeSystem/condition-category\",\n          \"code\": \"problem-list-item\",\n          \"display\": \"Problem List Item\"\n        }\n      ]\n    }\n  ],\n  \"code\": {\n    \"coding\": [\n      {\n        \"system\": \"http://hl7.org/fhir/sid/icd-10\",\n        \"code\": \"C50.9\",\n        \"display\": \"Breast, unspecified\"\n      },\n      {\n        \"system\": \"http://snomed.info/sct\",\n        \"code\": \"254837009\",\n        \"display\": \"Malignant neoplasm of breast\"\n      }\n    ],\n    \"text\": \"Carcinoma ductal infiltrante de mama izquierda\"\n  },\n  \"bodySite\": [\n    {\n      \"coding\": [\n        {\n          \"system\": \"http://snomed.info/sct\",\n          \"code\": \"80248007\",\n          \"display\": \"Left breast structure\"\n        }\n      ],\n      \"text\": \"Mama izquierda\"\n    }\n  ],\n  \"subject\": {\n    \"reference\": \"Patient/{{patientId}}\",\n    \"display\": \"Luis Alberto Paredes Cevallos\"\n  },\n  \"onsetDateTime\": \"2025-05-13\",\n  \"recordedDate\": \"2025-05-13\",\n  \"recorder\": {\n    \"reference\": \"Practitioner/{{practitionerId}}\",\n    \"display\": \"Dra. Andrea Lucía Salazar Moreno\"\n  },\n  \"evidence\": [\n    {\n      \"detail\": [\n        {\n          \"reference\": \"DiagnosticReport/{{diagnosticReportId}}\",\n          \"display\": \"Informe de patología AP-2025-0457\"\n        }\n      ]\n    }\n  ]\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/08-anatomia-patologica/soluciones/08j_condition_cancer_mama.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const id = pm.response.json().id;",
+                  "pm.collectionVariables.set(\"conditionCancerId\", id);",
+                  "console.log(\"conditionCancerId = \" + id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "08k · Informe con sus resultados incluidos",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/DiagnosticReport?subject=Patient/{{patientId}}&_include=DiagnosticReport:result"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "09 · Procedimientos",
+      "item": [
+        {
+          "name": "09a · Mastectomía parcial",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Procedure",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"Procedure\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Mastectomía parcial de mama izquierda, 10 de junio de 2025.</p></div>\"\n  },\n  \"identifier\": [\n    {\n      \"system\": \"https://f-slg.github.io/aprende-fhir/sid/procedimiento\",\n      \"value\": \"PROC-2025-0001\"\n    }\n  ],\n  \"status\": \"completed\",\n  \"category\": {\n    \"coding\": [\n      {\n        \"system\": \"http://snomed.info/sct\",\n        \"code\": \"387713003\",\n        \"display\": \"Surgical procedure\"\n      }\n    ],\n    \"text\": \"Procedimiento quirúrgico\"\n  },\n  \"code\": {\n    \"coding\": [\n      {\n        \"system\": \"http://snomed.info/sct\",\n        \"code\": \"64368001\",\n        \"display\": \"Partial mastectomy\"\n      }\n    ],\n    \"text\": \"Mastectomía parcial\"\n  },\n  \"subject\": {\n    \"reference\": \"Patient/{{patientId}}\",\n    \"display\": \"Luis Alberto Paredes Cevallos\"\n  },\n  \"performedDateTime\": \"2025-06-10T08:00:00-05:00\",\n  \"recorder\": {\n    \"reference\": \"Practitioner/{{practitionerId}}\",\n    \"display\": \"Dra. Andrea Lucía Salazar Moreno\"\n  },\n  \"performer\": [\n    {\n      \"actor\": {\n        \"reference\": \"Practitioner/{{practitionerId}}\",\n        \"display\": \"Dra. Andrea Lucía Salazar Moreno\"\n      },\n      \"onBehalfOf\": {\n        \"reference\": \"Organization/{{hospitalId}}\",\n        \"display\": \"Hospital General Docente Ejemplo\"\n      }\n    }\n  ],\n  \"reasonReference\": [\n    {\n      \"reference\": \"Condition/{{conditionCancerId}}\",\n      \"display\": \"Carcinoma ductal infiltrante de mama izquierda\"\n    }\n  ],\n  \"bodySite\": [\n    {\n      \"coding\": [\n        {\n          \"system\": \"http://snomed.info/sct\",\n          \"code\": \"80248007\",\n          \"display\": \"Left breast structure\"\n        }\n      ],\n      \"text\": \"Mama izquierda\"\n    }\n  ]\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/09-procedimientos/soluciones/09a_procedure_mastectomia.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const id = pm.response.json().id;",
+                  "pm.collectionVariables.set(\"procedureId\", id);",
+                  "console.log(\"procedureId = \" + id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "09b · Agregar resultado y seguimiento",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Procedure/{{procedureId}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"Procedure\",\n  \"id\": \"{{procedureId}}\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Mastectomía parcial de mama izquierda, 10 de junio de 2025.</p><p>Resultado: exitoso. Control en 2 semanas.</p></div>\"\n  },\n  \"identifier\": [\n    {\n      \"system\": \"https://f-slg.github.io/aprende-fhir/sid/procedimiento\",\n      \"value\": \"PROC-2025-0001\"\n    }\n  ],\n  \"status\": \"completed\",\n  \"category\": {\n    \"coding\": [\n      {\n        \"system\": \"http://snomed.info/sct\",\n        \"code\": \"387713003\",\n        \"display\": \"Surgical procedure\"\n      }\n    ],\n    \"text\": \"Procedimiento quirúrgico\"\n  },\n  \"code\": {\n    \"coding\": [\n      {\n        \"system\": \"http://snomed.info/sct\",\n        \"code\": \"64368001\",\n        \"display\": \"Partial mastectomy\"\n      }\n    ],\n    \"text\": \"Mastectomía parcial\"\n  },\n  \"subject\": {\n    \"reference\": \"Patient/{{patientId}}\",\n    \"display\": \"Luis Alberto Paredes Cevallos\"\n  },\n  \"performedDateTime\": \"2025-06-10T08:00:00-05:00\",\n  \"recorder\": {\n    \"reference\": \"Practitioner/{{practitionerId}}\",\n    \"display\": \"Dra. Andrea Lucía Salazar Moreno\"\n  },\n  \"performer\": [\n    {\n      \"actor\": {\n        \"reference\": \"Practitioner/{{practitionerId}}\",\n        \"display\": \"Dra. Andrea Lucía Salazar Moreno\"\n      },\n      \"onBehalfOf\": {\n        \"reference\": \"Organization/{{hospitalId}}\",\n        \"display\": \"Hospital General Docente Ejemplo\"\n      }\n    }\n  ],\n  \"reasonReference\": [\n    {\n      \"reference\": \"Condition/{{conditionCancerId}}\",\n      \"display\": \"Carcinoma ductal infiltrante de mama izquierda\"\n    }\n  ],\n  \"bodySite\": [\n    {\n      \"coding\": [\n        {\n          \"system\": \"http://snomed.info/sct\",\n          \"code\": \"80248007\",\n          \"display\": \"Left breast structure\"\n        }\n      ],\n      \"text\": \"Mama izquierda\"\n    }\n  ],\n  \"outcome\": {\n    \"coding\": [\n      {\n        \"system\": \"http://snomed.info/sct\",\n        \"code\": \"385669000\",\n        \"display\": \"Successful\"\n      }\n    ],\n    \"text\": \"Exitoso\"\n  },\n  \"followUp\": [\n    {\n      \"text\": \"Control de herida quirúrgica en 2 semanas y valoración por oncología.\"\n    }\n  ],\n  \"note\": [\n    {\n      \"text\": \"Márgenes quirúrgicos libres de tumor.\"\n    }\n  ]\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/09-procedimientos/soluciones/09b_procedure_actualizar.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "10 · Medicamentos",
+      "item": [
+        {
+          "name": "10a · Superficie corporal",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Observation",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"Observation\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Superficie corporal: 1,77 m² (peso 72 kg, talla 1,58 m; Mosteller).</p></div>\"\n  },\n  \"status\": \"final\",\n  \"category\": [\n    {\n      \"coding\": [\n        {\n          \"system\": \"http://terminology.hl7.org/CodeSystem/observation-category\",\n          \"code\": \"vital-signs\",\n          \"display\": \"Vital Signs\"\n        }\n      ]\n    }\n  ],\n  \"code\": {\n    \"coding\": [\n      {\n        \"system\": \"http://loinc.org\",\n        \"code\": \"8277-6\",\n        \"display\": \"Body surface area\"\n      }\n    ],\n    \"text\": \"Superficie corporal\"\n  },\n  \"subject\": {\n    \"reference\": \"Patient/{{patientId}}\",\n    \"display\": \"Luis Alberto Paredes Cevallos\"\n  },\n  \"effectiveDateTime\": \"2025-07-01\",\n  \"performer\": [\n    {\n      \"reference\": \"Practitioner/{{practitionerId}}\",\n      \"display\": \"Dra. Andrea Lucía Salazar Moreno\"\n    }\n  ],\n  \"valueQuantity\": {\n    \"value\": 1.77,\n    \"unit\": \"m2\",\n    \"system\": \"http://unitsofmeasure.org\",\n    \"code\": \"m2\"\n  },\n  \"method\": {\n    \"text\": \"Fórmula de Mosteller\"\n  }\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/10-medicamentos/soluciones/10a_observation_superficie_corporal.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const id = pm.response.json().id;",
+                  "pm.collectionVariables.set(\"obsBSAId\", id);",
+                  "console.log(\"obsBSAId = \" + id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "10b · Prescribir doxorrubicina",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/MedicationRequest",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"MedicationRequest\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Doxorrubicina 60 mg/m² (106,2 mg) IV cada 21 días, 4 ciclos.</p></div>\"\n  },\n  \"identifier\": [\n    {\n      \"system\": \"https://f-slg.github.io/aprende-fhir/sid/receta\",\n      \"value\": \"RX-2025-0101\"\n    }\n  ],\n  \"status\": \"active\",\n  \"intent\": \"order\",\n  \"category\": [\n    {\n      \"coding\": [\n        {\n          \"system\": \"http://terminology.hl7.org/CodeSystem/medicationrequest-category\",\n          \"code\": \"outpatient\",\n          \"display\": \"Outpatient\"\n        }\n      ]\n    }\n  ],\n  \"medicationCodeableConcept\": {\n    \"coding\": [\n      {\n        \"system\": \"http://snomed.info/sct\",\n        \"code\": \"372817009\",\n        \"display\": \"Doxorubicin\"\n      }\n    ],\n    \"text\": \"Doxorrubicina\"\n  },\n  \"subject\": {\n    \"reference\": \"Patient/{{patientId}}\",\n    \"display\": \"Luis Alberto Paredes Cevallos\"\n  },\n  \"authoredOn\": \"2025-07-01\",\n  \"requester\": {\n    \"reference\": \"Practitioner/{{practitionerId}}\",\n    \"display\": \"Dra. Andrea Lucía Salazar Moreno\"\n  },\n  \"reasonReference\": [\n    {\n      \"reference\": \"Condition/{{conditionCancerId}}\",\n      \"display\": \"Carcinoma ductal infiltrante de mama izquierda\"\n    }\n  ],\n  \"supportingInformation\": [\n    {\n      \"reference\": \"Observation/{{obsBSAId}}\",\n      \"display\": \"Superficie corporal 1,77 m²\"\n    }\n  ],\n  \"dosageInstruction\": [\n    {\n      \"text\": \"60 mg/m² (106,2 mg) por vía intravenosa cada 21 días, 4 ciclos\",\n      \"timing\": {\n        \"repeat\": {\n          \"count\": 4,\n          \"frequency\": 1,\n          \"period\": 21,\n          \"periodUnit\": \"d\"\n        }\n      },\n      \"route\": {\n        \"coding\": [\n          {\n            \"system\": \"http://snomed.info/sct\",\n            \"code\": \"47625008\",\n            \"display\": \"Intravenous route\"\n          }\n        ],\n        \"text\": \"Vía intravenosa\"\n      },\n      \"doseAndRate\": [\n        {\n          \"doseQuantity\": {\n            \"value\": 106.2,\n            \"unit\": \"mg\",\n            \"system\": \"http://unitsofmeasure.org\",\n            \"code\": \"mg\"\n          }\n        }\n      ]\n    }\n  ]\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/10-medicamentos/soluciones/10b_medicationrequest_doxorrubicina.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const id = pm.response.json().id;",
+                  "pm.collectionVariables.set(\"medReqDoxoId\", id);",
+                  "console.log(\"medReqDoxoId = \" + id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "10c · Administrar el primer ciclo",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/MedicationAdministration",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"MedicationAdministration\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Primer ciclo de doxorrubicina: 106,2 mg IV en 30 minutos, 2 de julio de 2025.</p></div>\"\n  },\n  \"status\": \"completed\",\n  \"category\": {\n    \"coding\": [\n      {\n        \"system\": \"http://terminology.hl7.org/CodeSystem/medication-admin-category\",\n        \"code\": \"outpatient\",\n        \"display\": \"Outpatient\"\n      }\n    ]\n  },\n  \"medicationCodeableConcept\": {\n    \"coding\": [\n      {\n        \"system\": \"http://snomed.info/sct\",\n        \"code\": \"372817009\",\n        \"display\": \"Doxorubicin\"\n      }\n    ],\n    \"text\": \"Doxorrubicina\"\n  },\n  \"subject\": {\n    \"reference\": \"Patient/{{patientId}}\",\n    \"display\": \"Luis Alberto Paredes Cevallos\"\n  },\n  \"effectivePeriod\": {\n    \"start\": \"2025-07-02T09:00:00-05:00\",\n    \"end\": \"2025-07-02T09:30:00-05:00\"\n  },\n  \"performer\": [\n    {\n      \"actor\": {\n        \"reference\": \"Practitioner/{{practitionerId}}\",\n        \"display\": \"Dra. Andrea Lucía Salazar Moreno\"\n      }\n    }\n  ],\n  \"reasonReference\": [\n    {\n      \"reference\": \"Condition/{{conditionCancerId}}\",\n      \"display\": \"Carcinoma ductal infiltrante de mama izquierda\"\n    }\n  ],\n  \"request\": {\n    \"reference\": \"MedicationRequest/{{medReqDoxoId}}\",\n    \"display\": \"Doxorrubicina 60 mg/m²\"\n  },\n  \"supportingInformation\": [\n    {\n      \"reference\": \"Observation/{{obsBSAId}}\",\n      \"display\": \"Superficie corporal 1,77 m²\"\n    }\n  ],\n  \"dosage\": {\n    \"text\": \"106,2 mg diluidos en 100 mL de solución salina, en 30 minutos\",\n    \"route\": {\n      \"coding\": [\n        {\n          \"system\": \"http://snomed.info/sct\",\n          \"code\": \"47625008\",\n          \"display\": \"Intravenous route\"\n        }\n      ],\n      \"text\": \"Vía intravenosa\"\n    },\n    \"dose\": {\n      \"value\": 106.2,\n      \"unit\": \"mg\",\n      \"system\": \"http://unitsofmeasure.org\",\n      \"code\": \"mg\"\n    },\n    \"rateQuantity\": {\n      \"value\": 200,\n      \"unit\": \"mL/h\",\n      \"system\": \"http://unitsofmeasure.org\",\n      \"code\": \"mL/h\"\n    }\n  }\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/10-medicamentos/soluciones/10c_medicationadministration_doxorrubicina.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const id = pm.response.json().id;",
+                  "pm.collectionVariables.set(\"medAdminDoxoId\", id);",
+                  "console.log(\"medAdminDoxoId = \" + id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "10d · Registrar un evento posterior a la infusión",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/MedicationAdministration/{{medAdminDoxoId}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"MedicationAdministration\",\n  \"id\": \"{{medAdminDoxoId}}\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Primer ciclo de doxorrubicina: 106,2 mg IV en 30 minutos, 2 de julio de 2025.</p><p>Evento posterior: náuseas grado 1, tratadas con ondansetrón.</p></div>\"\n  },\n  \"status\": \"completed\",\n  \"category\": {\n    \"coding\": [\n      {\n        \"system\": \"http://terminology.hl7.org/CodeSystem/medication-admin-category\",\n        \"code\": \"outpatient\",\n        \"display\": \"Outpatient\"\n      }\n    ]\n  },\n  \"medicationCodeableConcept\": {\n    \"coding\": [\n      {\n        \"system\": \"http://snomed.info/sct\",\n        \"code\": \"372817009\",\n        \"display\": \"Doxorubicin\"\n      }\n    ],\n    \"text\": \"Doxorrubicina\"\n  },\n  \"subject\": {\n    \"reference\": \"Patient/{{patientId}}\",\n    \"display\": \"Luis Alberto Paredes Cevallos\"\n  },\n  \"effectivePeriod\": {\n    \"start\": \"2025-07-02T09:00:00-05:00\",\n    \"end\": \"2025-07-02T09:30:00-05:00\"\n  },\n  \"performer\": [\n    {\n      \"actor\": {\n        \"reference\": \"Practitioner/{{practitionerId}}\",\n        \"display\": \"Dra. Andrea Lucía Salazar Moreno\"\n      }\n    }\n  ],\n  \"reasonReference\": [\n    {\n      \"reference\": \"Condition/{{conditionCancerId}}\",\n      \"display\": \"Carcinoma ductal infiltrante de mama izquierda\"\n    }\n  ],\n  \"request\": {\n    \"reference\": \"MedicationRequest/{{medReqDoxoId}}\",\n    \"display\": \"Doxorrubicina 60 mg/m²\"\n  },\n  \"supportingInformation\": [\n    {\n      \"reference\": \"Observation/{{obsBSAId}}\",\n      \"display\": \"Superficie corporal 1,77 m²\"\n    }\n  ],\n  \"dosage\": {\n    \"text\": \"106,2 mg diluidos en 100 mL de solución salina, en 30 minutos\",\n    \"route\": {\n      \"coding\": [\n        {\n          \"system\": \"http://snomed.info/sct\",\n          \"code\": \"47625008\",\n          \"display\": \"Intravenous route\"\n        }\n      ],\n      \"text\": \"Vía intravenosa\"\n    },\n    \"dose\": {\n      \"value\": 106.2,\n      \"unit\": \"mg\",\n      \"system\": \"http://unitsofmeasure.org\",\n      \"code\": \"mg\"\n    },\n    \"rateQuantity\": {\n      \"value\": 200,\n      \"unit\": \"mL/h\",\n      \"system\": \"http://unitsofmeasure.org\",\n      \"code\": \"mL/h\"\n    }\n  },\n  \"note\": [\n    {\n      \"time\": \"2025-07-02T11:00:00-05:00\",\n      \"text\": \"Náuseas grado 1 dos horas después de la infusión; se administró ondansetrón 8 mg VO.\"\n    }\n  ]\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/10-medicamentos/soluciones/10d_medicationadministration_actualizar.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "10e · Prescribir tamoxifeno",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/MedicationRequest",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"MedicationRequest\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Tamoxifeno 20 mg por vía oral una vez al día.</p></div>\"\n  },\n  \"identifier\": [\n    {\n      \"system\": \"https://f-slg.github.io/aprende-fhir/sid/receta\",\n      \"value\": \"RX-2025-0207\"\n    }\n  ],\n  \"status\": \"active\",\n  \"intent\": \"order\",\n  \"category\": [\n    {\n      \"coding\": [\n        {\n          \"system\": \"http://terminology.hl7.org/CodeSystem/medicationrequest-category\",\n          \"code\": \"outpatient\",\n          \"display\": \"Outpatient\"\n        }\n      ]\n    }\n  ],\n  \"medicationCodeableConcept\": {\n    \"coding\": [\n      {\n        \"system\": \"http://snomed.info/sct\",\n        \"code\": \"373345002\",\n        \"display\": \"Tamoxifen\"\n      }\n    ],\n    \"text\": \"Tamoxifeno\"\n  },\n  \"subject\": {\n    \"reference\": \"Patient/{{patientId}}\",\n    \"display\": \"Luis Alberto Paredes Cevallos\"\n  },\n  \"authoredOn\": \"2025-10-15\",\n  \"requester\": {\n    \"reference\": \"Practitioner/{{practitionerId}}\",\n    \"display\": \"Dra. Andrea Lucía Salazar Moreno\"\n  },\n  \"reasonReference\": [\n    {\n      \"reference\": \"Condition/{{conditionCancerId}}\",\n      \"display\": \"Carcinoma ductal infiltrante de mama izquierda\"\n    }\n  ],\n  \"dosageInstruction\": [\n    {\n      \"text\": \"20 mg por vía oral una vez al día, durante 5 años\",\n      \"timing\": {\n        \"repeat\": {\n          \"frequency\": 1,\n          \"period\": 1,\n          \"periodUnit\": \"d\",\n          \"boundsDuration\": {\n            \"value\": 5,\n            \"unit\": \"años\",\n            \"system\": \"http://unitsofmeasure.org\",\n            \"code\": \"a\"\n          }\n        }\n      },\n      \"route\": {\n        \"coding\": [\n          {\n            \"system\": \"http://snomed.info/sct\",\n            \"code\": \"26643006\",\n            \"display\": \"Oral route\"\n          }\n        ],\n        \"text\": \"Vía oral\"\n      },\n      \"doseAndRate\": [\n        {\n          \"doseQuantity\": {\n            \"value\": 20,\n            \"unit\": \"mg\",\n            \"system\": \"http://unitsofmeasure.org\",\n            \"code\": \"mg\"\n          }\n        }\n      ]\n    }\n  ],\n  \"dispenseRequest\": {\n    \"numberOfRepeatsAllowed\": 11,\n    \"quantity\": {\n      \"value\": 30,\n      \"unit\": \"comprimidos\"\n    },\n    \"expectedSupplyDuration\": {\n      \"value\": 30,\n      \"unit\": \"días\",\n      \"system\": \"http://unitsofmeasure.org\",\n      \"code\": \"d\"\n    }\n  }\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/10-medicamentos/soluciones/10e_medicationrequest_tamoxifeno.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const id = pm.response.json().id;",
+                  "pm.collectionVariables.set(\"medReqTamoxId\", id);",
+                  "console.log(\"medReqTamoxId = \" + id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "10f · Primera dosis autoadministrada",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/MedicationAdministration",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"MedicationAdministration\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Primera dosis de tamoxifeno 20 mg VO, autoadministrada en casa, 16 de octubre de 2025.</p></div>\"\n  },\n  \"status\": \"completed\",\n  \"category\": {\n    \"coding\": [\n      {\n        \"system\": \"http://terminology.hl7.org/CodeSystem/medication-admin-category\",\n        \"code\": \"community\",\n        \"display\": \"Community\"\n      }\n    ]\n  },\n  \"medicationCodeableConcept\": {\n    \"coding\": [\n      {\n        \"system\": \"http://snomed.info/sct\",\n        \"code\": \"373345002\",\n        \"display\": \"Tamoxifen\"\n      }\n    ],\n    \"text\": \"Tamoxifeno\"\n  },\n  \"subject\": {\n    \"reference\": \"Patient/{{patientId}}\",\n    \"display\": \"Luis Alberto Paredes Cevallos\"\n  },\n  \"effectiveDateTime\": \"2025-10-16T08:00:00-05:00\",\n  \"performer\": [\n    {\n      \"actor\": {\n        \"reference\": \"Patient/{{patientId}}\",\n        \"display\": \"Luis Alberto Paredes Cevallos\"\n      }\n    }\n  ],\n  \"reasonReference\": [\n    {\n      \"reference\": \"Condition/{{conditionCancerId}}\",\n      \"display\": \"Carcinoma ductal infiltrante de mama izquierda\"\n    }\n  ],\n  \"request\": {\n    \"reference\": \"MedicationRequest/{{medReqTamoxId}}\",\n    \"display\": \"Tamoxifeno 20 mg diario\"\n  },\n  \"dosage\": {\n    \"text\": \"1 comprimido de 20 mg por vía oral\",\n    \"route\": {\n      \"coding\": [\n        {\n          \"system\": \"http://snomed.info/sct\",\n          \"code\": \"26643006\",\n          \"display\": \"Oral route\"\n        }\n      ],\n      \"text\": \"Vía oral\"\n    },\n    \"dose\": {\n      \"value\": 20,\n      \"unit\": \"mg\",\n      \"system\": \"http://unitsofmeasure.org\",\n      \"code\": \"mg\"\n    }\n  }\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/10-medicamentos/soluciones/10f_medicationadministration_tamoxifeno.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const id = pm.response.json().id;",
+                  "pm.collectionVariables.set(\"medAdminTamoxId\", id);",
+                  "console.log(\"medAdminTamoxId = \" + id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "10g · Suspender el tamoxifeno (stopped)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/MedicationRequest/{{medReqTamoxId}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"MedicationRequest\",\n  \"id\": \"{{medReqTamoxId}}\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Tamoxifeno 20 mg por vía oral una vez al día.</p><p>Suspendido por intolerancia.</p></div>\"\n  },\n  \"identifier\": [\n    {\n      \"system\": \"https://f-slg.github.io/aprende-fhir/sid/receta\",\n      \"value\": \"RX-2025-0207\"\n    }\n  ],\n  \"status\": \"stopped\",\n  \"intent\": \"order\",\n  \"category\": [\n    {\n      \"coding\": [\n        {\n          \"system\": \"http://terminology.hl7.org/CodeSystem/medicationrequest-category\",\n          \"code\": \"outpatient\",\n          \"display\": \"Outpatient\"\n        }\n      ]\n    }\n  ],\n  \"medicationCodeableConcept\": {\n    \"coding\": [\n      {\n        \"system\": \"http://snomed.info/sct\",\n        \"code\": \"373345002\",\n        \"display\": \"Tamoxifen\"\n      }\n    ],\n    \"text\": \"Tamoxifeno\"\n  },\n  \"subject\": {\n    \"reference\": \"Patient/{{patientId}}\",\n    \"display\": \"Luis Alberto Paredes Cevallos\"\n  },\n  \"authoredOn\": \"2025-10-15\",\n  \"requester\": {\n    \"reference\": \"Practitioner/{{practitionerId}}\",\n    \"display\": \"Dra. Andrea Lucía Salazar Moreno\"\n  },\n  \"reasonReference\": [\n    {\n      \"reference\": \"Condition/{{conditionCancerId}}\",\n      \"display\": \"Carcinoma ductal infiltrante de mama izquierda\"\n    }\n  ],\n  \"dosageInstruction\": [\n    {\n      \"text\": \"20 mg por vía oral una vez al día, durante 5 años\",\n      \"timing\": {\n        \"repeat\": {\n          \"frequency\": 1,\n          \"period\": 1,\n          \"periodUnit\": \"d\",\n          \"boundsDuration\": {\n            \"value\": 5,\n            \"unit\": \"años\",\n            \"system\": \"http://unitsofmeasure.org\",\n            \"code\": \"a\"\n          }\n        }\n      },\n      \"route\": {\n        \"coding\": [\n          {\n            \"system\": \"http://snomed.info/sct\",\n            \"code\": \"26643006\",\n            \"display\": \"Oral route\"\n          }\n        ],\n        \"text\": \"Vía oral\"\n      },\n      \"doseAndRate\": [\n        {\n          \"doseQuantity\": {\n            \"value\": 20,\n            \"unit\": \"mg\",\n            \"system\": \"http://unitsofmeasure.org\",\n            \"code\": \"mg\"\n          }\n        }\n      ]\n    }\n  ],\n  \"dispenseRequest\": {\n    \"numberOfRepeatsAllowed\": 11,\n    \"quantity\": {\n      \"value\": 30,\n      \"unit\": \"comprimidos\"\n    },\n    \"expectedSupplyDuration\": {\n      \"value\": 30,\n      \"unit\": \"días\",\n      \"system\": \"http://unitsofmeasure.org\",\n      \"code\": \"d\"\n    }\n  },\n  \"statusReason\": {\n    \"text\": \"Intolerancia: sofocos intensos y dolor articular\"\n  },\n  \"note\": [\n    {\n      \"time\": \"2026-02-10T10:00:00-05:00\",\n      \"text\": \"Se suspende el tamoxifeno por intolerancia; se valorará una alternativa en oncología.\"\n    }\n  ]\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/10-medicamentos/soluciones/10g_medicationrequest_suspender.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "10h · Expediente completo del paciente",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Patient/{{patientId}}/$everything"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "FHIRURL",
+      "value": "https://hapi.fhir.org/baseR4"
+    },
+    {
+      "key": "patientId",
+      "value": ""
+    },
+    {
+      "key": "practitionerId",
+      "value": ""
+    },
+    {
+      "key": "organizationId",
+      "value": ""
+    },
+    {
+      "key": "hospitalId",
+      "value": ""
+    },
+    {
+      "key": "conditionIntoxId",
+      "value": ""
+    },
+    {
+      "key": "encounterId",
+      "value": ""
+    },
+    {
+      "key": "obsPAId",
+      "value": ""
+    },
+    {
+      "key": "obsTempId",
+      "value": ""
+    },
+    {
+      "key": "obsFRId",
+      "value": ""
+    },
+    {
+      "key": "obsFCId",
+      "value": ""
+    },
+    {
+      "key": "compositionId",
+      "value": ""
+    },
+    {
+      "key": "bundleDocId",
+      "value": ""
+    },
+    {
+      "key": "bodyStructureId",
+      "value": ""
+    },
+    {
+      "key": "specimenId",
+      "value": ""
+    },
+    {
+      "key": "obsTumorId",
+      "value": ""
+    },
+    {
+      "key": "obsREId",
+      "value": ""
+    },
+    {
+      "key": "diagnosticReportId",
+      "value": ""
+    },
+    {
+      "key": "conditionCancerId",
+      "value": ""
+    },
+    {
+      "key": "procedureId",
+      "value": ""
+    },
+    {
+      "key": "obsBSAId",
+      "value": ""
+    },
+    {
+      "key": "medReqDoxoId",
+      "value": ""
+    },
+    {
+      "key": "medAdminDoxoId",
+      "value": ""
+    },
+    {
+      "key": "medReqTamoxId",
+      "value": ""
+    },
+    {
+      "key": "medAdminTamoxId",
+      "value": ""
+    }
+  ]
+}

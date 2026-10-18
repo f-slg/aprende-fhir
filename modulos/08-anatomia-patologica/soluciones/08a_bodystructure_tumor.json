@@ -1,0 +1,39 @@
+{
+  "resourceType": "BodyStructure",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Tumor primario en mama izquierda: carcinoma ductal infiltrante.</p></div>"
+  },
+  "identifier": [
+    {
+      "system": "https://f-slg.github.io/aprende-fhir/sid/estructura-corporal",
+      "value": "EC-2025-0001"
+    }
+  ],
+  "active": true,
+  "morphology": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "82711006",
+        "display": "Infiltrating duct carcinoma"
+      }
+    ],
+    "text": "Carcinoma ductal infiltrante"
+  },
+  "location": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "80248007",
+        "display": "Left breast structure"
+      }
+    ],
+    "text": "Mama izquierda"
+  },
+  "description": "Carcinoma ductal infiltrante primario de mama izquierda",
+  "patient": {
+    "reference": "Patient/{{patientId}}",
+    "display": "Luis Alberto Paredes Cevallos"
+  }
+}

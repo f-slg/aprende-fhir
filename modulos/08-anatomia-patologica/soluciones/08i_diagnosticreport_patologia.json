@@ -1,0 +1,83 @@
+{
+  "resourceType": "DiagnosticReport",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Informe de anatomía patológica: carcinoma ductal infiltrante de mama izquierda de 3,5 cm,</p><p>receptor de estrógeno positivo (Allred 8).</p></div>"
+  },
+  "identifier": [
+    {
+      "system": "https://f-slg.github.io/aprende-fhir/sid/informe",
+      "value": "INF-AP-2025-0457"
+    }
+  ],
+  "status": "final",
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/v2-0074",
+          "code": "SP",
+          "display": "Surgical Pathology"
+        }
+      ],
+      "text": "Anatomía patológica"
+    }
+  ],
+  "code": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "11526-1",
+        "display": "Pathology study"
+      }
+    ],
+    "text": "Estudio de patología"
+  },
+  "subject": {
+    "reference": "Patient/{{patientId}}",
+    "display": "Luis Alberto Paredes Cevallos"
+  },
+  "effectiveDateTime": "2025-05-12",
+  "issued": "2025-05-13T12:00:00-05:00",
+  "performer": [
+    {
+      "reference": "Organization/{{hospitalId}}",
+      "display": "Hospital General Docente Ejemplo"
+    }
+  ],
+  "resultsInterpreter": [
+    {
+      "reference": "Practitioner/{{practitionerId}}",
+      "display": "Dra. Andrea Lucía Salazar Moreno"
+    }
+  ],
+  "specimen": [
+    {
+      "reference": "Specimen/{{specimenId}}",
+      "display": "Biopsia AP-2025-0457"
+    }
+  ],
+  "result": [
+    {
+      "reference": "Observation/{{obsTumorId}}",
+      "display": "Tamaño del tumor 3,5 cm"
+    },
+    {
+      "reference": "Observation/{{obsREId}}",
+      "display": "Receptor de estrógeno positivo"
+    }
+  ],
+  "conclusion": "Carcinoma ductal infiltrante de mama izquierda, 3,5 cm, receptor de estrógeno positivo.",
+  "conclusionCode": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "254837009",
+          "display": "Malignant neoplasm of breast"
+        }
+      ],
+      "text": "Cáncer de mama"
+    }
+  ]
+}

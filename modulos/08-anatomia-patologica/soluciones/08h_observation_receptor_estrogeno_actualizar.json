@@ -1,0 +1,71 @@
+{
+  "resourceType": "Observation",
+  "id": "{{obsREId}}",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Receptor de estrógeno: positivo.</p><p>90 % de células tumorales, puntuación de Allred 8.</p></div>"
+  },
+  "status": "amended",
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+          "code": "laboratory",
+          "display": "Laboratory"
+        }
+      ]
+    }
+  ],
+  "code": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "85337-4",
+        "display": "Estrogen receptor Ag [Presence] in Breast cancer specimen by Immune stain"
+      }
+    ],
+    "text": "Receptor de estrógeno"
+  },
+  "subject": {
+    "reference": "Patient/{{patientId}}",
+    "display": "Luis Alberto Paredes Cevallos"
+  },
+  "effectiveDateTime": "2025-05-12",
+  "performer": [
+    {
+      "reference": "Practitioner/{{practitionerId}}",
+      "display": "Dra. Andrea Lucía Salazar Moreno"
+    }
+  ],
+  "valueCodeableConcept": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "10828004",
+        "display": "Positive"
+      }
+    ],
+    "text": "Positivo"
+  },
+  "specimen": {
+    "reference": "Specimen/{{specimenId}}",
+    "display": "Biopsia AP-2025-0457"
+  },
+  "interpretation": [
+    {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation",
+          "code": "POS",
+          "display": "Positive"
+        }
+      ]
+    }
+  ],
+  "note": [
+    {
+      "text": "Positivo en el 90 % de las células tumorales, intensidad fuerte (Allred 8/8)."
+    }
+  ]
+}

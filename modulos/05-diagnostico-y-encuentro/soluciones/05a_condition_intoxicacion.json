@@ -1,0 +1,123 @@
+{
+  "resourceType": "Condition",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Intoxicación alimentaria bacteriana, no especificada (moderada).</p><p>Inicio: 17 de marzo de 2025. Resuelta.</p></div>"
+  },
+  "identifier": [
+    {
+      "system": "https://f-slg.github.io/aprende-fhir/sid/condicion",
+      "value": "COND-2025-0001"
+    }
+  ],
+  "clinicalStatus": {
+    "coding": [
+      {
+        "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+        "code": "resolved",
+        "display": "Resolved"
+      }
+    ]
+  },
+  "verificationStatus": {
+    "coding": [
+      {
+        "system": "http://terminology.hl7.org/CodeSystem/condition-ver-status",
+        "code": "confirmed",
+        "display": "Confirmed"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/condition-category",
+          "code": "encounter-diagnosis",
+          "display": "Encounter Diagnosis"
+        }
+      ]
+    }
+  ],
+  "severity": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "6736007",
+        "display": "Moderate (severity modifier)"
+      }
+    ],
+    "text": "Moderada"
+  },
+  "code": {
+    "coding": [
+      {
+        "system": "http://hl7.org/fhir/sid/icd-10",
+        "code": "A05.9",
+        "display": "Bacterial foodborne intoxication, unspecified"
+      }
+    ],
+    "text": "Intoxicación alimentaria bacteriana, no especificada"
+  },
+  "subject": {
+    "reference": "Patient/{{patientId}}",
+    "display": "Luis Alberto Paredes Cevallos"
+  },
+  "onsetDateTime": "2025-03-17",
+  "abatementDateTime": "2025-03-24",
+  "recordedDate": "2025-03-20",
+  "recorder": {
+    "reference": "Practitioner/{{practitionerId}}",
+    "display": "Dra. Andrea Lucía Salazar Moreno"
+  },
+  "asserter": {
+    "reference": "Practitioner/{{practitionerId}}",
+    "display": "Dra. Andrea Lucía Salazar Moreno"
+  },
+  "evidence": [
+    {
+      "code": [
+        {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "422587007",
+              "display": "Nausea"
+            }
+          ],
+          "text": "Náuseas"
+        },
+        {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "422400008",
+              "display": "Vomiting"
+            }
+          ],
+          "text": "Vómito"
+        },
+        {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "21522001",
+              "display": "Abdominal pain"
+            }
+          ],
+          "text": "Dolor abdominal"
+        },
+        {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "62315008",
+              "display": "Diarrhea"
+            }
+          ],
+          "text": "Diarrea"
+        }
+      ]
+    }
+  ]
+}

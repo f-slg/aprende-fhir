@@ -1,0 +1,416 @@
+{
+  "descripcion": "Pasos del taller en orden. Postman, curl y R se generan o se ejecutan a partir de esta lista.",
+  "pasos": [
+    {
+      "id": "01a",
+      "modulo": "01-fundamentos",
+      "nombre": "Declaración de capacidades del servidor",
+      "metodo": "GET",
+      "ruta": "metadata"
+    },
+    {
+      "id": "01b",
+      "modulo": "01-fundamentos",
+      "nombre": "Buscar pacientes (primeros 5)",
+      "metodo": "GET",
+      "ruta": "Patient?_count=5"
+    },
+    {
+      "id": "02a",
+      "modulo": "02-patient",
+      "nombre": "Crear el paciente",
+      "metodo": "POST",
+      "ruta": "Patient",
+      "archivo": "modulos/02-patient/soluciones/02a_patient_crear.json",
+      "guarda": "patientId"
+    },
+    {
+      "id": "02b",
+      "modulo": "02-patient",
+      "nombre": "Leer el paciente por id",
+      "metodo": "GET",
+      "ruta": "Patient/{{patientId}}"
+    },
+    {
+      "id": "02c",
+      "modulo": "02-patient",
+      "nombre": "Buscar el paciente por cédula",
+      "metodo": "GET",
+      "ruta": "Patient?identifier=https://f-slg.github.io/aprende-fhir/sid/cedula|9900000017"
+    },
+    {
+      "id": "02d",
+      "modulo": "02-patient",
+      "nombre": "Buscar el paciente por nombre",
+      "metodo": "GET",
+      "ruta": "Patient?family=Paredes&given=Luis"
+    },
+    {
+      "id": "02e",
+      "modulo": "02-patient",
+      "nombre": "Actualizar el paciente (teléfono y estado civil)",
+      "metodo": "PUT",
+      "ruta": "Patient/{{patientId}}",
+      "archivo": "modulos/02-patient/soluciones/02e_patient_actualizar.json"
+    },
+    {
+      "id": "02f",
+      "modulo": "02-patient",
+      "nombre": "Historial de versiones del paciente",
+      "metodo": "GET",
+      "ruta": "Patient/{{patientId}}/_history"
+    },
+    {
+      "id": "03a",
+      "modulo": "03-transacciones",
+      "nombre": "Crear a la familia en una transacción",
+      "metodo": "POST",
+      "ruta": "",
+      "archivo": "modulos/03-transacciones/soluciones/03a_bundle_transaction_familia.json"
+    },
+    {
+      "id": "03b",
+      "modulo": "03-transacciones",
+      "nombre": "Buscar a los Paredes",
+      "metodo": "GET",
+      "ruta": "Patient?family=Paredes"
+    },
+    {
+      "id": "04a",
+      "modulo": "04-profesionales-y-organizaciones",
+      "nombre": "Crear a la médica",
+      "metodo": "POST",
+      "ruta": "Practitioner",
+      "archivo": "modulos/04-profesionales-y-organizaciones/soluciones/04a_practitioner_crear.json",
+      "guarda": "practitionerId"
+    },
+    {
+      "id": "04b",
+      "modulo": "04-profesionales-y-organizaciones",
+      "nombre": "Crear la red de servicios",
+      "metodo": "POST",
+      "ruta": "Organization",
+      "archivo": "modulos/04-profesionales-y-organizaciones/soluciones/04b_organization_red.json",
+      "guarda": "organizationId"
+    },
+    {
+      "id": "04c",
+      "modulo": "04-profesionales-y-organizaciones",
+      "nombre": "Crear el hospital (parte de la red)",
+      "metodo": "POST",
+      "ruta": "Organization",
+      "archivo": "modulos/04-profesionales-y-organizaciones/soluciones/04c_organization_hospital.json",
+      "guarda": "hospitalId"
+    },
+    {
+      "id": "04d",
+      "modulo": "04-profesionales-y-organizaciones",
+      "nombre": "Buscar los establecimientos de la red",
+      "metodo": "GET",
+      "ruta": "Organization?partof={{organizationId}}"
+    },
+    {
+      "id": "05a",
+      "modulo": "05-diagnostico-y-encuentro",
+      "nombre": "Registrar el diagnóstico de intoxicación",
+      "metodo": "POST",
+      "ruta": "Condition",
+      "archivo": "modulos/05-diagnostico-y-encuentro/soluciones/05a_condition_intoxicacion.json",
+      "guarda": "conditionIntoxId"
+    },
+    {
+      "id": "05b",
+      "modulo": "05-diagnostico-y-encuentro",
+      "nombre": "Registrar el encuentro",
+      "metodo": "POST",
+      "ruta": "Encounter",
+      "archivo": "modulos/05-diagnostico-y-encuentro/soluciones/05b_encounter_crear.json",
+      "guarda": "encounterId"
+    },
+    {
+      "id": "05c",
+      "modulo": "05-diagnostico-y-encuentro",
+      "nombre": "Encuentros del paciente con su diagnóstico",
+      "metodo": "GET",
+      "ruta": "Encounter?subject=Patient/{{patientId}}&_include=Encounter:diagnosis"
+    },
+    {
+      "id": "06a",
+      "modulo": "06-observaciones",
+      "nombre": "Presión arterial (componentes)",
+      "metodo": "POST",
+      "ruta": "Observation",
+      "archivo": "modulos/06-observaciones/soluciones/06a_observation_presion_arterial.json",
+      "guarda": "obsPAId"
+    },
+    {
+      "id": "06b",
+      "modulo": "06-observaciones",
+      "nombre": "Temperatura (valueQuantity)",
+      "metodo": "POST",
+      "ruta": "Observation",
+      "archivo": "modulos/06-observaciones/soluciones/06b_observation_temperatura.json",
+      "guarda": "obsTempId"
+    },
+    {
+      "id": "06c",
+      "modulo": "06-observaciones",
+      "nombre": "Frecuencia respiratoria",
+      "metodo": "POST",
+      "ruta": "Observation",
+      "archivo": "modulos/06-observaciones/soluciones/06c_observation_frecuencia_respiratoria.json",
+      "guarda": "obsFRId"
+    },
+    {
+      "id": "06d",
+      "modulo": "06-observaciones",
+      "nombre": "Frecuencia cardíaca",
+      "metodo": "POST",
+      "ruta": "Observation",
+      "archivo": "modulos/06-observaciones/soluciones/06d_observation_frecuencia_cardiaca.json",
+      "guarda": "obsFCId"
+    },
+    {
+      "id": "06e",
+      "modulo": "06-observaciones",
+      "nombre": "Fiebre (valueBoolean)",
+      "metodo": "POST",
+      "ruta": "Observation",
+      "archivo": "modulos/06-observaciones/soluciones/06e_observation_fiebre_boolean.json"
+    },
+    {
+      "id": "06f",
+      "modulo": "06-observaciones",
+      "nombre": "Motivo de consulta (valueString)",
+      "metodo": "POST",
+      "ruta": "Observation",
+      "archivo": "modulos/06-observaciones/soluciones/06f_observation_motivo_string.json"
+    },
+    {
+      "id": "06g",
+      "modulo": "06-observaciones",
+      "nombre": "Sangre oculta en heces (valueCodeableConcept)",
+      "metodo": "POST",
+      "ruta": "Observation",
+      "archivo": "modulos/06-observaciones/soluciones/06g_observation_sangre_oculta_codeable.json"
+    },
+    {
+      "id": "06h",
+      "modulo": "06-observaciones",
+      "nombre": "Título serológico (valueRatio)",
+      "metodo": "POST",
+      "ruta": "Observation",
+      "archivo": "modulos/06-observaciones/soluciones/06h_observation_titulo_ratio.json"
+    },
+    {
+      "id": "06i",
+      "modulo": "06-observaciones",
+      "nombre": "Signos vitales del paciente",
+      "metodo": "GET",
+      "ruta": "Observation?subject=Patient/{{patientId}}&category=vital-signs"
+    },
+    {
+      "id": "07a",
+      "modulo": "07-documentos-clinicos",
+      "nombre": "Composition de signos vitales",
+      "metodo": "POST",
+      "ruta": "Composition",
+      "archivo": "modulos/07-documentos-clinicos/soluciones/07a_composition_signos_vitales.json",
+      "guarda": "compositionId"
+    },
+    {
+      "id": "07b",
+      "modulo": "07-documentos-clinicos",
+      "nombre": "Documento clínico autocontenido (Bundle document)",
+      "metodo": "POST",
+      "ruta": "Bundle",
+      "archivo": "modulos/07-documentos-clinicos/soluciones/07b_bundle_document_signos_vitales.json",
+      "guarda": "bundleDocId"
+    },
+    {
+      "id": "07c",
+      "modulo": "07-documentos-clinicos",
+      "nombre": "Leer el documento",
+      "metodo": "GET",
+      "ruta": "Bundle/{{bundleDocId}}"
+    },
+    {
+      "id": "08a",
+      "modulo": "08-anatomia-patologica",
+      "nombre": "Registrar el tumor (BodyStructure)",
+      "metodo": "POST",
+      "ruta": "BodyStructure",
+      "archivo": "modulos/08-anatomia-patologica/soluciones/08a_bodystructure_tumor.json",
+      "guarda": "bodyStructureId"
+    },
+    {
+      "id": "08b",
+      "modulo": "08-anatomia-patologica",
+      "nombre": "Precisar la ubicación del tumor",
+      "metodo": "PUT",
+      "ruta": "BodyStructure/{{bodyStructureId}}",
+      "archivo": "modulos/08-anatomia-patologica/soluciones/08b_bodystructure_actualizar.json"
+    },
+    {
+      "id": "08c",
+      "modulo": "08-anatomia-patologica",
+      "nombre": "Registrar la biopsia (Specimen)",
+      "metodo": "POST",
+      "ruta": "Specimen",
+      "archivo": "modulos/08-anatomia-patologica/soluciones/08c_specimen_crear.json",
+      "guarda": "specimenId"
+    },
+    {
+      "id": "08d",
+      "modulo": "08-anatomia-patologica",
+      "nombre": "Marcar la muestra como agotada",
+      "metodo": "PUT",
+      "ruta": "Specimen/{{specimenId}}",
+      "archivo": "modulos/08-anatomia-patologica/soluciones/08d_specimen_actualizar.json"
+    },
+    {
+      "id": "08e",
+      "modulo": "08-anatomia-patologica",
+      "nombre": "Tamaño del tumor: 2,5 cm",
+      "metodo": "POST",
+      "ruta": "Observation",
+      "archivo": "modulos/08-anatomia-patologica/soluciones/08e_observation_tamano_tumor.json",
+      "guarda": "obsTumorId"
+    },
+    {
+      "id": "08f",
+      "modulo": "08-anatomia-patologica",
+      "nombre": "Corregir el tamaño a 3,5 cm (amended)",
+      "metodo": "PUT",
+      "ruta": "Observation/{{obsTumorId}}",
+      "archivo": "modulos/08-anatomia-patologica/soluciones/08f_observation_tamano_tumor_actualizar.json"
+    },
+    {
+      "id": "08g",
+      "modulo": "08-anatomia-patologica",
+      "nombre": "Receptor de estrógeno positivo",
+      "metodo": "POST",
+      "ruta": "Observation",
+      "archivo": "modulos/08-anatomia-patologica/soluciones/08g_observation_receptor_estrogeno.json",
+      "guarda": "obsREId"
+    },
+    {
+      "id": "08h",
+      "modulo": "08-anatomia-patologica",
+      "nombre": "Ampliar el resultado del receptor (amended)",
+      "metodo": "PUT",
+      "ruta": "Observation/{{obsREId}}",
+      "archivo": "modulos/08-anatomia-patologica/soluciones/08h_observation_receptor_estrogeno_actualizar.json"
+    },
+    {
+      "id": "08i",
+      "modulo": "08-anatomia-patologica",
+      "nombre": "Informe de anatomía patológica",
+      "metodo": "POST",
+      "ruta": "DiagnosticReport",
+      "archivo": "modulos/08-anatomia-patologica/soluciones/08i_diagnosticreport_patologia.json",
+      "guarda": "diagnosticReportId"
+    },
+    {
+      "id": "08j",
+      "modulo": "08-anatomia-patologica",
+      "nombre": "Diagnóstico de cáncer de mama",
+      "metodo": "POST",
+      "ruta": "Condition",
+      "archivo": "modulos/08-anatomia-patologica/soluciones/08j_condition_cancer_mama.json",
+      "guarda": "conditionCancerId"
+    },
+    {
+      "id": "08k",
+      "modulo": "08-anatomia-patologica",
+      "nombre": "Informe con sus resultados incluidos",
+      "metodo": "GET",
+      "ruta": "DiagnosticReport?subject=Patient/{{patientId}}&_include=DiagnosticReport:result"
+    },
+    {
+      "id": "09a",
+      "modulo": "09-procedimientos",
+      "nombre": "Mastectomía parcial",
+      "metodo": "POST",
+      "ruta": "Procedure",
+      "archivo": "modulos/09-procedimientos/soluciones/09a_procedure_mastectomia.json",
+      "guarda": "procedureId"
+    },
+    {
+      "id": "09b",
+      "modulo": "09-procedimientos",
+      "nombre": "Agregar resultado y seguimiento",
+      "metodo": "PUT",
+      "ruta": "Procedure/{{procedureId}}",
+      "archivo": "modulos/09-procedimientos/soluciones/09b_procedure_actualizar.json"
+    },
+    {
+      "id": "10a",
+      "modulo": "10-medicamentos",
+      "nombre": "Superficie corporal",
+      "metodo": "POST",
+      "ruta": "Observation",
+      "archivo": "modulos/10-medicamentos/soluciones/10a_observation_superficie_corporal.json",
+      "guarda": "obsBSAId"
+    },
+    {
+      "id": "10b",
+      "modulo": "10-medicamentos",
+      "nombre": "Prescribir doxorrubicina",
+      "metodo": "POST",
+      "ruta": "MedicationRequest",
+      "archivo": "modulos/10-medicamentos/soluciones/10b_medicationrequest_doxorrubicina.json",
+      "guarda": "medReqDoxoId"
+    },
+    {
+      "id": "10c",
+      "modulo": "10-medicamentos",
+      "nombre": "Administrar el primer ciclo",
+      "metodo": "POST",
+      "ruta": "MedicationAdministration",
+      "archivo": "modulos/10-medicamentos/soluciones/10c_medicationadministration_doxorrubicina.json",
+      "guarda": "medAdminDoxoId"
+    },
+    {
+      "id": "10d",
+      "modulo": "10-medicamentos",
+      "nombre": "Registrar un evento posterior a la infusión",
+      "metodo": "PUT",
+      "ruta": "MedicationAdministration/{{medAdminDoxoId}}",
+      "archivo": "modulos/10-medicamentos/soluciones/10d_medicationadministration_actualizar.json"
+    },
+    {
+      "id": "10e",
+      "modulo": "10-medicamentos",
+      "nombre": "Prescribir tamoxifeno",
+      "metodo": "POST",
+      "ruta": "MedicationRequest",
+      "archivo": "modulos/10-medicamentos/soluciones/10e_medicationrequest_tamoxifeno.json",
+      "guarda": "medReqTamoxId"
+    },
+    {
+      "id": "10f",
+      "modulo": "10-medicamentos",
+      "nombre": "Primera dosis autoadministrada",
+      "metodo": "POST",
+      "ruta": "MedicationAdministration",
+      "archivo": "modulos/10-medicamentos/soluciones/10f_medicationadministration_tamoxifeno.json",
+      "guarda": "medAdminTamoxId"
+    },
+    {
+      "id": "10g",
+      "modulo": "10-medicamentos",
+      "nombre": "Suspender el tamoxifeno (stopped)",
+      "metodo": "PUT",
+      "ruta": "MedicationRequest/{{medReqTamoxId}}",
+      "archivo": "modulos/10-medicamentos/soluciones/10g_medicationrequest_suspender.json"
+    },
+    {
+      "id": "10h",
+      "modulo": "10-medicamentos",
+      "nombre": "Expediente completo del paciente",
+      "metodo": "GET",
+      "ruta": "Patient/{{patientId}}/$everything"
+    }
+  ]
+}

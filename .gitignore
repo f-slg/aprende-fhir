@@ -1,0 +1,10 @@
+# Validador de HL7 descargado por herramientas/validar.sh
+.validador/
+
+# R y RStudio
+.Rproj.user/
+.Rhistory
+.RData
+
+# Sistema
+.DS_Store

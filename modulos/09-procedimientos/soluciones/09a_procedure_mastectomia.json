@@ -1,0 +1,73 @@
+{
+  "resourceType": "Procedure",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Mastectomía parcial de mama izquierda, 10 de junio de 2025.</p></div>"
+  },
+  "identifier": [
+    {
+      "system": "https://f-slg.github.io/aprende-fhir/sid/procedimiento",
+      "value": "PROC-2025-0001"
+    }
+  ],
+  "status": "completed",
+  "category": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "387713003",
+        "display": "Surgical procedure"
+      }
+    ],
+    "text": "Procedimiento quirúrgico"
+  },
+  "code": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "64368001",
+        "display": "Partial mastectomy"
+      }
+    ],
+    "text": "Mastectomía parcial"
+  },
+  "subject": {
+    "reference": "Patient/{{patientId}}",
+    "display": "Luis Alberto Paredes Cevallos"
+  },
+  "performedDateTime": "2025-06-10T08:00:00-05:00",
+  "recorder": {
+    "reference": "Practitioner/{{practitionerId}}",
+    "display": "Dra. Andrea Lucía Salazar Moreno"
+  },
+  "performer": [
+    {
+      "actor": {
+        "reference": "Practitioner/{{practitionerId}}",
+        "display": "Dra. Andrea Lucía Salazar Moreno"
+      },
+      "onBehalfOf": {
+        "reference": "Organization/{{hospitalId}}",
+        "display": "Hospital General Docente Ejemplo"
+      }
+    }
+  ],
+  "reasonReference": [
+    {
+      "reference": "Condition/{{conditionCancerId}}",
+      "display": "Carcinoma ductal infiltrante de mama izquierda"
+    }
+  ],
+  "bodySite": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "80248007",
+          "display": "Left breast structure"
+        }
+      ],
+      "text": "Mama izquierda"
+    }
+  ]
+}

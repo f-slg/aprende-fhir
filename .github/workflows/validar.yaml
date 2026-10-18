@@ -1,0 +1,66 @@
+# Valida los recursos del taller y lo ejecuta completo en un servidor HAPI FHIR.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+name: validar
+
+permissions: read-all
+
+jobs:
+  recursos:
+    name: Validador oficial de HL7
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+
+      - name: Caché del validador
+        uses: actions/cache@v4
+        with:
+          path: |
+            .validador
+            ~/.fhir
+          key: validador-${{ runner.os }}-${{ github.run_id }}
+          restore-keys: validador-${{ runner.os }}-
+
+      - name: Validar los recursos (FHIR R4)
+        run: herramientas/validar.sh
+
+      - name: Comprobar que la colección de Postman está al día
+        run: |
+          python3 herramientas/construir_postman.py
+          git diff --exit-code postman/ || {
+            echo "::error::La colección de Postman no coincide con herramientas/pasos.json. Ejecuta python3 herramientas/construir_postman.py"
+            exit 1
+          }
+
+  taller:
+    name: Taller completo en HAPI FHIR
+    runs-on: ubuntu-latest
+    services:
+      hapi:
+        image: hapiproject/hapi:latest
+        ports:
+          - 8080:8080
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Esperar a que el servidor esté listo
+        run: |
+          for i in $(seq 1 60); do
+            curl -sf http://localhost:8080/fhir/metadata > /dev/null && exit 0
+            sleep 5
+          done
+          echo "::error::El servidor HAPI no respondió"; exit 1
+
+      - name: Ejecutar los 10 módulos con curl
+        env:
+          FHIRURL: http://localhost:8080/fhir
+        run: curl/taller.sh

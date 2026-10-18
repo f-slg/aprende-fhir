@@ -1,0 +1,141 @@
+{
+  "resourceType": "Bundle",
+  "type": "transaction",
+  "entry": [
+    {
+      "fullUrl": "urn:uuid:f7c61a9c-0abc-5d6f-8814-2b25090472ff",
+      "resource": {
+        "resourceType": "Patient",
+        "text": {
+          "status": "generated",
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>María José Paredes Andrade, cédula ficticia 9900000025.</p></div>"
+        },
+        "identifier": [
+          {
+            "use": "official",
+            "type": {
+              "coding": [
+                {
+                  "system": "http://terminology.hl7.org/CodeSystem/v2-0203",
+                  "code": "NI",
+                  "display": "National unique individual identifier"
+                }
+              ],
+              "text": "Cédula de identidad"
+            },
+            "system": "https://f-slg.github.io/aprende-fhir/sid/cedula",
+            "value": "9900000025"
+          }
+        ],
+        "name": [
+          {
+            "use": "official",
+            "text": "María José Paredes Andrade",
+            "family": "Paredes Andrade",
+            "given": [
+              "María",
+              "José"
+            ]
+          }
+        ],
+        "gender": "female",
+        "birthDate": "2006-07-21"
+      },
+      "request": {
+        "method": "POST",
+        "url": "Patient",
+        "ifNoneExist": "identifier=https://f-slg.github.io/aprende-fhir/sid/cedula|9900000025"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:7e8908cb-6dc5-5d36-8da3-569708c9956d",
+      "resource": {
+        "resourceType": "Patient",
+        "text": {
+          "status": "generated",
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Carmen Elena Andrade Vega, cédula ficticia 9900000033.</p></div>"
+        },
+        "identifier": [
+          {
+            "use": "official",
+            "type": {
+              "coding": [
+                {
+                  "system": "http://terminology.hl7.org/CodeSystem/v2-0203",
+                  "code": "NI",
+                  "display": "National unique individual identifier"
+                }
+              ],
+              "text": "Cédula de identidad"
+            },
+            "system": "https://f-slg.github.io/aprende-fhir/sid/cedula",
+            "value": "9900000033"
+          }
+        ],
+        "name": [
+          {
+            "use": "official",
+            "text": "Carmen Elena Andrade Vega",
+            "family": "Andrade Vega",
+            "given": [
+              "Carmen",
+              "Elena"
+            ]
+          }
+        ],
+        "gender": "female",
+        "birthDate": "1981-11-02"
+      },
+      "request": {
+        "method": "POST",
+        "url": "Patient",
+        "ifNoneExist": "identifier=https://f-slg.github.io/aprende-fhir/sid/cedula|9900000033"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:9e683edb-5c5b-5a1e-87a1-fe0923235ea0",
+      "resource": {
+        "resourceType": "Patient",
+        "text": {
+          "status": "generated",
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Daniel Esteban Paredes Andrade, cédula ficticia 9900000041.</p></div>"
+        },
+        "identifier": [
+          {
+            "use": "official",
+            "type": {
+              "coding": [
+                {
+                  "system": "http://terminology.hl7.org/CodeSystem/v2-0203",
+                  "code": "NI",
+                  "display": "National unique individual identifier"
+                }
+              ],
+              "text": "Cédula de identidad"
+            },
+            "system": "https://f-slg.github.io/aprende-fhir/sid/cedula",
+            "value": "9900000041"
+          }
+        ],
+        "name": [
+          {
+            "use": "official",
+            "text": "Daniel Esteban Paredes Andrade",
+            "family": "Paredes Andrade",
+            "given": [
+              "Daniel",
+              "Esteban"
+            ]
+          }
+        ],
+        "gender": "male",
+        "birthDate": "2010-01-15"
+      },
+      "request": {
+        "method": "POST",
+        "url": "Patient",
+        "ifNoneExist": "identifier=https://f-slg.github.io/aprende-fhir/sid/cedula|9900000041"
+      }
+    }
+  ]
+}

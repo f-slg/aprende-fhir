@@ -1,0 +1,45 @@
+{
+  "resourceType": "Observation",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Fiebre: presente.</p></div>"
+  },
+  "status": "final",
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+          "code": "exam",
+          "display": "Exam"
+        }
+      ]
+    }
+  ],
+  "code": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "386661006",
+        "display": "Fever"
+      }
+    ],
+    "text": "Fiebre"
+  },
+  "subject": {
+    "reference": "Patient/{{patientId}}",
+    "display": "Luis Alberto Paredes Cevallos"
+  },
+  "encounter": {
+    "reference": "Encounter/{{encounterId}}",
+    "display": "Consulta por dolor abdominal"
+  },
+  "effectiveDateTime": "2025-03-20T07:30:00-05:00",
+  "performer": [
+    {
+      "reference": "Practitioner/{{practitionerId}}",
+      "display": "Dra. Andrea Lucía Salazar Moreno"
+    }
+  ],
+  "valueBoolean": true
+}

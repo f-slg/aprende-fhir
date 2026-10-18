@@ -1,0 +1,79 @@
+{
+  "resourceType": "Composition",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Nota de signos vitales del 20 de marzo de 2025.</p><p>Presión arterial 128/84 mmHg; Temperatura 38,4 °C; Frecuencia respiratoria 20/min; Frecuencia cardíaca 102/min.</p></div>"
+  },
+  "identifier": {
+    "system": "https://f-slg.github.io/aprende-fhir/sid/documento",
+    "value": "DOC-2025-0001"
+  },
+  "status": "final",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "8716-3",
+        "display": "Vital signs note"
+      }
+    ],
+    "text": "Nota de signos vitales"
+  },
+  "subject": {
+    "reference": "Patient/{{patientId}}",
+    "display": "Luis Alberto Paredes Cevallos"
+  },
+  "encounter": {
+    "reference": "Encounter/{{encounterId}}",
+    "display": "Consulta por dolor abdominal"
+  },
+  "date": "2025-03-20T08:00:00-05:00",
+  "author": [
+    {
+      "reference": "Practitioner/{{practitionerId}}",
+      "display": "Dra. Andrea Lucía Salazar Moreno"
+    }
+  ],
+  "title": "Signos vitales - consulta del 20 de marzo de 2025",
+  "custodian": {
+    "reference": "Organization/{{hospitalId}}",
+    "display": "Hospital General Docente Ejemplo"
+  },
+  "section": [
+    {
+      "title": "Signos vitales",
+      "code": {
+        "coding": [
+          {
+            "system": "http://loinc.org",
+            "code": "8716-3",
+            "display": "Vital signs note"
+          }
+        ],
+        "text": "Nota de signos vitales"
+      },
+      "text": {
+        "status": "generated",
+        "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Presión arterial 128/84 mmHg; Temperatura 38,4 °C; Frecuencia respiratoria 20/min; Frecuencia cardíaca 102/min.</p></div>"
+      },
+      "entry": [
+        {
+          "reference": "Observation/{{obsPAId}}",
+          "display": "Presión arterial 128/84 mmHg"
+        },
+        {
+          "reference": "Observation/{{obsTempId}}",
+          "display": "Temperatura 38,4 °C"
+        },
+        {
+          "reference": "Observation/{{obsFRId}}",
+          "display": "Frecuencia respiratoria 20/min"
+        },
+        {
+          "reference": "Observation/{{obsFCId}}",
+          "display": "Frecuencia cardíaca 102/min"
+        }
+      ]
+    }
+  ]
+}
