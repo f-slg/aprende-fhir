@@ -317,6 +317,15 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#desde-vs-code-con-postman" class="md-nav__link">
+    <span class="md-ellipsis">
+      Desde VS Code con Postman
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -982,6 +991,15 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#desde-vs-code-con-postman" class="md-nav__link">
+    <span class="md-ellipsis">
+      Desde VS Code con Postman
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1169,6 +1187,63 @@ el servidor de terminología de HL7, <code>https://tx.fhir.org/r4</code> (variab
 <div class="highlight"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span>-p<span class="w"> </span><span class="m">8080</span>:8080<span class="w"> </span>hapiproject/hapi:latest
 </code></pre></div>
 <p>y usar <code>http://localhost:8080/fhir</code>.</p>
+<h3 id="desde-vs-code-con-postman">Desde VS Code con Postman<a class="headerlink" href="#desde-vs-code-con-postman" title="Permanent link">&para;</a></h3>
+<p>El repositorio viene preconfigurado para VS Code. Ábrelo con
+<code>code aprende-fhir</code> y acepta instalar las <strong>extensiones recomendadas</strong>
+(Postman, R, vista previa de Mermaid y herramientas FHIR).</p>
+<ol>
+<li>En la barra lateral, abre <strong>Postman</strong> e inicia sesión (la extensión usa tu
+   cuenta de Postman, la gratuita basta).</li>
+<li><strong>Import</strong> → elige <code>postman/aprende-fhir.postman_collection.json</code>.</li>
+<li>Importa también un entorno de la carpeta <code>postman/</code>:</li>
+<li><code>hapi-publico.postman_environment.json</code>: servidor público de HAPI.</li>
+<li><code>hapi-local.postman_environment.json</code>: tu HAPI en <code>http://localhost:8080/fhir</code>.</li>
+<li>Selecciona el entorno arriba a la derecha y ejecuta las peticiones en orden
+   con <strong>Send</strong>. Cada <code>POST</code> guarda el <code>id</code> en las variables de la colección, así
+   que los módulos siguientes ya lo encuentran. Para correrla entera, usa
+   <strong>Run</strong> sobre la colección.</li>
+</ol>
+<p>Con el README del módulo abierto a un lado (vista previa: <code>Ctrl+Shift+V</code>) y
+Postman al otro, sigues la explicación y ejecutas cada paso sin salir del editor.</p>
+<p>En <strong>Terminal → Ejecutar tarea…</strong> tienes atajos para lo demás:</p>
+<table>
+<thead>
+<tr>
+<th>Tarea</th>
+<th>Qué hace</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>HAPI local: iniciar / detener</td>
+<td>Levanta o detiene un HAPI FHIR con Podman o Docker y espera a que responda</td>
+</tr>
+<tr>
+<td>Taller: ejecutar la colección de Postman (newman)</td>
+<td>Corre la colección completa desde la terminal y muestra qué paso falla</td>
+</tr>
+<tr>
+<td>Taller: ejecutar con curl</td>
+<td><code>curl/taller.sh</code>, todo o hasta el módulo que elijas</td>
+</tr>
+<tr>
+<td>Taller: ejecutar con R</td>
+<td><code>r/taller.R</code>, todo o hasta el módulo que elijas</td>
+</tr>
+<tr>
+<td>Validar con el validador oficial de HL7</td>
+<td><code>herramientas/validar.sh</code></td>
+</tr>
+<tr>
+<td>Actualizar pasos, fichas y colección de Postman</td>
+<td><code>herramientas/actualizar.py</code></td>
+</tr>
+<tr>
+<td>Sitio web: vista previa</td>
+<td>El sitio en <code>http://127.0.0.1:8000</code></td>
+</tr>
+</tbody>
+</table>
 <h2 id="módulos">Módulos<a class="headerlink" href="#módulos" title="Permanent link">&para;</a></h2>
 <p>El taller tiene tres niveles y 19 módulos, que se siguen en orden.</p>
 <p><strong>Nivel básico</strong></p>
@@ -1472,7 +1547,8 @@ real se usan las que defina la guía de implementación nacional.</p>
 modulos/NN-tema/soluciones/     recursos FHIR de solución (JSON)
 modulos/NN-tema/pasos/          versiones intermedias de la construcción paso a paso
 modulos/NN-tema/errores/        errores a propósito
-postman/                        colección de Postman
+postman/                        colección y entornos de Postman (público y local)
+.vscode/                        tareas y extensiones recomendadas para VS Code
 r/                              funciones y scripts para R/RStudio
 curl/                           script para la terminal
 herramientas/pasos.json         lista ordenada de pasos del taller (y errores esperados)
