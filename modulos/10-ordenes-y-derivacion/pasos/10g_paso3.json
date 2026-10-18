@@ -1,0 +1,44 @@
+{
+  "resourceType": "DiagnosticReport",
+  "basedOn": [
+    {
+      "reference": "ServiceRequest/{{ultrasoundRequestId}}",
+      "display": "Orden de ecografía de mama"
+    }
+  ],
+  "status": "final",
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/v2-0074",
+          "code": "RAD",
+          "display": "Radiology"
+        }
+      ],
+      "text": "Imagenología"
+    }
+  ],
+  "code": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "24601-7",
+        "display": "US Breast"
+      }
+    ],
+    "text": "Ecografía de mama"
+  },
+  "subject": {
+    "reference": "Patient/{{patientId}}",
+    "display": "Luis Alberto Paredes Cevallos"
+  },
+  "effectiveDateTime": "2025-04-25T10:00:00-05:00",
+  "issued": "2025-04-25T12:00:00-05:00",
+  "performer": [
+    {
+      "reference": "Organization/{{hospitalId}}",
+      "display": "Hospital General Docente Ejemplo"
+    }
+  ]
+}

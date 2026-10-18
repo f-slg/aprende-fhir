@@ -1,0 +1,11 @@
+{
+  "resourceType": "PractitionerRole",
+  "practitioner": {
+    "reference": "Practitioner/{{practitionerId}}",
+    "display": "Dra. Andrea Lucía Salazar Moreno"
+  },
+  "organization": {
+    "reference": "Organization/{{hospitalId}}",
+    "display": "Hospital General Docente Ejemplo"
+  }
+}

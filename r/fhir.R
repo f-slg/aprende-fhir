@@ -33,12 +33,14 @@ fhir_sustituir <- function(texto) {
 #' @param archivo Archivo JSON con el cuerpo de la petición (POST y PUT).
 #' @param guarda Nombre con el que guardar el id del recurso creado.
 #' @return La respuesta del servidor como lista de R.
-fhir <- function(metodo, ruta = "", archivo = NULL, guarda = NULL, espera_rechazo = FALSE) {
+fhir <- function(metodo, ruta = "", archivo = NULL, guarda = NULL, espera_rechazo = FALSE,
+                 encabezados = NULL) {
   url <- paste0(fhir_url(), if (nzchar(ruta)) paste0("/", fhir_sustituir(ruta)))
   req <- request(url) |>
     req_method(metodo) |>
     req_headers(Accept = "application/fhir+json") |>
     req_error(is_error = function(resp) FALSE)
+  if (length(encabezados)) req <- req_headers(req, !!!encabezados)
   if (!is.null(archivo)) {
     cuerpo <- fhir_sustituir(paste(readLines(archivo, encoding = "UTF-8", warn = FALSE),
                                    collapse = "\n"))

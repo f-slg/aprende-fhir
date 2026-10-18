@@ -1,0 +1,9 @@
+{
+  "resourceType": "ServiceRequest",
+  "status": "completed",
+  "intent": "order",
+  "subject": {
+    "reference": "Patient/{{patientId}}",
+    "display": "Luis Alberto Paredes Cevallos"
+  }
+}

@@ -18,7 +18,7 @@ fi
 tmp="$(mktemp -d)"
 trap 'rm -rf "$tmp"' EXIT
 mkdir -p "$tmp/correctos" "$tmp/errores"
-preparar() { sed -E 's/\{\{([A-Za-z]+)\}\}/ej-\1/g' "$1" > "$2/$(basename "$1")"; }
+preparar() { sed -E 's/\{\{([A-Za-z0-9]+)\}\}/ej-\1/g' "$1" > "$2/$(basename "$1")"; }
 for f in "$raiz"/modulos/*/soluciones/*.json "$raiz"/modulos/*/pasos/*.json; do
   preparar "$f" "$tmp/correctos"
 done

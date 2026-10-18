@@ -1,0 +1,58 @@
+{
+  "resourceType": "CareTeam",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Comité de tumores de mama del Hospital General Docente Ejemplo:</p><p>Dr. Ruiz (oncología clínica, coordinador) y Dra. Salazar (medicina general).</p></div>"
+  },
+  "identifier": [
+    {
+      "system": "https://f-slg.github.io/aprende-fhir/sid/equipo",
+      "value": "CT-MAMA-0001"
+    }
+  ],
+  "status": "active",
+  "name": "Comité de tumores de mama",
+  "subject": {
+    "reference": "Patient/{{patientId}}",
+    "display": "Luis Alberto Paredes Cevallos"
+  },
+  "period": {
+    "start": "2025-05-20"
+  },
+  "participant": [
+    {
+      "role": [
+        {
+          "text": "Oncólogo clínico, coordinador del comité"
+        }
+      ],
+      "member": {
+        "reference": "PractitionerRole/{{oncologistRoleId}}",
+        "display": "Dr. Ruiz · Oncología clínica"
+      }
+    },
+    {
+      "role": [
+        {
+          "text": "Médica de cabecera"
+        }
+      ],
+      "member": {
+        "reference": "PractitionerRole/{{salazarRoleId}}",
+        "display": "Dra. Salazar · Medicina general"
+      }
+    }
+  ],
+  "managingOrganization": [
+    {
+      "reference": "Organization/{{hospitalId}}",
+      "display": "Hospital General Docente Ejemplo"
+    }
+  ],
+  "reasonReference": [
+    {
+      "reference": "Condition/{{conditionCancerId}}",
+      "display": "Carcinoma ductal infiltrante de mama izquierda"
+    }
+  ]
+}

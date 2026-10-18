@@ -1,0 +1,18 @@
+{
+  "resourceType": "QuestionnaireResponse",
+  "questionnaire": "https://f-slg.github.io/aprende-fhir/Questionnaire/seguimiento-oncologico",
+  "status": "completed",
+  "subject": {
+    "reference": "Patient/{{patientId}}"
+  },
+  "item": [
+    {
+      "linkId": "dolor",
+      "answer": [
+        {
+          "valueInteger": "seis"
+        }
+      ]
+    }
+  ]
+}

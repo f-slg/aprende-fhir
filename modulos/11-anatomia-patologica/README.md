@@ -1,11 +1,8 @@
 # Módulo 11 · Anatomía patológica
 
-[← Módulo 09](../09-documentos-clinicos/README.md) · [Inicio](../../README.md) · [Módulo 13 →](../13-procedimientos/README.md)
+[← Módulo 10](../10-ordenes-y-derivacion/README.md) · [Inicio](../../README.md) · [Módulo 12 →](../12-plan-y-consentimiento/README.md)
 
-> **Nivel:** intermedio · **Duración:** 90 minutos · **Necesitas:** módulos 05 y 06
->
-> El módulo 10 (órdenes y derivación) está en preparación. Cuando esté listo,
-> la biopsia de este módulo se pedirá con una orden.
+> **Nivel:** intermedio · **Duración:** 90 minutos · **Necesitas:** módulos 05, 06 y 10
 
 ## Lo que vas a aprender
 
@@ -21,7 +18,7 @@ mama en hombres es poco frecuente (alrededor del 1 % de los casos), pero
 existe, y Luis tiene un antecedente importante: su madre lo tuvo a los 52
 años (módulo 07).
 
-- **6 de mayo:** se toma una **biopsia** del nódulo.
+- **6 de mayo:** se toma la **biopsia** que se pidió en el módulo 10.
 - **8 de mayo:** el patólogo informa un tumor de **2,5 cm**. Al revisar la
   pieza, corrige la medida a **3,5 cm**.
 - **12 de mayo:** la inmunohistoquímica muestra **receptor de estrógeno
@@ -299,7 +296,7 @@ general: el laboratorio sabe qué recibe.
 ```
 <!-- /paso -->
 
-### Paso 3 · Identificador, estado y recepción
+### Paso 3 · Identificador, estado, recepción y la orden
 
 <!-- paso 11c 3 -->
 ```json
@@ -315,12 +312,20 @@ general: el laboratorio sabe qué recibe.
   "text": {
     "status": "generated",
     "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Biopsia de tejido tumoral de mama izquierda (AP-2025-0457). Estado: available.</p></div>"
-  }
+  },
+  "request": [
+    {
+      "reference": "ServiceRequest/{{biopsyRequestId}}",
+      "display": "Orden de biopsia de mama"
+    }
+  ]
 }
 ```
 <!-- /paso -->
 
-Solución: [`11c_specimen_crear.json`](soluciones/11c_specimen_crear.json).
+`request` apunta a la orden de biopsia del módulo 10: así el laboratorio
+sabe qué se pidió con esta muestra. Solución:
+[`11c_specimen_crear.json`](soluciones/11c_specimen_crear.json).
 
 **11d · La muestra se agota.** Tras la inmunohistoquímica no queda tejido.
 Lo que cambia:
@@ -565,7 +570,7 @@ LOINC `11526-1` *Pathology study*.
 `category` con la tabla `v2-0074`: `SP` es *Surgical Pathology*. `effective`
 es cuándo se hizo el estudio; `issued`, cuándo se publicó el informe.
 
-### Paso 3 · La muestra y los resultados
+### Paso 3 · La orden, la muestra y los resultados
 
 <!-- paso 11i 3 -->
 ```json
@@ -585,10 +590,19 @@ es cuándo se hizo el estudio; `issued`, cuándo se publicó el informe.
       "reference": "Observation/{{obsREId}}",
       "display": "Receptor de estrógeno positivo"
     }
+  ],
+  "basedOn": [
+    {
+      "reference": "ServiceRequest/{{biopsyRequestId}}",
+      "display": "Orden de biopsia de mama"
+    }
   ]
 }
 ```
 <!-- /paso -->
+
+`basedOn` cierra el ciclo con la orden de biopsia, como el informe de la
+ecografía en el módulo 10.
 
 ### Paso 4 · La conclusión
 

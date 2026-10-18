@@ -1,0 +1,9 @@
+{
+  "resourceType": "CarePlan",
+  "status": "active",
+  "intent": "plan",
+  "subject": {
+    "reference": "Patient/{{patientId}}",
+    "display": "Luis Alberto Paredes Cevallos"
+  }
+}

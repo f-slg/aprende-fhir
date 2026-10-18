@@ -10,6 +10,12 @@
       "value": "INF-AP-2025-0457"
     }
   ],
+  "basedOn": [
+    {
+      "reference": "ServiceRequest/{{biopsyRequestId}}",
+      "display": "Orden de biopsia de mama"
+    }
+  ],
   "status": "final",
   "category": [
     {

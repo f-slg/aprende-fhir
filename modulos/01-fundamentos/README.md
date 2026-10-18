@@ -47,11 +47,13 @@ agrupados por tema:
 
 | Grupo | Ejemplos | En este taller |
 |---|---|---|
-| Administración | Patient, Practitioner, Organization, Encounter | Módulos 02, 04, 05 |
-| Clínicos | Condition, AllergyIntolerance, Procedure, FamilyMemberHistory | Módulos 05, 07, 13 |
-| Diagnóstico | Observation, DiagnosticReport, Specimen, BodyStructure | Módulos 06, 11 |
+| Administración | Patient, Practitioner, PractitionerRole, Organization, Location, Encounter | Módulos 02, 04, 05, 10 |
+| Agenda | Schedule, Slot, Appointment, AppointmentResponse | Módulo 14 |
+| Clínicos | Condition, AllergyIntolerance, FamilyMemberHistory, Procedure | Módulos 05, 07, 13 |
+| Planificación | ServiceRequest, CarePlan, CareTeam, Goal | Módulos 10, 12 |
+| Diagnóstico | Observation, DiagnosticReport, Specimen, BodyStructure | Módulos 06, 10, 11 |
 | Medicación | MedicationRequest, MedicationAdministration, MedicationStatement, Immunization | Módulos 07, 08, 15 |
-| Documentos | Composition, Bundle | Módulos 03, 09 |
+| Documentos y formularios | Composition, Bundle, Questionnaire, QuestionnaireResponse, Consent | Módulos 03, 09, 12, 16 |
 | Infraestructura | CapabilityStatement, OperationOutcome | Este módulo |
 
 Todos los recursos comparten la misma **anatomía**:

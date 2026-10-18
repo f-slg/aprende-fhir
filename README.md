@@ -19,7 +19,7 @@
 ---
 
 Un recorrido para aprender FHIR haciendo, **paso a paso**: crearás, buscarás,
-corregirás y enlazarás **20 tipos de recursos** siguiendo a un mismo paciente,
+corregirás y enlazarás **33 tipos de recursos** siguiendo a un mismo paciente,
 desde su primera consulta hasta el tratamiento de un cáncer de mama.
 
 En cada módulo:
@@ -39,7 +39,7 @@ En cada módulo:
   programar.
 - **Tres formas de practicar** con el mismo contenido: Postman, R/RStudio o
   curl.
-- **Recursos validados:** las 46 soluciones y sus 73 versiones intermedias se
+- **Recursos validados:** las 74 soluciones y sus 120 versiones intermedias se
   revisan con el [validador oficial de HL7](https://github.com/hapifhir/org.hl7.fhir.core)
   en cada cambio, y el taller completo se ejecuta en un servidor
   [HAPI FHIR](https://hapifhir.io/).
@@ -80,9 +80,8 @@ y usar `http://localhost:8080/fhir`.
 
 ## Módulos
 
-El taller tiene tres niveles y 19 módulos. Los módulos disponibles se pueden
-seguir en orden; los marcados *en preparación* llegarán en las próximas
-etapas.
+El taller tiene tres niveles y 19 módulos. Los niveles básico e intermedio
+están completos; el nivel avanzado llegará en la próxima etapa.
 
 **Nivel básico**
 
@@ -102,19 +101,19 @@ etapas.
 | 07 | [Antecedentes](modulos/07-antecedentes/README.md) | AllergyIntolerance, MedicationStatement, FamilyMemberHistory | Registrar alergias, medicación habitual y antecedentes familiares |
 | 08 | [Vacunación](modulos/08-vacunacion/README.md) | Immunization | Registrar vacunas aplicadas y diferidas, con lote y dosis del esquema |
 | 09 | [Documentos clínicos](modulos/09-documentos-clinicos/README.md) | Composition, Bundle `document` | Crear un documento autocontenido e inmutable |
-| 10 | Órdenes y derivación · *en preparación* | ServiceRequest, PractitionerRole, Location | Pedir estudios y derivar a otro servicio |
+| 10 | [Órdenes y derivación](modulos/10-ordenes-y-derivacion/README.md) | Location, PractitionerRole, ServiceRequest | Pedir estudios, derivar y cerrar el ciclo orden → resultado con `_revinclude` |
 | 11 | [Anatomía patológica](modulos/11-anatomia-patologica/README.md) | BodyStructure, Specimen, DiagnosticReport | Registrar una biopsia, corregir resultados y emitir un informe |
-| 12 | Plan y consentimiento · *en preparación* | CarePlan, Goal, Consent | Registrar la decisión del comité y el consentimiento |
+| 12 | [Plan y consentimiento](modulos/12-plan-y-consentimiento/README.md) | CareTeam, Goal, CarePlan, Consent | Registrar el comité de tumores, sus metas, el plan y el consentimiento informado |
 | 13 | [Procedimientos](modulos/13-procedimientos/README.md) | Procedure | Registrar una cirugía con su motivo y resultado |
-| 14 | Citas · *en preparación* | Schedule, Slot, Appointment | Agendar los ciclos de quimioterapia |
-| 15 | [Medicamentos](modulos/15-medicamentos/README.md) | MedicationRequest, MedicationAdministration | Prescribir, administrar, suspender y recuperar todo con `$everything` |
-| 16 | Seguimiento · *en preparación* | Questionnaire, QuestionnaireResponse | Aplicar escalas de dolor y calidad de vida |
+| 14 | [Citas](modulos/14-citas/README.md) | Schedule, Slot, Appointment, AppointmentResponse | Agendar, confirmar, cumplir y cancelar citas, y entender la caché del servidor |
+| 15 | [Medicamentos](modulos/15-medicamentos/README.md) | MedicationRequest, MedicationAdministration | Prescribir, administrar y suspender un tratamiento |
+| 16 | [Seguimiento](modulos/16-seguimiento/README.md) | Questionnaire, QuestionnaireResponse | Definir y responder un cuestionario, extraer datos y ver todo con `$everything` |
 
 **Nivel avanzado** · *en preparación*
 
 | | Módulo | Aprendes a... |
 |---|---|---|
-| 17 | Búsquedas avanzadas y versiones | `_revinclude`, búsquedas encadenadas, `_has` y control de concurrencia con `If-Match` |
+| 17 | Búsquedas avanzadas y versiones | Búsquedas encadenadas, `_has`, prefijos de comparación y control de concurrencia con `If-Match` |
 | 18 | Terminologías y perfiles | `$lookup`, `$validate-code` y una introducción a los perfiles y guías de implementación |
 | 19 | Resumen del paciente (IPS) | Armar el resumen internacional del paciente con todo lo aprendido |
 
@@ -128,19 +127,25 @@ alimentaria y, en la anamnesis, registra su **alergia a la penicilina**, el
 cáncer de mama**. Como Luis tiene fiebre, las vacunas se difieren; dos
 semanas después recibe la de la influenza y el refuerzo de Td.
 
-Meses más tarde, una biopsia de un nódulo en la mama izquierda confirma un
-**carcinoma ductal infiltrante** con receptor de estrógeno positivo. Luis
-recibe cirugía, quimioterapia con doxorrubicina y hormonoterapia con
-tamoxifeno, que se suspende por intolerancia.
+En abril, Luis se palpa un nódulo en la mama izquierda. La ecografía es
+sospechosa y una biopsia confirma un **carcinoma ductal infiltrante** con
+receptor de estrógeno positivo. El comité de tumores define el plan: cirugía,
+quimioterapia con doxorrubicina y hormonoterapia con tamoxifeno. Los
+cuestionarios de seguimiento muestran que el tamoxifeno le provoca sofocos y
+dolor articular, y se suspende.
 
 | Fecha | Qué pasa | Módulos |
 |---|---|---|
 | 20-mar-2025 | Consulta: diagnóstico, signos vitales, antecedentes, vacunas diferidas | 02 a 08 |
 | 03-abr-2025 | Vacunatorio: influenza y Td | 08 |
+| 22 a 28-abr-2025 | Nódulo en la mama: ecografía BI-RADS 4, orden de biopsia y derivación a oncología | 10 |
 | 06 a 13-may-2025 | Biopsia, informe de patología y diagnóstico de cáncer | 11 |
+| 20 y 27-may-2025 | Comité de tumores: plan, metas y consentimiento informado | 12 |
 | 10-jun-2025 | Mastectomía parcial | 13 |
+| jul-2025 | Citas de quimioterapia; el ciclo 2 se cancela por neutropenia | 14 |
 | 02-jul-2025 | Primer ciclo de doxorrubicina | 15 |
 | 15-oct-2025 → feb-2026 | Tamoxifeno, suspendido por intolerancia | 15 |
+| oct-2025 y ene-2026 | Cuestionarios de seguimiento: aparecen los sofocos y el dolor articular | 16 |
 
 Así se enlazan los recursos que crearás:
 
@@ -171,6 +176,15 @@ flowchart LR
   Pr[Procedure<br/>mastectomía] -->|reason| C2
   MR[MedicationRequest<br/>doxorrubicina y tamoxifeno] -->|reason| C2
   MA[MedicationAdministration] -->|request| MR
+  SR[ServiceRequest<br/>ecografía y biopsia] --> P
+  DR -->|basedOn| SR
+  S -->|request| SR
+  CP[CarePlan<br/>plan del comité] -->|addresses| C2
+  CP --> G[Goal<br/>metas]
+  CP --> CT[CareTeam<br/>comité]
+  Pr -->|basedOn| CP
+  Ap[Appointment<br/>ciclos de quimioterapia] -->|slot| Sl[Slot] -->|schedule| Sc[Schedule]
+  QR[QuestionnaireResponse<br/>seguimiento] --> P
 ```
 
 ## Validar tus recursos

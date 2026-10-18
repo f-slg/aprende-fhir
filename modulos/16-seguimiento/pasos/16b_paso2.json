@@ -1,0 +1,18 @@
+{
+  "resourceType": "QuestionnaireResponse",
+  "questionnaire": "https://f-slg.github.io/aprende-fhir/Questionnaire/seguimiento-oncologico",
+  "status": "in-progress",
+  "subject": {
+    "reference": "Patient/{{patientId}}",
+    "display": "Luis Alberto Paredes Cevallos"
+  },
+  "authored": "2025-10-28T09:30:00-05:00",
+  "author": {
+    "reference": "Patient/{{patientId}}",
+    "display": "Luis Alberto Paredes Cevallos"
+  },
+  "source": {
+    "reference": "Patient/{{patientId}}",
+    "display": "Luis Alberto Paredes Cevallos"
+  }
+}

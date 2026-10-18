@@ -1,0 +1,69 @@
+{
+  "resourceType": "QuestionnaireResponse",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Respuesta del 28 de octubre de 2025: dolor 2/10, ECOG 0, sin sofocos ni dolor articular.</p></div>"
+  },
+  "questionnaire": "https://f-slg.github.io/aprende-fhir/Questionnaire/seguimiento-oncologico",
+  "status": "completed",
+  "subject": {
+    "reference": "Patient/{{patientId}}",
+    "display": "Luis Alberto Paredes Cevallos"
+  },
+  "authored": "2025-10-28T09:30:00-05:00",
+  "author": {
+    "reference": "Patient/{{patientId}}",
+    "display": "Luis Alberto Paredes Cevallos"
+  },
+  "source": {
+    "reference": "Patient/{{patientId}}",
+    "display": "Luis Alberto Paredes Cevallos"
+  },
+  "item": [
+    {
+      "linkId": "dolor",
+      "text": "En una escala de 0 (sin dolor) a 10 (el peor dolor imaginable), ¿cuánto dolor tuvo en la última semana?",
+      "answer": [
+        {
+          "valueInteger": 2
+        }
+      ]
+    },
+    {
+      "linkId": "ecog",
+      "text": "¿Cuál de estas frases describe mejor su actividad habitual?",
+      "answer": [
+        {
+          "valueString": "0 · Hago mi vida normal sin limitaciones"
+        }
+      ]
+    },
+    {
+      "linkId": "sofocos",
+      "text": "¿Ha tenido sofocos (bochornos) en la última semana?",
+      "answer": [
+        {
+          "valueBoolean": false
+        }
+      ]
+    },
+    {
+      "linkId": "articular",
+      "text": "¿Ha tenido dolor en las articulaciones en la última semana?",
+      "answer": [
+        {
+          "valueBoolean": false
+        }
+      ]
+    },
+    {
+      "linkId": "comentarios",
+      "text": "¿Algo más que quiera contarnos?",
+      "answer": [
+        {
+          "valueString": "Me siento bien, ya volví al trabajo."
+        }
+      ]
+    }
+  ]
+}

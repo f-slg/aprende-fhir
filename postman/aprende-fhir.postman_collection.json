@@ -1457,7 +1457,10 @@
                 "exec": [
                   "pm.test(\"Respuesta exitosa (2xx)\", function () {",
                   "    pm.expect(pm.response.code).to.be.within(200, 299);",
-                  "});"
+                  "});",
+                  "const id = pm.response.json().id;",
+                  "pm.collectionVariables.set(\"motherHistoryId\", id);",
+                  "console.log(\"motherHistoryId = \" + id);"
                 ]
               }
             }
@@ -2022,6 +2025,517 @@
       ]
     },
     {
+      "name": "10 · Órdenes y derivación",
+      "item": [
+        {
+          "name": "10a · Crear el consultorio (Location)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Location",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"Location\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Consultorio 3 de Medicina General, planta baja del Hospital General Docente Ejemplo.</p></div>\"\n  },\n  \"identifier\": [\n    {\n      \"system\": \"https://f-slg.github.io/aprende-fhir/sid/ubicacion\",\n      \"value\": \"HGDE-CONS-03\"\n    }\n  ],\n  \"status\": \"active\",\n  \"name\": \"Consultorio 3 de Medicina General\",\n  \"mode\": \"instance\",\n  \"type\": [\n    {\n      \"coding\": [\n        {\n          \"system\": \"http://terminology.hl7.org/CodeSystem/v3-RoleCode\",\n          \"code\": \"FMC\",\n          \"display\": \"Family Medicine clinic\"\n        }\n      ],\n      \"text\": \"Consulta de medicina general\"\n    }\n  ],\n  \"physicalType\": {\n    \"coding\": [\n      {\n        \"system\": \"http://terminology.hl7.org/CodeSystem/location-physical-type\",\n        \"code\": \"ro\",\n        \"display\": \"Room\"\n      }\n    ],\n    \"text\": \"Sala\"\n  },\n  \"address\": {\n    \"line\": [\n      \"Av. Principal Ejemplo S00-00\"\n    ],\n    \"city\": \"Quito\",\n    \"state\": \"Pichincha\",\n    \"country\": \"EC\"\n  },\n  \"managingOrganization\": {\n    \"reference\": \"Organization/{{hospitalId}}\",\n    \"display\": \"Hospital General Docente Ejemplo\"\n  }\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/10-ordenes-y-derivacion/soluciones/10a_location_consultorio.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const id = pm.response.json().id;",
+                  "pm.collectionVariables.set(\"officeLocationId\", id);",
+                  "console.log(\"officeLocationId = \" + id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "10b · Rol de la Dra. Salazar: médica general",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/PractitionerRole",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"PractitionerRole\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Dra. Andrea Lucía Salazar Moreno: médica general en el Hospital General Docente Ejemplo,</p><p>consultorio 3, de lunes a viernes de 07:00 a 13:00.</p></div>\"\n  },\n  \"active\": true,\n  \"practitioner\": {\n    \"reference\": \"Practitioner/{{practitionerId}}\",\n    \"display\": \"Dra. Andrea Lucía Salazar Moreno\"\n  },\n  \"organization\": {\n    \"reference\": \"Organization/{{hospitalId}}\",\n    \"display\": \"Hospital General Docente Ejemplo\"\n  },\n  \"code\": [\n    {\n      \"coding\": [\n        {\n          \"system\": \"http://terminology.hl7.org/CodeSystem/practitioner-role\",\n          \"code\": \"doctor\",\n          \"display\": \"Doctor\"\n        }\n      ],\n      \"text\": \"Médica\"\n    }\n  ],\n  \"specialty\": [\n    {\n      \"coding\": [\n        {\n          \"system\": \"http://snomed.info/sct\",\n          \"code\": \"394814009\",\n          \"display\": \"General practice (specialty)\"\n        }\n      ],\n      \"text\": \"Medicina general\"\n    }\n  ],\n  \"location\": [\n    {\n      \"reference\": \"Location/{{officeLocationId}}\",\n      \"display\": \"Consultorio 3 de Medicina General\"\n    }\n  ],\n  \"availableTime\": [\n    {\n      \"daysOfWeek\": [\n        \"mon\",\n        \"tue\",\n        \"wed\",\n        \"thu\",\n        \"fri\"\n      ],\n      \"availableStartTime\": \"07:00:00\",\n      \"availableEndTime\": \"13:00:00\"\n    }\n  ]\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/10-ordenes-y-derivacion/soluciones/10b_practitionerrole_medica_general.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const id = pm.response.json().id;",
+                  "pm.collectionVariables.set(\"salazarRoleId\", id);",
+                  "console.log(\"salazarRoleId = \" + id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "10c · Crear al oncólogo",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Practitioner",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"Practitioner\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Dr. Esteban Patricio Ruiz Montalvo, oncólogo clínico. Registro profesional ficticio RP-000733.</p></div>\"\n  },\n  \"identifier\": [\n    {\n      \"use\": \"official\",\n      \"system\": \"https://f-slg.github.io/aprende-fhir/sid/registro-profesional\",\n      \"value\": \"RP-000733\"\n    }\n  ],\n  \"active\": true,\n  \"name\": [\n    {\n      \"use\": \"official\",\n      \"text\": \"Dr. Esteban Patricio Ruiz Montalvo\",\n      \"prefix\": [\n        \"Dr.\"\n      ],\n      \"family\": \"Ruiz Montalvo\",\n      \"given\": [\n        \"Esteban\",\n        \"Patricio\"\n      ]\n    }\n  ],\n  \"gender\": \"male\",\n  \"qualification\": [\n    {\n      \"code\": {\n        \"coding\": [\n          {\n            \"system\": \"http://terminology.hl7.org/CodeSystem/v2-0360\",\n            \"code\": \"MD\",\n            \"display\": \"Doctor of Medicine\"\n          }\n        ],\n        \"text\": \"Médico\"\n      }\n    }\n  ]\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/10-ordenes-y-derivacion/soluciones/10c_practitioner_oncologo.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const id = pm.response.json().id;",
+                  "pm.collectionVariables.set(\"oncologistId\", id);",
+                  "console.log(\"oncologistId = \" + id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "10d · Rol del oncólogo",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/PractitionerRole",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"PractitionerRole\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Dr. Esteban Patricio Ruiz Montalvo: oncólogo clínico en el Hospital General Docente Ejemplo.</p></div>\"\n  },\n  \"active\": true,\n  \"practitioner\": {\n    \"reference\": \"Practitioner/{{oncologistId}}\",\n    \"display\": \"Dr. Esteban Patricio Ruiz Montalvo\"\n  },\n  \"organization\": {\n    \"reference\": \"Organization/{{hospitalId}}\",\n    \"display\": \"Hospital General Docente Ejemplo\"\n  },\n  \"code\": [\n    {\n      \"coding\": [\n        {\n          \"system\": \"http://terminology.hl7.org/CodeSystem/practitioner-role\",\n          \"code\": \"doctor\",\n          \"display\": \"Doctor\"\n        }\n      ],\n      \"text\": \"Médico\"\n    }\n  ],\n  \"specialty\": [\n    {\n      \"coding\": [\n        {\n          \"system\": \"http://snomed.info/sct\",\n          \"code\": \"394593009\",\n          \"display\": \"Medical oncology\"\n        }\n      ],\n      \"text\": \"Oncología clínica\"\n    }\n  ]\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/10-ordenes-y-derivacion/soluciones/10d_practitionerrole_oncologo.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const id = pm.response.json().id;",
+                  "pm.collectionVariables.set(\"oncologistRoleId\", id);",
+                  "console.log(\"oncologistRoleId = \" + id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "10e · Consulta por el nódulo",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Encounter",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"Encounter\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Consulta por nódulo en la mama izquierda, 22 de abril de 2025, 08:00 a 08:30, consultorio 3.</p></div>\"\n  },\n  \"identifier\": [\n    {\n      \"system\": \"https://f-slg.github.io/aprende-fhir/sid/encuentro\",\n      \"value\": \"ENC-2025-0003\"\n    }\n  ],\n  \"status\": \"finished\",\n  \"class\": {\n    \"system\": \"http://terminology.hl7.org/CodeSystem/v3-ActCode\",\n    \"code\": \"AMB\",\n    \"display\": \"ambulatory\"\n  },\n  \"serviceType\": {\n    \"coding\": [\n      {\n        \"system\": \"http://terminology.hl7.org/CodeSystem/service-type\",\n        \"code\": \"124\",\n        \"display\": \"General Practice\"\n      }\n    ],\n    \"text\": \"Medicina general\"\n  },\n  \"subject\": {\n    \"reference\": \"Patient/{{patientId}}\",\n    \"display\": \"Luis Alberto Paredes Cevallos\"\n  },\n  \"participant\": [\n    {\n      \"type\": [\n        {\n          \"coding\": [\n            {\n              \"system\": \"http://terminology.hl7.org/CodeSystem/v3-ParticipationType\",\n              \"code\": \"ATND\",\n              \"display\": \"attender\"\n            }\n          ]\n        }\n      ],\n      \"individual\": {\n        \"reference\": \"PractitionerRole/{{salazarRoleId}}\",\n        \"display\": \"Dra. Salazar · Medicina general\"\n      }\n    }\n  ],\n  \"period\": {\n    \"start\": \"2025-04-22T08:00:00-05:00\",\n    \"end\": \"2025-04-22T08:30:00-05:00\"\n  },\n  \"reasonCode\": [\n    {\n      \"coding\": [\n        {\n          \"system\": \"http://snomed.info/sct\",\n          \"code\": \"89164003\",\n          \"display\": \"Breast lump\"\n        }\n      ],\n      \"text\": \"Nódulo en la mama izquierda\"\n    }\n  ],\n  \"location\": [\n    {\n      \"location\": {\n        \"reference\": \"Location/{{officeLocationId}}\",\n        \"display\": \"Consultorio 3 de Medicina General\"\n      }\n    }\n  ],\n  \"serviceProvider\": {\n    \"reference\": \"Organization/{{hospitalId}}\",\n    \"display\": \"Hospital General Docente Ejemplo\"\n  }\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/10-ordenes-y-derivacion/soluciones/10e_encounter_consulta_nodulo.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const id = pm.response.json().id;",
+                  "pm.collectionVariables.set(\"noduleEncounterId\", id);",
+                  "console.log(\"noduleEncounterId = \" + id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "10f · Orden de ecografía",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/ServiceRequest",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"ServiceRequest\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Orden: ecografía de mama izquierda, prioridad urgente.</p><p>Motivo: nódulo palpable de 2 cm en el cuadrante superior externo.</p></div>\"\n  },\n  \"identifier\": [\n    {\n      \"system\": \"https://f-slg.github.io/aprende-fhir/sid/orden\",\n      \"value\": \"ORD-2025-0101\"\n    }\n  ],\n  \"status\": \"completed\",\n  \"intent\": \"order\",\n  \"category\": [\n    {\n      \"coding\": [\n        {\n          \"system\": \"http://snomed.info/sct\",\n          \"code\": \"363679005\",\n          \"display\": \"Imaging\"\n        }\n      ],\n      \"text\": \"Imagenología\"\n    }\n  ],\n  \"priority\": \"urgent\",\n  \"code\": {\n    \"coding\": [\n      {\n        \"system\": \"http://snomed.info/sct\",\n        \"code\": \"47079000\",\n        \"display\": \"Ultrasonography of breast\"\n      }\n    ],\n    \"text\": \"Ecografía de mama\"\n  },\n  \"subject\": {\n    \"reference\": \"Patient/{{patientId}}\",\n    \"display\": \"Luis Alberto Paredes Cevallos\"\n  },\n  \"encounter\": {\n    \"reference\": \"Encounter/{{noduleEncounterId}}\",\n    \"display\": \"Consulta por nódulo mamario, 22 de abril de 2025\"\n  },\n  \"authoredOn\": \"2025-04-22T08:20:00-05:00\",\n  \"requester\": {\n    \"reference\": \"PractitionerRole/{{salazarRoleId}}\",\n    \"display\": \"Dra. Salazar · Medicina general\"\n  },\n  \"bodySite\": [\n    {\n      \"coding\": [\n        {\n          \"system\": \"http://snomed.info/sct\",\n          \"code\": \"80248007\",\n          \"display\": \"Left breast structure\"\n        }\n      ],\n      \"text\": \"Mama izquierda\"\n    }\n  ],\n  \"reasonCode\": [\n    {\n      \"coding\": [\n        {\n          \"system\": \"http://snomed.info/sct\",\n          \"code\": \"89164003\",\n          \"display\": \"Breast lump\"\n        }\n      ],\n      \"text\": \"Nódulo palpable en la mama izquierda\"\n    }\n  ]\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/10-ordenes-y-derivacion/soluciones/10f_servicerequest_ecografia.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const id = pm.response.json().id;",
+                  "pm.collectionVariables.set(\"ultrasoundRequestId\", id);",
+                  "console.log(\"ultrasoundRequestId = \" + id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "10g · Informe de la ecografía (BI-RADS 4)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/DiagnosticReport",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"DiagnosticReport\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Ecografía de mama izquierda (25 de abril de 2025): nódulo sólido, irregular, de 2,4 cm, BI-RADS 4.</p><p>Se recomienda biopsia.</p></div>\"\n  },\n  \"identifier\": [\n    {\n      \"system\": \"https://f-slg.github.io/aprende-fhir/sid/informe\",\n      \"value\": \"INF-IMG-2025-0212\"\n    }\n  ],\n  \"basedOn\": [\n    {\n      \"reference\": \"ServiceRequest/{{ultrasoundRequestId}}\",\n      \"display\": \"Orden de ecografía de mama\"\n    }\n  ],\n  \"status\": \"final\",\n  \"category\": [\n    {\n      \"coding\": [\n        {\n          \"system\": \"http://terminology.hl7.org/CodeSystem/v2-0074\",\n          \"code\": \"RAD\",\n          \"display\": \"Radiology\"\n        }\n      ],\n      \"text\": \"Imagenología\"\n    }\n  ],\n  \"code\": {\n    \"coding\": [\n      {\n        \"system\": \"http://loinc.org\",\n        \"code\": \"24601-7\",\n        \"display\": \"US Breast\"\n      }\n    ],\n    \"text\": \"Ecografía de mama\"\n  },\n  \"subject\": {\n    \"reference\": \"Patient/{{patientId}}\",\n    \"display\": \"Luis Alberto Paredes Cevallos\"\n  },\n  \"effectiveDateTime\": \"2025-04-25T10:00:00-05:00\",\n  \"issued\": \"2025-04-25T12:00:00-05:00\",\n  \"performer\": [\n    {\n      \"reference\": \"Organization/{{hospitalId}}\",\n      \"display\": \"Hospital General Docente Ejemplo\"\n    }\n  ],\n  \"conclusion\": \"Nódulo sólido de bordes irregulares de 2,4 cm en el cuadrante superior externo de la mama izquierda. BI-RADS 4: sospechoso. Se recomienda biopsia.\",\n  \"conclusionCode\": [\n    {\n      \"coding\": [\n        {\n          \"system\": \"http://snomed.info/sct\",\n          \"code\": \"89164003\",\n          \"display\": \"Breast lump\"\n        }\n      ],\n      \"text\": \"Nódulo mamario sospechoso\"\n    }\n  ]\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/10-ordenes-y-derivacion/soluciones/10g_diagnosticreport_ecografia.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const id = pm.response.json().id;",
+                  "pm.collectionVariables.set(\"ultrasoundReportId\", id);",
+                  "console.log(\"ultrasoundReportId = \" + id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "10h · Orden de biopsia",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/ServiceRequest",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"ServiceRequest\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Orden: biopsia del nódulo de la mama izquierda con estudio de anatomía patológica.</p></div>\"\n  },\n  \"identifier\": [\n    {\n      \"system\": \"https://f-slg.github.io/aprende-fhir/sid/orden\",\n      \"value\": \"ORD-2025-0102\"\n    }\n  ],\n  \"status\": \"completed\",\n  \"intent\": \"order\",\n  \"category\": [\n    {\n      \"coding\": [\n        {\n          \"system\": \"http://snomed.info/sct\",\n          \"code\": \"108252007\",\n          \"display\": \"Laboratory procedure\"\n        }\n      ],\n      \"text\": \"Procedimiento de laboratorio\"\n    }\n  ],\n  \"priority\": \"urgent\",\n  \"code\": {\n    \"coding\": [\n      {\n        \"system\": \"http://snomed.info/sct\",\n        \"code\": \"122548005\",\n        \"display\": \"Biopsy of breast\"\n      }\n    ],\n    \"text\": \"Biopsia de mama\"\n  },\n  \"subject\": {\n    \"reference\": \"Patient/{{patientId}}\",\n    \"display\": \"Luis Alberto Paredes Cevallos\"\n  },\n  \"encounter\": {\n    \"reference\": \"Encounter/{{noduleEncounterId}}\",\n    \"display\": \"Consulta por nódulo mamario, 22 de abril de 2025\"\n  },\n  \"authoredOn\": \"2025-04-28T09:00:00-05:00\",\n  \"requester\": {\n    \"reference\": \"PractitionerRole/{{salazarRoleId}}\",\n    \"display\": \"Dra. Salazar · Medicina general\"\n  },\n  \"bodySite\": [\n    {\n      \"coding\": [\n        {\n          \"system\": \"http://snomed.info/sct\",\n          \"code\": \"80248007\",\n          \"display\": \"Left breast structure\"\n        }\n      ],\n      \"text\": \"Mama izquierda\"\n    }\n  ],\n  \"reasonReference\": [\n    {\n      \"reference\": \"DiagnosticReport/{{ultrasoundReportId}}\",\n      \"display\": \"Ecografía BI-RADS 4\"\n    }\n  ]\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/10-ordenes-y-derivacion/soluciones/10h_servicerequest_biopsia.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const id = pm.response.json().id;",
+                  "pm.collectionVariables.set(\"biopsyRequestId\", id);",
+                  "console.log(\"biopsyRequestId = \" + id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "10i · Derivación a oncología",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/ServiceRequest",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"ServiceRequest\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Derivación a Oncología Clínica por nódulo mamario BI-RADS 4 en estudio.</p></div>\"\n  },\n  \"identifier\": [\n    {\n      \"system\": \"https://f-slg.github.io/aprende-fhir/sid/orden\",\n      \"value\": \"ORD-2025-0103\"\n    }\n  ],\n  \"status\": \"active\",\n  \"intent\": \"order\",\n  \"category\": [\n    {\n      \"coding\": [\n        {\n          \"system\": \"http://snomed.info/sct\",\n          \"code\": \"3457005\",\n          \"display\": \"Patient referral\"\n        }\n      ],\n      \"text\": \"Derivación\"\n    }\n  ],\n  \"priority\": \"urgent\",\n  \"code\": {\n    \"coding\": [\n      {\n        \"system\": \"http://snomed.info/sct\",\n        \"code\": \"3457005\",\n        \"display\": \"Patient referral\"\n      }\n    ],\n    \"text\": \"Derivación a Oncología Clínica\"\n  },\n  \"subject\": {\n    \"reference\": \"Patient/{{patientId}}\",\n    \"display\": \"Luis Alberto Paredes Cevallos\"\n  },\n  \"encounter\": {\n    \"reference\": \"Encounter/{{noduleEncounterId}}\",\n    \"display\": \"Consulta por nódulo mamario, 22 de abril de 2025\"\n  },\n  \"authoredOn\": \"2025-04-28T09:05:00-05:00\",\n  \"requester\": {\n    \"reference\": \"PractitionerRole/{{salazarRoleId}}\",\n    \"display\": \"Dra. Salazar · Medicina general\"\n  },\n  \"performerType\": {\n    \"coding\": [\n      {\n        \"system\": \"http://snomed.info/sct\",\n        \"code\": \"394593009\",\n        \"display\": \"Medical oncology\"\n      }\n    ],\n    \"text\": \"Oncología clínica\"\n  },\n  \"performer\": [\n    {\n      \"reference\": \"PractitionerRole/{{oncologistRoleId}}\",\n      \"display\": \"Dr. Ruiz · Oncología clínica\"\n    }\n  ],\n  \"reasonReference\": [\n    {\n      \"reference\": \"DiagnosticReport/{{ultrasoundReportId}}\",\n      \"display\": \"Ecografía BI-RADS 4\"\n    }\n  ],\n  \"supportingInfo\": [\n    {\n      \"reference\": \"FamilyMemberHistory/{{motherHistoryId}}\",\n      \"display\": \"Madre con cáncer de mama a los 52 años\"\n    }\n  ],\n  \"note\": [\n    {\n      \"text\": \"Paciente varón de 46 años con nódulo sospechoso y madre con cáncer de mama. Se solicita valoración prioritaria.\"\n    }\n  ]\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/10-ordenes-y-derivacion/soluciones/10i_servicerequest_derivacion.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const id = pm.response.json().id;",
+                  "pm.collectionVariables.set(\"referralId\", id);",
+                  "console.log(\"referralId = \" + id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "10j · Órdenes del paciente",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/ServiceRequest?subject=Patient/{{patientId}}&_sort=authored"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "10k · Lo que se hizo con cada orden (_revinclude)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/ServiceRequest?subject=Patient/{{patientId}}&_revinclude=DiagnosticReport:based-on"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "10l · Profesionales de oncología del hospital",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/PractitionerRole?specialty=http://snomed.info/sct|394593009&_include=PractitionerRole:practitioner"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "10m · Error a propósito: prioridad en español",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/ServiceRequest",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"ServiceRequest\",\n  \"status\": \"active\",\n  \"intent\": \"order\",\n  \"priority\": \"urgente\",\n  \"code\": {\n    \"coding\": [\n      {\n        \"system\": \"http://snomed.info/sct\",\n        \"code\": \"47079000\",\n        \"display\": \"Ultrasonography of breast\"\n      }\n    ]\n  },\n  \"subject\": {\n    \"reference\": \"Patient/{{patientId}}\"\n  }\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/10-ordenes-y-derivacion/errores/10e1_prioridad_en_espanol.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"El servidor rechaza el error (4xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(400, 499);",
+                  "});",
+                  "console.log(pm.response.json().issue[0].diagnostics);"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
       "name": "11 · Anatomía patológica",
       "item": [
         {
@@ -2124,7 +2638,7 @@
             "url": "{{FHIRURL}}/Specimen",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"resourceType\": \"Specimen\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Biopsia de tejido tumoral de mama izquierda (AP-2025-0457). Estado: available.</p></div>\"\n  },\n  \"identifier\": [\n    {\n      \"system\": \"https://f-slg.github.io/aprende-fhir/sid/muestra\",\n      \"value\": \"AP-2025-0457\"\n    }\n  ],\n  \"status\": \"available\",\n  \"type\": {\n    \"coding\": [\n      {\n        \"system\": \"http://snomed.info/sct\",\n        \"code\": \"258435002\",\n        \"display\": \"Tumor tissue sample\"\n      }\n    ],\n    \"text\": \"Tejido tumoral\"\n  },\n  \"subject\": {\n    \"reference\": \"Patient/{{patientId}}\",\n    \"display\": \"Luis Alberto Paredes Cevallos\"\n  },\n  \"receivedTime\": \"2025-05-06T10:30:00-05:00\",\n  \"collection\": {\n    \"collector\": {\n      \"reference\": \"Practitioner/{{practitionerId}}\",\n      \"display\": \"Dra. Andrea Lucía Salazar Moreno\"\n    },\n    \"collectedDateTime\": \"2025-05-06T09:00:00-05:00\",\n    \"method\": {\n      \"coding\": [\n        {\n          \"system\": \"http://snomed.info/sct\",\n          \"code\": \"129314006\",\n          \"display\": \"Biopsy - action\"\n        }\n      ],\n      \"text\": \"Biopsia\"\n    },\n    \"bodySite\": {\n      \"coding\": [\n        {\n          \"system\": \"http://snomed.info/sct\",\n          \"code\": \"80248007\",\n          \"display\": \"Left breast structure\"\n        }\n      ],\n      \"text\": \"Mama izquierda\"\n    }\n  }\n}\n",
+              "raw": "{\n  \"resourceType\": \"Specimen\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Biopsia de tejido tumoral de mama izquierda (AP-2025-0457). Estado: available.</p></div>\"\n  },\n  \"identifier\": [\n    {\n      \"system\": \"https://f-slg.github.io/aprende-fhir/sid/muestra\",\n      \"value\": \"AP-2025-0457\"\n    }\n  ],\n  \"status\": \"available\",\n  \"type\": {\n    \"coding\": [\n      {\n        \"system\": \"http://snomed.info/sct\",\n        \"code\": \"258435002\",\n        \"display\": \"Tumor tissue sample\"\n      }\n    ],\n    \"text\": \"Tejido tumoral\"\n  },\n  \"subject\": {\n    \"reference\": \"Patient/{{patientId}}\",\n    \"display\": \"Luis Alberto Paredes Cevallos\"\n  },\n  \"request\": [\n    {\n      \"reference\": \"ServiceRequest/{{biopsyRequestId}}\",\n      \"display\": \"Orden de biopsia de mama\"\n    }\n  ],\n  \"receivedTime\": \"2025-05-06T10:30:00-05:00\",\n  \"collection\": {\n    \"collector\": {\n      \"reference\": \"Practitioner/{{practitionerId}}\",\n      \"display\": \"Dra. Andrea Lucía Salazar Moreno\"\n    },\n    \"collectedDateTime\": \"2025-05-06T09:00:00-05:00\",\n    \"method\": {\n      \"coding\": [\n        {\n          \"system\": \"http://snomed.info/sct\",\n          \"code\": \"129314006\",\n          \"display\": \"Biopsy - action\"\n        }\n      ],\n      \"text\": \"Biopsia\"\n    },\n    \"bodySite\": {\n      \"coding\": [\n        {\n          \"system\": \"http://snomed.info/sct\",\n          \"code\": \"80248007\",\n          \"display\": \"Left breast structure\"\n        }\n      ],\n      \"text\": \"Mama izquierda\"\n    }\n  }\n}\n",
               "options": {
                 "raw": {
                   "language": "json"
@@ -2167,7 +2681,7 @@
             "url": "{{FHIRURL}}/Specimen/{{specimenId}}",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"resourceType\": \"Specimen\",\n  \"id\": \"{{specimenId}}\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Biopsia de tejido tumoral de mama izquierda (AP-2025-0457). Estado: unavailable.</p></div>\"\n  },\n  \"identifier\": [\n    {\n      \"system\": \"https://f-slg.github.io/aprende-fhir/sid/muestra\",\n      \"value\": \"AP-2025-0457\"\n    }\n  ],\n  \"status\": \"unavailable\",\n  \"type\": {\n    \"coding\": [\n      {\n        \"system\": \"http://snomed.info/sct\",\n        \"code\": \"258435002\",\n        \"display\": \"Tumor tissue sample\"\n      }\n    ],\n    \"text\": \"Tejido tumoral\"\n  },\n  \"subject\": {\n    \"reference\": \"Patient/{{patientId}}\",\n    \"display\": \"Luis Alberto Paredes Cevallos\"\n  },\n  \"receivedTime\": \"2025-05-06T10:30:00-05:00\",\n  \"collection\": {\n    \"collector\": {\n      \"reference\": \"Practitioner/{{practitionerId}}\",\n      \"display\": \"Dra. Andrea Lucía Salazar Moreno\"\n    },\n    \"collectedDateTime\": \"2025-05-06T09:00:00-05:00\",\n    \"method\": {\n      \"coding\": [\n        {\n          \"system\": \"http://snomed.info/sct\",\n          \"code\": \"129314006\",\n          \"display\": \"Biopsy - action\"\n        }\n      ],\n      \"text\": \"Biopsia\"\n    },\n    \"bodySite\": {\n      \"coding\": [\n        {\n          \"system\": \"http://snomed.info/sct\",\n          \"code\": \"80248007\",\n          \"display\": \"Left breast structure\"\n        }\n      ],\n      \"text\": \"Mama izquierda\"\n    }\n  },\n  \"note\": [\n    {\n      \"text\": \"Muestra agotada tras los estudios de inmunohistoquímica.\"\n    }\n  ]\n}\n",
+              "raw": "{\n  \"resourceType\": \"Specimen\",\n  \"id\": \"{{specimenId}}\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Biopsia de tejido tumoral de mama izquierda (AP-2025-0457). Estado: unavailable.</p></div>\"\n  },\n  \"identifier\": [\n    {\n      \"system\": \"https://f-slg.github.io/aprende-fhir/sid/muestra\",\n      \"value\": \"AP-2025-0457\"\n    }\n  ],\n  \"status\": \"unavailable\",\n  \"type\": {\n    \"coding\": [\n      {\n        \"system\": \"http://snomed.info/sct\",\n        \"code\": \"258435002\",\n        \"display\": \"Tumor tissue sample\"\n      }\n    ],\n    \"text\": \"Tejido tumoral\"\n  },\n  \"subject\": {\n    \"reference\": \"Patient/{{patientId}}\",\n    \"display\": \"Luis Alberto Paredes Cevallos\"\n  },\n  \"request\": [\n    {\n      \"reference\": \"ServiceRequest/{{biopsyRequestId}}\",\n      \"display\": \"Orden de biopsia de mama\"\n    }\n  ],\n  \"receivedTime\": \"2025-05-06T10:30:00-05:00\",\n  \"collection\": {\n    \"collector\": {\n      \"reference\": \"Practitioner/{{practitionerId}}\",\n      \"display\": \"Dra. Andrea Lucía Salazar Moreno\"\n    },\n    \"collectedDateTime\": \"2025-05-06T09:00:00-05:00\",\n    \"method\": {\n      \"coding\": [\n        {\n          \"system\": \"http://snomed.info/sct\",\n          \"code\": \"129314006\",\n          \"display\": \"Biopsy - action\"\n        }\n      ],\n      \"text\": \"Biopsia\"\n    },\n    \"bodySite\": {\n      \"coding\": [\n        {\n          \"system\": \"http://snomed.info/sct\",\n          \"code\": \"80248007\",\n          \"display\": \"Left breast structure\"\n        }\n      ],\n      \"text\": \"Mama izquierda\"\n    }\n  },\n  \"note\": [\n    {\n      \"text\": \"Muestra agotada tras los estudios de inmunohistoquímica.\"\n    }\n  ]\n}\n",
               "options": {
                 "raw": {
                   "language": "json"
@@ -2440,7 +2954,7 @@
             "url": "{{FHIRURL}}/DiagnosticReport",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"resourceType\": \"DiagnosticReport\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Informe de anatomía patológica: carcinoma ductal infiltrante de mama izquierda de 3,5 cm,</p><p>receptor de estrógeno positivo (Allred 8).</p></div>\"\n  },\n  \"identifier\": [\n    {\n      \"system\": \"https://f-slg.github.io/aprende-fhir/sid/informe\",\n      \"value\": \"INF-AP-2025-0457\"\n    }\n  ],\n  \"status\": \"final\",\n  \"category\": [\n    {\n      \"coding\": [\n        {\n          \"system\": \"http://terminology.hl7.org/CodeSystem/v2-0074\",\n          \"code\": \"SP\",\n          \"display\": \"Surgical Pathology\"\n        }\n      ],\n      \"text\": \"Anatomía patológica\"\n    }\n  ],\n  \"code\": {\n    \"coding\": [\n      {\n        \"system\": \"http://loinc.org\",\n        \"code\": \"11526-1\",\n        \"display\": \"Pathology study\"\n      }\n    ],\n    \"text\": \"Estudio de patología\"\n  },\n  \"subject\": {\n    \"reference\": \"Patient/{{patientId}}\",\n    \"display\": \"Luis Alberto Paredes Cevallos\"\n  },\n  \"effectiveDateTime\": \"2025-05-12\",\n  \"issued\": \"2025-05-13T12:00:00-05:00\",\n  \"performer\": [\n    {\n      \"reference\": \"Organization/{{hospitalId}}\",\n      \"display\": \"Hospital General Docente Ejemplo\"\n    }\n  ],\n  \"resultsInterpreter\": [\n    {\n      \"reference\": \"Practitioner/{{practitionerId}}\",\n      \"display\": \"Dra. Andrea Lucía Salazar Moreno\"\n    }\n  ],\n  \"specimen\": [\n    {\n      \"reference\": \"Specimen/{{specimenId}}\",\n      \"display\": \"Biopsia AP-2025-0457\"\n    }\n  ],\n  \"result\": [\n    {\n      \"reference\": \"Observation/{{obsTumorId}}\",\n      \"display\": \"Tamaño del tumor 3,5 cm\"\n    },\n    {\n      \"reference\": \"Observation/{{obsREId}}\",\n      \"display\": \"Receptor de estrógeno positivo\"\n    }\n  ],\n  \"conclusion\": \"Carcinoma ductal infiltrante de mama izquierda, 3,5 cm, receptor de estrógeno positivo.\",\n  \"conclusionCode\": [\n    {\n      \"coding\": [\n        {\n          \"system\": \"http://snomed.info/sct\",\n          \"code\": \"254837009\",\n          \"display\": \"Malignant neoplasm of breast\"\n        }\n      ],\n      \"text\": \"Cáncer de mama\"\n    }\n  ]\n}\n",
+              "raw": "{\n  \"resourceType\": \"DiagnosticReport\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Informe de anatomía patológica: carcinoma ductal infiltrante de mama izquierda de 3,5 cm,</p><p>receptor de estrógeno positivo (Allred 8).</p></div>\"\n  },\n  \"identifier\": [\n    {\n      \"system\": \"https://f-slg.github.io/aprende-fhir/sid/informe\",\n      \"value\": \"INF-AP-2025-0457\"\n    }\n  ],\n  \"basedOn\": [\n    {\n      \"reference\": \"ServiceRequest/{{biopsyRequestId}}\",\n      \"display\": \"Orden de biopsia de mama\"\n    }\n  ],\n  \"status\": \"final\",\n  \"category\": [\n    {\n      \"coding\": [\n        {\n          \"system\": \"http://terminology.hl7.org/CodeSystem/v2-0074\",\n          \"code\": \"SP\",\n          \"display\": \"Surgical Pathology\"\n        }\n      ],\n      \"text\": \"Anatomía patológica\"\n    }\n  ],\n  \"code\": {\n    \"coding\": [\n      {\n        \"system\": \"http://loinc.org\",\n        \"code\": \"11526-1\",\n        \"display\": \"Pathology study\"\n      }\n    ],\n    \"text\": \"Estudio de patología\"\n  },\n  \"subject\": {\n    \"reference\": \"Patient/{{patientId}}\",\n    \"display\": \"Luis Alberto Paredes Cevallos\"\n  },\n  \"effectiveDateTime\": \"2025-05-12\",\n  \"issued\": \"2025-05-13T12:00:00-05:00\",\n  \"performer\": [\n    {\n      \"reference\": \"Organization/{{hospitalId}}\",\n      \"display\": \"Hospital General Docente Ejemplo\"\n    }\n  ],\n  \"resultsInterpreter\": [\n    {\n      \"reference\": \"Practitioner/{{practitionerId}}\",\n      \"display\": \"Dra. Andrea Lucía Salazar Moreno\"\n    }\n  ],\n  \"specimen\": [\n    {\n      \"reference\": \"Specimen/{{specimenId}}\",\n      \"display\": \"Biopsia AP-2025-0457\"\n    }\n  ],\n  \"result\": [\n    {\n      \"reference\": \"Observation/{{obsTumorId}}\",\n      \"display\": \"Tamaño del tumor 3,5 cm\"\n    },\n    {\n      \"reference\": \"Observation/{{obsREId}}\",\n      \"display\": \"Receptor de estrógeno positivo\"\n    }\n  ],\n  \"conclusion\": \"Carcinoma ductal infiltrante de mama izquierda, 3,5 cm, receptor de estrógeno positivo.\",\n  \"conclusionCode\": [\n    {\n      \"coding\": [\n        {\n          \"system\": \"http://snomed.info/sct\",\n          \"code\": \"254837009\",\n          \"display\": \"Malignant neoplasm of breast\"\n        }\n      ],\n      \"text\": \"Cáncer de mama\"\n    }\n  ]\n}\n",
               "options": {
                 "raw": {
                   "language": "json"
@@ -2538,6 +3052,321 @@
       ]
     },
     {
+      "name": "12 · Plan y consentimiento",
+      "item": [
+        {
+          "name": "12a · Comité de tumores (CareTeam)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/CareTeam",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"CareTeam\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Comité de tumores de mama del Hospital General Docente Ejemplo:</p><p>Dr. Ruiz (oncología clínica, coordinador) y Dra. Salazar (medicina general).</p></div>\"\n  },\n  \"identifier\": [\n    {\n      \"system\": \"https://f-slg.github.io/aprende-fhir/sid/equipo\",\n      \"value\": \"CT-MAMA-0001\"\n    }\n  ],\n  \"status\": \"active\",\n  \"name\": \"Comité de tumores de mama\",\n  \"subject\": {\n    \"reference\": \"Patient/{{patientId}}\",\n    \"display\": \"Luis Alberto Paredes Cevallos\"\n  },\n  \"period\": {\n    \"start\": \"2025-05-20\"\n  },\n  \"participant\": [\n    {\n      \"role\": [\n        {\n          \"text\": \"Oncólogo clínico, coordinador del comité\"\n        }\n      ],\n      \"member\": {\n        \"reference\": \"PractitionerRole/{{oncologistRoleId}}\",\n        \"display\": \"Dr. Ruiz · Oncología clínica\"\n      }\n    },\n    {\n      \"role\": [\n        {\n          \"text\": \"Médica de cabecera\"\n        }\n      ],\n      \"member\": {\n        \"reference\": \"PractitionerRole/{{salazarRoleId}}\",\n        \"display\": \"Dra. Salazar · Medicina general\"\n      }\n    }\n  ],\n  \"managingOrganization\": [\n    {\n      \"reference\": \"Organization/{{hospitalId}}\",\n      \"display\": \"Hospital General Docente Ejemplo\"\n    }\n  ],\n  \"reasonReference\": [\n    {\n      \"reference\": \"Condition/{{conditionCancerId}}\",\n      \"display\": \"Carcinoma ductal infiltrante de mama izquierda\"\n    }\n  ]\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/12-plan-y-consentimiento/soluciones/12a_careteam_comite.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const id = pm.response.json().id;",
+                  "pm.collectionVariables.set(\"careTeamId\", id);",
+                  "console.log(\"careTeamId = \" + id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "12b · Meta: sin evidencia de enfermedad",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Goal",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"Goal\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Meta: sin evidencia de enfermedad al terminar el tratamiento.</p></div>\"\n  },\n  \"identifier\": [\n    {\n      \"system\": \"https://f-slg.github.io/aprende-fhir/sid/meta\",\n      \"value\": \"META-0001\"\n    }\n  ],\n  \"lifecycleStatus\": \"active\",\n  \"achievementStatus\": {\n    \"coding\": [\n      {\n        \"system\": \"http://terminology.hl7.org/CodeSystem/goal-achievement\",\n        \"code\": \"in-progress\",\n        \"display\": \"In Progress\"\n      }\n    ],\n    \"text\": \"En curso\"\n  },\n  \"priority\": {\n    \"coding\": [\n      {\n        \"system\": \"http://terminology.hl7.org/CodeSystem/goal-priority\",\n        \"code\": \"high-priority\",\n        \"display\": \"High Priority\"\n      }\n    ],\n    \"text\": \"Alta\"\n  },\n  \"description\": {\n    \"text\": \"Sin evidencia de enfermedad al terminar el tratamiento\"\n  },\n  \"subject\": {\n    \"reference\": \"Patient/{{patientId}}\",\n    \"display\": \"Luis Alberto Paredes Cevallos\"\n  },\n  \"startDate\": \"2025-05-20\",\n  \"target\": [\n    {\n      \"dueDate\": \"2026-06-30\"\n    }\n  ],\n  \"addresses\": [\n    {\n      \"reference\": \"Condition/{{conditionCancerId}}\",\n      \"display\": \"Carcinoma ductal infiltrante de mama izquierda\"\n    }\n  ],\n  \"expressedBy\": {\n    \"reference\": \"PractitionerRole/{{oncologistRoleId}}\",\n    \"display\": \"Dr. Ruiz · Oncología clínica\"\n  }\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/12-plan-y-consentimiento/soluciones/12b_goal_control_enfermedad.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const id = pm.response.json().id;",
+                  "pm.collectionVariables.set(\"goalControlId\", id);",
+                  "console.log(\"goalControlId = \" + id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "12c · Meta: mantener la funcionalidad",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Goal",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"Goal\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Meta: mantener la funcionalidad (ECOG 0 a 1) durante el tratamiento.</p></div>\"\n  },\n  \"identifier\": [\n    {\n      \"system\": \"https://f-slg.github.io/aprende-fhir/sid/meta\",\n      \"value\": \"META-0002\"\n    }\n  ],\n  \"lifecycleStatus\": \"active\",\n  \"achievementStatus\": {\n    \"coding\": [\n      {\n        \"system\": \"http://terminology.hl7.org/CodeSystem/goal-achievement\",\n        \"code\": \"in-progress\",\n        \"display\": \"In Progress\"\n      }\n    ],\n    \"text\": \"En curso\"\n  },\n  \"priority\": {\n    \"coding\": [\n      {\n        \"system\": \"http://terminology.hl7.org/CodeSystem/goal-priority\",\n        \"code\": \"medium-priority\",\n        \"display\": \"Medium Priority\"\n      }\n    ],\n    \"text\": \"Media\"\n  },\n  \"description\": {\n    \"text\": \"Mantener la funcionalidad durante el tratamiento (ECOG 0 a 1)\"\n  },\n  \"subject\": {\n    \"reference\": \"Patient/{{patientId}}\",\n    \"display\": \"Luis Alberto Paredes Cevallos\"\n  },\n  \"startDate\": \"2025-05-20\",\n  \"target\": [\n    {\n      \"dueDate\": \"2026-06-30\"\n    }\n  ],\n  \"addresses\": [\n    {\n      \"reference\": \"Condition/{{conditionCancerId}}\",\n      \"display\": \"Carcinoma ductal infiltrante de mama izquierda\"\n    }\n  ],\n  \"expressedBy\": {\n    \"reference\": \"PractitionerRole/{{oncologistRoleId}}\",\n    \"display\": \"Dr. Ruiz · Oncología clínica\"\n  }\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/12-plan-y-consentimiento/soluciones/12c_goal_calidad_vida.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const id = pm.response.json().id;",
+                  "pm.collectionVariables.set(\"goalQualityId\", id);",
+                  "console.log(\"goalQualityId = \" + id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "12d · Plan de tratamiento (CarePlan)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/CarePlan",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"CarePlan\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Plan de tratamiento del comité de tumores (20 de mayo de 2025):</p><p>1) mastectomía parcial; 2) quimioterapia con doxorrubicina, 4 ciclos; 3) hormonoterapia con tamoxifeno por 5 años.</p></div>\"\n  },\n  \"identifier\": [\n    {\n      \"system\": \"https://f-slg.github.io/aprende-fhir/sid/plan\",\n      \"value\": \"PLAN-2025-0001\"\n    }\n  ],\n  \"status\": \"active\",\n  \"intent\": \"plan\",\n  \"category\": [\n    {\n      \"text\": \"Plan de tratamiento oncológico\"\n    }\n  ],\n  \"title\": \"Plan de tratamiento del cáncer de mama\",\n  \"description\": \"Tratamiento acordado por el comité de tumores de mama.\",\n  \"subject\": {\n    \"reference\": \"Patient/{{patientId}}\",\n    \"display\": \"Luis Alberto Paredes Cevallos\"\n  },\n  \"period\": {\n    \"start\": \"2025-05-20\",\n    \"end\": \"2030-10-31\"\n  },\n  \"created\": \"2025-05-20\",\n  \"author\": {\n    \"reference\": \"PractitionerRole/{{oncologistRoleId}}\",\n    \"display\": \"Dr. Ruiz · Oncología clínica\"\n  },\n  \"careTeam\": [\n    {\n      \"reference\": \"CareTeam/{{careTeamId}}\",\n      \"display\": \"Comité de tumores de mama\"\n    }\n  ],\n  \"addresses\": [\n    {\n      \"reference\": \"Condition/{{conditionCancerId}}\",\n      \"display\": \"Carcinoma ductal infiltrante de mama izquierda\"\n    }\n  ],\n  \"goal\": [\n    {\n      \"reference\": \"Goal/{{goalControlId}}\",\n      \"display\": \"Sin evidencia de enfermedad\"\n    },\n    {\n      \"reference\": \"Goal/{{goalQualityId}}\",\n      \"display\": \"Mantener la funcionalidad\"\n    }\n  ],\n  \"activity\": [\n    {\n      \"detail\": {\n        \"kind\": \"ServiceRequest\",\n        \"code\": {\n          \"coding\": [\n            {\n              \"system\": \"http://snomed.info/sct\",\n              \"code\": \"64368001\",\n              \"display\": \"Partial mastectomy\"\n            }\n          ],\n          \"text\": \"Mastectomía parcial\"\n        },\n        \"status\": \"scheduled\",\n        \"scheduledPeriod\": {\n          \"start\": \"2025-06-10\",\n          \"end\": \"2025-06-10\"\n        },\n        \"performer\": [\n          {\n            \"reference\": \"PractitionerRole/{{oncologistRoleId}}\",\n            \"display\": \"Dr. Ruiz · Oncología clínica\"\n          }\n        ],\n        \"description\": \"Mastectomía parcial de la mama izquierda\"\n      }\n    },\n    {\n      \"detail\": {\n        \"kind\": \"MedicationRequest\",\n        \"code\": {\n          \"coding\": [\n            {\n              \"system\": \"http://snomed.info/sct\",\n              \"code\": \"367336001\",\n              \"display\": \"Chemotherapy\"\n            }\n          ],\n          \"text\": \"Quimioterapia\"\n        },\n        \"status\": \"not-started\",\n        \"scheduledPeriod\": {\n          \"start\": \"2025-07-01\",\n          \"end\": \"2025-09-30\"\n        },\n        \"performer\": [\n          {\n            \"reference\": \"PractitionerRole/{{oncologistRoleId}}\",\n            \"display\": \"Dr. Ruiz · Oncología clínica\"\n          }\n        ],\n        \"description\": \"Doxorrubicina 60 mg/m² cada 21 días, 4 ciclos\"\n      }\n    },\n    {\n      \"detail\": {\n        \"kind\": \"MedicationRequest\",\n        \"code\": {\n          \"coding\": [\n            {\n              \"system\": \"http://snomed.info/sct\",\n              \"code\": \"169413002\",\n              \"display\": \"Hormone therapy\"\n            }\n          ],\n          \"text\": \"Hormonoterapia\"\n        },\n        \"status\": \"not-started\",\n        \"scheduledPeriod\": {\n          \"start\": \"2025-10-15\",\n          \"end\": \"2030-10-15\"\n        },\n        \"performer\": [\n          {\n            \"reference\": \"PractitionerRole/{{oncologistRoleId}}\",\n            \"display\": \"Dr. Ruiz · Oncología clínica\"\n          }\n        ],\n        \"description\": \"Tamoxifeno 20 mg diarios por 5 años\"\n      }\n    }\n  ]\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/12-plan-y-consentimiento/soluciones/12d_careplan_oncologico.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const id = pm.response.json().id;",
+                  "pm.collectionVariables.set(\"carePlanId\", id);",
+                  "console.log(\"carePlanId = \" + id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "12e · Consentimiento informado para la cirugía",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Consent",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"Consent\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Consentimiento informado para la mastectomía parcial de la mama izquierda,</p><p>firmado por el paciente el 27 de mayo de 2025.</p></div>\"\n  },\n  \"identifier\": [\n    {\n      \"system\": \"https://f-slg.github.io/aprende-fhir/sid/consentimiento\",\n      \"value\": \"CI-2025-0007\"\n    }\n  ],\n  \"status\": \"active\",\n  \"scope\": {\n    \"coding\": [\n      {\n        \"system\": \"http://terminology.hl7.org/CodeSystem/consentscope\",\n        \"code\": \"treatment\",\n        \"display\": \"Treatment\"\n      }\n    ],\n    \"text\": \"Tratamiento\"\n  },\n  \"category\": [\n    {\n      \"coding\": [\n        {\n          \"system\": \"http://loinc.org\",\n          \"code\": \"59284-0\",\n          \"display\": \"Patient Consent\"\n        }\n      ],\n      \"text\": \"Consentimiento del paciente\"\n    }\n  ],\n  \"patient\": {\n    \"reference\": \"Patient/{{patientId}}\",\n    \"display\": \"Luis Alberto Paredes Cevallos\"\n  },\n  \"dateTime\": \"2025-05-27T10:00:00-05:00\",\n  \"performer\": [\n    {\n      \"reference\": \"Patient/{{patientId}}\",\n      \"display\": \"Luis Alberto Paredes Cevallos\"\n    }\n  ],\n  \"organization\": [\n    {\n      \"reference\": \"Organization/{{hospitalId}}\",\n      \"display\": \"Hospital General Docente Ejemplo\"\n    }\n  ],\n  \"policyRule\": {\n    \"text\": \"Consentimiento informado para procedimientos quirúrgicos (normativa nacional)\"\n  },\n  \"provision\": {\n    \"type\": \"permit\",\n    \"period\": {\n      \"start\": \"2025-05-27\",\n      \"end\": \"2025-07-31\"\n    },\n    \"actor\": [\n      {\n        \"role\": {\n          \"text\": \"Equipo quirúrgico tratante\"\n        },\n        \"reference\": {\n          \"reference\": \"PractitionerRole/{{oncologistRoleId}}\",\n          \"display\": \"Dr. Ruiz · Oncología clínica\"\n        }\n      }\n    ],\n    \"code\": [\n      {\n        \"coding\": [\n          {\n            \"system\": \"http://snomed.info/sct\",\n            \"code\": \"64368001\",\n            \"display\": \"Partial mastectomy\"\n          }\n        ],\n        \"text\": \"Mastectomía parcial\"\n      }\n    ]\n  }\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/12-plan-y-consentimiento/soluciones/12e_consent_cirugia.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const id = pm.response.json().id;",
+                  "pm.collectionVariables.set(\"consentId\", id);",
+                  "console.log(\"consentId = \" + id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "12f · El plan con sus metas y su equipo",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/CarePlan?subject=Patient/{{patientId}}&_include=CarePlan:goal&_include=CarePlan:care-team"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "12g · Error a propósito: consentimiento sin categoría (el servidor lo acepta)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Consent",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"Consent\",\n  \"status\": \"active\",\n  \"scope\": {\n    \"coding\": [\n      {\n        \"system\": \"http://terminology.hl7.org/CodeSystem/consentscope\",\n        \"code\": \"treatment\",\n        \"display\": \"Treatment\"\n      }\n    ]\n  },\n  \"patient\": {\n    \"reference\": \"Patient/{{patientId}}\"\n  },\n  \"policyRule\": {\n    \"text\": \"Consentimiento informado para procedimientos quirúrgicos (normativa nacional)\"\n  }\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/12-plan-y-consentimiento/errores/12e1_consentimiento_sin_categoria.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const id = pm.response.json().id;",
+                  "pm.collectionVariables.set(\"errorConsentId\", id);",
+                  "console.log(\"errorConsentId = \" + id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "12h · Borrar el consentimiento inválido",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Consent/{{errorConsentId}}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
       "name": "13 · Procedimientos",
       "item": [
         {
@@ -2557,7 +3386,7 @@
             "url": "{{FHIRURL}}/Procedure",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"resourceType\": \"Procedure\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Mastectomía parcial de mama izquierda, 10 de junio de 2025.</p></div>\"\n  },\n  \"identifier\": [\n    {\n      \"system\": \"https://f-slg.github.io/aprende-fhir/sid/procedimiento\",\n      \"value\": \"PROC-2025-0001\"\n    }\n  ],\n  \"status\": \"completed\",\n  \"category\": {\n    \"coding\": [\n      {\n        \"system\": \"http://snomed.info/sct\",\n        \"code\": \"387713003\",\n        \"display\": \"Surgical procedure\"\n      }\n    ],\n    \"text\": \"Procedimiento quirúrgico\"\n  },\n  \"code\": {\n    \"coding\": [\n      {\n        \"system\": \"http://snomed.info/sct\",\n        \"code\": \"64368001\",\n        \"display\": \"Partial mastectomy\"\n      }\n    ],\n    \"text\": \"Mastectomía parcial\"\n  },\n  \"subject\": {\n    \"reference\": \"Patient/{{patientId}}\",\n    \"display\": \"Luis Alberto Paredes Cevallos\"\n  },\n  \"performedDateTime\": \"2025-06-10T08:00:00-05:00\",\n  \"recorder\": {\n    \"reference\": \"Practitioner/{{practitionerId}}\",\n    \"display\": \"Dra. Andrea Lucía Salazar Moreno\"\n  },\n  \"performer\": [\n    {\n      \"actor\": {\n        \"reference\": \"Practitioner/{{practitionerId}}\",\n        \"display\": \"Dra. Andrea Lucía Salazar Moreno\"\n      },\n      \"onBehalfOf\": {\n        \"reference\": \"Organization/{{hospitalId}}\",\n        \"display\": \"Hospital General Docente Ejemplo\"\n      }\n    }\n  ],\n  \"reasonReference\": [\n    {\n      \"reference\": \"Condition/{{conditionCancerId}}\",\n      \"display\": \"Carcinoma ductal infiltrante de mama izquierda\"\n    }\n  ],\n  \"bodySite\": [\n    {\n      \"coding\": [\n        {\n          \"system\": \"http://snomed.info/sct\",\n          \"code\": \"80248007\",\n          \"display\": \"Left breast structure\"\n        }\n      ],\n      \"text\": \"Mama izquierda\"\n    }\n  ]\n}\n",
+              "raw": "{\n  \"resourceType\": \"Procedure\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Mastectomía parcial de mama izquierda, 10 de junio de 2025.</p></div>\"\n  },\n  \"identifier\": [\n    {\n      \"system\": \"https://f-slg.github.io/aprende-fhir/sid/procedimiento\",\n      \"value\": \"PROC-2025-0001\"\n    }\n  ],\n  \"basedOn\": [\n    {\n      \"reference\": \"CarePlan/{{carePlanId}}\",\n      \"display\": \"Plan de tratamiento del cáncer de mama\"\n    }\n  ],\n  \"status\": \"completed\",\n  \"category\": {\n    \"coding\": [\n      {\n        \"system\": \"http://snomed.info/sct\",\n        \"code\": \"387713003\",\n        \"display\": \"Surgical procedure\"\n      }\n    ],\n    \"text\": \"Procedimiento quirúrgico\"\n  },\n  \"code\": {\n    \"coding\": [\n      {\n        \"system\": \"http://snomed.info/sct\",\n        \"code\": \"64368001\",\n        \"display\": \"Partial mastectomy\"\n      }\n    ],\n    \"text\": \"Mastectomía parcial\"\n  },\n  \"subject\": {\n    \"reference\": \"Patient/{{patientId}}\",\n    \"display\": \"Luis Alberto Paredes Cevallos\"\n  },\n  \"performedDateTime\": \"2025-06-10T08:00:00-05:00\",\n  \"recorder\": {\n    \"reference\": \"Practitioner/{{practitionerId}}\",\n    \"display\": \"Dra. Andrea Lucía Salazar Moreno\"\n  },\n  \"performer\": [\n    {\n      \"actor\": {\n        \"reference\": \"Practitioner/{{practitionerId}}\",\n        \"display\": \"Dra. Andrea Lucía Salazar Moreno\"\n      },\n      \"onBehalfOf\": {\n        \"reference\": \"Organization/{{hospitalId}}\",\n        \"display\": \"Hospital General Docente Ejemplo\"\n      }\n    }\n  ],\n  \"reasonReference\": [\n    {\n      \"reference\": \"Condition/{{conditionCancerId}}\",\n      \"display\": \"Carcinoma ductal infiltrante de mama izquierda\"\n    }\n  ],\n  \"bodySite\": [\n    {\n      \"coding\": [\n        {\n          \"system\": \"http://snomed.info/sct\",\n          \"code\": \"80248007\",\n          \"display\": \"Left breast structure\"\n        }\n      ],\n      \"text\": \"Mama izquierda\"\n    }\n  ]\n}\n",
               "options": {
                 "raw": {
                   "language": "json"
@@ -2600,7 +3429,7 @@
             "url": "{{FHIRURL}}/Procedure/{{procedureId}}",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"resourceType\": \"Procedure\",\n  \"id\": \"{{procedureId}}\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Mastectomía parcial de mama izquierda, 10 de junio de 2025.</p><p>Resultado: exitoso. Control en 2 semanas.</p></div>\"\n  },\n  \"identifier\": [\n    {\n      \"system\": \"https://f-slg.github.io/aprende-fhir/sid/procedimiento\",\n      \"value\": \"PROC-2025-0001\"\n    }\n  ],\n  \"status\": \"completed\",\n  \"category\": {\n    \"coding\": [\n      {\n        \"system\": \"http://snomed.info/sct\",\n        \"code\": \"387713003\",\n        \"display\": \"Surgical procedure\"\n      }\n    ],\n    \"text\": \"Procedimiento quirúrgico\"\n  },\n  \"code\": {\n    \"coding\": [\n      {\n        \"system\": \"http://snomed.info/sct\",\n        \"code\": \"64368001\",\n        \"display\": \"Partial mastectomy\"\n      }\n    ],\n    \"text\": \"Mastectomía parcial\"\n  },\n  \"subject\": {\n    \"reference\": \"Patient/{{patientId}}\",\n    \"display\": \"Luis Alberto Paredes Cevallos\"\n  },\n  \"performedDateTime\": \"2025-06-10T08:00:00-05:00\",\n  \"recorder\": {\n    \"reference\": \"Practitioner/{{practitionerId}}\",\n    \"display\": \"Dra. Andrea Lucía Salazar Moreno\"\n  },\n  \"performer\": [\n    {\n      \"actor\": {\n        \"reference\": \"Practitioner/{{practitionerId}}\",\n        \"display\": \"Dra. Andrea Lucía Salazar Moreno\"\n      },\n      \"onBehalfOf\": {\n        \"reference\": \"Organization/{{hospitalId}}\",\n        \"display\": \"Hospital General Docente Ejemplo\"\n      }\n    }\n  ],\n  \"reasonReference\": [\n    {\n      \"reference\": \"Condition/{{conditionCancerId}}\",\n      \"display\": \"Carcinoma ductal infiltrante de mama izquierda\"\n    }\n  ],\n  \"bodySite\": [\n    {\n      \"coding\": [\n        {\n          \"system\": \"http://snomed.info/sct\",\n          \"code\": \"80248007\",\n          \"display\": \"Left breast structure\"\n        }\n      ],\n      \"text\": \"Mama izquierda\"\n    }\n  ],\n  \"outcome\": {\n    \"coding\": [\n      {\n        \"system\": \"http://snomed.info/sct\",\n        \"code\": \"385669000\",\n        \"display\": \"Successful\"\n      }\n    ],\n    \"text\": \"Exitoso\"\n  },\n  \"followUp\": [\n    {\n      \"text\": \"Control de herida quirúrgica en 2 semanas y valoración por oncología.\"\n    }\n  ],\n  \"note\": [\n    {\n      \"text\": \"Márgenes quirúrgicos libres de tumor.\"\n    }\n  ]\n}\n",
+              "raw": "{\n  \"resourceType\": \"Procedure\",\n  \"id\": \"{{procedureId}}\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Mastectomía parcial de mama izquierda, 10 de junio de 2025.</p><p>Resultado: exitoso. Control en 2 semanas.</p></div>\"\n  },\n  \"identifier\": [\n    {\n      \"system\": \"https://f-slg.github.io/aprende-fhir/sid/procedimiento\",\n      \"value\": \"PROC-2025-0001\"\n    }\n  ],\n  \"basedOn\": [\n    {\n      \"reference\": \"CarePlan/{{carePlanId}}\",\n      \"display\": \"Plan de tratamiento del cáncer de mama\"\n    }\n  ],\n  \"status\": \"completed\",\n  \"category\": {\n    \"coding\": [\n      {\n        \"system\": \"http://snomed.info/sct\",\n        \"code\": \"387713003\",\n        \"display\": \"Surgical procedure\"\n      }\n    ],\n    \"text\": \"Procedimiento quirúrgico\"\n  },\n  \"code\": {\n    \"coding\": [\n      {\n        \"system\": \"http://snomed.info/sct\",\n        \"code\": \"64368001\",\n        \"display\": \"Partial mastectomy\"\n      }\n    ],\n    \"text\": \"Mastectomía parcial\"\n  },\n  \"subject\": {\n    \"reference\": \"Patient/{{patientId}}\",\n    \"display\": \"Luis Alberto Paredes Cevallos\"\n  },\n  \"performedDateTime\": \"2025-06-10T08:00:00-05:00\",\n  \"recorder\": {\n    \"reference\": \"Practitioner/{{practitionerId}}\",\n    \"display\": \"Dra. Andrea Lucía Salazar Moreno\"\n  },\n  \"performer\": [\n    {\n      \"actor\": {\n        \"reference\": \"Practitioner/{{practitionerId}}\",\n        \"display\": \"Dra. Andrea Lucía Salazar Moreno\"\n      },\n      \"onBehalfOf\": {\n        \"reference\": \"Organization/{{hospitalId}}\",\n        \"display\": \"Hospital General Docente Ejemplo\"\n      }\n    }\n  ],\n  \"reasonReference\": [\n    {\n      \"reference\": \"Condition/{{conditionCancerId}}\",\n      \"display\": \"Carcinoma ductal infiltrante de mama izquierda\"\n    }\n  ],\n  \"bodySite\": [\n    {\n      \"coding\": [\n        {\n          \"system\": \"http://snomed.info/sct\",\n          \"code\": \"80248007\",\n          \"display\": \"Left breast structure\"\n        }\n      ],\n      \"text\": \"Mama izquierda\"\n    }\n  ],\n  \"outcome\": {\n    \"coding\": [\n      {\n        \"system\": \"http://snomed.info/sct\",\n        \"code\": \"385669000\",\n        \"display\": \"Successful\"\n      }\n    ],\n    \"text\": \"Exitoso\"\n  },\n  \"followUp\": [\n    {\n      \"text\": \"Control de herida quirúrgica en 2 semanas y valoración por oncología.\"\n    }\n  ],\n  \"note\": [\n    {\n      \"text\": \"Márgenes quirúrgicos libres de tumor.\"\n    }\n  ]\n}\n",
               "options": {
                 "raw": {
                   "language": "json"
@@ -2608,6 +3437,580 @@
               }
             },
             "description": "Cuerpo: `modulos/13-procedimientos/soluciones/13b_procedure_actualizar.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "14 · Citas",
+      "item": [
+        {
+          "name": "14a · Crear el Hospital de Día de Oncología",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Location",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"Location\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Hospital de Día de Oncología, segundo piso del Hospital General Docente Ejemplo.</p></div>\"\n  },\n  \"identifier\": [\n    {\n      \"system\": \"https://f-slg.github.io/aprende-fhir/sid/ubicacion\",\n      \"value\": \"HGDE-HDO\"\n    }\n  ],\n  \"status\": \"active\",\n  \"name\": \"Hospital de Día de Oncología\",\n  \"mode\": \"instance\",\n  \"type\": [\n    {\n      \"coding\": [\n        {\n          \"system\": \"http://terminology.hl7.org/CodeSystem/v3-RoleCode\",\n          \"code\": \"ONCL\",\n          \"display\": \"Medical oncology clinic\"\n        }\n      ],\n      \"text\": \"Hospital de día de oncología\"\n    }\n  ],\n  \"physicalType\": {\n    \"coding\": [\n      {\n        \"system\": \"http://terminology.hl7.org/CodeSystem/location-physical-type\",\n        \"code\": \"wa\",\n        \"display\": \"Ward\"\n      }\n    ],\n    \"text\": \"Área\"\n  },\n  \"managingOrganization\": {\n    \"reference\": \"Organization/{{hospitalId}}\",\n    \"display\": \"Hospital General Docente Ejemplo\"\n  }\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/14-citas/soluciones/14a_location_hospital_dia.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const id = pm.response.json().id;",
+                  "pm.collectionVariables.set(\"dayHospitalLocationId\", id);",
+                  "console.log(\"dayHospitalLocationId = \" + id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "14b · Agenda de quimioterapia (Schedule)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Schedule",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"Schedule\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Agenda de quimioterapia del Hospital de Día de Oncología, julio a septiembre de 2025.</p></div>\"\n  },\n  \"identifier\": [\n    {\n      \"system\": \"https://f-slg.github.io/aprende-fhir/sid/agenda\",\n      \"value\": \"AG-HDO-2025-3\"\n    }\n  ],\n  \"active\": true,\n  \"serviceType\": [\n    {\n      \"text\": \"Quimioterapia ambulatoria\"\n    }\n  ],\n  \"specialty\": [\n    {\n      \"coding\": [\n        {\n          \"system\": \"http://snomed.info/sct\",\n          \"code\": \"394593009\",\n          \"display\": \"Medical oncology\"\n        }\n      ],\n      \"text\": \"Oncología clínica\"\n    }\n  ],\n  \"actor\": [\n    {\n      \"reference\": \"Location/{{dayHospitalLocationId}}\",\n      \"display\": \"Hospital de Día de Oncología\"\n    },\n    {\n      \"reference\": \"PractitionerRole/{{oncologistRoleId}}\",\n      \"display\": \"Dr. Ruiz · Oncología clínica\"\n    }\n  ],\n  \"planningHorizon\": {\n    \"start\": \"2025-07-01T07:00:00-05:00\",\n    \"end\": \"2025-09-30T19:00:00-05:00\"\n  },\n  \"comment\": \"Sillones de quimioterapia, de lunes a viernes de 07:00 a 19:00.\"\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/14-citas/soluciones/14b_schedule_quimioterapia.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const id = pm.response.json().id;",
+                  "pm.collectionVariables.set(\"scheduleId\", id);",
+                  "console.log(\"scheduleId = \" + id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "14c · Cupo libre para el ciclo 1 (Slot)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Slot",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"Slot\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Cupo libre: 2 de julio de 2025, 09:00 a 11:00.</p></div>\"\n  },\n  \"schedule\": {\n    \"reference\": \"Schedule/{{scheduleId}}\",\n    \"display\": \"Agenda de quimioterapia\"\n  },\n  \"serviceType\": [\n    {\n      \"text\": \"Quimioterapia ambulatoria\"\n    }\n  ],\n  \"status\": \"free\",\n  \"start\": \"2025-07-02T09:00:00-05:00\",\n  \"end\": \"2025-07-02T11:00:00-05:00\"\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/14-citas/soluciones/14c_slot_ciclo1.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const id = pm.response.json().id;",
+                  "pm.collectionVariables.set(\"slot1Id\", id);",
+                  "console.log(\"slot1Id = \" + id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "14d · Cupos libres de la agenda",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Slot?schedule=Schedule/{{scheduleId}}&status=free"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "14e · Agendar el ciclo 1 (Appointment)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Appointment",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"Appointment\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Cita: quimioterapia ciclo 1 de 4, 2 de julio de 2025, 09:00.</p></div>\"\n  },\n  \"identifier\": [\n    {\n      \"system\": \"https://f-slg.github.io/aprende-fhir/sid/cita\",\n      \"value\": \"CITA-2025-QT1\"\n    }\n  ],\n  \"status\": \"booked\",\n  \"serviceType\": [\n    {\n      \"text\": \"Quimioterapia ambulatoria\"\n    }\n  ],\n  \"appointmentType\": {\n    \"coding\": [\n      {\n        \"system\": \"http://terminology.hl7.org/CodeSystem/v2-0276\",\n        \"code\": \"FOLLOWUP\",\n        \"display\": \"A follow up visit from a previous appointment\"\n      }\n    ],\n    \"text\": \"Ciclo de tratamiento\"\n  },\n  \"reasonReference\": [\n    {\n      \"reference\": \"Condition/{{conditionCancerId}}\",\n      \"display\": \"Carcinoma ductal infiltrante de mama izquierda\"\n    }\n  ],\n  \"description\": \"Quimioterapia con doxorrubicina, ciclo 1 de 4\",\n  \"slot\": [\n    {\n      \"reference\": \"Slot/{{slot1Id}}\",\n      \"display\": \"Cupo del ciclo 1\"\n    }\n  ],\n  \"start\": \"2025-07-02T09:00:00-05:00\",\n  \"end\": \"2025-07-02T11:00:00-05:00\",\n  \"created\": \"2025-06-20T10:00:00-05:00\",\n  \"participant\": [\n    {\n      \"actor\": {\n        \"reference\": \"Patient/{{patientId}}\",\n        \"display\": \"Luis Alberto Paredes Cevallos\"\n      },\n      \"required\": \"required\",\n      \"status\": \"accepted\"\n    },\n    {\n      \"actor\": {\n        \"reference\": \"PractitionerRole/{{oncologistRoleId}}\",\n        \"display\": \"Dr. Ruiz · Oncología clínica\"\n      },\n      \"required\": \"required\",\n      \"status\": \"accepted\"\n    },\n    {\n      \"actor\": {\n        \"reference\": \"Location/{{dayHospitalLocationId}}\",\n        \"display\": \"Hospital de Día de Oncología\"\n      },\n      \"required\": \"required\",\n      \"status\": \"accepted\"\n    }\n  ]\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/14-citas/soluciones/14e_appointment_ciclo1.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const id = pm.response.json().id;",
+                  "pm.collectionVariables.set(\"appointment1Id\", id);",
+                  "console.log(\"appointment1Id = \" + id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "14f · Marcar el cupo como ocupado",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Slot/{{slot1Id}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"Slot\",\n  \"id\": \"{{slot1Id}}\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Cupo ocupado: 2 de julio de 2025, 09:00 a 11:00.</p></div>\"\n  },\n  \"schedule\": {\n    \"reference\": \"Schedule/{{scheduleId}}\",\n    \"display\": \"Agenda de quimioterapia\"\n  },\n  \"serviceType\": [\n    {\n      \"text\": \"Quimioterapia ambulatoria\"\n    }\n  ],\n  \"status\": \"busy\",\n  \"start\": \"2025-07-02T09:00:00-05:00\",\n  \"end\": \"2025-07-02T11:00:00-05:00\"\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/14-citas/soluciones/14d_slot_ciclo1_ocupado.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "14g · Volver a buscar cupos libres, sin caché",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Cache-Control",
+                "value": "no-cache"
+              }
+            ],
+            "url": "{{FHIRURL}}/Slot?schedule=Schedule/{{scheduleId}}&status=free"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "14h · El paciente confirma (AppointmentResponse)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/AppointmentResponse",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"AppointmentResponse\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Luis confirma su asistencia a la cita del ciclo 1.</p></div>\"\n  },\n  \"appointment\": {\n    \"reference\": \"Appointment/{{appointment1Id}}\",\n    \"display\": \"Quimioterapia ciclo 1\"\n  },\n  \"actor\": {\n    \"reference\": \"Patient/{{patientId}}\",\n    \"display\": \"Luis Alberto Paredes Cevallos\"\n  },\n  \"participantStatus\": \"accepted\",\n  \"comment\": \"Confirmado por teléfono el 30 de junio de 2025.\"\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/14-citas/soluciones/14f_appointmentresponse_paciente.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "14i · La cita se cumple",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Appointment/{{appointment1Id}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"Appointment\",\n  \"id\": \"{{appointment1Id}}\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Cita cumplida: quimioterapia ciclo 1 de 4, 2 de julio de 2025.</p></div>\"\n  },\n  \"identifier\": [\n    {\n      \"system\": \"https://f-slg.github.io/aprende-fhir/sid/cita\",\n      \"value\": \"CITA-2025-QT1\"\n    }\n  ],\n  \"status\": \"fulfilled\",\n  \"serviceType\": [\n    {\n      \"text\": \"Quimioterapia ambulatoria\"\n    }\n  ],\n  \"appointmentType\": {\n    \"coding\": [\n      {\n        \"system\": \"http://terminology.hl7.org/CodeSystem/v2-0276\",\n        \"code\": \"FOLLOWUP\",\n        \"display\": \"A follow up visit from a previous appointment\"\n      }\n    ],\n    \"text\": \"Ciclo de tratamiento\"\n  },\n  \"reasonReference\": [\n    {\n      \"reference\": \"Condition/{{conditionCancerId}}\",\n      \"display\": \"Carcinoma ductal infiltrante de mama izquierda\"\n    }\n  ],\n  \"description\": \"Quimioterapia con doxorrubicina, ciclo 1 de 4\",\n  \"slot\": [\n    {\n      \"reference\": \"Slot/{{slot1Id}}\",\n      \"display\": \"Cupo del ciclo 1\"\n    }\n  ],\n  \"start\": \"2025-07-02T09:00:00-05:00\",\n  \"end\": \"2025-07-02T11:00:00-05:00\",\n  \"created\": \"2025-06-20T10:00:00-05:00\",\n  \"participant\": [\n    {\n      \"actor\": {\n        \"reference\": \"Patient/{{patientId}}\",\n        \"display\": \"Luis Alberto Paredes Cevallos\"\n      },\n      \"required\": \"required\",\n      \"status\": \"accepted\"\n    },\n    {\n      \"actor\": {\n        \"reference\": \"PractitionerRole/{{oncologistRoleId}}\",\n        \"display\": \"Dr. Ruiz · Oncología clínica\"\n      },\n      \"required\": \"required\",\n      \"status\": \"accepted\"\n    },\n    {\n      \"actor\": {\n        \"reference\": \"Location/{{dayHospitalLocationId}}\",\n        \"display\": \"Hospital de Día de Oncología\"\n      },\n      \"required\": \"required\",\n      \"status\": \"accepted\"\n    }\n  ]\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/14-citas/soluciones/14g_appointment_ciclo1_cumplida.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "14j · Cupo para el ciclo 2",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Slot",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"Slot\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Cupo ocupado: 23 de julio de 2025, 09:00 a 11:00.</p></div>\"\n  },\n  \"schedule\": {\n    \"reference\": \"Schedule/{{scheduleId}}\",\n    \"display\": \"Agenda de quimioterapia\"\n  },\n  \"serviceType\": [\n    {\n      \"text\": \"Quimioterapia ambulatoria\"\n    }\n  ],\n  \"status\": \"busy\",\n  \"start\": \"2025-07-23T09:00:00-05:00\",\n  \"end\": \"2025-07-23T11:00:00-05:00\"\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/14-citas/soluciones/14h_slot_ciclo2.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const id = pm.response.json().id;",
+                  "pm.collectionVariables.set(\"slot2Id\", id);",
+                  "console.log(\"slot2Id = \" + id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "14k · Agendar el ciclo 2",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Appointment",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"Appointment\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Cita: quimioterapia ciclo 2 de 4, 23 de julio de 2025, 09:00.</p></div>\"\n  },\n  \"identifier\": [\n    {\n      \"system\": \"https://f-slg.github.io/aprende-fhir/sid/cita\",\n      \"value\": \"CITA-2025-QT2\"\n    }\n  ],\n  \"status\": \"booked\",\n  \"serviceType\": [\n    {\n      \"text\": \"Quimioterapia ambulatoria\"\n    }\n  ],\n  \"appointmentType\": {\n    \"coding\": [\n      {\n        \"system\": \"http://terminology.hl7.org/CodeSystem/v2-0276\",\n        \"code\": \"FOLLOWUP\",\n        \"display\": \"A follow up visit from a previous appointment\"\n      }\n    ],\n    \"text\": \"Ciclo de tratamiento\"\n  },\n  \"reasonReference\": [\n    {\n      \"reference\": \"Condition/{{conditionCancerId}}\",\n      \"display\": \"Carcinoma ductal infiltrante de mama izquierda\"\n    }\n  ],\n  \"description\": \"Quimioterapia con doxorrubicina, ciclo 2 de 4\",\n  \"slot\": [\n    {\n      \"reference\": \"Slot/{{slot2Id}}\",\n      \"display\": \"Cupo del ciclo 2\"\n    }\n  ],\n  \"start\": \"2025-07-23T09:00:00-05:00\",\n  \"end\": \"2025-07-23T11:00:00-05:00\",\n  \"created\": \"2025-06-20T10:00:00-05:00\",\n  \"participant\": [\n    {\n      \"actor\": {\n        \"reference\": \"Patient/{{patientId}}\",\n        \"display\": \"Luis Alberto Paredes Cevallos\"\n      },\n      \"required\": \"required\",\n      \"status\": \"accepted\"\n    },\n    {\n      \"actor\": {\n        \"reference\": \"PractitionerRole/{{oncologistRoleId}}\",\n        \"display\": \"Dr. Ruiz · Oncología clínica\"\n      },\n      \"required\": \"required\",\n      \"status\": \"accepted\"\n    },\n    {\n      \"actor\": {\n        \"reference\": \"Location/{{dayHospitalLocationId}}\",\n        \"display\": \"Hospital de Día de Oncología\"\n      },\n      \"required\": \"required\",\n      \"status\": \"accepted\"\n    }\n  ]\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/14-citas/soluciones/14i_appointment_ciclo2.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const id = pm.response.json().id;",
+                  "pm.collectionVariables.set(\"appointment2Id\", id);",
+                  "console.log(\"appointment2Id = \" + id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "14l · Cancelar el ciclo 2 por neutropenia",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Appointment/{{appointment2Id}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"Appointment\",\n  \"id\": \"{{appointment2Id}}\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Cita cancelada: ciclo 2 del 23 de julio de 2025, por neutropenia. Se reprograma.</p></div>\"\n  },\n  \"identifier\": [\n    {\n      \"system\": \"https://f-slg.github.io/aprende-fhir/sid/cita\",\n      \"value\": \"CITA-2025-QT2\"\n    }\n  ],\n  \"status\": \"cancelled\",\n  \"serviceType\": [\n    {\n      \"text\": \"Quimioterapia ambulatoria\"\n    }\n  ],\n  \"appointmentType\": {\n    \"coding\": [\n      {\n        \"system\": \"http://terminology.hl7.org/CodeSystem/v2-0276\",\n        \"code\": \"FOLLOWUP\",\n        \"display\": \"A follow up visit from a previous appointment\"\n      }\n    ],\n    \"text\": \"Ciclo de tratamiento\"\n  },\n  \"reasonReference\": [\n    {\n      \"reference\": \"Condition/{{conditionCancerId}}\",\n      \"display\": \"Carcinoma ductal infiltrante de mama izquierda\"\n    }\n  ],\n  \"description\": \"Quimioterapia con doxorrubicina, ciclo 2 de 4\",\n  \"slot\": [\n    {\n      \"reference\": \"Slot/{{slot2Id}}\",\n      \"display\": \"Cupo del ciclo 2\"\n    }\n  ],\n  \"start\": \"2025-07-23T09:00:00-05:00\",\n  \"end\": \"2025-07-23T11:00:00-05:00\",\n  \"created\": \"2025-06-20T10:00:00-05:00\",\n  \"participant\": [\n    {\n      \"actor\": {\n        \"reference\": \"Patient/{{patientId}}\",\n        \"display\": \"Luis Alberto Paredes Cevallos\"\n      },\n      \"required\": \"required\",\n      \"status\": \"accepted\"\n    },\n    {\n      \"actor\": {\n        \"reference\": \"PractitionerRole/{{oncologistRoleId}}\",\n        \"display\": \"Dr. Ruiz · Oncología clínica\"\n      },\n      \"required\": \"required\",\n      \"status\": \"accepted\"\n    },\n    {\n      \"actor\": {\n        \"reference\": \"Location/{{dayHospitalLocationId}}\",\n        \"display\": \"Hospital de Día de Oncología\"\n      },\n      \"required\": \"required\",\n      \"status\": \"accepted\"\n    }\n  ],\n  \"cancelationReason\": {\n    \"text\": \"Neutropenia: el recuento de neutrófilos no permite administrar el ciclo\"\n  },\n  \"comment\": \"Se reprograma para el 30 de julio, con un nuevo control de hemograma.\"\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/14-citas/soluciones/14j_appointment_ciclo2_cancelada.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "14m · Citas del paciente",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Appointment?patient=Patient/{{patientId}}&_sort=date"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "14n · Error a propósito: cita sin participantes (el servidor la acepta)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Appointment",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"Appointment\",\n  \"status\": \"booked\",\n  \"start\": \"2025-07-30T09:00:00-05:00\",\n  \"end\": \"2025-07-30T11:00:00-05:00\",\n  \"description\": \"Quimioterapia con doxorrubicina, ciclo 2 de 4 (reprogramado)\"\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/14-citas/errores/14e1_cita_sin_participantes.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const id = pm.response.json().id;",
+                  "pm.collectionVariables.set(\"errorAppointmentId\", id);",
+                  "console.log(\"errorAppointmentId = \" + id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "14o · Borrar la cita inválida",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Appointment/{{errorAppointmentId}}"
           },
           "event": [
             {
@@ -2991,9 +4394,250 @@
               }
             }
           ]
+        }
+      ]
+    },
+    {
+      "name": "16 · Seguimiento",
+      "item": [
+        {
+          "name": "16a · Crear el cuestionario (Questionnaire)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Questionnaire",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"Questionnaire\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Cuestionario de seguimiento oncológico: dolor (0 a 10), funcionalidad (ECOG),</p><p>sofocos, dolor articular y comentarios.</p></div>\"\n  },\n  \"url\": \"https://f-slg.github.io/aprende-fhir/Questionnaire/seguimiento-oncologico\",\n  \"version\": \"1.0.0\",\n  \"name\": \"SeguimientoOncologico\",\n  \"title\": \"Cuestionario de seguimiento oncológico\",\n  \"status\": \"active\",\n  \"subjectType\": [\n    \"Patient\"\n  ],\n  \"date\": \"2025-09-01\",\n  \"publisher\": \"Aprende FHIR desde cero (ejemplo didáctico)\",\n  \"description\": \"Cuestionario breve para el control de pacientes en tratamiento oncológico.\",\n  \"item\": [\n    {\n      \"linkId\": \"dolor\",\n      \"text\": \"En una escala de 0 (sin dolor) a 10 (el peor dolor imaginable), ¿cuánto dolor tuvo en la última semana?\",\n      \"type\": \"integer\",\n      \"required\": true,\n      \"code\": [\n        {\n          \"system\": \"http://loinc.org\",\n          \"code\": \"72514-3\",\n          \"display\": \"Pain severity - 0-10 verbal numeric rating [Score] - Reported\"\n        }\n      ]\n    },\n    {\n      \"linkId\": \"ecog\",\n      \"text\": \"¿Cuál de estas frases describe mejor su actividad habitual?\",\n      \"type\": \"choice\",\n      \"required\": true,\n      \"answerOption\": [\n        {\n          \"valueString\": \"0 · Hago mi vida normal sin limitaciones\"\n        },\n        {\n          \"valueString\": \"1 · Tengo síntomas, pero hago trabajos ligeros\"\n        },\n        {\n          \"valueString\": \"2 · No puedo trabajar, pero me valgo por mí mismo\"\n        },\n        {\n          \"valueString\": \"3 · Paso más de la mitad del día en cama o sentado\"\n        },\n        {\n          \"valueString\": \"4 · Estoy en cama todo el día\"\n        }\n      ]\n    },\n    {\n      \"linkId\": \"sofocos\",\n      \"text\": \"¿Ha tenido sofocos (bochornos) en la última semana?\",\n      \"type\": \"boolean\"\n    },\n    {\n      \"linkId\": \"articular\",\n      \"text\": \"¿Ha tenido dolor en las articulaciones en la última semana?\",\n      \"type\": \"boolean\"\n    },\n    {\n      \"linkId\": \"comentarios\",\n      \"text\": \"¿Algo más que quiera contarnos?\",\n      \"type\": \"text\"\n    }\n  ]\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/16-seguimiento/soluciones/16a_questionnaire_seguimiento.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const id = pm.response.json().id;",
+                  "pm.collectionVariables.set(\"questionnaireId\", id);",
+                  "console.log(\"questionnaireId = \" + id);"
+                ]
+              }
+            }
+          ]
         },
         {
-          "name": "15j · Expediente completo del paciente",
+          "name": "16b · Respuesta de octubre de 2025",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/QuestionnaireResponse",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"QuestionnaireResponse\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Respuesta del 28 de octubre de 2025: dolor 2/10, ECOG 0, sin sofocos ni dolor articular.</p></div>\"\n  },\n  \"questionnaire\": \"https://f-slg.github.io/aprende-fhir/Questionnaire/seguimiento-oncologico\",\n  \"status\": \"completed\",\n  \"subject\": {\n    \"reference\": \"Patient/{{patientId}}\",\n    \"display\": \"Luis Alberto Paredes Cevallos\"\n  },\n  \"authored\": \"2025-10-28T09:30:00-05:00\",\n  \"author\": {\n    \"reference\": \"Patient/{{patientId}}\",\n    \"display\": \"Luis Alberto Paredes Cevallos\"\n  },\n  \"source\": {\n    \"reference\": \"Patient/{{patientId}}\",\n    \"display\": \"Luis Alberto Paredes Cevallos\"\n  },\n  \"item\": [\n    {\n      \"linkId\": \"dolor\",\n      \"text\": \"En una escala de 0 (sin dolor) a 10 (el peor dolor imaginable), ¿cuánto dolor tuvo en la última semana?\",\n      \"answer\": [\n        {\n          \"valueInteger\": 2\n        }\n      ]\n    },\n    {\n      \"linkId\": \"ecog\",\n      \"text\": \"¿Cuál de estas frases describe mejor su actividad habitual?\",\n      \"answer\": [\n        {\n          \"valueString\": \"0 · Hago mi vida normal sin limitaciones\"\n        }\n      ]\n    },\n    {\n      \"linkId\": \"sofocos\",\n      \"text\": \"¿Ha tenido sofocos (bochornos) en la última semana?\",\n      \"answer\": [\n        {\n          \"valueBoolean\": false\n        }\n      ]\n    },\n    {\n      \"linkId\": \"articular\",\n      \"text\": \"¿Ha tenido dolor en las articulaciones en la última semana?\",\n      \"answer\": [\n        {\n          \"valueBoolean\": false\n        }\n      ]\n    },\n    {\n      \"linkId\": \"comentarios\",\n      \"text\": \"¿Algo más que quiera contarnos?\",\n      \"answer\": [\n        {\n          \"valueString\": \"Me siento bien, ya volví al trabajo.\"\n        }\n      ]\n    }\n  ]\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/16-seguimiento/soluciones/16b_questionnaireresponse_octubre.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const id = pm.response.json().id;",
+                  "pm.collectionVariables.set(\"responseOctoberId\", id);",
+                  "console.log(\"responseOctoberId = \" + id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "16c · Respuesta de enero de 2026",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/QuestionnaireResponse",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"QuestionnaireResponse\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Respuesta del 27 de enero de 2026: dolor 6/10, ECOG 1, con sofocos y dolor articular.</p></div>\"\n  },\n  \"questionnaire\": \"https://f-slg.github.io/aprende-fhir/Questionnaire/seguimiento-oncologico\",\n  \"status\": \"completed\",\n  \"subject\": {\n    \"reference\": \"Patient/{{patientId}}\",\n    \"display\": \"Luis Alberto Paredes Cevallos\"\n  },\n  \"authored\": \"2026-01-27T09:30:00-05:00\",\n  \"author\": {\n    \"reference\": \"Patient/{{patientId}}\",\n    \"display\": \"Luis Alberto Paredes Cevallos\"\n  },\n  \"source\": {\n    \"reference\": \"Patient/{{patientId}}\",\n    \"display\": \"Luis Alberto Paredes Cevallos\"\n  },\n  \"item\": [\n    {\n      \"linkId\": \"dolor\",\n      \"text\": \"En una escala de 0 (sin dolor) a 10 (el peor dolor imaginable), ¿cuánto dolor tuvo en la última semana?\",\n      \"answer\": [\n        {\n          \"valueInteger\": 6\n        }\n      ]\n    },\n    {\n      \"linkId\": \"ecog\",\n      \"text\": \"¿Cuál de estas frases describe mejor su actividad habitual?\",\n      \"answer\": [\n        {\n          \"valueString\": \"1 · Tengo síntomas, pero hago trabajos ligeros\"\n        }\n      ]\n    },\n    {\n      \"linkId\": \"sofocos\",\n      \"text\": \"¿Ha tenido sofocos (bochornos) en la última semana?\",\n      \"answer\": [\n        {\n          \"valueBoolean\": true\n        }\n      ]\n    },\n    {\n      \"linkId\": \"articular\",\n      \"text\": \"¿Ha tenido dolor en las articulaciones en la última semana?\",\n      \"answer\": [\n        {\n          \"valueBoolean\": true\n        }\n      ]\n    },\n    {\n      \"linkId\": \"comentarios\",\n      \"text\": \"¿Algo más que quiera contarnos?\",\n      \"answer\": [\n        {\n          \"valueString\": \"Los bochornos no me dejan dormir y me duelen las rodillas y las manos.\"\n        }\n      ]\n    }\n  ]\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/16-seguimiento/soluciones/16c_questionnaireresponse_enero.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const id = pm.response.json().id;",
+                  "pm.collectionVariables.set(\"responseJanuaryId\", id);",
+                  "console.log(\"responseJanuaryId = \" + id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "16d · Dolor 6/10 como observación (derivedFrom)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/Observation",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"Observation\",\n  \"text\": {\n    \"status\": \"generated\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p>Dolor 6/10 (escala numérica), informado por el paciente el 27 de enero de 2026.</p></div>\"\n  },\n  \"status\": \"final\",\n  \"category\": [\n    {\n      \"coding\": [\n        {\n          \"system\": \"http://terminology.hl7.org/CodeSystem/observation-category\",\n          \"code\": \"survey\",\n          \"display\": \"Survey\"\n        }\n      ]\n    }\n  ],\n  \"code\": {\n    \"coding\": [\n      {\n        \"system\": \"http://loinc.org\",\n        \"code\": \"72514-3\",\n        \"display\": \"Pain severity - 0-10 verbal numeric rating [Score] - Reported\"\n      }\n    ],\n    \"text\": \"Intensidad del dolor (0 a 10)\"\n  },\n  \"subject\": {\n    \"reference\": \"Patient/{{patientId}}\",\n    \"display\": \"Luis Alberto Paredes Cevallos\"\n  },\n  \"effectiveDateTime\": \"2026-01-27T09:30:00-05:00\",\n  \"performer\": [\n    {\n      \"reference\": \"Patient/{{patientId}}\",\n      \"display\": \"Luis Alberto Paredes Cevallos\"\n    }\n  ],\n  \"valueInteger\": 6,\n  \"derivedFrom\": [\n    {\n      \"reference\": \"QuestionnaireResponse/{{responseJanuaryId}}\",\n      \"display\": \"Cuestionario del 27 de enero de 2026\"\n    }\n  ]\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/16-seguimiento/soluciones/16d_observation_dolor.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "16e · Respuestas del paciente a este cuestionario",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/QuestionnaireResponse?subject=Patient/{{patientId}}&questionnaire=https://f-slg.github.io/aprende-fhir/Questionnaire/seguimiento-oncologico&_sort=authored"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Respuesta exitosa (2xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "16f · Error a propósito: una respuesta numérica escrita en letras",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/fhir+json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/fhir+json"
+              }
+            ],
+            "url": "{{FHIRURL}}/QuestionnaireResponse",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceType\": \"QuestionnaireResponse\",\n  \"questionnaire\": \"https://f-slg.github.io/aprende-fhir/Questionnaire/seguimiento-oncologico\",\n  \"status\": \"completed\",\n  \"subject\": {\n    \"reference\": \"Patient/{{patientId}}\"\n  },\n  \"item\": [\n    {\n      \"linkId\": \"dolor\",\n      \"answer\": [\n        {\n          \"valueInteger\": \"seis\"\n        }\n      ]\n    }\n  ]\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Cuerpo: `modulos/16-seguimiento/errores/16e1_respuesta_con_texto.json`"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"El servidor rechaza el error (4xx)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.within(400, 499);",
+                  "});",
+                  "console.log(pm.response.json().issue[0].diagnostics);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "16g · Expediente completo del paciente",
           "request": {
             "method": "GET",
             "header": [
@@ -3083,6 +4727,10 @@
       "value": ""
     },
     {
+      "key": "motherHistoryId",
+      "value": ""
+    },
+    {
       "key": "nursePractitionerId",
       "value": ""
     },
@@ -3100,6 +4748,42 @@
     },
     {
       "key": "bundleDocId",
+      "value": ""
+    },
+    {
+      "key": "officeLocationId",
+      "value": ""
+    },
+    {
+      "key": "salazarRoleId",
+      "value": ""
+    },
+    {
+      "key": "oncologistId",
+      "value": ""
+    },
+    {
+      "key": "oncologistRoleId",
+      "value": ""
+    },
+    {
+      "key": "noduleEncounterId",
+      "value": ""
+    },
+    {
+      "key": "ultrasoundRequestId",
+      "value": ""
+    },
+    {
+      "key": "ultrasoundReportId",
+      "value": ""
+    },
+    {
+      "key": "biopsyRequestId",
+      "value": ""
+    },
+    {
+      "key": "referralId",
       "value": ""
     },
     {
@@ -3127,7 +4811,59 @@
       "value": ""
     },
     {
+      "key": "careTeamId",
+      "value": ""
+    },
+    {
+      "key": "goalControlId",
+      "value": ""
+    },
+    {
+      "key": "goalQualityId",
+      "value": ""
+    },
+    {
+      "key": "carePlanId",
+      "value": ""
+    },
+    {
+      "key": "consentId",
+      "value": ""
+    },
+    {
+      "key": "errorConsentId",
+      "value": ""
+    },
+    {
       "key": "procedureId",
+      "value": ""
+    },
+    {
+      "key": "dayHospitalLocationId",
+      "value": ""
+    },
+    {
+      "key": "scheduleId",
+      "value": ""
+    },
+    {
+      "key": "slot1Id",
+      "value": ""
+    },
+    {
+      "key": "appointment1Id",
+      "value": ""
+    },
+    {
+      "key": "slot2Id",
+      "value": ""
+    },
+    {
+      "key": "appointment2Id",
+      "value": ""
+    },
+    {
+      "key": "errorAppointmentId",
       "value": ""
     },
     {
@@ -3152,6 +4888,18 @@
     },
     {
       "key": "errorMedReqId",
+      "value": ""
+    },
+    {
+      "key": "questionnaireId",
+      "value": ""
+    },
+    {
+      "key": "responseOctoberId",
+      "value": ""
+    },
+    {
+      "key": "responseJanuaryId",
       "value": ""
     }
   ]

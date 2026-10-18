@@ -1,12 +1,8 @@
 # Módulo 13 · Procedimientos
 
-[← Módulo 11](../11-anatomia-patologica/README.md) · [Inicio](../../README.md) · [Módulo 15 →](../15-medicamentos/README.md)
+[← Módulo 12](../12-plan-y-consentimiento/README.md) · [Inicio](../../README.md) · [Módulo 14 →](../14-citas/README.md)
 
-> **Nivel:** intermedio · **Duración:** 40 minutos · **Necesitas:** módulo 11
->
-> El módulo 12 (plan y consentimiento) está en preparación. Cuando esté
-> listo, antes de la cirugía se registrará el plan del comité de tumores y el
-> consentimiento informado.
+> **Nivel:** intermedio · **Duración:** 40 minutos · **Necesitas:** módulos 11 y 12
 
 ## Lo que vas a aprender
 
@@ -16,8 +12,9 @@
 
 ## La historia
 
-El **10 de junio de 2025**, a las 08:00, se realiza una **mastectomía
-parcial** de la mama izquierda. Al terminar se registra el procedimiento.
+El **10 de junio de 2025**, a las 08:00, se realiza la **mastectomía
+parcial** de la mama izquierda que acordó el comité de tumores (módulo 12) y
+que Luis autorizó con su consentimiento informado. Al terminar se registra el procedimiento.
 Después se agrega el resultado: exitoso, con márgenes quirúrgicos libres de
 tumor, y el seguimiento: control de la herida en dos semanas y valoración por
 oncología.
@@ -137,7 +134,7 @@ la estadística de producción (cirugías realizadas).
 `category` SNOMED `387713003` *Surgical procedure* y `code` SNOMED `64368001`
 *Partial mastectomy*.
 
-### Paso 3 · Cuándo, quién y por qué
+### Paso 3 · Cuándo, quién, por qué y según qué plan
 
 <!-- paso 13a 3 -->
 ```json
@@ -164,6 +161,12 @@ la estadística de producción (cirugías realizadas).
       "reference": "Condition/{{conditionCancerId}}",
       "display": "Carcinoma ductal infiltrante de mama izquierda"
     }
+  ],
+  "basedOn": [
+    {
+      "reference": "CarePlan/{{carePlanId}}",
+      "display": "Plan de tratamiento del cáncer de mama"
+    }
   ]
 }
 ```
@@ -171,7 +174,8 @@ la estadística de producción (cirugías realizadas).
 
 `performer.onBehalfOf`: la cirujana opera **en nombre del** hospital.
 `reasonReference` apunta al diagnóstico de cáncer del módulo 11: la cirugía
-tiene un motivo verificable.
+tiene un motivo verificable. `basedOn` apunta al plan del comité (módulo 12):
+la cirugía es la primera actividad de ese plan.
 
 ### Paso 4 · Identificador y narrativa
 

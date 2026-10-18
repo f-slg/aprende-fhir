@@ -1,11 +1,8 @@
 # Módulo 15 · Medicamentos
 
-[← Módulo 13](../13-procedimientos/README.md) · [Inicio](../../README.md)
+[← Módulo 14](../14-citas/README.md) · [Inicio](../../README.md) · [Módulo 16 →](../16-seguimiento/README.md)
 
-> **Nivel:** intermedio · **Duración:** 90 minutos · **Necesitas:** módulos 06 y 11
->
-> Los módulos 14 (citas), 16 (seguimiento) y 17 a 19 (nivel avanzado) están
-> en preparación.
+> **Nivel:** intermedio · **Duración:** 90 minutos · **Necesitas:** módulos 06, 11 y 14
 
 ## Lo que vas a aprender
 
@@ -14,20 +11,24 @@
 2. A expresar una dosis con texto y con datos estructurados (`Dosage`).
 3. A justificar una dosis con una observación (`supportingInformation`).
 4. El **ciclo de vida** de una receta: activa → suspendida.
-5. A recuperar todo el expediente con la operación **`$everything`**.
+
 
 ## La historia
+
+Son las actividades 2 y 3 del plan del comité (módulo 12).
 
 **Quimioterapia.** El 1 de julio de 2025 se pesa y se mide a Luis: 72 kg y
 1,57 m. Su **superficie corporal** es 1,77 m². La dosis de **doxorrubicina**
 es 60 mg/m² × 1,77 m² = **106,2 mg** por vía intravenosa, cada 21 días, 4
-ciclos. El primer ciclo se administra el 2 de julio, de 09:00 a 09:30. Dos
+ciclos. El primer ciclo se administra el 2 de julio, de 09:00 a 09:30, en la cita
+del módulo 14. Dos
 horas después, Luis tiene náuseas leves.
 
 **Hormonoterapia.** Como el tumor es receptor de estrógeno positivo, el 15 de
 octubre se prescribe **tamoxifeno** 20 mg diarios por vía oral, durante 5
 años. Luis toma la primera dosis en casa al día siguiente. En febrero de
-2026 se suspende por intolerancia: sofocos intensos y dolor articular.
+2026 se suspende por intolerancia: sofocos intensos y dolor articular, que
+Luis informa en el cuestionario de seguimiento del módulo 16.
 
 > Antes de prescribir, el sistema puede revisar las alergias del módulo 07:
 > Luis es alérgico a la penicilina, no a estos medicamentos.
@@ -534,17 +535,6 @@ MedicationRequest.intent: minimum required = 1, but only found 0
 ¿Es una orden o una propuesta? Sin `intent`, una farmacia no sabe si debe
 dispensar. Bórrala con `DELETE {{FHIRURL}}/MedicationRequest/{{errorMedReqId}}`.
 
-### 15j · El expediente completo
-
-```http
-GET {{FHIRURL}}/Patient/{{patientId}}/$everything
-```
-
-`$everything` es una **operación**: las operaciones empiezan con `$` y hacen
-algo más que leer o buscar. Esta devuelve el paciente y **todo** lo que se
-relaciona con él. Cuenta cuántos recursos de cada tipo creaste durante el
-taller.
-
 ## Autoevaluación
 
 <details><summary>1. La enfermera registra que administró la dosis de las 08:00. ¿Qué recurso?</summary>
@@ -572,27 +562,18 @@ modo que se pueda verificar el cálculo.
   administró; `request` las enlaza.
 - `Dosage` combina un texto para personas y datos estructurados.
 - Una receta se suspende con `stopped`, no se borra.
-- `$everything` devuelve todo el expediente de un paciente.
-
-## ¿Qué sigue?
-
-Completaste los módulos disponibles. En las próximas etapas del taller:
-
-- **10 · Órdenes y derivación:** ServiceRequest, PractitionerRole, Location.
-- **12 · Plan y consentimiento:** CarePlan, Goal, Consent.
-- **14 · Citas:** Schedule, Slot, Appointment (como en
-  [Agenda FHIR](https://github.com/f-slg/agenda-fhir-r)).
-- **16 · Seguimiento:** Questionnaire, QuestionnaireResponse.
-- **17 a 19 · Avanzado:** búsquedas avanzadas, terminologías y perfiles, y
-  el resumen internacional del paciente (IPS).
 
 ## Ejecutar este módulo
 
 - **Postman:** carpeta *15 · Medicamentos*.
-- **curl:** `curl/taller.sh` (todo el taller)
+- **curl:** `curl/taller.sh 15`
 - **R:**
 
   ```r
-  todo <- fhir_leer("Patient/{{patientId}}/$everything?_count=200")
-  table(vapply(todo$entry, function(e) e$resource$resourceType, ""))
+  recetas <- fhir_buscar("MedicationRequest?subject=Patient/{{patientId}}")
+  fhir_tabla(recetas, list(
+    medicamento = function(r) r$medicationCodeableConcept$text,
+    estado      = function(r) r$status,
+    motivo      = function(r) r$statusReason$text %||% ""
+  ))
   ```

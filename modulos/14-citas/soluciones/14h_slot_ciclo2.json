@@ -1,0 +1,19 @@
+{
+  "resourceType": "Slot",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Cupo ocupado: 23 de julio de 2025, 09:00 a 11:00.</p></div>"
+  },
+  "schedule": {
+    "reference": "Schedule/{{scheduleId}}",
+    "display": "Agenda de quimioterapia"
+  },
+  "serviceType": [
+    {
+      "text": "Quimioterapia ambulatoria"
+    }
+  ],
+  "status": "busy",
+  "start": "2025-07-23T09:00:00-05:00",
+  "end": "2025-07-23T11:00:00-05:00"
+}

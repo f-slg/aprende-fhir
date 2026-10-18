@@ -17,9 +17,13 @@ TITULOS = {
     "07-antecedentes": "07 · Antecedentes",
     "08-vacunacion": "08 · Vacunación",
     "09-documentos-clinicos": "09 · Documentos clínicos",
+    "10-ordenes-y-derivacion": "10 · Órdenes y derivación",
     "11-anatomia-patologica": "11 · Anatomía patológica",
+    "12-plan-y-consentimiento": "12 · Plan y consentimiento",
     "13-procedimientos": "13 · Procedimientos",
+    "14-citas": "14 · Citas",
     "15-medicamentos": "15 · Medicamentos",
+    "16-seguimiento": "16 · Seguimiento",
 }
 
 def peticion(paso):
@@ -28,6 +32,8 @@ def peticion(paso):
     req = {"method": paso["metodo"],
            "header": [{"key": "Accept", "value": "application/fhir+json"}],
            "url": raw}
+    for clave, valor in paso.get("encabezados", {}).items():
+        req["header"].append({"key": clave, "value": valor})
     if "archivo" in paso:
         req["header"].append({"key": "Content-Type", "value": "application/fhir+json"})
         with open(os.path.join(raiz, paso["archivo"]), encoding="utf-8") as f:

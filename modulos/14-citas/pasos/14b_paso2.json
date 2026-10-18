@@ -1,0 +1,35 @@
+{
+  "resourceType": "Schedule",
+  "active": true,
+  "serviceType": [
+    {
+      "text": "Quimioterapia ambulatoria"
+    }
+  ],
+  "specialty": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "394593009",
+          "display": "Medical oncology"
+        }
+      ],
+      "text": "Oncología clínica"
+    }
+  ],
+  "actor": [
+    {
+      "reference": "Location/{{dayHospitalLocationId}}",
+      "display": "Hospital de Día de Oncología"
+    },
+    {
+      "reference": "PractitionerRole/{{oncologistRoleId}}",
+      "display": "Dr. Ruiz · Oncología clínica"
+    }
+  ],
+  "planningHorizon": {
+    "start": "2025-07-01T07:00:00-05:00",
+    "end": "2025-09-30T19:00:00-05:00"
+  }
+}

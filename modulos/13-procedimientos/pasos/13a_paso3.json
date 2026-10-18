@@ -1,5 +1,11 @@
 {
   "resourceType": "Procedure",
+  "basedOn": [
+    {
+      "reference": "CarePlan/{{carePlanId}}",
+      "display": "Plan de tratamiento del cáncer de mama"
+    }
+  ],
   "status": "completed",
   "category": {
     "coding": [

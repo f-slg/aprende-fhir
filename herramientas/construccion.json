@@ -514,7 +514,8 @@
      "identifier",
      "status",
      "receivedTime",
-     "text"
+     "text",
+     "request"
     ]
    }
   ]
@@ -589,7 +590,8 @@
     "titulo": "La muestra y los resultados",
     "campos": [
      "specimen",
-     "result"
+     "result",
+     "basedOn"
     ]
    },
    {
@@ -661,7 +663,8 @@
      "performedDateTime",
      "recorder",
      "performer",
-     "reasonReference"
+     "reasonReference",
+     "basedOn"
     ]
    },
    {
@@ -758,5 +761,539 @@
  "15g": {
   "diferencia": "15e",
   "archivo": "modulos/15-medicamentos/soluciones/15g_medicationrequest_suspender.json"
+ },
+ "10a": {
+  "archivo": "modulos/10-ordenes-y-derivacion/soluciones/10a_location_consultorio.json",
+  "pasos": [
+   {
+    "titulo": "El mínimo: nombre y estado",
+    "campos": [
+     "resourceType",
+     "name",
+     "status"
+    ]
+   },
+   {
+    "titulo": "Qué clase de lugar es",
+    "campos": [
+     "mode",
+     "type",
+     "physicalType"
+    ]
+   },
+   {
+    "titulo": "Dónde está y quién lo administra",
+    "campos": [
+     "address",
+     "managingOrganization",
+     "identifier",
+     "text"
+    ]
+   }
+  ]
+ },
+ "10b": {
+  "archivo": "modulos/10-ordenes-y-derivacion/soluciones/10b_practitionerrole_medica_general.json",
+  "pasos": [
+   {
+    "titulo": "El mínimo: quién y dónde trabaja",
+    "campos": [
+     "resourceType",
+     "practitioner",
+     "organization"
+    ]
+   },
+   {
+    "titulo": "Qué rol y qué especialidad",
+    "campos": [
+     "code",
+     "specialty"
+    ]
+   },
+   {
+    "titulo": "En qué consultorio y en qué horario",
+    "campos": [
+     "active",
+     "location",
+     "availableTime",
+     "text"
+    ]
+   }
+  ]
+ },
+ "10d": {
+  "diferencia": "10b",
+  "archivo": "modulos/10-ordenes-y-derivacion/soluciones/10d_practitionerrole_oncologo.json"
+ },
+ "10e": {
+  "diferencia": "05b",
+  "archivo": "modulos/10-ordenes-y-derivacion/soluciones/10e_encounter_consulta_nodulo.json"
+ },
+ "10f": {
+  "archivo": "modulos/10-ordenes-y-derivacion/soluciones/10f_servicerequest_ecografia.json",
+  "pasos": [
+   {
+    "titulo": "El mínimo: estado, intención y paciente",
+    "campos": [
+     "resourceType",
+     "status",
+     "intent",
+     "subject"
+    ]
+   },
+   {
+    "titulo": "Qué se pide, con qué prioridad y de qué parte del cuerpo",
+    "campos": [
+     "category",
+     "code",
+     "priority",
+     "bodySite"
+    ]
+   },
+   {
+    "titulo": "Quién lo pide, cuándo, en qué consulta y por qué",
+    "campos": [
+     "encounter",
+     "authoredOn",
+     "requester",
+     "reasonCode"
+    ]
+   },
+   {
+    "titulo": "Identificador y narrativa",
+    "campos": [
+     "identifier",
+     "text"
+    ]
+   }
+  ]
+ },
+ "10g": {
+  "archivo": "modulos/10-ordenes-y-derivacion/soluciones/10g_diagnosticreport_ecografia.json",
+  "pasos": [
+   {
+    "titulo": "El mínimo: estado y código",
+    "campos": [
+     "resourceType",
+     "status",
+     "code"
+    ]
+   },
+   {
+    "titulo": "De quién, cuándo y quién informa",
+    "campos": [
+     "category",
+     "subject",
+     "effectiveDateTime",
+     "issued",
+     "performer"
+    ]
+   },
+   {
+    "titulo": "A qué orden responde",
+    "campos": [
+     "basedOn"
+    ]
+   },
+   {
+    "titulo": "La conclusión: BI-RADS 4",
+    "campos": [
+     "conclusion",
+     "conclusionCode",
+     "identifier",
+     "text"
+    ]
+   }
+  ]
+ },
+ "10h": {
+  "diferencia": "10f",
+  "archivo": "modulos/10-ordenes-y-derivacion/soluciones/10h_servicerequest_biopsia.json"
+ },
+ "10i": {
+  "diferencia": "10f",
+  "archivo": "modulos/10-ordenes-y-derivacion/soluciones/10i_servicerequest_derivacion.json"
+ },
+ "12a": {
+  "archivo": "modulos/12-plan-y-consentimiento/soluciones/12a_careteam_comite.json",
+  "pasos": [
+   {
+    "titulo": "El mínimo: estado, nombre y paciente",
+    "campos": [
+     "resourceType",
+     "status",
+     "name",
+     "subject"
+    ]
+   },
+   {
+    "titulo": "Quiénes lo integran y con qué rol",
+    "campos": [
+     "participant"
+    ]
+   },
+   {
+    "titulo": "Desde cuándo, de qué organización y por qué",
+    "campos": [
+     "period",
+     "managingOrganization",
+     "reasonReference",
+     "identifier",
+     "text"
+    ]
+   }
+  ]
+ },
+ "12b": {
+  "archivo": "modulos/12-plan-y-consentimiento/soluciones/12b_goal_control_enfermedad.json",
+  "pasos": [
+   {
+    "titulo": "El mínimo: estado, descripción y paciente",
+    "campos": [
+     "resourceType",
+     "lifecycleStatus",
+     "description",
+     "subject"
+    ]
+   },
+   {
+    "titulo": "Avance, prioridad y plazo",
+    "campos": [
+     "achievementStatus",
+     "priority",
+     "startDate",
+     "target"
+    ]
+   },
+   {
+    "titulo": "A qué problema responde y quién la propone",
+    "campos": [
+     "addresses",
+     "expressedBy",
+     "identifier",
+     "text"
+    ]
+   }
+  ]
+ },
+ "12c": {
+  "diferencia": "12b",
+  "archivo": "modulos/12-plan-y-consentimiento/soluciones/12c_goal_calidad_vida.json"
+ },
+ "12d": {
+  "archivo": "modulos/12-plan-y-consentimiento/soluciones/12d_careplan_oncologico.json",
+  "pasos": [
+   {
+    "titulo": "El mínimo: estado, intención y paciente",
+    "campos": [
+     "resourceType",
+     "status",
+     "intent",
+     "subject"
+    ]
+   },
+   {
+    "titulo": "Qué plan es, de cuándo y de quién",
+    "campos": [
+     "category",
+     "title",
+     "description",
+     "period",
+     "created",
+     "author"
+    ]
+   },
+   {
+    "titulo": "El equipo, el problema y las metas",
+    "campos": [
+     "careTeam",
+     "addresses",
+     "goal"
+    ]
+   },
+   {
+    "titulo": "Las actividades: cirugía, quimioterapia y hormonoterapia",
+    "campos": [
+     "activity",
+     "identifier",
+     "text"
+    ]
+   }
+  ]
+ },
+ "12e": {
+  "archivo": "modulos/12-plan-y-consentimiento/soluciones/12e_consent_cirugia.json",
+  "pasos": [
+   {
+    "titulo": "El mínimo: estado, alcance, categoría, paciente y norma",
+    "campos": [
+     "resourceType",
+     "status",
+     "scope",
+     "category",
+     "patient",
+     "policyRule"
+    ]
+   },
+   {
+    "titulo": "Cuándo, quién lo otorga y ante qué organización",
+    "campos": [
+     "dateTime",
+     "performer",
+     "organization"
+    ]
+   },
+   {
+    "titulo": "Qué se autoriza: la disposición",
+    "campos": [
+     "provision",
+     "identifier",
+     "text"
+    ]
+   }
+  ]
+ },
+ "14a": {
+  "diferencia": "10a",
+  "archivo": "modulos/14-citas/soluciones/14a_location_hospital_dia.json"
+ },
+ "14b": {
+  "archivo": "modulos/14-citas/soluciones/14b_schedule_quimioterapia.json",
+  "pasos": [
+   {
+    "titulo": "El mínimo: de quién es la agenda",
+    "campos": [
+     "resourceType",
+     "actor"
+    ]
+   },
+   {
+    "titulo": "Qué servicio ofrece y en qué periodo",
+    "campos": [
+     "active",
+     "serviceType",
+     "specialty",
+     "planningHorizon"
+    ]
+   },
+   {
+    "titulo": "Comentario, identificador y narrativa",
+    "campos": [
+     "comment",
+     "identifier",
+     "text"
+    ]
+   }
+  ]
+ },
+ "14c": {
+  "archivo": "modulos/14-citas/soluciones/14c_slot_ciclo1.json",
+  "pasos": [
+   {
+    "titulo": "El mínimo: agenda, estado, inicio y fin",
+    "campos": [
+     "resourceType",
+     "schedule",
+     "status",
+     "start",
+     "end"
+    ]
+   },
+   {
+    "titulo": "Qué servicio y la narrativa",
+    "campos": [
+     "serviceType",
+     "text"
+    ]
+   }
+  ]
+ },
+ "14d": {
+  "diferencia": "14c",
+  "archivo": "modulos/14-citas/soluciones/14d_slot_ciclo1_ocupado.json"
+ },
+ "14e": {
+  "archivo": "modulos/14-citas/soluciones/14e_appointment_ciclo1.json",
+  "pasos": [
+   {
+    "titulo": "El mínimo: estado, participantes, inicio y fin",
+    "campos": [
+     "resourceType",
+     "status",
+     "participant",
+     "start",
+     "end"
+    ]
+   },
+   {
+    "titulo": "Qué cupo ocupa y cuándo se agendó",
+    "campos": [
+     "slot",
+     "created"
+    ]
+   },
+   {
+    "titulo": "Qué atención es y por qué",
+    "campos": [
+     "serviceType",
+     "appointmentType",
+     "reasonReference",
+     "description",
+     "identifier",
+     "text"
+    ]
+   }
+  ]
+ },
+ "14f": {
+  "archivo": "modulos/14-citas/soluciones/14f_appointmentresponse_paciente.json",
+  "pasos": [
+   {
+    "titulo": "El mínimo: la cita, quién responde y su respuesta",
+    "campos": [
+     "resourceType",
+     "appointment",
+     "actor",
+     "participantStatus"
+    ]
+   },
+   {
+    "titulo": "Un comentario y la narrativa",
+    "campos": [
+     "comment",
+     "text"
+    ]
+   }
+  ]
+ },
+ "14g": {
+  "diferencia": "14e",
+  "archivo": "modulos/14-citas/soluciones/14g_appointment_ciclo1_cumplida.json"
+ },
+ "14i": {
+  "diferencia": "14e",
+  "archivo": "modulos/14-citas/soluciones/14i_appointment_ciclo2.json"
+ },
+ "14j": {
+  "diferencia": "14i",
+  "archivo": "modulos/14-citas/soluciones/14j_appointment_ciclo2_cancelada.json"
+ },
+ "16a": {
+  "archivo": "modulos/16-seguimiento/soluciones/16a_questionnaire_seguimiento.json",
+  "pasos": [
+   {
+    "titulo": "El mínimo: el estado",
+    "campos": [
+     "resourceType",
+     "status"
+    ]
+   },
+   {
+    "titulo": "Cómo se identifica: url, versión, nombre y título",
+    "campos": [
+     "url",
+     "version",
+     "name",
+     "title",
+     "date",
+     "publisher",
+     "description",
+     "subjectType"
+    ]
+   },
+   {
+    "titulo": "La primera pregunta: el dolor",
+    "parcial": {
+     "item": [
+      {
+       "linkId": "dolor",
+       "text": "En una escala de 0 (sin dolor) a 10 (el peor dolor imaginable), ¿cuánto dolor tuvo en la última semana?",
+       "type": "integer",
+       "required": true,
+       "code": [
+        {
+         "system": "http://loinc.org",
+         "code": "72514-3",
+         "display": "Pain severity - 0-10 verbal numeric rating [Score] - Reported"
+        }
+       ]
+      }
+     ]
+    }
+   },
+   {
+    "titulo": "Las demás preguntas",
+    "campos": [
+     "item",
+     "text"
+    ]
+   }
+  ]
+ },
+ "16b": {
+  "archivo": "modulos/16-seguimiento/soluciones/16b_questionnaireresponse_octubre.json",
+  "pasos": [
+   {
+    "titulo": "El mínimo: qué cuestionario, todavía en curso",
+    "campos": [
+     "resourceType",
+     "questionnaire"
+    ],
+    "parcial": {
+     "status": "in-progress"
+    }
+   },
+   {
+    "titulo": "De quién, cuándo y quién respondió",
+    "campos": [
+     "subject",
+     "authored",
+     "author",
+     "source"
+    ]
+   },
+   {
+    "titulo": "Las respuestas: ya se puede marcar como completo",
+    "campos": [
+     "item",
+     "status",
+     "text"
+    ]
+   }
+  ]
+ },
+ "16c": {
+  "diferencia": "16b",
+  "archivo": "modulos/16-seguimiento/soluciones/16c_questionnaireresponse_enero.json"
+ },
+ "16d": {
+  "archivo": "modulos/16-seguimiento/soluciones/16d_observation_dolor.json",
+  "pasos": [
+   {
+    "titulo": "El mínimo: estado y código",
+    "campos": [
+     "resourceType",
+     "status",
+     "code"
+    ]
+   },
+   {
+    "titulo": "El resultado: 6 de 10",
+    "campos": [
+     "category",
+     "subject",
+     "effectiveDateTime",
+     "performer",
+     "valueInteger"
+    ]
+   },
+   {
+    "titulo": "De dónde sale: el cuestionario",
+    "campos": [
+     "derivedFrom",
+     "text"
+    ]
+   }
+  ]
  }
 }

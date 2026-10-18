@@ -1,0 +1,7 @@
+{
+  "resourceType": "Appointment",
+  "status": "booked",
+  "start": "2025-07-30T09:00:00-05:00",
+  "end": "2025-07-30T11:00:00-05:00",
+  "description": "Quimioterapia con doxorrubicina, ciclo 2 de 4 (reprogramado)"
+}

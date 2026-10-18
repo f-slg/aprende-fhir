@@ -1,0 +1,9 @@
+{
+  "resourceType": "CareTeam",
+  "status": "active",
+  "name": "Comité de tumores de mama",
+  "subject": {
+    "reference": "Patient/{{patientId}}",
+    "display": "Luis Alberto Paredes Cevallos"
+  }
+}

@@ -1,5 +1,11 @@
 {
   "resourceType": "DiagnosticReport",
+  "basedOn": [
+    {
+      "reference": "ServiceRequest/{{biopsyRequestId}}",
+      "display": "Orden de biopsia de mama"
+    }
+  ],
   "status": "final",
   "category": [
     {

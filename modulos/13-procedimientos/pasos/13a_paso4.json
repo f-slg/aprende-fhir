@@ -10,6 +10,12 @@
       "value": "PROC-2025-0001"
     }
   ],
+  "basedOn": [
+    {
+      "reference": "CarePlan/{{carePlanId}}",
+      "display": "Plan de tratamiento del cáncer de mama"
+    }
+  ],
   "status": "completed",
   "category": {
     "coding": [

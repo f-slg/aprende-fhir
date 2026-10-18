@@ -30,6 +30,9 @@ for ((i = 0; i < n; i++)); do
   url="$FHIRURL${ruta:+/$ruta}"
   args=(-sS -o /tmp/aprende-fhir-respuesta.json -w '%{http_code}' -X "$metodo"
         -H 'Accept: application/fhir+json' --globoff)
+  while IFS= read -r encabezado; do
+    [ -n "$encabezado" ] && args+=(-H "$encabezado")
+  done < <(jq -r '.encabezados // {} | to_entries[] | "\(.key): \(.value)"' <<<"$paso")
   archivo=$(jq -r '.archivo // empty' <<<"$paso")
   if [ -n "$archivo" ]; then
     cuerpo=$(sustituir "$(cat "$raiz/$archivo")")

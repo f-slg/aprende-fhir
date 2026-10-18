@@ -1,0 +1,12 @@
+{
+  "resourceType": "AppointmentResponse",
+  "appointment": {
+    "reference": "Appointment/{{appointment1Id}}",
+    "display": "Quimioterapia ciclo 1"
+  },
+  "actor": {
+    "reference": "Patient/{{patientId}}",
+    "display": "Luis Alberto Paredes Cevallos"
+  },
+  "participantStatus": "accepted"
+}

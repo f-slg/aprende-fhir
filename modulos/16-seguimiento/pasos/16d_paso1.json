@@ -1,0 +1,14 @@
+{
+  "resourceType": "Observation",
+  "status": "final",
+  "code": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "72514-3",
+        "display": "Pain severity - 0-10 verbal numeric rating [Score] - Reported"
+      }
+    ],
+    "text": "Intensidad del dolor (0 a 10)"
+  }
+}

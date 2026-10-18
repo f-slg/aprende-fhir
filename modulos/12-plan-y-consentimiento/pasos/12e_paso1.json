@@ -1,0 +1,33 @@
+{
+  "resourceType": "Consent",
+  "status": "active",
+  "scope": {
+    "coding": [
+      {
+        "system": "http://terminology.hl7.org/CodeSystem/consentscope",
+        "code": "treatment",
+        "display": "Treatment"
+      }
+    ],
+    "text": "Tratamiento"
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://loinc.org",
+          "code": "59284-0",
+          "display": "Patient Consent"
+        }
+      ],
+      "text": "Consentimiento del paciente"
+    }
+  ],
+  "patient": {
+    "reference": "Patient/{{patientId}}",
+    "display": "Luis Alberto Paredes Cevallos"
+  },
+  "policyRule": {
+    "text": "Consentimiento informado para procedimientos quirúrgicos (normativa nacional)"
+  }
+}

@@ -1,6 +1,6 @@
 # Módulo 09 · Documentos clínicos
 
-[← Módulo 08](../08-vacunacion/README.md) · [Inicio](../../README.md) · [Módulo 11 →](../11-anatomia-patologica/README.md)
+[← Módulo 08](../08-vacunacion/README.md) · [Inicio](../../README.md) · [Módulo 10 →](../10-ordenes-y-derivacion/README.md)
 
 > **Nivel:** intermedio · **Duración:** 60 minutos · **Necesitas:** módulo 06
 

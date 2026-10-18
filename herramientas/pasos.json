@@ -340,7 +340,8 @@
       "nombre": "Antecedente familiar: madre",
       "metodo": "POST",
       "ruta": "FamilyMemberHistory",
-      "archivo": "modulos/07-antecedentes/soluciones/07c_familymemberhistory_madre.json"
+      "archivo": "modulos/07-antecedentes/soluciones/07c_familymemberhistory_madre.json",
+      "guarda": "motherHistoryId"
     },
     {
       "id": "07d",
@@ -471,6 +472,120 @@
       "ruta": "Bundle/{{bundleDocId}}"
     },
     {
+      "id": "10a",
+      "modulo": "10-ordenes-y-derivacion",
+      "nombre": "Crear el consultorio (Location)",
+      "metodo": "POST",
+      "ruta": "Location",
+      "archivo": "modulos/10-ordenes-y-derivacion/soluciones/10a_location_consultorio.json",
+      "guarda": "officeLocationId"
+    },
+    {
+      "id": "10b",
+      "modulo": "10-ordenes-y-derivacion",
+      "nombre": "Rol de la Dra. Salazar: médica general",
+      "metodo": "POST",
+      "ruta": "PractitionerRole",
+      "archivo": "modulos/10-ordenes-y-derivacion/soluciones/10b_practitionerrole_medica_general.json",
+      "guarda": "salazarRoleId"
+    },
+    {
+      "id": "10c",
+      "modulo": "10-ordenes-y-derivacion",
+      "nombre": "Crear al oncólogo",
+      "metodo": "POST",
+      "ruta": "Practitioner",
+      "archivo": "modulos/10-ordenes-y-derivacion/soluciones/10c_practitioner_oncologo.json",
+      "guarda": "oncologistId"
+    },
+    {
+      "id": "10d",
+      "modulo": "10-ordenes-y-derivacion",
+      "nombre": "Rol del oncólogo",
+      "metodo": "POST",
+      "ruta": "PractitionerRole",
+      "archivo": "modulos/10-ordenes-y-derivacion/soluciones/10d_practitionerrole_oncologo.json",
+      "guarda": "oncologistRoleId"
+    },
+    {
+      "id": "10e",
+      "modulo": "10-ordenes-y-derivacion",
+      "nombre": "Consulta por el nódulo",
+      "metodo": "POST",
+      "ruta": "Encounter",
+      "archivo": "modulos/10-ordenes-y-derivacion/soluciones/10e_encounter_consulta_nodulo.json",
+      "guarda": "noduleEncounterId"
+    },
+    {
+      "id": "10f",
+      "modulo": "10-ordenes-y-derivacion",
+      "nombre": "Orden de ecografía",
+      "metodo": "POST",
+      "ruta": "ServiceRequest",
+      "archivo": "modulos/10-ordenes-y-derivacion/soluciones/10f_servicerequest_ecografia.json",
+      "guarda": "ultrasoundRequestId"
+    },
+    {
+      "id": "10g",
+      "modulo": "10-ordenes-y-derivacion",
+      "nombre": "Informe de la ecografía (BI-RADS 4)",
+      "metodo": "POST",
+      "ruta": "DiagnosticReport",
+      "archivo": "modulos/10-ordenes-y-derivacion/soluciones/10g_diagnosticreport_ecografia.json",
+      "guarda": "ultrasoundReportId"
+    },
+    {
+      "id": "10h",
+      "modulo": "10-ordenes-y-derivacion",
+      "nombre": "Orden de biopsia",
+      "metodo": "POST",
+      "ruta": "ServiceRequest",
+      "archivo": "modulos/10-ordenes-y-derivacion/soluciones/10h_servicerequest_biopsia.json",
+      "guarda": "biopsyRequestId"
+    },
+    {
+      "id": "10i",
+      "modulo": "10-ordenes-y-derivacion",
+      "nombre": "Derivación a oncología",
+      "metodo": "POST",
+      "ruta": "ServiceRequest",
+      "archivo": "modulos/10-ordenes-y-derivacion/soluciones/10i_servicerequest_derivacion.json",
+      "guarda": "referralId"
+    },
+    {
+      "id": "10j",
+      "modulo": "10-ordenes-y-derivacion",
+      "nombre": "Órdenes del paciente",
+      "metodo": "GET",
+      "ruta": "ServiceRequest?subject=Patient/{{patientId}}&_sort=authored"
+    },
+    {
+      "id": "10k",
+      "modulo": "10-ordenes-y-derivacion",
+      "nombre": "Lo que se hizo con cada orden (_revinclude)",
+      "metodo": "GET",
+      "ruta": "ServiceRequest?subject=Patient/{{patientId}}&_revinclude=DiagnosticReport:based-on"
+    },
+    {
+      "id": "10l",
+      "modulo": "10-ordenes-y-derivacion",
+      "nombre": "Profesionales de oncología del hospital",
+      "metodo": "GET",
+      "ruta": "PractitionerRole?specialty=http://snomed.info/sct|394593009&_include=PractitionerRole:practitioner"
+    },
+    {
+      "id": "10m",
+      "modulo": "10-ordenes-y-derivacion",
+      "nombre": "Error a propósito: prioridad en español",
+      "metodo": "POST",
+      "ruta": "ServiceRequest",
+      "archivo": "modulos/10-ordenes-y-derivacion/errores/10e1_prioridad_en_espanol.json",
+      "espera": {
+        "servidor": "rechaza",
+        "validador": "falla"
+      }
+    },
+    {
       "id": "11a",
       "modulo": "11-anatomia-patologica",
       "nombre": "Registrar el tumor (BodyStructure)",
@@ -583,6 +698,78 @@
       "ruta": "DiagnosticReport?subject=Patient/{{patientId}}&_include=DiagnosticReport:result"
     },
     {
+      "id": "12a",
+      "modulo": "12-plan-y-consentimiento",
+      "nombre": "Comité de tumores (CareTeam)",
+      "metodo": "POST",
+      "ruta": "CareTeam",
+      "archivo": "modulos/12-plan-y-consentimiento/soluciones/12a_careteam_comite.json",
+      "guarda": "careTeamId"
+    },
+    {
+      "id": "12b",
+      "modulo": "12-plan-y-consentimiento",
+      "nombre": "Meta: sin evidencia de enfermedad",
+      "metodo": "POST",
+      "ruta": "Goal",
+      "archivo": "modulos/12-plan-y-consentimiento/soluciones/12b_goal_control_enfermedad.json",
+      "guarda": "goalControlId"
+    },
+    {
+      "id": "12c",
+      "modulo": "12-plan-y-consentimiento",
+      "nombre": "Meta: mantener la funcionalidad",
+      "metodo": "POST",
+      "ruta": "Goal",
+      "archivo": "modulos/12-plan-y-consentimiento/soluciones/12c_goal_calidad_vida.json",
+      "guarda": "goalQualityId"
+    },
+    {
+      "id": "12d",
+      "modulo": "12-plan-y-consentimiento",
+      "nombre": "Plan de tratamiento (CarePlan)",
+      "metodo": "POST",
+      "ruta": "CarePlan",
+      "archivo": "modulos/12-plan-y-consentimiento/soluciones/12d_careplan_oncologico.json",
+      "guarda": "carePlanId"
+    },
+    {
+      "id": "12e",
+      "modulo": "12-plan-y-consentimiento",
+      "nombre": "Consentimiento informado para la cirugía",
+      "metodo": "POST",
+      "ruta": "Consent",
+      "archivo": "modulos/12-plan-y-consentimiento/soluciones/12e_consent_cirugia.json",
+      "guarda": "consentId"
+    },
+    {
+      "id": "12f",
+      "modulo": "12-plan-y-consentimiento",
+      "nombre": "El plan con sus metas y su equipo",
+      "metodo": "GET",
+      "ruta": "CarePlan?subject=Patient/{{patientId}}&_include=CarePlan:goal&_include=CarePlan:care-team"
+    },
+    {
+      "id": "12g",
+      "modulo": "12-plan-y-consentimiento",
+      "nombre": "Error a propósito: consentimiento sin categoría (el servidor lo acepta)",
+      "metodo": "POST",
+      "ruta": "Consent",
+      "archivo": "modulos/12-plan-y-consentimiento/errores/12e1_consentimiento_sin_categoria.json",
+      "espera": {
+        "servidor": "acepta",
+        "validador": "falla"
+      },
+      "guarda": "errorConsentId"
+    },
+    {
+      "id": "12h",
+      "modulo": "12-plan-y-consentimiento",
+      "nombre": "Borrar el consentimiento inválido",
+      "metodo": "DELETE",
+      "ruta": "Consent/{{errorConsentId}}"
+    },
+    {
       "id": "13a",
       "modulo": "13-procedimientos",
       "nombre": "Mastectomía parcial",
@@ -598,6 +785,136 @@
       "metodo": "PUT",
       "ruta": "Procedure/{{procedureId}}",
       "archivo": "modulos/13-procedimientos/soluciones/13b_procedure_actualizar.json"
+    },
+    {
+      "id": "14a",
+      "modulo": "14-citas",
+      "nombre": "Crear el Hospital de Día de Oncología",
+      "metodo": "POST",
+      "ruta": "Location",
+      "archivo": "modulos/14-citas/soluciones/14a_location_hospital_dia.json",
+      "guarda": "dayHospitalLocationId"
+    },
+    {
+      "id": "14b",
+      "modulo": "14-citas",
+      "nombre": "Agenda de quimioterapia (Schedule)",
+      "metodo": "POST",
+      "ruta": "Schedule",
+      "archivo": "modulos/14-citas/soluciones/14b_schedule_quimioterapia.json",
+      "guarda": "scheduleId"
+    },
+    {
+      "id": "14c",
+      "modulo": "14-citas",
+      "nombre": "Cupo libre para el ciclo 1 (Slot)",
+      "metodo": "POST",
+      "ruta": "Slot",
+      "archivo": "modulos/14-citas/soluciones/14c_slot_ciclo1.json",
+      "guarda": "slot1Id"
+    },
+    {
+      "id": "14d",
+      "modulo": "14-citas",
+      "nombre": "Cupos libres de la agenda",
+      "metodo": "GET",
+      "ruta": "Slot?schedule=Schedule/{{scheduleId}}&status=free"
+    },
+    {
+      "id": "14e",
+      "modulo": "14-citas",
+      "nombre": "Agendar el ciclo 1 (Appointment)",
+      "metodo": "POST",
+      "ruta": "Appointment",
+      "archivo": "modulos/14-citas/soluciones/14e_appointment_ciclo1.json",
+      "guarda": "appointment1Id"
+    },
+    {
+      "id": "14f",
+      "modulo": "14-citas",
+      "nombre": "Marcar el cupo como ocupado",
+      "metodo": "PUT",
+      "ruta": "Slot/{{slot1Id}}",
+      "archivo": "modulos/14-citas/soluciones/14d_slot_ciclo1_ocupado.json"
+    },
+    {
+      "id": "14g",
+      "modulo": "14-citas",
+      "nombre": "Volver a buscar cupos libres, sin caché",
+      "metodo": "GET",
+      "ruta": "Slot?schedule=Schedule/{{scheduleId}}&status=free",
+      "encabezados": {
+        "Cache-Control": "no-cache"
+      }
+    },
+    {
+      "id": "14h",
+      "modulo": "14-citas",
+      "nombre": "El paciente confirma (AppointmentResponse)",
+      "metodo": "POST",
+      "ruta": "AppointmentResponse",
+      "archivo": "modulos/14-citas/soluciones/14f_appointmentresponse_paciente.json"
+    },
+    {
+      "id": "14i",
+      "modulo": "14-citas",
+      "nombre": "La cita se cumple",
+      "metodo": "PUT",
+      "ruta": "Appointment/{{appointment1Id}}",
+      "archivo": "modulos/14-citas/soluciones/14g_appointment_ciclo1_cumplida.json"
+    },
+    {
+      "id": "14j",
+      "modulo": "14-citas",
+      "nombre": "Cupo para el ciclo 2",
+      "metodo": "POST",
+      "ruta": "Slot",
+      "archivo": "modulos/14-citas/soluciones/14h_slot_ciclo2.json",
+      "guarda": "slot2Id"
+    },
+    {
+      "id": "14k",
+      "modulo": "14-citas",
+      "nombre": "Agendar el ciclo 2",
+      "metodo": "POST",
+      "ruta": "Appointment",
+      "archivo": "modulos/14-citas/soluciones/14i_appointment_ciclo2.json",
+      "guarda": "appointment2Id"
+    },
+    {
+      "id": "14l",
+      "modulo": "14-citas",
+      "nombre": "Cancelar el ciclo 2 por neutropenia",
+      "metodo": "PUT",
+      "ruta": "Appointment/{{appointment2Id}}",
+      "archivo": "modulos/14-citas/soluciones/14j_appointment_ciclo2_cancelada.json"
+    },
+    {
+      "id": "14m",
+      "modulo": "14-citas",
+      "nombre": "Citas del paciente",
+      "metodo": "GET",
+      "ruta": "Appointment?patient=Patient/{{patientId}}&_sort=date"
+    },
+    {
+      "id": "14n",
+      "modulo": "14-citas",
+      "nombre": "Error a propósito: cita sin participantes (el servidor la acepta)",
+      "metodo": "POST",
+      "ruta": "Appointment",
+      "archivo": "modulos/14-citas/errores/14e1_cita_sin_participantes.json",
+      "espera": {
+        "servidor": "acepta",
+        "validador": "falla"
+      },
+      "guarda": "errorAppointmentId"
+    },
+    {
+      "id": "14o",
+      "modulo": "14-citas",
+      "nombre": "Borrar la cita inválida",
+      "metodo": "DELETE",
+      "ruta": "Appointment/{{errorAppointmentId}}"
     },
     {
       "id": "15a",
@@ -681,8 +998,62 @@
       "ruta": "MedicationRequest/{{errorMedReqId}}"
     },
     {
-      "id": "15j",
-      "modulo": "15-medicamentos",
+      "id": "16a",
+      "modulo": "16-seguimiento",
+      "nombre": "Crear el cuestionario (Questionnaire)",
+      "metodo": "POST",
+      "ruta": "Questionnaire",
+      "archivo": "modulos/16-seguimiento/soluciones/16a_questionnaire_seguimiento.json",
+      "guarda": "questionnaireId"
+    },
+    {
+      "id": "16b",
+      "modulo": "16-seguimiento",
+      "nombre": "Respuesta de octubre de 2025",
+      "metodo": "POST",
+      "ruta": "QuestionnaireResponse",
+      "archivo": "modulos/16-seguimiento/soluciones/16b_questionnaireresponse_octubre.json",
+      "guarda": "responseOctoberId"
+    },
+    {
+      "id": "16c",
+      "modulo": "16-seguimiento",
+      "nombre": "Respuesta de enero de 2026",
+      "metodo": "POST",
+      "ruta": "QuestionnaireResponse",
+      "archivo": "modulos/16-seguimiento/soluciones/16c_questionnaireresponse_enero.json",
+      "guarda": "responseJanuaryId"
+    },
+    {
+      "id": "16d",
+      "modulo": "16-seguimiento",
+      "nombre": "Dolor 6/10 como observación (derivedFrom)",
+      "metodo": "POST",
+      "ruta": "Observation",
+      "archivo": "modulos/16-seguimiento/soluciones/16d_observation_dolor.json"
+    },
+    {
+      "id": "16e",
+      "modulo": "16-seguimiento",
+      "nombre": "Respuestas del paciente a este cuestionario",
+      "metodo": "GET",
+      "ruta": "QuestionnaireResponse?subject=Patient/{{patientId}}&questionnaire=https://f-slg.github.io/aprende-fhir/Questionnaire/seguimiento-oncologico&_sort=authored"
+    },
+    {
+      "id": "16f",
+      "modulo": "16-seguimiento",
+      "nombre": "Error a propósito: una respuesta numérica escrita en letras",
+      "metodo": "POST",
+      "ruta": "QuestionnaireResponse",
+      "archivo": "modulos/16-seguimiento/errores/16e1_respuesta_con_texto.json",
+      "espera": {
+        "servidor": "rechaza",
+        "validador": "falla"
+      }
+    },
+    {
+      "id": "16g",
+      "modulo": "16-seguimiento",
       "nombre": "Expediente completo del paciente",
       "metodo": "GET",
       "ruta": "Patient/{{patientId}}/$everything"

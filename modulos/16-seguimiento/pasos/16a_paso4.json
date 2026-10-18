@@ -1,0 +1,71 @@
+{
+  "resourceType": "Questionnaire",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Cuestionario de seguimiento oncológico: dolor (0 a 10), funcionalidad (ECOG),</p><p>sofocos, dolor articular y comentarios.</p></div>"
+  },
+  "url": "https://f-slg.github.io/aprende-fhir/Questionnaire/seguimiento-oncologico",
+  "version": "1.0.0",
+  "name": "SeguimientoOncologico",
+  "title": "Cuestionario de seguimiento oncológico",
+  "status": "active",
+  "subjectType": [
+    "Patient"
+  ],
+  "date": "2025-09-01",
+  "publisher": "Aprende FHIR desde cero (ejemplo didáctico)",
+  "description": "Cuestionario breve para el control de pacientes en tratamiento oncológico.",
+  "item": [
+    {
+      "linkId": "dolor",
+      "text": "En una escala de 0 (sin dolor) a 10 (el peor dolor imaginable), ¿cuánto dolor tuvo en la última semana?",
+      "type": "integer",
+      "required": true,
+      "code": [
+        {
+          "system": "http://loinc.org",
+          "code": "72514-3",
+          "display": "Pain severity - 0-10 verbal numeric rating [Score] - Reported"
+        }
+      ]
+    },
+    {
+      "linkId": "ecog",
+      "text": "¿Cuál de estas frases describe mejor su actividad habitual?",
+      "type": "choice",
+      "required": true,
+      "answerOption": [
+        {
+          "valueString": "0 · Hago mi vida normal sin limitaciones"
+        },
+        {
+          "valueString": "1 · Tengo síntomas, pero hago trabajos ligeros"
+        },
+        {
+          "valueString": "2 · No puedo trabajar, pero me valgo por mí mismo"
+        },
+        {
+          "valueString": "3 · Paso más de la mitad del día en cama o sentado"
+        },
+        {
+          "valueString": "4 · Estoy en cama todo el día"
+        }
+      ]
+    },
+    {
+      "linkId": "sofocos",
+      "text": "¿Ha tenido sofocos (bochornos) en la última semana?",
+      "type": "boolean"
+    },
+    {
+      "linkId": "articular",
+      "text": "¿Ha tenido dolor en las articulaciones en la última semana?",
+      "type": "boolean"
+    },
+    {
+      "linkId": "comentarios",
+      "text": "¿Algo más que quiera contarnos?",
+      "type": "text"
+    }
+  ]
+}

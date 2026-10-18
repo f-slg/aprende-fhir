@@ -1,0 +1,29 @@
+{
+  "resourceType": "Questionnaire",
+  "url": "https://f-slg.github.io/aprende-fhir/Questionnaire/seguimiento-oncologico",
+  "version": "1.0.0",
+  "name": "SeguimientoOncologico",
+  "title": "Cuestionario de seguimiento oncológico",
+  "status": "active",
+  "subjectType": [
+    "Patient"
+  ],
+  "date": "2025-09-01",
+  "publisher": "Aprende FHIR desde cero (ejemplo didáctico)",
+  "description": "Cuestionario breve para el control de pacientes en tratamiento oncológico.",
+  "item": [
+    {
+      "linkId": "dolor",
+      "text": "En una escala de 0 (sin dolor) a 10 (el peor dolor imaginable), ¿cuánto dolor tuvo en la última semana?",
+      "type": "integer",
+      "required": true,
+      "code": [
+        {
+          "system": "http://loinc.org",
+          "code": "72514-3",
+          "display": "Pain severity - 0-10 verbal numeric rating [Score] - Reported"
+        }
+      ]
+    }
+  ]
+}

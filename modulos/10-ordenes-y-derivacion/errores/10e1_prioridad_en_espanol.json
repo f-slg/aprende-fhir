@@ -1,0 +1,18 @@
+{
+  "resourceType": "ServiceRequest",
+  "status": "active",
+  "intent": "order",
+  "priority": "urgente",
+  "code": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "47079000",
+        "display": "Ultrasonography of breast"
+      }
+    ]
+  },
+  "subject": {
+    "reference": "Patient/{{patientId}}"
+  }
+}

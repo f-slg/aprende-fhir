@@ -1,0 +1,17 @@
+{
+  "resourceType": "AppointmentResponse",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Luis confirma su asistencia a la cita del ciclo 1.</p></div>"
+  },
+  "appointment": {
+    "reference": "Appointment/{{appointment1Id}}",
+    "display": "Quimioterapia ciclo 1"
+  },
+  "actor": {
+    "reference": "Patient/{{patientId}}",
+    "display": "Luis Alberto Paredes Cevallos"
+  },
+  "participantStatus": "accepted",
+  "comment": "Confirmado por teléfono el 30 de junio de 2025."
+}
