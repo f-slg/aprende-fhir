@@ -82,6 +82,38 @@ docker run -p 8080:8080 hapiproject/hapi:latest
 
 y usar `http://localhost:8080/fhir`.
 
+### Desde VS Code con Postman
+
+El repositorio viene preconfigurado para VS Code. Ábrelo con
+`code aprende-fhir` y acepta instalar las **extensiones recomendadas**
+(Postman, R, vista previa de Mermaid y herramientas FHIR).
+
+1. En la barra lateral, abre **Postman** e inicia sesión (la extensión usa tu
+   cuenta de Postman, la gratuita basta).
+2. **Import** → elige `postman/aprende-fhir.postman_collection.json`.
+3. Importa también un entorno de la carpeta `postman/`:
+   - `hapi-publico.postman_environment.json`: servidor público de HAPI.
+   - `hapi-local.postman_environment.json`: tu HAPI en `http://localhost:8080/fhir`.
+4. Selecciona el entorno arriba a la derecha y ejecuta las peticiones en orden
+   con **Send**. Cada `POST` guarda el `id` en las variables de la colección, así
+   que los módulos siguientes ya lo encuentran. Para correrla entera, usa
+   **Run** sobre la colección.
+
+Con el README del módulo abierto a un lado (vista previa: `Ctrl+Shift+V`) y
+Postman al otro, sigues la explicación y ejecutas cada paso sin salir del editor.
+
+En **Terminal → Ejecutar tarea…** tienes atajos para lo demás:
+
+| Tarea | Qué hace |
+|---|---|
+| HAPI local: iniciar / detener | Levanta o detiene un HAPI FHIR con Podman o Docker y espera a que responda |
+| Taller: ejecutar la colección de Postman (newman) | Corre la colección completa desde la terminal y muestra qué paso falla |
+| Taller: ejecutar con curl | `curl/taller.sh`, todo o hasta el módulo que elijas |
+| Taller: ejecutar con R | `r/taller.R`, todo o hasta el módulo que elijas |
+| Validar con el validador oficial de HL7 | `herramientas/validar.sh` |
+| Actualizar pasos, fichas y colección de Postman | `herramientas/actualizar.py` |
+| Sitio web: vista previa | El sitio en `http://127.0.0.1:8000` |
+
 ## Módulos
 
 El taller tiene tres niveles y 19 módulos, que se siguen en orden.
@@ -235,7 +267,8 @@ modulos/NN-tema/README.md       explicación, ejercicios y pistas
 modulos/NN-tema/soluciones/     recursos FHIR de solución (JSON)
 modulos/NN-tema/pasos/          versiones intermedias de la construcción paso a paso
 modulos/NN-tema/errores/        errores a propósito
-postman/                        colección de Postman
+postman/                        colección y entornos de Postman (público y local)
+.vscode/                        tareas y extensiones recomendadas para VS Code
 r/                              funciones y scripts para R/RStudio
 curl/                           script para la terminal
 herramientas/pasos.json         lista ordenada de pasos del taller (y errores esperados)

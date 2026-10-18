@@ -1,0 +1,84 @@
+{
+  // Terminal → Ejecutar tarea… (o Ctrl+Shift+P → «Tasks: Run Task»)
+  "version": "2.0.0",
+  "inputs": [
+    {
+      "id": "hasta",
+      "type": "promptString",
+      "description": "¿Hasta qué módulo? (01 a 19)",
+      "default": "19"
+    },
+    {
+      "id": "servidor",
+      "type": "pickString",
+      "description": "Servidor FHIR",
+      "options": [
+        "https://hapi.fhir.org/baseR4",
+        "http://localhost:8080/fhir"
+      ],
+      "default": "https://hapi.fhir.org/baseR4"
+    }
+  ],
+  "tasks": [
+    {
+      "label": "Taller: ejecutar con curl",
+      "detail": "Corre todos los pasos con curl/taller.sh (o hasta un módulo)",
+      "type": "shell",
+      "command": "FHIRURL='${input:servidor}' curl/taller.sh ${input:hasta}",
+      "problemMatcher": [],
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "Taller: ejecutar la colección de Postman (newman)",
+      "detail": "Corre la colección completa con newman, la misma que usas en Postman",
+      "type": "shell",
+      "command": "npx --yes newman@6 run postman/aprende-fhir.postman_collection.json --env-var FHIRURL='${input:servidor}' --delay-request 100",
+      "problemMatcher": []
+    },
+    {
+      "label": "Taller: ejecutar con R",
+      "detail": "Ejecuta r/taller.R (requiere httr2 y jsonlite)",
+      "type": "shell",
+      "command": "FHIRURL='${input:servidor}' Rscript r/taller.R ${input:hasta}",
+      "problemMatcher": []
+    },
+    {
+      "label": "HAPI local: iniciar",
+      "detail": "Servidor HAPI FHIR en http://localhost:8080/fhir (podman o docker)",
+      "type": "shell",
+      "command": "motor=$(command -v podman || command -v docker); $motor start aprende-fhir-hapi 2>/dev/null || $motor run -d --name aprende-fhir-hapi -p 8080:8080 docker.io/hapiproject/hapi:latest; echo 'Esperando a HAPI…'; until curl -sf http://localhost:8080/fhir/metadata -o /dev/null; do sleep 3; done; echo 'HAPI listo en http://localhost:8080/fhir'",
+      "problemMatcher": []
+    },
+    {
+      "label": "HAPI local: detener",
+      "type": "shell",
+      "command": "motor=$(command -v podman || command -v docker); $motor stop aprende-fhir-hapi",
+      "problemMatcher": []
+    },
+    {
+      "label": "Validar con el validador oficial de HL7",
+      "detail": "herramientas/validar.sh (requiere Java 17+)",
+      "type": "shell",
+      "command": "herramientas/validar.sh",
+      "problemMatcher": []
+    },
+    {
+      "label": "Actualizar pasos, fichas y colección de Postman",
+      "detail": "herramientas/actualizar.py",
+      "type": "shell",
+      "command": "python3 herramientas/actualizar.py",
+      "problemMatcher": []
+    },
+    {
+      "label": "Sitio web: vista previa",
+      "detail": "MkDocs en http://127.0.0.1:8000 (instala herramientas/sitio/requisitos.txt)",
+      "type": "shell",
+      "command": "python3 herramientas/sitio/construir.py --servir",
+      "isBackground": true,
+      "problemMatcher": []
+    }
+  ]
+}

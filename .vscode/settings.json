@@ -1,0 +1,13 @@
+{
+  "files.associations": {
+    "*.postman_collection.json": "json",
+    "*.postman_environment.json": "json"
+  },
+  "[json]": {
+    "editor.tabSize": 2
+  },
+  "files.exclude": {
+    ".sitio": true,
+    ".validador": true
+  }
+}

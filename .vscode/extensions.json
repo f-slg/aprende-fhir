@@ -1,0 +1,12 @@
+{
+  "recommendations": [
+    "postman.postman-for-vscode",
+    "REditorSupport.r",
+    "bierner.markdown-mermaid",
+    "yannick-lagger.vscode-fhir-tools",
+    "ms-ceintl.vscode-language-pack-es"
+  ],
+  "unwantedRecommendations": [
+    "humao.rest-client"
+  ]
+}
