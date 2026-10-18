@@ -1194,13 +1194,17 @@ el servidor de terminología de HL7, <code>https://tx.fhir.org/r4</code> (variab
 <ol>
 <li>En la barra lateral, abre <strong>Postman</strong> e inicia sesión (la extensión usa tu
    cuenta de Postman, la gratuita basta).</li>
-<li><strong>Import</strong> → elige <code>postman/aprende-fhir.postman_collection.json</code>.</li>
+<li><strong>Import</strong> (icono de la barra de título del panel, o <code>Ctrl+Mayús+P</code> →
+   <em>Postman: Import</em>). El botón aparece después de iniciar sesión y elegir un
+   <em>workspace</em>. La extensión rechaza colecciones grandes, así que importa las
+   tres partes de <code>postman/niveles/</code> en lugar de la colección completa:
+   <code>1-basico</code>, <code>2-intermedio</code> y <code>3-avanzado</code>.</li>
 <li>Importa también un entorno de la carpeta <code>postman/</code>:</li>
 <li><code>hapi-publico.postman_environment.json</code>: servidor público de HAPI.</li>
 <li><code>hapi-local.postman_environment.json</code>: tu HAPI en <code>http://localhost:8080/fhir</code>.</li>
 <li>Selecciona el entorno arriba a la derecha y ejecuta las peticiones en orden
-   con <strong>Send</strong>. Cada <code>POST</code> guarda el <code>id</code> en las variables de la colección, así
-   que los módulos siguientes ya lo encuentran. Para correrla entera, usa
+   con <strong>Send</strong>. Cada <code>POST</code> guarda el <code>id</code> en el entorno seleccionado, así que
+   los módulos siguientes (aunque estén en otra parte) ya lo encuentran. Para correrla entera, usa
    <strong>Run</strong> sobre la colección.</li>
 </ol>
 <p>Con el README del módulo abierto a un lado (vista previa: <code>Ctrl+Shift+V</code>) y
@@ -1547,7 +1551,8 @@ real se usan las que defina la guía de implementación nacional.</p>
 modulos/NN-tema/soluciones/     recursos FHIR de solución (JSON)
 modulos/NN-tema/pasos/          versiones intermedias de la construcción paso a paso
 modulos/NN-tema/errores/        errores a propósito
-postman/                        colección y entornos de Postman (público y local)
+postman/                        colección completa y entornos de Postman (público y local)
+postman/niveles/                la misma colección en tres partes (básico, intermedio, avanzado)
 .vscode/                        tareas y extensiones recomendadas para VS Code
 r/                              funciones y scripts para R/RStudio
 curl/                           script para la terminal
