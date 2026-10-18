@@ -1194,18 +1194,23 @@ el servidor de terminología de HL7, <code>https://tx.fhir.org/r4</code> (variab
 <ol>
 <li>En la barra lateral, abre <strong>Postman</strong> e inicia sesión (la extensión usa tu
    cuenta de Postman, la gratuita basta).</li>
-<li><strong>Import</strong> (icono de la barra de título del panel, o <code>Ctrl+Mayús+P</code> →
-   <em>Postman: Import</em>). El botón aparece después de iniciar sesión y elegir un
-   <em>workspace</em>. La extensión rechaza colecciones grandes, así que importa las
-   tres partes de <code>postman/niveles/</code> en lugar de la colección completa:
-   <code>1-basico</code>, <code>2-intermedio</code> y <code>3-avanzado</code>.</li>
-<li>Importa también un entorno de la carpeta <code>postman/</code>:</li>
+<li>Importa la colección <strong>desde Postman web</strong>. La extensión de VS Code puede
+   fallar al importar colecciones ("Could not import collection"), pero usa tu
+   misma cuenta: lo que importes en la web aparece solo en VS Code.</li>
+<li>Abre <a href="https://go.postman.co">https://go.postman.co</a>, entra en <strong>My Workspace</strong> y pulsa <strong>Import</strong>
+     (icono junto a <em>Collections</em>, o <code>Ctrl+O</code>). No uses el buscador de arriba.</li>
+<li>Pega el enlace de la colección:
+     <code>https://raw.githubusercontent.com/f-slg/aprende-fhir/main/postman/aprende-fhir.postman_collection.json</code></li>
+<li>Si prefieres partes más pequeñas, en <code>postman/niveles/</code> está la misma
+     colección dividida en básico, intermedio y avanzado.</li>
+<li>Importa también un entorno de la carpeta <code>postman/</code> (desde la web o desde
+   la extensión, con <strong>Import → File</strong>; los entornos sí entran desde VS Code):</li>
 <li><code>hapi-publico.postman_environment.json</code>: servidor público de HAPI.</li>
 <li><code>hapi-local.postman_environment.json</code>: tu HAPI en <code>http://localhost:8080/fhir</code>.</li>
 <li>Selecciona el entorno arriba a la derecha y ejecuta las peticiones en orden
    con <strong>Send</strong>. Cada <code>POST</code> guarda el <code>id</code> en el entorno seleccionado, así que
-   los módulos siguientes (aunque estén en otra parte) ya lo encuentran. Para correrla entera, usa
-   <strong>Run</strong> sobre la colección.</li>
+   los módulos siguientes (aunque estén en otra parte) ya lo encuentran. Para
+   correrla entera, usa <strong>Run</strong> sobre la colección.</li>
 </ol>
 <p>Con el README del módulo abierto a un lado (vista previa: <code>Ctrl+Shift+V</code>) y
 Postman al otro, sigues la explicación y ejecutas cada paso sin salir del editor.</p>
