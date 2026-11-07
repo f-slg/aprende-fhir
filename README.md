@@ -21,6 +21,14 @@
 
 ---
 
+> **In English.** *Aprende FHIR desde cero* ("Learn FHIR from scratch") is a
+> hands-on HL7 FHIR R4 (4.0.1) workshop **in Spanish**. You create, search,
+> fix and link **36 resource types** while following a single Ecuadorian
+> patient, from the first visit to the International Patient Summary (IPS)
+> they take abroad. Each module has a card per resource and exercises for
+> Postman, R or curl, and every example resource is validated in CI.
+> [Open the workshop site](https://f-slg.github.io/aprende-fhir/).
+
 Un recorrido para aprender FHIR haciendo, **paso a paso**: crearás, buscarás,
 corregirás y enlazarás **36 tipos de recursos** siguiendo a un mismo paciente,
 desde su primera consulta hasta el resumen internacional (IPS) que lleva de viaje.
