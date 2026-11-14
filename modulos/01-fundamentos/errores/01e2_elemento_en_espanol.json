@@ -1,5 +1,11 @@
 {
   "resourceType": "Patient",
+  "identifier": [
+    {
+      "system": "https://f-slg.github.io/aprende-fhir/sid/ejercicio-01",
+      "value": "{{$guid}}"
+    }
+  ],
   "nombre": [
     {
       "text": "Luis Alberto Paredes Cevallos"

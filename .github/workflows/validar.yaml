@@ -10,6 +10,24 @@ name: validar
 permissions: read-all
 
 jobs:
+  modulo01:
+    name: Regresión del módulo 01 (sin servidor público)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          use-public-rspm: true
+
+      - name: Instalar las herramientas de R y Postman
+        run: |
+          Rscript -e 'paquetes <- c("httr2", "jsonlite", "uuid"); install.packages(paquetes); stopifnot(all(vapply(paquetes, requireNamespace, logical(1), quietly = TRUE)))'
+          npm install --global newman@6
+
+      - name: Comprobar que el módulo se puede repetir
+        run: python3 herramientas/test_modulo01.py
+
   recursos:
     name: Validador oficial de HL7
     runs-on: ubuntu-latest

@@ -65,8 +65,8 @@ En cada módulo:
 | | Ideal si... | Cómo empezar |
 |---|---|---|
 | **Postman** | Es tu primera vez con FHIR o no programas. Ves cada petición y cada respuesta. | Instala [Postman](https://www.postman.com/downloads/), importa [`postman/aprende-fhir.postman_collection.json`](postman/aprende-fhir.postman_collection.json) y ejecuta las peticiones en orden. Cada `POST` guarda el `id` creado para las siguientes. |
-| **R / RStudio** | Trabajas con datos y quieres convertir los resultados en tablas. | Abre `aprende-fhir.Rproj`, instala `httr2` y `jsonlite`, y sigue [`r/primeros_pasos.R`](r/primeros_pasos.R). Con `source("r/taller.R")` ejecutas todo. |
-| **curl** | Prefieres la terminal o quieres automatizar. | `curl/taller.sh` ejecuta todo el taller; `curl/taller.sh 05` solo hasta el módulo 05. Requiere `curl` y `jq`. |
+| **R / RStudio** | Trabajas con datos y quieres convertir los resultados en tablas. | Abre `aprende-fhir.Rproj`, instala `httr2`, `jsonlite` y `uuid`, y sigue [`r/primeros_pasos.R`](r/primeros_pasos.R). Con `source("r/taller.R")` ejecutas todo. |
+| **curl** | Prefieres la terminal o quieres automatizar. | `curl/taller.sh` ejecuta todo el taller; `curl/taller.sh 05` solo hasta el módulo 05. Requiere `curl`, `jq` y Python 3. |
 
 Los tres caminos usan los mismos archivos JSON y la misma lista de pasos
 ([`herramientas/pasos.json`](herramientas/pasos.json)).
