@@ -162,7 +162,7 @@ los métodos de HTTP:
 | Crear | `POST /Patient` | El recurso, sin `id` | `201 Created` y el recurso con su `id` |
 | Leer | `GET /Patient/1000` | — | `200 OK` |
 | Actualizar | `PUT /Patient/1000` | El recurso **completo**, con su `id` | `200 OK` y una nueva versión |
-| Borrar | `DELETE /Patient/1000` | — | `200 OK` |
+| Borrar | `DELETE /Patient/1000` | — | `200 OK` o `204 No Content` |
 | Buscar | `GET /Patient?family=Paredes` | — | `200 OK` y un `Bundle` con los resultados |
 | Ver el historial | `GET /Patient/1000/_history` | — | `200 OK` y todas las versiones |
 | Ver qué sabe hacer el servidor | `GET /metadata` | — | `200 OK` y un `CapabilityStatement` |
@@ -177,6 +177,7 @@ En todas las peticiones se envía el encabezado
 |---|---|
 | `200 OK` | La operación salió bien. |
 | `201 Created` | Se creó el recurso. Mira el `id` en la respuesta. |
+| `204 No Content` | La operación salió bien y la respuesta no lleva cuerpo. |
 | `400 Bad Request` | El servidor no aceptó lo que enviaste: JSON mal formado, un valor inválido o una referencia a algo que no existe. |
 | `404 Not Found` | No existe un recurso con ese `id`. |
 | `410 Gone` | El recurso existió pero fue borrado. |
@@ -260,14 +261,51 @@ que sí va en español es el contenido: nombres, textos, narrativa.
 
 Ahora envía ([`01e2_elemento_en_espanol.json`](errores/01e2_elemento_en_espanol.json)):
 
-```json
-{ "resourceType": "Patient", "nombre": [ { "text": "Luis Alberto Paredes Cevallos" } ], "gender": "male" }
+```http
+POST {{FHIRURL}}/Patient
 ```
 
-**El servidor responde `201 Created`.** Parece que salió bien, pero lee lo
-que guardó con `GET {{FHIRURL}}/Patient/{{errorPatientId}}`: el paciente
-**no tiene nombre**. El servidor ignoró `nombre` porque no es un elemento de
-FHIR, y no avisó.
+```json
+{
+  "resourceType": "Patient",
+  "identifier": [
+    {
+      "system": "https://f-slg.github.io/aprende-fhir/sid/ejercicio-01",
+      "value": "{{$guid}}"
+    }
+  ],
+  "nombre": [ { "text": "Luis Alberto Paredes Cevallos" } ],
+  "gender": "male"
+}
+```
+
+`{{$guid}}` es un **marcador dinámico**: Postman y los scripts de R y curl del
+taller lo sustituyen por un UUID nuevo cada vez que envías la petición. El
+identificador es solo para este ejercicio; no representa una cédula ni una
+persona real. Si haces las peticiones por tu cuenta, reemplázalo antes de
+enviar el JSON. En PowerShell puedes generar uno con
+`[guid]::NewGuid().ToString()`.
+
+**En el servidor público de HAPI, el resultado esperado es `201 Created`.**
+Guarda el `id` devuelto como `errorPatientId` (Postman y los scripts del taller
+lo hacen por ti). Luego lee lo que guardó con
+`GET {{FHIRURL}}/Patient/{{errorPatientId}}` y comprueba:
+
+- `identifier` conserva el UUID que enviaste;
+- no aparecen `nombre` ni `name`: el paciente **no tiene nombre**.
+
+HAPI ignoró `nombre` porque no es un elemento de FHIR. Otros servidores pueden
+rechazar el elemento desconocido con un `OperationOutcome`, según su
+configuración; la aceptación silenciosa no es una regla de FHIR.
+
+> **Para repetir el ejercicio:** vuelve a ejecutar 01d y usa el nuevo `id`
+> devuelto para 01e y 01f. HAPI puede bloquear creaciones con contenido idéntico
+> mediante una caché de recursos recientes y responder con `HAPI-2840`, incluso
+> después de borrar el recurso anterior. El UUID nuevo distingue cada intento.
+> Cambiar solo `nombre` no sirve, porque ese elemento se descarta. Si ejecutas
+> las peticiones manualmente, genera otro UUID para cada intento. No uses para
+> leer o borrar el `id` mencionado en un error de duplicado: podría pertenecer a
+> otra persona que esté practicando.
 
 Esta es la lección más importante del módulo: **que el servidor acepte un
 recurso no significa que el recurso sea correcto.** Muchos servidores son
@@ -282,6 +320,8 @@ Patient | Unrecognized property 'nombre'
 Puedes validar cualquier recurso pegándolo en <https://validator.fhir.org/>,
 o todos los del taller con `herramientas/validar.sh` (ver
 [Validar tus recursos](../../README.md#validar-tus-recursos)).
+Si pegas este ejemplo en el validador, sustituye antes `{{$guid}}` por un UUID;
+el script de validación ya reemplaza los marcadores por valores de ejemplo.
 
 ### 01f · Borrar el paciente de prueba
 
@@ -289,8 +329,10 @@ o todos los del taller con `herramientas/validar.sh` (ver
 DELETE {{FHIRURL}}/Patient/{{errorPatientId}}
 ```
 
-Si después intentas leerlo, el servidor responde `410 Gone`: el recurso
-existió, pero se borró.
+El borrado puede responder `200 OK` o `204 No Content`; ambos indican éxito.
+Si después intentas leerlo en HAPI, el servidor responde `410 Gone`: el recurso
+existió, pero se borró. El borrado no implica que desaparezcan las versiones
+anteriores del historial, ni limpia necesariamente la caché de duplicados.
 
 ## Dos tipos de errores
 

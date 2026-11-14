@@ -40,7 +40,7 @@
     },
     {
       "label": "Taller: ejecutar con R",
-      "detail": "Ejecuta r/taller.R (requiere httr2 y jsonlite)",
+      "detail": "Ejecuta r/taller.R (requiere httr2, jsonlite y uuid)",
       "type": "shell",
       "command": "FHIRURL='${input:servidor}' Rscript r/taller.R ${input:hasta}",
       "problemMatcher": []

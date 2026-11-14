@@ -1,7 +1,7 @@
 # -----------------------------------------------------------------------------
 # Aprende FHIR desde cero · Funciones para trabajar con un servidor FHIR desde R
 #
-# Requiere: install.packages(c("httr2", "jsonlite"))
+# Requiere: install.packages(c("httr2", "jsonlite", "uuid"))
 # Uso:      source("r/fhir.R")
 # -----------------------------------------------------------------------------
 library(httr2)
@@ -19,10 +19,13 @@ tx_url <- function() Sys.getenv("TXURL", "https://tx.fhir.org/r4")
 .fhir_ids <- new.env()
 fhir_ids <- function() as.list(.fhir_ids)
 
-# Reemplaza los marcadores {{variable}} por los ids guardados
+# Reemplaza los ids guardados y el marcador dinámico de Postman {{$guid}}.
 fhir_sustituir <- function(texto) {
   for (var in ls(.fhir_ids)) {
     texto <- gsub(paste0("{{", var, "}}"), get(var, envir = .fhir_ids), texto, fixed = TRUE)
+  }
+  if (grepl("{{$guid}}", texto, fixed = TRUE)) {
+    texto <- gsub("{{$guid}}", uuid::UUIDgenerate(), texto, fixed = TRUE)
   }
   texto
 }
@@ -49,7 +52,7 @@ fhir <- function(metodo, ruta = "", archivo = NULL, guarda = NULL, espera_rechaz
     req <- req_body_raw(req, cuerpo, type = "application/fhir+json")
   }
   resp <- req_perform(req)
-  contenido <- if (length(resp_body_raw(resp))) resp_body_json(resp, simplifyVector = FALSE) else list()
+  contenido <- if (resp_has_body(resp)) resp_body_json(resp, simplifyVector = FALSE) else list()
   if (espera_rechazo) {
     if (resp_status(resp) < 400 || resp_status(resp) >= 500) {
       stop("Se esperaba que el servidor rechazara la petición y respondió ", resp_status(resp),

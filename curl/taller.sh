@@ -7,7 +7,7 @@
 #   curl/taller.sh 06                      # solo hasta el módulo 06
 #   TXURL=... curl/taller.sh               # otro servidor de terminología (módulo 18)
 #
-# Requiere curl y jq. Solo datos sintéticos.
+# Requiere curl, jq y Python 3. Solo datos sintéticos.
 set -euo pipefail
 raiz="$(cd "$(dirname "$0")/.." && pwd)"
 FHIRURL="${FHIRURL:-https://hapi.fhir.org/baseR4}"
@@ -18,6 +18,11 @@ declare -A ids
 sustituir() {   # reemplaza {{variable}} por los ids guardados
   local texto="$1" var
   for var in "${!ids[@]}"; do texto="${texto//\{\{$var\}\}/${ids[$var]}}"; done
+  if [[ "$texto" == *'{{$guid}}'* ]]; then
+    local guid
+    guid=$(python3 -c 'import uuid; print(uuid.uuid4())') || return 1
+    texto="${texto//\{\{\$guid\}\}/$guid}"
+  fi
   printf '%s' "$texto"
 }
 

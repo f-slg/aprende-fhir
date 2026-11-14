@@ -119,7 +119,7 @@
             "url": "{{FHIRURL}}/Patient",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"resourceType\": \"Patient\",\n  \"nombre\": [\n    {\n      \"text\": \"Luis Alberto Paredes Cevallos\"\n    }\n  ],\n  \"gender\": \"male\"\n}\n",
+              "raw": "{\n  \"resourceType\": \"Patient\",\n  \"identifier\": [\n    {\n      \"system\": \"https://f-slg.github.io/aprende-fhir/sid/ejercicio-01\",\n      \"value\": \"{{$guid}}\"\n    }\n  ],\n  \"nombre\": [\n    {\n      \"text\": \"Luis Alberto Paredes Cevallos\"\n    }\n  ],\n  \"gender\": \"male\"\n}\n",
               "options": {
                 "raw": {
                   "language": "json"
