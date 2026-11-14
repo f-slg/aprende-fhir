@@ -3,7 +3,7 @@
 #
 # 1. Abre aprende-fhir.Rproj en RStudio.
 # 2. Instala los paquetes (una sola vez):
-#      install.packages(c("httr2", "jsonlite"))
+#      install.packages(c("httr2", "jsonlite", "uuid"))
 # 3. Ejecuta este archivo línea por línea con Ctrl + Enter.
 # -----------------------------------------------------------------------------
 source("r/fhir.R")

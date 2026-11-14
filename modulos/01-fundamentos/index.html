@@ -1566,7 +1566,7 @@ los métodos de HTTP:</p>
 <td>Borrar</td>
 <td><code>DELETE /Patient/1000</code></td>
 <td>—</td>
-<td><code>200 OK</code></td>
+<td><code>200 OK</code> o <code>204 No Content</code></td>
 </tr>
 <tr>
 <td>Buscar</td>
@@ -1607,6 +1607,10 @@ los métodos de HTTP:</p>
 <tr>
 <td><code>201 Created</code></td>
 <td>Se creó el recurso. Mira el <code>id</code> en la respuesta.</td>
+</tr>
+<tr>
+<td><code>204 No Content</code></td>
+<td>La operación salió bien y la respuesta no lleva cuerpo.</td>
 </tr>
 <tr>
 <td><code>400 Bad Request</code></td>
@@ -1682,12 +1686,47 @@ inglés</strong> y distinguen mayúsculas: <code>Patient</code>, no <code>Pacien
 que sí va en español es el contenido: nombres, textos, narrativa.</p>
 <h3 id="01d-y-01e--error-a-propósito-un-elemento-en-español">01d y 01e · Error a propósito: un elemento en español<a class="headerlink" href="#01d-y-01e--error-a-propósito-un-elemento-en-español" title="Permanent link">&para;</a></h3>
 <p>Ahora envía (<a href="errores/01e2_elemento_en_espanol.json"><code>01e2_elemento_en_espanol.json</code></a>):</p>
-<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="w"> </span><span class="nt">"resourceType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Patient"</span><span class="p">,</span><span class="w"> </span><span class="nt">"nombre"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Luis Alberto Paredes Cevallos"</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">],</span><span class="w"> </span><span class="nt">"gender"</span><span class="p">:</span><span class="w"> </span><span class="s2">"male"</span><span class="w"> </span><span class="p">}</span>
+<div class="highlight"><pre><span></span><code><span class="err">POST {{FHIRURL}}/Patient</span>
 </code></pre></div>
-<p><strong>El servidor responde <code>201 Created</code>.</strong> Parece que salió bien, pero lee lo
-que guardó con <code>GET {{FHIRURL}}/Patient/{{errorPatientId}}</code>: el paciente
-<strong>no tiene nombre</strong>. El servidor ignoró <code>nombre</code> porque no es un elemento de
-FHIR, y no avisó.</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"resourceType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Patient"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"identifier"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"system"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://f-slg.github.io/aprende-fhir/sid/ejercicio-01"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{{$guid}}"</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">],</span>
+<span class="w">  </span><span class="nt">"nombre"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Luis Alberto Paredes Cevallos"</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">],</span>
+<span class="w">  </span><span class="nt">"gender"</span><span class="p">:</span><span class="w"> </span><span class="s2">"male"</span>
+<span class="p">}</span>
+</code></pre></div>
+<p><code>{{$guid}}</code> es un <strong>marcador dinámico</strong>: Postman y los scripts de R y curl del
+taller lo sustituyen por un UUID nuevo cada vez que envías la petición. El
+identificador es solo para este ejercicio; no representa una cédula ni una
+persona real. Si haces las peticiones por tu cuenta, reemplázalo antes de
+enviar el JSON. En PowerShell puedes generar uno con
+<code>[guid]::NewGuid().ToString()</code>.</p>
+<p><strong>En el servidor público de HAPI, el resultado esperado es <code>201 Created</code>.</strong>
+Guarda el <code>id</code> devuelto como <code>errorPatientId</code> (Postman y los scripts del taller
+lo hacen por ti). Luego lee lo que guardó con
+<code>GET {{FHIRURL}}/Patient/{{errorPatientId}}</code> y comprueba:</p>
+<ul>
+<li><code>identifier</code> conserva el UUID que enviaste;</li>
+<li>no aparecen <code>nombre</code> ni <code>name</code>: el paciente <strong>no tiene nombre</strong>.</li>
+</ul>
+<p>HAPI ignoró <code>nombre</code> porque no es un elemento de FHIR. Otros servidores pueden
+rechazar el elemento desconocido con un <code>OperationOutcome</code>, según su
+configuración; la aceptación silenciosa no es una regla de FHIR.</p>
+<blockquote>
+<p><strong>Para repetir el ejercicio:</strong> vuelve a ejecutar 01d y usa el nuevo <code>id</code>
+devuelto para 01e y 01f. HAPI puede bloquear creaciones con contenido idéntico
+mediante una caché de recursos recientes y responder con <code>HAPI-2840</code>, incluso
+después de borrar el recurso anterior. El UUID nuevo distingue cada intento.
+Cambiar solo <code>nombre</code> no sirve, porque ese elemento se descarta. Si ejecutas
+las peticiones manualmente, genera otro UUID para cada intento. No uses para
+leer o borrar el <code>id</code> mencionado en un error de duplicado: podría pertenecer a
+otra persona que esté practicando.</p>
+</blockquote>
 <p>Esta es la lección más importante del módulo: <strong>que el servidor acepte un
 recurso no significa que el recurso sea correcto.</strong> Muchos servidores son
 tolerantes y descartan en silencio lo que no entienden. Por eso, antes de
@@ -1697,12 +1736,16 @@ problema:</p>
 </code></pre></div>
 <p>Puedes validar cualquier recurso pegándolo en <a href="https://validator.fhir.org/">https://validator.fhir.org/</a>,
 o todos los del taller con <code>herramientas/validar.sh</code> (ver
-<a href="../../#validar-tus-recursos">Validar tus recursos</a>).</p>
+<a href="../../#validar-tus-recursos">Validar tus recursos</a>).
+Si pegas este ejemplo en el validador, sustituye antes <code>{{$guid}}</code> por un UUID;
+el script de validación ya reemplaza los marcadores por valores de ejemplo.</p>
 <h3 id="01f--borrar-el-paciente-de-prueba">01f · Borrar el paciente de prueba<a class="headerlink" href="#01f--borrar-el-paciente-de-prueba" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><span class="err">DELETE {{FHIRURL}}/Patient/{{errorPatientId}}</span>
 </code></pre></div>
-<p>Si después intentas leerlo, el servidor responde <code>410 Gone</code>: el recurso
-existió, pero se borró.</p>
+<p>El borrado puede responder <code>200 OK</code> o <code>204 No Content</code>; ambos indican éxito.
+Si después intentas leerlo en HAPI, el servidor responde <code>410 Gone</code>: el recurso
+existió, pero se borró. El borrado no implica que desaparezcan las versiones
+anteriores del historial, ni limpia necesariamente la caché de duplicados.</p>
 <h2 id="dos-tipos-de-errores">Dos tipos de errores<a class="headerlink" href="#dos-tipos-de-errores" title="Permanent link">&para;</a></h2>
 <p>A lo largo del taller, cada módulo tiene un <strong>error a propósito</strong>. Son de dos
 tipos, y conviene distinguirlos desde ahora:</p>
