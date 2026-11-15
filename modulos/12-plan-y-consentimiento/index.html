@@ -2569,12 +2569,21 @@ claro es mejor que un código equivocado.</p>
 <p>Se pueden combinar <strong>varios <code>_include</code></strong>. Verás el plan (<code>match</code>), el equipo
 y las dos metas (<code>include</code>): todo el acuerdo del comité en una petición.</p>
 <h3 id="12g-y-12h--error-a-propósito-el-consentimiento-sin-categoría">12g y 12h · Error a propósito: el consentimiento sin categoría<a class="headerlink" href="#12g-y-12h--error-a-propósito-el-consentimiento-sin-categoría" title="Permanent link">&para;</a></h3>
+<p>Si el servidor acepta la creación, guarda inmediatamente el <code>id</code> devuelto
+como <code>errorConsentId</code>, junto con la dirección del servidor. Postman y los scripts
+del taller guardan esa variable por ti. Si repites el intento, conserva cada
+ID antes de sobrescribirlo. Si el servidor rechaza el recurso, no ejecutes el
+borrado con un ID de un intento anterior.</p>
 <p>Envía (<a href="errores/12e1_consentimiento_sin_categoria.json"><code>12e1_consentimiento_sin_categoria.json</code></a>)
 un consentimiento sin <code>category</code>. <strong>El servidor responde <code>201 Created</code>.</strong> El
 validador lo detecta:</p>
 <div class="highlight"><pre><span></span><code>Consent.category: minimum required = 1, but only found 0
 </code></pre></div>
 <p>Bórralo con <code>DELETE {{FHIRURL}}/Consent/{{errorConsentId}}</code>.</p>
+<p>Tras el borrado, comprueba <code>GET {{FHIRURL}}/Consent/{{errorConsentId}}</code>:
+en HAPI se espera <code>410 Gone</code>. Un <code>404</code> indica que no se encuentra el recurso,
+pero no demuestra por sí solo que el borrado se haya realizado en el servidor
+correcto. Conserva la respuesta del <code>DELETE</code> (<code>200</code> o <code>204</code>).</p>
 <h2 id="para-pensar">Para pensar<a class="headerlink" href="#para-pensar" title="Permanent link">&para;</a></h2>
 <p>El consentimiento firmado en papel sigue siendo el documento legal. ¿Cómo lo
 vincularías a este recurso? <em>(Pista: <code>sourceAttachment</code>, con el PDF

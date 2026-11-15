@@ -1562,6 +1562,10 @@ es "en abril de 2025".</p>
 </table>
 <hr />
 <h2 id="ejercicios-en-el-servidor">Ejercicios en el servidor<a class="headerlink" href="#ejercicios-en-el-servidor" title="Permanent link">&para;</a></h2>
+<p>Los recuentos de estos ejercicios corresponden a una instancia limpia y una
+sola ejecución en orden. Las búsquedas por cédula o nombre pueden incluir los
+recursos de otros participantes en el servidor público. Las búsquedas por
+<code>Patient/{{patientId}}</code> se limitan al paciente que creaste.</p>
 <h3 id="17a--encadenada-por-la-cédula-sin-conocer-el-id">17a · Encadenada: por la cédula, sin conocer el id<a class="headerlink" href="#17a--encadenada-por-la-cédula-sin-conocer-el-id" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><span class="err">GET {{FHIRURL}}/Observation?subject.identifier=https://f-slg.github.io/aprende-fhir/sid/cedula|9900000017&amp;category=vital-signs</span>
 </code></pre></div>
@@ -1704,7 +1708,10 @@ versión que yo leí".</p>
 </code></pre></div>
 <!-- /diferencia -->
 
-<p>El servidor responde <code>200 OK</code> y el paciente pasa a la versión 3.</p>
+<p>En una ejecución en orden, el servidor responde <code>200 OK</code> y el paciente pasa
+a la versión 3. Si ya lo actualizaste durante tus pruebas, lee primero el
+recurso y su <code>ETag</code>: la versión puede ser distinta. Usa ese <code>ETag</code> en 17o y
+reutiliza el mismo valor, ya obsoleto, en 17p para provocar el conflicto.</p>
 <h3 id="17p--error-a-propósito-actualizar-con-una-versión-vieja">17p · Error a propósito: actualizar con una versión vieja<a class="headerlink" href="#17p--error-a-propósito-actualizar-con-una-versión-vieja" title="Permanent link">&para;</a></h3>
 <p>Repite <strong>exactamente</strong> la misma petición, con <code>If-Match: W/"2"</code>. Ahora el
 recurso ya está en la versión 3, y el servidor la rechaza:</p>

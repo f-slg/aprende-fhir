@@ -1835,6 +1835,11 @@ pena conocer:</p>
   quitar el bloque completo, no solo la referencia.</li>
 </ul>
 <h3 id="19e-y-19f--error-a-propósito-un-ips-sin-alergias">19e y 19f · Error a propósito: un IPS sin alergias<a class="headerlink" href="#19e-y-19f--error-a-propósito-un-ips-sin-alergias" title="Permanent link">&para;</a></h3>
+<p>Si el servidor acepta la creación, guarda inmediatamente el <code>id</code> devuelto
+como <code>errorIpsId</code>, junto con la dirección del servidor. Postman y los scripts
+del taller guardan esa variable por ti. Si repites el intento, conserva cada
+ID antes de sobrescribirlo. Si el servidor rechaza el recurso, no ejecutes el
+borrado con un ID de un intento anterior.</p>
 <p><a href="errores/19e1_ips_sin_alergias.json"><code>19e1_ips_sin_alergias.json</code></a> es el
 mismo IPS sin la sección de alergias. <strong>El servidor lo acepta</strong>: para él es un
 Bundle cualquiera. La especificación base también lo acepta. Solo la guía
@@ -1859,6 +1864,10 @@ con <code>DELETE {{FHIRURL}}/Bundle/{{errorIpsId}}</code>.</p>
 recursos</strong>: de su primera consulta por una intoxicación hasta el resumen que
 lleva de viaje. Compáralo con el IPS: el expediente tiene <strong>todo</strong>; el IPS,
 <strong>lo esencial</strong>.</p>
+<p>Tras el borrado, comprueba <code>GET {{FHIRURL}}/Bundle/{{errorIpsId}}</code>:
+en HAPI se espera <code>410 Gone</code>. Un <code>404</code> indica que no se encuentra el recurso,
+pero no demuestra por sí solo que el borrado se haya realizado en el servidor
+correcto. Conserva la respuesta del <code>DELETE</code> (<code>200</code> o <code>204</code>).</p>
 <h2 id="para-pensar">Para pensar<a class="headerlink" href="#para-pensar" title="Permanent link">&para;</a></h2>
 <p>Luis llega a urgencias en otro país con un código QR que lleva a su IPS.
 ¿Qué tres datos del resumen mirarías primero? ¿Qué pasaría si la sección de

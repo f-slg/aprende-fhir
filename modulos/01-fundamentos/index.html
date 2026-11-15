@@ -1681,9 +1681,11 @@ taller.</p>
 <p>El servidor responde <strong><code>400</code></strong>:</p>
 <div class="highlight"><pre><span></span><code>HAPI-1814: Incorrect resource type found, expected "Patient" but found "Paciente"
 </code></pre></div>
-<p>Los nombres de recursos, elementos y códigos de FHIR son <strong>siempre en
-inglés</strong> y distinguen mayúsculas: <code>Patient</code>, no <code>Paciente</code> ni <code>patient</code>. Lo
-que sí va en español es el contenido: nombres, textos, narrativa.</p>
+<p>Los nombres de recursos y elementos se escriben exactamente como en la
+especificación: <code>Patient</code>, no <code>Paciente</code> ni <code>patient</code>. Los códigos se copian
+del sistema de códigos correspondiente; no se traducen libremente y su
+sensibilidad a mayúsculas depende de ese sistema. Los nombres de personas,
+textos y narrativa sí pueden estar en español.</p>
 <h3 id="01d-y-01e--error-a-propósito-un-elemento-en-español">01d y 01e · Error a propósito: un elemento en español<a class="headerlink" href="#01d-y-01e--error-a-propósito-un-elemento-en-español" title="Permanent link">&para;</a></h3>
 <p>Ahora envía (<a href="errores/01e2_elemento_en_espanol.json"><code>01e2_elemento_en_espanol.json</code></a>):</p>
 <div class="highlight"><pre><span></span><code><span class="err">POST {{FHIRURL}}/Patient</span>
@@ -1708,7 +1710,11 @@ enviar el JSON. En PowerShell puedes generar uno con
 <code>[guid]::NewGuid().ToString()</code>.</p>
 <p><strong>En el servidor público de HAPI, el resultado esperado es <code>201 Created</code>.</strong>
 Guarda el <code>id</code> devuelto como <code>errorPatientId</code> (Postman y los scripts del taller
-lo hacen por ti). Luego lee lo que guardó con
+lo hacen por ti). Hazlo <strong>inmediatamente después de cada creación</strong>, incluso
+en intentos preliminares, y conserva también el servidor y el UUID enviado.
+Antes de repetir 01d, completa 01f para el recurso anterior: la variable
+<code>errorPatientId</code> pasará a contener el ID nuevo y podrías perder el anterior.
+Luego lee lo que guardó con
 <code>GET {{FHIRURL}}/Patient/{{errorPatientId}}</code> y comprueba:</p>
 <ul>
 <li><code>identifier</code> conserva el UUID que enviaste;</li>
@@ -1747,8 +1753,9 @@ Si después intentas leerlo en HAPI, el servidor responde <code>410 Gone</code>:
 existió, pero se borró. El borrado no implica que desaparezcan las versiones
 anteriores del historial, ni limpia necesariamente la caché de duplicados.</p>
 <h2 id="dos-tipos-de-errores">Dos tipos de errores<a class="headerlink" href="#dos-tipos-de-errores" title="Permanent link">&para;</a></h2>
-<p>A lo largo del taller, cada módulo tiene un <strong>error a propósito</strong>. Son de dos
-tipos, y conviene distinguirlos desde ahora:</p>
+<p>El taller incluye <strong>errores a propósito</strong>. Esta tabla resume el comportamiento
+esperado en el HAPI usado para los ejercicios; otros servidores pueden validar
+al guardar y rechazar también los errores de contenido:</p>
 <table>
 <thead>
 <tr>
@@ -1767,9 +1774,9 @@ tipos, y conviene distinguirlos desde ahora:</p>
 </tr>
 <tr>
 <td><strong>Error de contenido</strong></td>
-<td>lo <strong>acepta</strong></td>
+<td>puede aceptarlo</td>
 <td>elemento desconocido, falta un elemento obligatorio, código con nombre equivocado</td>
-<td>solo con el <strong>validador</strong></td>
+<td>con el <strong>validador</strong> o <code>$validate</code> (módulo 18)</td>
 </tr>
 </tbody>
 </table>

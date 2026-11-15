@@ -2337,6 +2337,10 @@ consulte disponibilidad justo después de reservar.</p>
 <h3 id="14m--las-citas-del-paciente">14m · Las citas del paciente<a class="headerlink" href="#14m--las-citas-del-paciente" title="Permanent link">&para;</a></h3>
 <p>Verás las dos: el 2 de julio <code>fulfilled</code> y el 23 de julio <code>cancelled</code>.</p>
 <h3 id="14n-y-14o--error-a-propósito-la-cita-sin-participantes">14n y 14o · Error a propósito: la cita sin participantes<a class="headerlink" href="#14n-y-14o--error-a-propósito-la-cita-sin-participantes" title="Permanent link">&para;</a></h3>
+<p>Si el servidor acepta la creación, guarda inmediatamente el <code>id</code> devuelto
+como <code>errorAppointmentId</code>, junto con la dirección del servidor. Postman y los
+scripts guardan esa variable por ti. Conserva cada ID si repites el intento;
+si el servidor rechaza la creación, no borres un recurso de un intento anterior.</p>
 <p>Envía (<a href="errores/14e1_cita_sin_participantes.json"><code>14e1_cita_sin_participantes.json</code></a>)
 una cita con estado, hora y descripción, pero <strong>sin <code>participant</code></strong>. <strong>El
 servidor responde <code>201 Created</code>.</strong> El validador lo detecta:</p>
@@ -2344,6 +2348,9 @@ servidor responde <code>201 Created</code>.</strong> El validador lo detecta:</p
 </code></pre></div>
 <p>Una cita sin participantes no dice quién viene. Bórrala con
 <code>DELETE {{FHIRURL}}/Appointment/{{errorAppointmentId}}</code>.</p>
+<p>Tras el borrado, conserva la respuesta <code>200</code> o <code>204</code> y comprueba
+<code>GET {{FHIRURL}}/Appointment/{{errorAppointmentId}}</code>: en HAPI se espera <code>410</code>.
+Un <code>404</code> por sí solo no confirma que hayas borrado en el servidor correcto.</p>
 <h2 id="para-pensar">Para pensar<a class="headerlink" href="#para-pensar" title="Permanent link">&para;</a></h2>
 <p>Para medir el <strong>ausentismo</strong> a las citas de quimioterapia, ¿qué búsqueda
 harías? ¿Y para la <strong>oportunidad</strong> de la atención (días entre la derivación

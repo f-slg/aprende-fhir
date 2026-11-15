@@ -1743,6 +1743,11 @@ una temperatura con <code>"value": "38,4"</code>. El servidor responde <strong><
 </code></pre></div>
 <p>En JSON los números van <strong>sin comillas</strong> y con <strong>punto</strong>: <code>38.4</code>.</p>
 <h3 id="06k-y-06l--error-a-propósito-la-observación-sin-código">06k y 06l · Error a propósito: la observación sin código<a class="headerlink" href="#06k-y-06l--error-a-propósito-la-observación-sin-código" title="Permanent link">&para;</a></h3>
+<p>Si el servidor acepta la creación, guarda inmediatamente el <code>id</code> devuelto
+como <code>errorObsId</code>, junto con la dirección del servidor. Postman y los scripts
+del taller guardan esa variable por ti. Si repites el intento, conserva cada
+ID antes de sobrescribirlo. Si el servidor rechaza el recurso, no ejecutes el
+borrado con un ID de un intento anterior.</p>
 <p>Envía (<a href="errores/06e2_observacion_sin_codigo.json"><code>06e2_observacion_sin_codigo.json</code></a>)
 una observación con estado, paciente y valor, pero <strong>sin <code>code</code></strong>. <strong>El
 servidor responde <code>201 Created</code></strong>: la guarda.</p>
@@ -1758,6 +1763,10 @@ quede en el expediente de Luis.</p>
 <a href="https://loinc.org/search/">https://loinc.org/search/</a> el código LOINC del título de anticuerpos contra
 el antígeno O de <em>Salmonella typhi</em> en suero, agrégalo como <code>coding</code> y valida
 el recurso.</p>
+<p>Tras el borrado, comprueba <code>GET {{FHIRURL}}/Observation/{{errorObsId}}</code>:
+en HAPI se espera <code>410 Gone</code>. Un <code>404</code> indica que no se encuentra el recurso,
+pero no demuestra por sí solo que el borrado se haya realizado en el servidor
+correcto. Conserva la respuesta del <code>DELETE</code> (<code>200</code> o <code>204</code>).</p>
 <h2 id="autoevaluación">Autoevaluación<a class="headerlink" href="#autoevaluación" title="Permanent link">&para;</a></h2>
 <details>
 <summary>1. ¿Por qué la presión arterial no usa <code>valueRatio</code> ni <code>valueString</code>?</summary>

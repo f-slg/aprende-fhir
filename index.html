@@ -309,6 +309,15 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#guardar-los-id-y-limpiar-los-recursos-de-prueba" class="md-nav__link">
+    <span class="md-ellipsis">
+      Guardar los ID y limpiar los recursos de prueba
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#los-servidores" class="md-nav__link">
     <span class="md-ellipsis">
       Los servidores
@@ -983,6 +992,15 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#guardar-los-id-y-limpiar-los-recursos-de-prueba" class="md-nav__link">
+    <span class="md-ellipsis">
+      Guardar los ID y limpiar los recursos de prueba
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#los-servidores" class="md-nav__link">
     <span class="md-ellipsis">
       Los servidores
@@ -1185,6 +1203,22 @@ cualquiera: nunca subas datos reales de pacientes.</p>
 </table>
 <p>Los tres caminos usan los mismos archivos JSON y la misma lista de pasos
 (<a href="herramientas/pasos.json"><code>herramientas/pasos.json</code></a>).</p>
+<h3 id="guardar-los-id-y-limpiar-los-recursos-de-prueba">Guardar los ID y limpiar los recursos de prueba<a class="headerlink" href="#guardar-los-id-y-limpiar-los-recursos-de-prueba" title="Permanent link">&para;</a></h3>
+<p>Después de cada creación, guarda inmediatamente el <code>id</code> devuelto, el tipo de
+recurso y la dirección del servidor, antes de enviar otra petición. Conserva
+también los ID de intentos preliminares: los necesitarás para leer o borrar
+exactamente lo que creaste. Las variables automáticas del taller no sustituyen
+un registro de todos los intentos si repites pasos o cierras la sesión.</p>
+<p>Los módulos 01, 06, 08, 12, 14, 15 y 19 incluyen recursos con errores intencionales
+que se eliminan al terminar el ejercicio. Usa únicamente el ID de tu propia
+respuesta de creación. Un borrado con <code>200</code> o <code>204</code> indica éxito; en HAPI, una
+lectura posterior suele devolver <code>410</code>. No uses un ID de un error de duplicado
+ni borres recursos encontrados solo por nombre o por la cédula ficticia
+compartida. Si pierdes el ID, revisa la respuesta o el registro de tu cliente;
+si no lo recuperas, deja la limpieza como no confirmada.</p>
+<p>Conserva los recursos válidos del caso mientras avanzas: los módulos siguientes
+los referencian. Los cuestionarios y recursos canónicos creados de forma
+condicional pueden estar compartidos con otros participantes.</p>
 <h3 id="los-servidores">Los servidores<a class="headerlink" href="#los-servidores" title="Permanent link">&para;</a></h3>
 <p>Por defecto se usa el servidor público de HAPI FHIR:
 <code>https://hapi.fhir.org/baseR4</code> (variable <code>FHIRURL</code>). El módulo 18 usa además
@@ -1553,7 +1587,11 @@ a los que les falta algo obligatorio. El módulo 01 lo explica y cada módulo
 tiene un error a propósito de cada tipo. Valida siempre tus recursos.</p>
 <p><strong>¿Por qué aparece varias veces el mismo paciente?</strong> Cada <code>POST</code> crea un
 recurso nuevo. Si ejecutas el taller dos veces, tendrás dos "Luis". Es un
-buen motivo para conocer la creación condicional del módulo 03.</p>
+buen motivo para conocer la creación condicional del módulo 03. En HAPI
+público, una creación idéntica también puede ser rechazada con <code>HAPI-2840</code>.
+El UUID del módulo 01 resuelve la repetición de ese ejercicio; no hace
+repetible automáticamente todo el taller. Para practicar de nuevo desde cero,
+usa una instancia local nueva y conserva los ID de cada ejecución.</p>
 <p><strong>¿Los códigos son reales?</strong> Sí. LOINC, SNOMED CT, CIE-10 y UCUM son las
 terminologías reales, y el validador revisa cada código y su nombre. Lo
 ficticio son las personas, los identificadores y los establecimientos.</p>

@@ -1749,7 +1749,10 @@ servidor?</p>
 <div class="highlight"><pre><span></span><code><span class="err">GET {{FHIRURL}}/Patient?identifier=https://f-slg.github.io/aprende-fhir/sid/cedula|9900000017</span>
 </code></pre></div>
 <p>El parámetro <code>identifier</code> usa el formato <code>system|value</code>. Devuelve un <code>Bundle</code>
-con un solo resultado.</p>
+con un solo resultado en una instancia limpia con una única ejecución.
+En el servidor público puede haber varias coincidencias: otros participantes
+usan la misma cédula ficticia. Para leer o actualizar tu recurso, usa el
+<code>patientId</code> de tu propia respuesta de creación.</p>
 <h3 id="02d--buscarlo-por-nombre">02d · Buscarlo por nombre<a class="headerlink" href="#02d--buscarlo-por-nombre" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><span class="err">GET {{FHIRURL}}/Patient?family=Paredes&amp;given=Luis</span>
 </code></pre></div>
