@@ -414,6 +414,12 @@ las dos del 3 de abril. Para el carné solo cuentan las aplicadas: agrega
 
 ### 08g y 08h · Error a propósito: la vacuna sin fecha
 
+Si el servidor acepta la creación, guarda inmediatamente el `id` devuelto
+como `errorImmId`, junto con la dirección del servidor. Postman y los scripts
+del taller guardan esa variable por ti. Si repites el intento, conserva cada
+ID antes de sobrescribirlo. Si el servidor rechaza el recurso, no ejecutes el
+borrado con un ID de un intento anterior.
+
 Envía ([`08e1_vacuna_sin_fecha.json`](errores/08e1_vacuna_sin_fecha.json)) una
 vacuna con estado, código y paciente, pero **sin `occurrenceDateTime`**. **El
 servidor responde `201 Created`.** El validador sí lo detecta:
@@ -425,6 +431,11 @@ Immunization.occurrence[x]: minimum required = 1, but only found 0
 Una vacuna sin fecha no sirve para el esquema: no se sabe si la siguiente
 dosis toca ya o en diez años. Bórrala con
 `DELETE {{FHIRURL}}/Immunization/{{errorImmId}}`.
+
+Tras el borrado, comprueba `GET {{FHIRURL}}/Immunization/{{errorImmId}}`:
+en HAPI se espera `410 Gone`. Un `404` indica que no se encuentra el recurso,
+pero no demuestra por sí solo que el borrado se haya realizado en el servidor
+correcto. Conserva la respuesta del `DELETE` (`200` o `204`).
 
 ## Para pensar
 

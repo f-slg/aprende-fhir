@@ -524,6 +524,12 @@ se actualiza con `status: stopped` y el motivo. Lo que cambia:
 
 ### 15h y 15i · Error a propósito: la receta sin intención
 
+Si el servidor acepta la creación, guarda inmediatamente el `id` devuelto
+como `errorMedReqId`, junto con la dirección del servidor. Postman y los scripts
+del taller guardan esa variable por ti. Si repites el intento, conserva cada
+ID antes de sobrescribirlo. Si el servidor rechaza el recurso, no ejecutes el
+borrado con un ID de un intento anterior.
+
 Envía ([`15e1_receta_sin_intencion.json`](errores/15e1_receta_sin_intencion.json))
 una receta sin `intent`. **El servidor responde `201 Created`.** El validador
 lo detecta:
@@ -534,6 +540,11 @@ MedicationRequest.intent: minimum required = 1, but only found 0
 
 ¿Es una orden o una propuesta? Sin `intent`, una farmacia no sabe si debe
 dispensar. Bórrala con `DELETE {{FHIRURL}}/MedicationRequest/{{errorMedReqId}}`.
+
+Tras el borrado, comprueba `GET {{FHIRURL}}/MedicationRequest/{{errorMedReqId}}`:
+en HAPI se espera `410 Gone`. Un `404` indica que no se encuentra el recurso,
+pero no demuestra por sí solo que el borrado se haya realizado en el servidor
+correcto. Conserva la respuesta del `DELETE` (`200` o `204`).
 
 ## Autoevaluación
 

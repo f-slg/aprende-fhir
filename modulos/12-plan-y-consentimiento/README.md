@@ -716,6 +716,12 @@ y las dos metas (`include`): todo el acuerdo del comité en una petición.
 
 ### 12g y 12h · Error a propósito: el consentimiento sin categoría
 
+Si el servidor acepta la creación, guarda inmediatamente el `id` devuelto
+como `errorConsentId`, junto con la dirección del servidor. Postman y los scripts
+del taller guardan esa variable por ti. Si repites el intento, conserva cada
+ID antes de sobrescribirlo. Si el servidor rechaza el recurso, no ejecutes el
+borrado con un ID de un intento anterior.
+
 Envía ([`12e1_consentimiento_sin_categoria.json`](errores/12e1_consentimiento_sin_categoria.json))
 un consentimiento sin `category`. **El servidor responde `201 Created`.** El
 validador lo detecta:
@@ -725,6 +731,11 @@ Consent.category: minimum required = 1, but only found 0
 ```
 
 Bórralo con `DELETE {{FHIRURL}}/Consent/{{errorConsentId}}`.
+
+Tras el borrado, comprueba `GET {{FHIRURL}}/Consent/{{errorConsentId}}`:
+en HAPI se espera `410 Gone`. Un `404` indica que no se encuentra el recurso,
+pero no demuestra por sí solo que el borrado se haya realizado en el servidor
+correcto. Conserva la respuesta del `DELETE` (`200` o `204`).
 
 ## Para pensar
 
