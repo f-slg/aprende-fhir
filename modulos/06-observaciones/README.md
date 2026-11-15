@@ -309,6 +309,12 @@ En JSON los números van **sin comillas** y con **punto**: `38.4`.
 
 ### 06k y 06l · Error a propósito: la observación sin código
 
+Si el servidor acepta la creación, guarda inmediatamente el `id` devuelto
+como `errorObsId`, junto con la dirección del servidor. Postman y los scripts
+del taller guardan esa variable por ti. Si repites el intento, conserva cada
+ID antes de sobrescribirlo. Si el servidor rechaza el recurso, no ejecutes el
+borrado con un ID de un intento anterior.
+
 Envía ([`06e2_observacion_sin_codigo.json`](errores/06e2_observacion_sin_codigo.json))
 una observación con estado, paciente y valor, pero **sin `code`**. **El
 servidor responde `201 Created`**: la guarda.
@@ -330,6 +336,11 @@ La observación `06h` solo tiene `code.text`. Busca en
 <https://loinc.org/search/> el código LOINC del título de anticuerpos contra
 el antígeno O de *Salmonella typhi* en suero, agrégalo como `coding` y valida
 el recurso.
+
+Tras el borrado, comprueba `GET {{FHIRURL}}/Observation/{{errorObsId}}`:
+en HAPI se espera `410 Gone`. Un `404` indica que no se encuentra el recurso,
+pero no demuestra por sí solo que el borrado se haya realizado en el servidor
+correcto. Conserva la respuesta del `DELETE` (`200` o `204`).
 
 ## Autoevaluación
 

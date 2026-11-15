@@ -96,6 +96,11 @@ Se escriben después del nombre del parámetro, con dos puntos:
 
 ## Ejercicios en el servidor
 
+Los recuentos de estos ejercicios corresponden a una instancia limpia y una
+sola ejecución en orden. Las búsquedas por cédula o nombre pueden incluir los
+recursos de otros participantes en el servidor público. Las búsquedas por
+`Patient/{{patientId}}` se limitan al paciente que creaste.
+
 ### 17a · Encadenada: por la cédula, sin conocer el id
 
 ```http
@@ -251,7 +256,10 @@ Esto es lo que agrega la actualización
 ```
 <!-- /diferencia -->
 
-El servidor responde `200 OK` y el paciente pasa a la versión 3.
+En una ejecución en orden, el servidor responde `200 OK` y el paciente pasa
+a la versión 3. Si ya lo actualizaste durante tus pruebas, lee primero el
+recurso y su `ETag`: la versión puede ser distinta. Usa ese `ETag` en 17o y
+reutiliza el mismo valor, ya obsoleto, en 17p para provocar el conflicto.
 
 ### 17p · Error a propósito: actualizar con una versión vieja
 

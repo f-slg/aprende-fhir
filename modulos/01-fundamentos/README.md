@@ -253,9 +253,11 @@ El servidor responde **`400`**:
 HAPI-1814: Incorrect resource type found, expected "Patient" but found "Paciente"
 ```
 
-Los nombres de recursos, elementos y códigos de FHIR son **siempre en
-inglés** y distinguen mayúsculas: `Patient`, no `Paciente` ni `patient`. Lo
-que sí va en español es el contenido: nombres, textos, narrativa.
+Los nombres de recursos y elementos se escriben exactamente como en la
+especificación: `Patient`, no `Paciente` ni `patient`. Los códigos se copian
+del sistema de códigos correspondiente; no se traducen libremente y su
+sensibilidad a mayúsculas depende de ese sistema. Los nombres de personas,
+textos y narrativa sí pueden estar en español.
 
 ### 01d y 01e · Error a propósito: un elemento en español
 
@@ -288,7 +290,11 @@ enviar el JSON. En PowerShell puedes generar uno con
 
 **En el servidor público de HAPI, el resultado esperado es `201 Created`.**
 Guarda el `id` devuelto como `errorPatientId` (Postman y los scripts del taller
-lo hacen por ti). Luego lee lo que guardó con
+lo hacen por ti). Hazlo **inmediatamente después de cada creación**, incluso
+en intentos preliminares, y conserva también el servidor y el UUID enviado.
+Antes de repetir 01d, completa 01f para el recurso anterior: la variable
+`errorPatientId` pasará a contener el ID nuevo y podrías perder el anterior.
+Luego lee lo que guardó con
 `GET {{FHIRURL}}/Patient/{{errorPatientId}}` y comprueba:
 
 - `identifier` conserva el UUID que enviaste;
@@ -336,13 +342,14 @@ anteriores del historial, ni limpia necesariamente la caché de duplicados.
 
 ## Dos tipos de errores
 
-A lo largo del taller, cada módulo tiene un **error a propósito**. Son de dos
-tipos, y conviene distinguirlos desde ahora:
+El taller incluye **errores a propósito**. Esta tabla resume el comportamiento
+esperado en el HAPI usado para los ejercicios; otros servidores pueden validar
+al guardar y rechazar también los errores de contenido:
 
 | | El servidor... | Ejemplos | Cómo se detecta |
 |---|---|---|---|
 | **Error de formato** | lo rechaza con `400` | tipo de recurso mal escrito, fecha `12/03/1979`, decimal `38,4`, un código que no existe | lo ves en la respuesta |
-| **Error de contenido** | lo **acepta** | elemento desconocido, falta un elemento obligatorio, código con nombre equivocado | solo con el **validador** |
+| **Error de contenido** | puede aceptarlo | elemento desconocido, falta un elemento obligatorio, código con nombre equivocado | con el **validador** o `$validate` (módulo 18) |
 
 ## Autoevaluación
 

@@ -539,6 +539,11 @@ Verás las dos: el 2 de julio `fulfilled` y el 23 de julio `cancelled`.
 
 ### 14n y 14o · Error a propósito: la cita sin participantes
 
+Si el servidor acepta la creación, guarda inmediatamente el `id` devuelto
+como `errorAppointmentId`, junto con la dirección del servidor. Postman y los
+scripts guardan esa variable por ti. Conserva cada ID si repites el intento;
+si el servidor rechaza la creación, no borres un recurso de un intento anterior.
+
 Envía ([`14e1_cita_sin_participantes.json`](errores/14e1_cita_sin_participantes.json))
 una cita con estado, hora y descripción, pero **sin `participant`**. **El
 servidor responde `201 Created`.** El validador lo detecta:
@@ -549,6 +554,10 @@ Appointment.participant: minimum required = 1, but only found 0
 
 Una cita sin participantes no dice quién viene. Bórrala con
 `DELETE {{FHIRURL}}/Appointment/{{errorAppointmentId}}`.
+
+Tras el borrado, conserva la respuesta `200` o `204` y comprueba
+`GET {{FHIRURL}}/Appointment/{{errorAppointmentId}}`: en HAPI se espera `410`.
+Un `404` por sí solo no confirma que hayas borrado en el servidor correcto.
 
 ## Para pensar
 

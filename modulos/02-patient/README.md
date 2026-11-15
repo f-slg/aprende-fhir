@@ -358,7 +358,10 @@ GET {{FHIRURL}}/Patient?identifier=https://f-slg.github.io/aprende-fhir/sid/cedu
 ```
 
 El parámetro `identifier` usa el formato `system|value`. Devuelve un `Bundle`
-con un solo resultado.
+con un solo resultado en una instancia limpia con una única ejecución.
+En el servidor público puede haber varias coincidencias: otros participantes
+usan la misma cédula ficticia. Para leer o actualizar tu recurso, usa el
+`patientId` de tu propia respuesta de creación.
 
 ### 02d · Buscarlo por nombre
 

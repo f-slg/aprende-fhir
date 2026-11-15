@@ -493,6 +493,12 @@ pena conocer:
 
 ### 19e y 19f · Error a propósito: un IPS sin alergias
 
+Si el servidor acepta la creación, guarda inmediatamente el `id` devuelto
+como `errorIpsId`, junto con la dirección del servidor. Postman y los scripts
+del taller guardan esa variable por ti. Si repites el intento, conserva cada
+ID antes de sobrescribirlo. Si el servidor rechaza el recurso, no ejecutes el
+borrado con un ID de un intento anterior.
+
 [`19e1_ips_sin_alergias.json`](errores/19e1_ips_sin_alergias.json) es el
 mismo IPS sin la sección de alergias. **El servidor lo acepta**: para él es un
 Bundle cualquiera. La especificación base también lo acepta. Solo la guía
@@ -528,6 +534,11 @@ Después de los 19 módulos, el expediente de Luis tiene **29 tipos de
 recursos**: de su primera consulta por una intoxicación hasta el resumen que
 lleva de viaje. Compáralo con el IPS: el expediente tiene **todo**; el IPS,
 **lo esencial**.
+
+Tras el borrado, comprueba `GET {{FHIRURL}}/Bundle/{{errorIpsId}}`:
+en HAPI se espera `410 Gone`. Un `404` indica que no se encuentra el recurso,
+pero no demuestra por sí solo que el borrado se haya realizado en el servidor
+correcto. Conserva la respuesta del `DELETE` (`200` o `204`).
 
 ## Para pensar
 

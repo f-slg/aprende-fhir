@@ -71,6 +71,26 @@ En cada módulo:
 Los tres caminos usan los mismos archivos JSON y la misma lista de pasos
 ([`herramientas/pasos.json`](herramientas/pasos.json)).
 
+### Guardar los ID y limpiar los recursos de prueba
+
+Después de cada creación, guarda inmediatamente el `id` devuelto, el tipo de
+recurso y la dirección del servidor, antes de enviar otra petición. Conserva
+también los ID de intentos preliminares: los necesitarás para leer o borrar
+exactamente lo que creaste. Las variables automáticas del taller no sustituyen
+un registro de todos los intentos si repites pasos o cierras la sesión.
+
+Los módulos 01, 06, 08, 12, 14, 15 y 19 incluyen recursos con errores intencionales
+que se eliminan al terminar el ejercicio. Usa únicamente el ID de tu propia
+respuesta de creación. Un borrado con `200` o `204` indica éxito; en HAPI, una
+lectura posterior suele devolver `410`. No uses un ID de un error de duplicado
+ni borres recursos encontrados solo por nombre o por la cédula ficticia
+compartida. Si pierdes el ID, revisa la respuesta o el registro de tu cliente;
+si no lo recuperas, deja la limpieza como no confirmada.
+
+Conserva los recursos válidos del caso mientras avanzas: los módulos siguientes
+los referencian. Los cuestionarios y recursos canónicos creados de forma
+condicional pueden estar compartidos con otros participantes.
+
 ### Los servidores
 
 Por defecto se usa el servidor público de HAPI FHIR:
@@ -267,7 +287,11 @@ tiene un error a propósito de cada tipo. Valida siempre tus recursos.
 
 **¿Por qué aparece varias veces el mismo paciente?** Cada `POST` crea un
 recurso nuevo. Si ejecutas el taller dos veces, tendrás dos "Luis". Es un
-buen motivo para conocer la creación condicional del módulo 03.
+buen motivo para conocer la creación condicional del módulo 03. En HAPI
+público, una creación idéntica también puede ser rechazada con `HAPI-2840`.
+El UUID del módulo 01 resuelve la repetición de ese ejercicio; no hace
+repetible automáticamente todo el taller. Para practicar de nuevo desde cero,
+usa una instancia local nueva y conserva los ID de cada ejecución.
 
 **¿Los códigos son reales?** Sí. LOINC, SNOMED CT, CIE-10 y UCUM son las
 terminologías reales, y el validador revisa cada código y su nombre. Lo
